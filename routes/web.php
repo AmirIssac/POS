@@ -31,7 +31,7 @@ Route::post('/make/edit/role/permissions/{id}','RolesController@editRolePermissi
 //});
 Route::get('/permissions','PermissionController@index')->name('permissions');
 Route::get('/permission/add/form','PermissionController@addPermissionForm')->name('permission.add.form');
-Route::post('/permission/add','PermissionController@addPermission')->name('permission.add');
+Route::post('/permission/store','PermissionController@store')->name('permission.store');
 
 
 Route::resource('/repositories','RepositoryController');

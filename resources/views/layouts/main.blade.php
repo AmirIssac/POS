@@ -17,8 +17,8 @@
  
  <head>
    <meta charset="utf-8" />
-   <link rel="apple-touch-icon" sizes="76x76" href="{{asset('img/apple-icon.png')}}">
-   <link rel="icon" type="image/png" href="{{asset('img/favicon.png')}}">
+   <link rel="apple-touch-icon" sizes="76x76" href="{{asset('public/img/apple-icon.png')}}">
+   <link rel="icon" type="image/png" href="{{asset('public/img/favicon.png')}}">
    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
    <title>
     Dani App 
@@ -26,39 +26,17 @@
    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
    <!-- Extra details for Live View on GitHub Pages -->
    <!-- Canonical SEO -->
-   <link rel="canonical" href="https://www.creative-tim.com/product/material-dashboard" />
-   <!--  Social tags      -->
-   <meta name="keywords" content="creative tim, html dashboard, html css dashboard, web dashboard, bootstrap 4 dashboard, bootstrap 4, css3 dashboard, bootstrap 4 admin, material dashboard bootstrap 4 dashboard, frontend, responsive bootstrap 4 dashboard, free dashboard, free admin dashboard, free bootstrap 4 admin dashboard">
-   <meta name="description" content="Material Dashboard is a Free Material Bootstrap Admin with a fresh, new design inspired by Google's Material Design.">
-   <!-- Schema.org markup for Google+ -->
-   <meta itemprop="name" content="Material Dashboard by Creative Tim">
-   <meta itemprop="description" content="Material Dashboard is a Free Material Bootstrap Admin with a fresh, new design inspired by Google's Material Design.">
-   <meta itemprop="image" content="https://s3.amazonaws.com/creativetim_bucket/products/50/opt_md_thumbnail.jpg">
-   <!-- Twitter Card data -->
-   <meta name="twitter:card" content="product">
-   <meta name="twitter:site" content="@creativetim">
-   <meta name="twitter:title" content="Material Dashboard by Creative Tim">
-   <meta name="twitter:description" content="Material Dashboard is a Free Material Bootstrap Admin with a fresh, new design inspired by Google's Material Design.">
-   <meta name="twitter:creator" content="@creativetim">
-   <meta name="twitter:image" content="https://s3.amazonaws.com/creativetim_bucket/products/50/opt_md_thumbnail.jpg">
-   <!-- Open Graph data -->
-   <meta property="fb:app_id" content="655968634437471">
-   <meta property="og:title" content="Material Dashboard by Creative Tim" />
-   <meta property="og:type" content="article" />
-   <meta property="og:url" content="https://demos.creative-tim.com/material-dashboard/examples/dashboard.html" />
-   <meta property="og:image" content="https://s3.amazonaws.com/creativetim_bucket/products/50/opt_md_thumbnail.jpg" />
-   <meta property="og:description" content="Material Dashboard is a Free Material Bootstrap Admin with a fresh, new design inspired by Google's Material Design." />
-   <meta property="og:site_name" content="Creative Tim" />
+  
    <!--     Fonts and icons     -->
    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
    <!-- Markazi Text font include just for persian demo purpose, don't include it in your project -->
    <link href="https://fonts.googleapis.com/css?family=Cairo&amp;subset=arabic" rel="stylesheet">
    <!-- CSS Files -->
-   <link href="{{asset('css/material-dashboard.min.css?v=2.1.2')}}" rel="stylesheet" />
-   <link href="{{asset('css/material-dashboard-rtl.min.css?v=1.1')}}" rel="stylesheet" />
+   <link href="{{asset('public/css/material-dashboard.min.css?v=2.1.2')}}" rel="stylesheet" />
+   <link href="{{asset('public/css/material-dashboard-rtl.min.css?v=1.1')}}" rel="stylesheet" />
    <!-- CSS Just for demo purpose, don't include it in your project -->
-   <link href="{{asset('demo/demo.css')}}" rel="stylesheet" />
+   <link href="{{asset('public/demo/demo.css')}}" rel="stylesheet" />
    <style>
      body{
        text-align: right !important;
@@ -66,6 +44,9 @@
      }
      form a:hover{
        color: white !important;
+     }
+     .ps-scrollbar-x{
+       display: none !important;   /* hide scroll bar */
      }
     </style>
    @yield('links')
@@ -92,7 +73,7 @@
     <!-- Extra details for Live View on GitHub Pages -->
   
     <div class="wrapper ">
-      <div class="sidebar" data-color="purple" data-background-color="white" data-image="{{asset('img/sidebar-1.jpg')}}">
+      <div class="sidebar" data-color="purple" data-background-color="white" data-image="{{asset('public/img/sidebar-1.jpg')}}">
         <!--
           Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
   
@@ -114,7 +95,7 @@
             </li>
             @endcan
             @can('المناصب')
-            <li class="nav-item {{ request()->is('roles')||request()->is('role/add/form') ? 'active' : '' }}">
+            <li class="nav-item {{ request()->is('roles')||request()->is('role/add/form')||request()->is('edit/role/permissions/*') ? 'active' : '' }}">
              <a class="nav-link" href="{{route('roles')}}">
                <i class="material-icons">
                  work </i>
@@ -148,24 +129,30 @@
               </a>
             </li>
             @endcan
+            @can('المبيعات')
            <li class="nav-item {{ request()->is('sales')? 'active' : ''}}">
             <a class="nav-link" href="{{route('sales.index')}}">
               <i class="material-icons">shopping_bag</i>
               <p>المبيعات</p>
             </a>
           </li>
+          @endcan
+          @can('التقارير')
           <li class="nav-item">
             <a class="nav-link" href="#">
               <i class="material-icons">receipt_long</i>
               <p>التقارير</p>
             </a>
           </li>
+         @endcan
+          @can('المخزون')
           <li class="nav-item {{ request()->is('repository')||request()->is('add/product/form/*')||request()->is('show/products/*')? 'active' : ''}}">
             <a class="nav-link" href="{{route('repository.index')}}">
               <i class="material-icons">store</i>
               <p>المخزون</p>
             </a>
           </li>
+          @endcan
 
 
 
@@ -224,7 +211,7 @@
               <a class="nav-link" href="javascript:;">
                 <i class="material-icons">email</i>
                 <p class="d-lg-none d-md-block">
-                  inbox
+                  صندوق البريد
                 </p>
               </a>
             </li>
@@ -233,7 +220,7 @@
                 <i class="material-icons">notifications</i>
                 <span class="notification">1</span>
                 <p class="d-lg-none d-md-block">
-                  Some Actions
+                  الإشعارات
                 </p>
               </a>
               <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownMenuLink">
@@ -244,7 +231,7 @@
               <a class="nav-link" href="javascript:;" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="material-icons">account_circle</i>
                 <p class="d-lg-none d-md-block">
-                  Account
+                  الحساب
                 </p>
               </a>
               <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownProfile">
@@ -264,20 +251,20 @@
  <!-- End Navbar -->
  @yield('body')
   <!--   Core JS Files   -->
-  <script src="{{asset('js/core/jquery.min.js')}}" type="text/javascript"></script>
-  <script src="{{asset('js/core/popper.min.js')}}" type="text/javascript"></script>
-  <script src="{{asset('js/core/bootstrap-material-design.min.js')}}" type="text/javascript"></script>
-  {{--<script src="{{asset('js/plugins/perfect-scrollbar.jquery.min.js')}}"></script>--}}
+  <script src="{{asset('public/js/core/jquery.min.js')}}" type="text/javascript"></script>
+  <script src="{{asset('public/js/core/popper.min.js')}}" type="text/javascript"></script>
+  <script src="{{asset('public/js/core/bootstrap-material-design.min.js')}}" type="text/javascript"></script>
+  <script src="{{asset('public/js/plugins/perfect-scrollbar.jquery.min.js')}}"></script>
   <!--  Google Maps Plugin    -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2Yno10-YTnLjjn_Vtk0V8cdcY5lC4plU"></script>
+  {{--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2Yno10-YTnLjjn_Vtk0V8cdcY5lC4plU"></script>--}}
   <!-- Place this tag in your head or just before your close body tag. -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Chartist JS -->
-  <script src="{{asset('js/plugins/chartist.min.js')}}"></script>
+  <script src="{{asset('public/js/plugins/chartist.min.js')}}"></script>
   <!--  Notifications Plugin    -->
-  <script src="{{asset('js/plugins/bootstrap-notify.js')}}"></script>
+  <script src="{{asset('public/js/plugins/bootstrap-notify.js')}}"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="{{asset('js/material-dashboard.min.js?v=2.1.2')}}" type="text/javascript"></script>
+  <script src="{{asset('public/js/material-dashboard.min.js?v=2.1.2')}}" type="text/javascript"></script>
   
  
  @yield('scripts')

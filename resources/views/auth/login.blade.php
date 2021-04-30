@@ -5,7 +5,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <link rel="stylesheet" href="{{asset('css/login.css')}}">
+  <link rel="stylesheet" href="{{asset('public/css/login.css')}}">
 </head>
 <body>
     

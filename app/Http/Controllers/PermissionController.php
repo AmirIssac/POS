@@ -15,8 +15,8 @@ class PermissionController extends Controller
     public function addPermissionForm(){
         return view('dashboard.Permissions.add');
     }
-    public function addPermission(Request $request){
-         Permission::create(['name' => $request->permission]);
+    public function store(Request $request){
+        Permission::create(['name' => $request->permission]);
         return back()->with('success','تم إضافة الصلاحية الجديدة بنجاح');
     }
 }

@@ -17,7 +17,7 @@ class RolesController extends Controller
         return view('dashboard.Roles.add');
     }
     public function addRole(Request $request){
-        $role = Role::create(['name' => $request->role]);
+         Role::create(['name' => $request->role]);
         return back()->with('success','تم إضافة المنصب الجديد بنجاح');
     }
     public function editRolePermissionForm($id){
