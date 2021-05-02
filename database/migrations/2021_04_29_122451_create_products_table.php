@@ -16,7 +16,9 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('repository_id');
-            $table->string('details');  // read from scanner
+            $table->string('barcode'); // read from scanner
+            $table->string('name');
+            $table->string('details');  
             $table->float('price');
             $table->integer('quantity');
             $table->timestamps();

@@ -19,7 +19,13 @@
                       ID
                     </th>
                     <th>
-                      معلومات المنتج 
+                      Barcode  
+                    </th>
+                    <th>
+                      الاسم  
+                    </th>
+                    <th>
+                      التفاصيل  
                     </th>
                     <th>
                         السعر  
@@ -33,6 +39,8 @@
                     @foreach($products as $product)
                     <tr>
                      <td>{{$product->id}}</td>
+                     <td>{{$product->barcode}}</td>
+                     <td>{{$product->name}}</td>
                      <td>
                         {{$product->details}}
                      </td>

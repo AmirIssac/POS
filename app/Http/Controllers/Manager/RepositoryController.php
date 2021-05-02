@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
 use App\Product;
 use App\Repository;
 use App\User;
@@ -22,7 +23,7 @@ class RepositoryController extends Controller
         $repository = Repository::find($id);
         return view('manager.Repository.add_product_form')->with('repository',$repository);
     }
-    public function storeProduct(Request $request){
+  /*  public function storeProduct(Request $request){
         // query to check if product exist so we update the quantity column or if not we create new record
         $product = Product::where('repository_id',$request->repo_id)->where('details',$request->details)->first();
         if($product)  // found it
@@ -45,6 +46,40 @@ class RepositoryController extends Controller
             );
         }
         return back()->with('success','تمت الاضافة بنجاح');
+    } */
+
+    public function storeProduct(Request $request){
+        $totalPrice=0;
+        $count = count($request->barcode);    // number of records
+        for($i=0;$i<$count;$i++){
+             // query to check if product exist so we update the quantity column or if not we create new record
+            $product = Product::where('repository_id',$request->repo_id)->where('barcode',$request->barcode[$i])->first();
+            if($product)  // found it
+            {
+            $new_quantity = $product->quantity + $request->quantity[$i];
+            $new_price = $request->price[$i];
+            $product->update([
+                'quantity' => $new_quantity,
+                'price' => $new_price,
+            ]);
+            $totalPrice+=$request->total_price[$i];
+            }
+        else{
+            Product::create(
+                [
+                    'repository_id'=>$request->repo_id,
+                    'barcode' => $request->barcode[$i],
+                    'name'=>$request->name[$i],
+                    'details'=>$request->details[$i],
+                    'quantity'=>$request->quantity[$i],
+                    'price'=>$request->price[$i],
+                ]
+                );
+            $totalPrice+=$request->total_price[$i];
+        }
+
+        }
+        return back()->with('success','   تمت الإضافة بنجاح بمبلغ إجمالي   '.$totalPrice);
     }
     
     public function showProducts($id){
