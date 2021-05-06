@@ -64,19 +64,19 @@ form i:hover{
                      <div id="record">
                       <tr>
                         <td>
-                            <input type="text" name="barcode[]" class="form-control barcode" placeholder="مدخل خاص ب scanner" autofocus required>
+                            <input type="text" name="barcode[]" class="form-control barcode" placeholder="مدخل خاص ب scanner" autofocus >
                         </td>
                         <td>
-                          <input type="text" name="name[]" class="form-control" placeholder="اسم المنتج" required>
+                          <input type="text" name="name[]" class="form-control" placeholder="اسم المنتج" >
                       </td>
                       <td>
-                        <input type="text" name="details[]" class="form-control" placeholder="تفاصيل المنتج" required>
+                        <input type="text" name="details[]" class="form-control" placeholder="تفاصيل المنتج" >
                     </td>
                     <td>
-                      <input id="quantity0" type="number" name="quantity[]" class="form-control" placeholder="الكمية" required>
+                      <input id="quantity0" type="number" name="quantity[]" class="form-control" placeholder="الكمية" >
                   </td>
                         <td>
-                            <input id="price0"  type="number" name="price[]" step="0.01" class="form-control target" value="0" placeholder="السعر" required>
+                            <input id="price0"  type="number" name="price[]" step="0.01" class="form-control target" value="0" placeholder="السعر" >
                         </td>
                         <td>
                             <input id="total_price0" type="number" name="total_price[]" step="0.01" class="form-control" placeholder="المبلغ الإجمالي">

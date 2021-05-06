@@ -16,6 +16,9 @@ class Repository extends Model
     public function products(){
         return $this->hasMany(Product::class);
     }
+    public function productsAsc(){
+        return $this->hasMany(Product::class)->orderBy('quantity');
+    }
 
 
     public function owner(){   // custom function to get the owner of repository

@@ -24,21 +24,21 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         return [
-                'barcode' => 'required',
-                'name' => 'required',
-                'details' => 'required',
-                'price' => 'required',
-                'quantity' => 'required',
+                'barcode[]' => 'required',
+                'name[]' => 'required',
+                'details[]' => 'required',
+                'price[]' => 'required',
+                'quantity[]' => 'required',
         ];
     }
     public function messages()
 {
     return [
-        'barcode.required' => 'ادخال رمز الباركود مطلوب',
-        'name.required' => 'ادخال الاسم مطلوب',
-        'details.required' => 'ادخال تفاصيل المنتج مطلوب',
-        'price.required' => 'ادخال السعر مطلوب',
-        'quantity.required' => 'ادخال الكمية مطلوب',
+        'barcode[].required' => 'ادخال رمز الباركود مطلوب',
+        'name[].required' => 'ادخال الاسم مطلوب',
+        'details[].required' => 'ادخال تفاصيل المنتج مطلوب',
+        'price[].required' => 'ادخال السعر مطلوب',
+        'quantity[].required' => 'ادخال الكمية مطلوب',
     ];
 }
 }

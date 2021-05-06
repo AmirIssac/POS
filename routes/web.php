@@ -42,5 +42,7 @@ Route::get('/repository','Manager\RepositoryController@index')->name('repository
 Route::get('/add/product/form/{repository_id}','Manager\RepositoryController@addProductForm')->name('add.product.form');
 Route::post('/store/product','Manager\RepositoryController@storeProduct')->name('store.product');
 Route::get('/show/products/{repository_id}','Manager\RepositoryController@showProducts')->name('show.products');
+Route::get('/import/products/excel/{repository_id}','Manager\RepositoryController@importExcelForm')->name('import.excel.form');
+Route::post('/store/products/excel/{repository_id}','Manager\RepositoryController@importExcel')->name('import.excel');
 
 //Route::get('/home', 'HomeController@index')->name('home');
