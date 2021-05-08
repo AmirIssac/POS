@@ -64,22 +64,22 @@ form i:hover{
                      <div id="record">
                       <tr>
                         <td>
-                            <input type="text" name="barcode[]" class="form-control barcode" placeholder="مدخل خاص ب scanner" autofocus >
+                            <input type="text" name="barcode[]" class="form-control barcode" placeholder="مدخل خاص ب scanner"  required>
                         </td>
                         <td>
-                          <input type="text" name="name[]" class="form-control" placeholder="اسم المنتج" >
+                          <input type="text" name="name[]" class="form-control" placeholder="اسم المنتج" required>
                       </td>
                       <td>
-                        <input type="text" name="details[]" class="form-control" placeholder="تفاصيل المنتج" >
+                        <input type="text" name="details[]" class="form-control" placeholder="تفاصيل المنتج" required>
                     </td>
                     <td>
-                      <input id="quantity0" type="number" name="quantity[]" class="form-control" placeholder="الكمية" >
+                      <input id="quantity0" type="number" name="quantity[]" class="form-control" placeholder="الكمية" required>
                   </td>
                         <td>
-                            <input id="price0"  type="number" name="price[]" step="0.01" class="form-control target" value="0" placeholder="السعر" >
+                            <input id="price0"  type="number" name="price[]" step="0.01" class="form-control target" value="0" placeholder="السعر" required>
                         </td>
                         <td>
-                            <input id="total_price0" type="number" name="total_price[]" step="0.01" class="form-control" placeholder="المبلغ الإجمالي">
+                            <input id="total_price0" type="number" name="total_price[]" step="0.01" class="form-control" placeholder="المبلغ الإجمالي" required>
                             <input type="hidden" name="repo_id" value="{{$repository->id}}">
                         </td>
                         

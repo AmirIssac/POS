@@ -39,15 +39,16 @@
         </tr>
       @endforeach
     </table>
-  @endif
+  @endif 
+  <form method="POST" action="{{route('import.excel',$repository->id)}}" enctype="multipart/form-data">
+    @csrf
     <div class="container-fluid">
       <div class="row">
-        <form method="POST" action="{{route('import.excel',$repository->id)}}" enctype="multipart/form-data">
-            @csrf
+        
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title "> استيراد مخزون عن طريق excel</h4>
+              <h4 class="card-title "> استيراد مخزون عن طريق excel sheet</h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -72,9 +73,70 @@
         </div>
       </div>
     </div>
-</form>
   </div>
+
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-warning">
+          <h4 class="card-title "> معلومات هامة قبل الاستيراد </h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+  <div class="table-responsive">
+    <table id="myTable" class="table">
+
+      <tbody>
+         <tr>
+             <td>
+               أن يكون الملف لا يحوي ترويسات أي يحوي المعطيات المراد إدخالها فقط
+             </td>
+         </tr>
+         <tr>
+           <td>
+            أن تكون الأعمدة في الملف بالترتيب التالي :
+           </td>
+         </tr>
+         <tr>
+           <td>
+             العامود الأول يحوي رمز الباركود
+           </td>
+         </tr>
+         <tr>
+          <td>
+            العامود الثاني يحوي  اسم المنتج
+          </td>
+        </tr>
+        <tr>
+          <td>
+            العامود الثالث يحوي  معلومات المنتج
+          </td>
+        </tr>
+        <tr>
+          <td>
+            العامود الرابع يحوي  سعر المنتج
+          </td>
+        </tr>
+        <tr>
+          <td>
+            العامود الخامس  يحوي الكمية  
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+        </div>
+      </div>
+
+
+
+
+
 </div>
+</form>
+  
 </div>
 @endsection
 

@@ -37,12 +37,19 @@ Route::post('/permission/store','PermissionController@store')->name('permission.
 Route::resource('/repositories','RepositoryController');
 
 // manager
-Route::get('/sales','Manager\SellController@index')->name('sales.index');
+Route::group(['middleware' => ['permission:المبيعات','permission:التقارير','permission:المخزون']], function () {
 Route::get('/repository','Manager\RepositoryController@index')->name('repository.index');
-Route::get('/add/product/form/{repository_id}','Manager\RepositoryController@addProductForm')->name('add.product.form');
 Route::post('/store/product','Manager\RepositoryController@storeProduct')->name('store.product');
-Route::get('/show/products/{repository_id}','Manager\RepositoryController@showProducts')->name('show.products');
-Route::get('/import/products/excel/{repository_id}','Manager\RepositoryController@importExcelForm')->name('import.excel.form');
-Route::post('/store/products/excel/{repository_id}','Manager\RepositoryController@importExcel')->name('import.excel');
+Route::get('/sales','Manager\SellController@index')->name('sales.index');
+});
+Route::group(['middleware'=>['permission:المبيعات','permission:التقارير','permission:المخزون','check_user']], function () {
+    Route::get('/add/product/form/{repository_id}','Manager\RepositoryController@addProductForm')->name('add.product.form');
+    Route::get('/show/products/{repository_id}','Manager\RepositoryController@showProducts')->name('show.products');
+    Route::get('/import/products/excel/{repository_id}','Manager\RepositoryController@importExcelForm')->name('import.excel.form');
+    Route::post('/store/products/excel/{repository_id}','Manager\RepositoryController@importExcel')->name('import.excel');
+    Route::get('/create/invoice/form/{repository_id}','Manager\SellController@createInvoiceForm')->name('create.invoice');
+    Route::get('/show/invoice/details/{repository_id}','Manager\SellController@invoiceDetails')->name('invoice.details');
+    Route::post('/sell/{repository_id}','Manager\SellController@sell')->name('make.sell');
+});
 
 //Route::get('/home', 'HomeController@index')->name('home');

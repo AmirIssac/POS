@@ -27,7 +27,7 @@ class RepositoryController extends Controller
     }
 
 
-    public function storeProduct(ProductRequest $request){
+    public function storeProduct(Request $request){
         $totalPrice=0;
         $count = count($request->barcode);    // number of records
         for($i=0;$i<$count;$i++){
