@@ -64,7 +64,7 @@ form i:hover{
                      <div id="record">
                       <tr>
                         <td>
-                            <input type="text" name="barcode[]" class="form-control barcode" placeholder="مدخل خاص ب scanner"  required>
+                            <input type="text" name="barcode[]" class="form-control barcode" placeholder="مدخل خاص ب scanner" id="autofocus"  required>
                         </td>
                         <td>
                           <input type="text" name="name[]" class="form-control" placeholder="اسم المنتج" required>
@@ -129,4 +129,9 @@ form i:hover{
     //$('.barcode').last().focus();
   });
 </script>
+<script>
+  window.onload=function(){
+    $('#autofocus').focus();
+  };
+  </script>
 @endsection

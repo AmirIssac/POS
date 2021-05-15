@@ -18,7 +18,7 @@ class RepositoryController extends Controller
     public function index(){
         $user = Auth::user();
         $user = User::find($user->id);
-        $repositories = $user->repositories;   // display all repositories for the owner
+        $repositories = $user->repositories;   // display all repositories for the owner|worker
         return view('manager.Repository.index')->with(['repositories'=>$repositories]);
     }
     public function addProductForm($id){

@@ -28,40 +28,22 @@
            <div class="row">
              <div class="col-lg-3 col-md-6 col-sm-6">
                <div class="card card-stats">
-                 <div class="card-header card-header-info card-header-icon">
-                  <a href="{{route('create.invoice',$repository->id)}}">
+                 <div class="card-header card-header-danger card-header-icon">
+                  <a href="{{route('show.invoices',$repository->id)}}">
                    <div class="card-icon">
-                   <i class="material-icons">add_circle_outline</i>
+                   <i class="material-icons">receipt</i>
                    </div>
                   </a>
-                   <p class="card-category">فاتورة جديدة</p>
-                   <h6 class="card-title">انشاء</h6>
+                   <p class="card-category">الفواتير</p>
+                   <h6 class="card-title">عرض</h6>
                  </div>
                  <div class="card-footer">
                    <div class="stats">
-                     <i class="material-icons">update</i>
+                     <i class="material-icons">receipt</i>
                    </div>
                  </div>
                </div>
              </div>
-             <div class="col-lg-3 col-md-6 col-sm-6">
-              <div class="card card-stats">
-                <div class="card-header card-header-warning card-header-icon">
-                 <a href="{{route('show.pending',$repository->id)}}">
-                  <div class="card-icon">
-                  <i class="material-icons">incomplete_circle</i>
-                  </div>
-                 </a>
-                  <p class="card-category">فاتورة معلقة</p>
-                  <h6 class="card-title">استكمال</h6>
-                </div>
-                <div class="card-footer">
-                  <div class="stats">
-                    <i class="material-icons">update</i>
-                  </div>
-                </div>
-              </div>
-            </div>
            </div>
          
            </div>

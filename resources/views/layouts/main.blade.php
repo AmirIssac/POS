@@ -138,8 +138,8 @@
           </li>
           @endcan
           @can('التقارير')
-          <li class="nav-item">
-            <a class="nav-link" href="#">
+          <li class="nav-item {{ request()->is('reports')? 'active' :'' }}">
+            <a class="nav-link" href="{{route('reports.index')}}">
               <i class="material-icons">receipt_long</i>
               <p>التقارير</p>
             </a>

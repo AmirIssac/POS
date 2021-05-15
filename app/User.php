@@ -40,4 +40,8 @@ class User extends Authenticatable
     public function repositories(){
         return $this->belongsToMany(Repository::class);
     }
+
+    public function invoices(){
+        return $this->hasMany(Invoice::class);
+    }
 }

@@ -50,6 +50,17 @@ Route::group(['middleware'=>['permission:المبيعات','permission:التق�
     Route::get('/create/invoice/form/{repository_id}','Manager\SellController@createInvoiceForm')->name('create.invoice');
     Route::get('/show/invoice/details/{repository_id}','Manager\SellController@invoiceDetails')->name('invoice.details');
     Route::post('/sell/{repository_id}','Manager\SellController@sell')->name('make.sell');
+    Route::get('/show/pending/invoices/{repository_id}','Manager\SellController@showPending')->name('show.pending');
 });
+Route::get('/reports','Manager\ReportController@index')->name('reports.index');
+Route::get('/show/invoices/{repository_id}','Manager\ReportController@showInvoices')->name('show.invoices');
+Route::get('/search/invoices/{repository_id}','Manager\ReportController@searchInvoicesByDate')->name('search.invoices');
+Route::get('/search/pending/{repository_id}','Manager\ReportController@searchPending')->name('search.pending');
+
+
+
+
+Route::get('/complete/invoice/form/{invoice_id}','Manager\SellController@completeInvoiceForm')->name('complete.invoice.form');
+Route::post('/complete/invoice/{invoice_id}','Manager\SellController@completeInvoice')->name('complete.invoice');
 
 //Route::get('/home', 'HomeController@index')->name('home');

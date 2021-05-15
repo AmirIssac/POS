@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Repository extends Model
 {
     protected $fillable = [
-        'name', 'address',
+        'name', 'address','category_id','cash_balance','card_balance',
     ];
     //
     public function users(){
@@ -19,6 +19,15 @@ class Repository extends Model
     public function productsAsc(){
         return $this->hasMany(Product::class)->orderBy('quantity');
     }
+    public function category(){
+        return $this->belongsTo(RepositoryCategory::class);
+    }
+    public function invoices(){
+        return $this->hasMany(Invoice::class);
+    }
+    public function invoicesDesc(){
+        return $this->hasMany(Invoice::class)->orderBy('created_at','DESC');
+    }
 
 
     public function owner(){   // custom function to get the owner of repository
@@ -28,5 +37,13 @@ class Repository extends Model
                 $owner = $user->name;
         }
         return $owner;
+    }
+    public function productsCount(){    // custom function calculate the count of products in repository
+        $count = 0;
+        $products = $this->products;
+        foreach($products as $product){
+            $count += $product->quantity; 
+        }
+        return $count;
     }
 }

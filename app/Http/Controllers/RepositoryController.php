@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repository;
+use App\RepositoryCategory;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -27,7 +28,8 @@ class RepositoryController extends Controller
      */
     public function create()
     {
-        return view('dashboard.Repositories.add');
+        $categories = RepositoryCategory::all();
+        return view('dashboard.Repositories.add')->with('categories',$categories);
     }
 
     /**
@@ -40,17 +42,26 @@ class RepositoryController extends Controller
     {
        $repository = Repository::create([
             'name' => $request->repositoryName,
-            'address' => $request->address
+            'address' => $request->address,
+            'category_id'=>$request->category_id,
         ]);
-
+        if(!$request->exist){      // owner not exist before
        $user = User::create([
             'name' => $request->ownerName,
             'email' => $request->owneremail,
             'password' => Hash::make($request->ownerpassword),
             'phone' => $request->ownerphone,
         ]);
+        if($request->category_id==1)
         $user->assignRole('مالك-مخزن');
+        /*if($request->category_id==2)
+        $user->assignRole('مالك-محل خاص');*/
         $repository->users()->attach($user->id); //pivot table insert
+       }
+       else{    // owner exist before
+        $user = User::where('email',$request->existemail)->get();
+        $repository->users()->attach($user[0]->id);
+       }
         return back()->with('success','تمت الاضافة بنجاح');
     }
 

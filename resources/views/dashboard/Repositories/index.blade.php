@@ -21,6 +21,9 @@
                           اسم المخزن
                         </th>
                         <th>
+                          نوع المخزن 
+                        </th>
+                        <th>
                         مالك المخزن
                       </th>
                        </thead>
@@ -35,7 +38,10 @@
                              {{$repository->name}}
                            </td>
                            <td>
-                            {{$repository->owner()}}
+                            {{$repository->category->name}}
+                          </td>
+                           <td>
+                            {{$repository->owner()}}   {{-- custom func in repo Model --}}
                            </td>
                           </tr>
                          @endforeach
