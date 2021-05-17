@@ -70,17 +70,12 @@
                         <td>
                             السعر الكلي
                         </td>
+                       
                         <td>
-                            دفع كاش
+                              كاش
                         </td>
                         <td>
-                            دفع بالبطاقة
-                        </td>
-                        <td>
-                            كمية المدفوع كاش
-                        </td>
-                        <td>
-                            كمية المدفوع بالبطاقة
+                              بطاقة
                         </td>
                         <td>
                             حالة الفاتورة
@@ -97,32 +92,26 @@
                             {{$invoice->total_price}}
                         </td>
                         <td>
-                            @if($invoice->cash_check==true)
+                            @if($invoice->cash_amount>0)
                             <span class="badge badge-success">
-                                نعم
+                            {{$invoice->cash_amount}}
                             </span>
                             @else
                             <span class="badge badge-danger">
-                                لا
-                            </span>
+                              {{$invoice->cash_amount}}
+                              </span>
                             @endif
                         </td>
                         <td>
-                            @if($invoice->card_check==true)
-                            <span class="badge badge-success">
-                                نعم
-                            </span>
-                            @else
-                            <span class="badge badge-danger">
-                                لا
-                            </span>
-                            @endif 
-                        </td>
-                        <td>
-                            {{$invoice->cash_amount}}
-                        </td>
-                        <td>
+                          @if($invoice->card_amount>0)
+                          <span class="badge badge-success">
+                          {{$invoice->card_amount}}
+                          </span>
+                          @else
+                          <span class="badge badge-danger">
                             {{$invoice->card_amount}}
+                            </span>
+                          @endif
                         </td>
                         <td>
                             @if($invoice->status=="delivered")

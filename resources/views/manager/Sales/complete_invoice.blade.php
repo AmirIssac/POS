@@ -24,6 +24,17 @@
   input[name=date]{
     border: 1px solid white;
   }
+   /* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
 @media print{
   *{
     margin: 0;
@@ -147,14 +158,14 @@
         <h4> &nbsp;الدفع كاش</h4>
         <input style="margin: 7px 10px 0 0" type="checkbox" name="cash" id="cash" checked>
           </div>
-        <input style="margin-right: 0px" type="number" min="0" step="0.1" name="cashVal" id="cashVal" value="{{($invoice->total_price)-($invoice->cash_amount+$invoice->card_amount)}}" class="form-control visible">
+        <input style="margin-right: 0px" type="number" min="0,1" step="0.1" name="cashVal" id="cashVal" value="{{($invoice->total_price)-($invoice->cash_amount+$invoice->card_amount)}}" class="form-control visible">
         </div>
         <div style="display: flex;flex-direction: column;">
           <div style="display: flex;">
         <h4> &nbsp;الدفع بالبطاقة</h4>
         <input style="margin: 7px 10px 0 0" type="checkbox" id="card" name="card">
           </div>
-        <input style="margin-right: 0px" type="number" min="0" step="0.1" name="cardVal" id="cardVal" value="0" class="form-control hidden">
+        <input style="margin-right: 0px" type="number" min="0.1" step="0.1" name="cardVal" id="cardVal" value="" class="form-control hidden">
         </div>
 </div>
         {{--<button onclick="window.print();" class="btn btn-success"> طباعة </button>--}}
@@ -179,30 +190,49 @@ if($('#cash').is(':checked') && $('#card').is(':checked')){
 if($('#cash').is(':checked') && $('#card').prop('checked') == false){
   $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
   //$('#cashVal').val( $('#total_price').val());
-  $('#cardVal').val(0);
+  $('#cashVal').val($('#extra_price').val());
+  $('#cardVal').val(null);
 }
 if($('#cash').prop('checked') == false && $('#card').prop('checked') == true){
   $('input[name="cardVal"]').removeClass('hidden').addClass('visibl');
   $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
-  $('#cashVal').val(0);
+  $('#cardVal').val($('#extra_price').val());
+  $('#cashVal').val(null);
 }
 if($('#cash').prop('checked') == false && $('#card').prop('checked') == false){   // error
-  $('#cash').prop('checked',true);
+  //$('#cash').prop('checked',true);
   $('input[name="cashVal"]').removeClass('hidden').addClass('visibl');
   $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
-  $('#cashVal').val( $('#extra_price').val());
+  //$('#cashVal').val( $('#extra_price').val());
+  $('#cashVal').val(null);
+  $('#cardVal').val(null);
+  $('#submit').prop('disabled', true);
 }
 });
 </script>
 
 <script>    // cant submit if cash + card != total real price    //Except if we make invoice pending
  $('input[name="quantity[]"],#cashVal,#cardVal,#cash,#card').on("keyup change",function(){
-    sum = parseFloat($('#cashVal').val()) + parseFloat($('#cardVal').val());
+  var sum;
+    var cash =  parseFloat($('#cashVal').val());
+    var card = parseFloat($('#cardVal').val());
+    if($('#cashVal').val()=="" && $('#cardVal').val()!=""){
+      sum = card + 0;
+    }
+   if($('#cardVal').val()=="" && $('#cashVal').val()!=""){
+      sum = cash + 0;
+    }
+    if($('#cashVal').val()!="" && $('#cardVal').val()!=""){
+    sum = cash + card ;
+    }
     if(sum == $('#extra_price').val()){
       $('button[type="submit"]').prop('disabled', false);
     }
     else if(sum != $('#extra_price').val()){
       $('button[type="submit"]').prop('disabled', true);   // cant submit if cash and card not equals the total
+    }
+    if(cash <=0 || card<=0){ // dont accept values less or equal to zero
+      $('button[type="submit"]').prop('disabled', true);
     }
   });
 </script>

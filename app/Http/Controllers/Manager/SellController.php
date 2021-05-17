@@ -143,6 +143,18 @@ class SellController extends Controller
         else{
             $card = false;
         } 
+        if(!$request->cashVal){
+            $cashVal = 0;
+        }
+        else{
+            $cashVal = $request->cashVal;
+        }
+        if(!$request->cardVal){
+            $cardVal = 0;
+        }
+        else{
+            $cardVal = $request->cardVal;
+        }
         Invoice::create(
             [
                 'repository_id' => $repository->id,
@@ -151,8 +163,8 @@ class SellController extends Controller
                 'total_price' => $request->total_price,
                 'cash_check' => $cash,
                 'card_check' => $card,
-                'cash_amount' => $request->cashVal,
-                'card_amount' => $request->cardVal,
+                'cash_amount' => $cashVal,
+                'card_amount' => $cardVal,
                 'status' => $status,
                 'phone' => $request->phone,
                 'created_at' => $request->date,
@@ -190,13 +202,25 @@ class SellController extends Controller
         else{
             $card = false;
         } 
+        if(!$request->cashVal){
+            $cashVal = 0;
+        }
+        else{
+            $cashVal = $request->cashVal;
+        }
+        if(!$request->cardVal){
+            $cardVal = 0;
+        }
+        else{
+            $cardVal = $request->cardVal;
+        }
         $invoice->update(
             [
                 'user_id' => Auth::user()->id,
                 'cash_check' => $cash,
                 'card_check' => $card,
-                'cash_amount' => $invoice->cash_amount + $request->cashVal,
-                'card_amount' => $invoice->card_amount + $request->cardVal,
+                'cash_amount' => $invoice->cash_amount + $cashVal,
+                'card_amount' => $invoice->card_amount + $cardVal,
                 'status' => 'delivered',
                 'created_at' => $request->date,
             ]

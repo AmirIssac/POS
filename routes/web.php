@@ -63,4 +63,7 @@ Route::get('/search/pending/{repository_id}','Manager\ReportController@searchPen
 Route::get('/complete/invoice/form/{invoice_id}','Manager\SellController@completeInvoiceForm')->name('complete.invoice.form');
 Route::post('/complete/invoice/{invoice_id}','Manager\SellController@completeInvoice')->name('complete.invoice');
 
+
+Route::get('/ajax/get/product/{repository_id}/{barcode}','Manager\RepositoryController@getProductAjax');
+
 //Route::get('/home', 'HomeController@index')->name('home');

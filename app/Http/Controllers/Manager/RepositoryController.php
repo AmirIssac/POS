@@ -85,4 +85,9 @@ class RepositoryController extends Controller
         (new ProductsImport($id))->import($file);
         return back()->with('success','تم استيراد الملف بنجاح');
     }
+
+    public function getProductAjax($repo_id,$barcode){
+        $product = Product::where('repository_id',$repo_id)->where('barcode',$barcode)->get(); // first record test
+        return response($product);
+    }
 }
