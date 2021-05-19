@@ -7,6 +7,24 @@ form i{
 form i:hover{
   cursor: pointer;
 }
+.blank{
+  background-color: white !important;
+  border: 2px solid white !important;
+  border-radius:10px;
+}
+.ajaxSuccess{
+  background-color: rgb(41, 206, 41) !important;
+  color: white;
+}
+#submit{
+  position: fixed;
+  left: 965px;
+  top: 230px;
+  z-index: 2;
+}
+.row{
+  margin-right: 100px;
+}
 </style>
 @endsection
 @section('body')
@@ -27,7 +45,7 @@ form i:hover{
   @endif
   <form method="GET" action="{{route('invoice.details',$repository->id)}}">
     @csrf
-  <div class="container-fluid">
+  <div  class="container-fluid">
     <div class="row">
       
       <div class="col-md-12">
@@ -55,30 +73,37 @@ form i:hover{
                     الكمية 
                   </th>
                 </thead>
+
                 <tbody>
-                   <div id="record">
+                  @for ($count=0;$count<=90;$count++)
+                   <div class="record">
                     <tr>
                       <td>
                         <input type="hidden" name="repo_id" id="repo_id" class="form-control" value="{{$repository->id}}">
-                          <input type="text" name="barcode[]" id="bar0" class="form-control barcode" placeholder="مدخل خاص ب scanner" id="autofocus" required>
+                          <input type="text" id="bar{{$count}}" name="barcode[]" value="{{old('barcode[$count]')}}"  class="form-control barcode" placeholder="مدخل خاص ب scanner" id="autofocus">
                       </td>
                       <td>
-                        <input type="text" id="name0" name="name[]" class="form-control name" readonly>
+                        <input type="text" id="name{{$count}}"  name="name[]" value="{{old('name.'.$count)}}" class="form-control name blank">
                       </td>
                       <td>
-                        <input type="text" id="details0" name="details[]" class="form-control details" readonly>
+                        <input type="text" id="details{{$count}}"  name="details[]" value="{{old('details.'.$count)}}" class="form-control details blank">
                       </td>
                       <td>
-                        <input type="text" id="price0" name="price[]" class="form-control price" readonly>
+                        <input type="text" id="price{{$count}}"  name="price[]" value="{{old('price.'.$count)}}" class="form-control price blank">
                       </td>
                       <td>
-                        <input type="text" name="quantity[]" class="form-control" value="1" placeholder="الكمية" required>
+                        @if(old('quantity.'.$count))
+                        <input type="text" id="quantity{{$count}}" name="quantity[]" value="{{old('quantity.'.$count)}}" class="form-control" placeholder="الكمية">
+                        @else
+                        <input type="text" id="quantity{{$count}}" name="quantity[]"  class="form-control" value="1" placeholder="الكمية">
+                        @endif
                     </td>
                 </tr>
             </div>
+            @endfor
          </tbody>
        </table>
-       <button  type="submit" class="btn btn-primary"> عرض الفاتورة</button>
+       <button id="submit"  type="submit" class="btn btn-success"> عرض الفاتورة</button>
        {{--<i class="material-icons">add_circle</i>--}}
    </div>
 </div>
@@ -106,31 +131,11 @@ window.onload=function(){
 };
 </script>
 <script>    // Ajax
-    /*var count = 1;*/
-     const interval =
-     setInterval(function() {
-   // method to be executed;
-    
-    //$('#btn-ajax').on('click',function(){
-    
-    $('#myTable').find('#bar0,#bar1,#bar2,#bar3,#bar4,#bar5,#bar6,#bar7,#bar8,#bar9,#bar10,#bar11,#bar12,#bar13,#bar14,#bar15,#bar16,#bar17,#bar18,#bar19,#bar20,#bar21,#bar22,#bar23,#bar24,#bar25,#bar26,#bar27,#bar28,#bar29,#bar30,#bar31').on('keyup',function(){
-      /*var myJsonData = {repo_id: 1 , barcode:123};
-      $.get("{{URL::to('/ajax/get/product')}}" , myJsonData, , function(data){
-      console.log(data);
-    });*/
-
-   
-    /*var count = $('#myTable').find('.barcode').length;
-    console.log(count);*/
-    //var k;
-    //for( k=0 ; k<100 ; k++){
+    $('.barcode').on('keyup',function(){
+     
     var barcode = $(this).val();
-    //$(this).attr('readonly','readonly');
-    //$(this).fadeOut();
-    //console.log(barcode);
-    var test = $(this).attr("id");  // extract id
-    var gold =  test.slice(3);   // remove bar from id to take just the number
-    //var barcode = $('#myTable').find('#bar'+k+'').val();
+    var id = $(this).attr("id");  // extract id
+    var gold =  id.slice(3);   // remove bar from id to take just the number
     var repo_id = $('#repo_id').val();
     $.ajax({
            type: "get",
@@ -138,39 +143,16 @@ window.onload=function(){
            //dataType: 'json',
           success: function(data){    // data is the response come from controller
             $.each(data,function(i,value){
-              //for(var j=0 ; j<200 ; j++){
-              //console.log(value.name);
-              //console.log(gold);
-              //console.log(k);
-              //console.log($('#myTable').find('.name',k));
-              //console.log($('#myTable').find('.name').eq(1).val());
-              $('#myTable').find('#name'+gold+'').val(value.name);
-              $('#myTable').find('#details'+gold+'').val(value.details);
-              $('#myTable').find('#price'+gold+'').val(value.price);
-              //$('#myTable').find('.name',k).val(value.name);    // eq(k)
-              //$('#myTable').find('.details',k).val(value.details);
-             // $('#myTable').find('.price',k).val(value.price);
-              //}
+              $('#name'+gold+'').val(value.name);
+              $('#name'+gold+'').addClass('ajaxSuccess');
+              $('#details'+gold+'').val(value.details);
+              $('#details'+gold+'').addClass('ajaxSuccess');
+              $('#price'+gold+'').val(value.price);
+              $('#price'+gold+'').addClass('ajaxSuccess');
            });
           }
     }); // ajax close
-    /*if($('#myTable').find('#name'+gold+'').val()!=""){
-           $('#myTable tr:last').after('<tr><td><input type="text" name="barcode[]" id="bar'+count+'" class="form-control barcode" placeholder="مدخل خاص ب scanner" required></td> <td><input type="text" name="name[]" id="name'+count+'" class="form-control name" readonly></td><td><input type="text" name="details[]" id="details'+count+'" class="form-control details" readonly></td><td><input type="text" name="price[]" id="price'+count+'" class="form-control price" readonly></td><td><input type="number" id="quantity'+count+'" name="quantity[]" class="form-control" placeholder="الكمية" value="1" required></td> </tr>');
-            $('#myTable').find('#bar'+count+'').focus();   // we use find to select new added element
-            count = count +1;}*/
-          
-       //console.log(data);
-       
-    /*$.ajax({
-      url: '/ajax/get/product',
-      type: "get",
-      data:{ _token: "{{csrf_token()}}", repo_id: 1, barcode: 123 },
-      dataType: 'json',
-    });*/
-  //});
-  //} // for k loop
   });
-}, 500);
 </script>
 <script>   // stop submiting form when click enter
 $(document).keypress(function(e) {
@@ -182,12 +164,15 @@ $(document).keypress(function(e) {
 </script>
 
 <script>
-  var count = 1;
   $(document).keypress(function(e) {
     if (e.keyCode == 13) {
-  $('#myTable tr:last').after('<tr><td><input type="text" name="barcode[]" id="bar'+count+'" class="form-control barcode" placeholder="مدخل خاص ب scanner" required></td> <td><input type="text" name="name[]" id="name'+count+'" class="form-control name" readonly></td><td><input type="text" name="details[]" id="details'+count+'" class="form-control details" readonly></td><td><input type="text" name="price[]" id="price'+count+'" class="form-control price" readonly></td><td><input type="number" id="quantity'+count+'" name="quantity[]" class="form-control" placeholder="الكمية" value="1" required></td> </tr>');
-  $('#myTable').find('#bar'+count+'').focus();   // we use find to select new added element
-  count = count +1;
+      // Get the focused element:
+      var focused = $(':focus');
+      var id = focused.attr("id");  // extract id
+      var gold =  id.slice(3);   // remove bar from id to take just the number
+      var num = parseInt(gold) +1;
+      // focus on next element
+      $('#bar'+num+'').focus();
     }
   //$('.barcode').last().focus();
 });

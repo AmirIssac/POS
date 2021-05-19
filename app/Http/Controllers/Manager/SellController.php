@@ -52,12 +52,54 @@ class SellController extends Controller
             'invoice_total_price' => $invoice_total_price,
             ]);
     }*/
-    public function invoiceDetails(Request $request , $id){
+   /* public function invoiceDetails(Request $request , $id){
         $repository = Repository::find($id);
         $count = count($request->barcode);    // number of records
         $products = collect(new Product());
         $invoice_total_price = 0 ;
         for($i=0;$i<$count;$i++){
+            $product = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->get();
+            // check if product not exist that mean one of the barcode inserted is wrong
+            if($product->isEmpty())
+            return back()->with('fail','هنالك خطأ بإدخال الباركود الرجاء التأكد من صحة الإدخال');
+            // check all the quantities if <= the stored quantity of stored products
+            if($product[0]->quantity<$request->quantity[$i])
+              return back()->with('fail','الكمية أكبر من المتوفر للقطعة'.'  '.$product[0]->name);
+            // check if product taked before so we dont craete new record to not make the invoice big we just add quantity
+            if($products->contains('barcode',$product[0]->barcode)){
+                $p = $request->quantity[$i];
+                $products->where('barcode', $product[0]->barcode)->map(function ($item, $key) use ($p){    // we use map to change value in collection
+                     $item->quantity = $item->quantity + $p;
+                }); 
+                $price = $product[0]->price * $request->quantity[$i];
+                $invoice_total_price += $price ;
+                continue;
+            }
+            $product[0]->quantity = $request->quantity[$i];
+            $products = $products->toBase()->merge($product);   // collections sum
+            foreach($product as $pro)    // we need to use foreach because we deal with collection
+            $price = $pro->price * $request->quantity[$i];
+            $invoice_total_price += $price ;
+        }
+        $date = now();  // invoice date
+        return view('manager.Sales.show_invoice_beforePrint')->with([
+            'repository'=>$repository,
+            'products'=>$products,
+            //'quantities' => $quantities,
+            'invoice_total_price' => $invoice_total_price,
+            'date' => $date,
+            ]);
+    } */
+
+    public function invoiceDetails(Request $request , $id){
+        $repository = Repository::find($id);
+        //return $request->barcode;
+        $count = count($request->barcode);    // number of records
+        $products = collect(new Product());
+        $invoice_total_price = 0 ;
+        for($i=0;$i<$count;$i++){
+            if(!$request->barcode[$i])    // null record
+            continue;
             $product = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->get();
             // check if product not exist that mean one of the barcode inserted is wrong
             if($product->isEmpty())
@@ -233,6 +275,6 @@ class SellController extends Controller
                 ]
                 );
                 
-                return redirect()->route('search.pending',[$repository->id])->with('completeSuccess','تمت عملية استكمال الفاتورة بنجاح');
+                return redirect()->route('show.pending',[$repository->id])->with('completeSuccess','تمت عملية استكمال الفاتورة بنجاح');
     }
 }

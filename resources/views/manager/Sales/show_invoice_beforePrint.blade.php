@@ -192,8 +192,9 @@ input[type=number] {
        </div>
          <div>
         {{--<button onclick="window.print();" class="btn btn-success"> طباعة </button>--}}
-        <button id="submit" onclick="window.print();" type="submit" class="btn btn-danger"> تأكيد الفاتورة وطباعتها </button>
-        <a href="{{route('create.invoice',$repository->id)}}" class="btn btn-warning"> فاتورة جديدة </a>
+        <button id="submit" onclick="window.print();" type="submit" class="btn btn-success"> تأكيد الفاتورة وطباعتها </button>
+        <a href="{{route('create.invoice',$repository->id)}}" class="btn btn-danger"> فاتورة جديدة </a>
+        <a style="float: left;" href="javascript:history.back()" class="btn btn-warning"> رجوع </a>
    </div>
 </div>
 </div>
