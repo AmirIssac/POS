@@ -4,6 +4,12 @@
   table span{
     width: 50px;
   }
+  #warning{
+    font-size: 38px;
+  }
+  #code{
+    float: left;
+  }
 </style>
 @endsection
 @section('body')
@@ -22,13 +28,24 @@
       </button>
     </div>
   </form>
+    <form action="{{route('search.invoices.code',$repository->id)}}" method="GET">
+      @csrf
+      <div style="width: 300px; margin-right: 20px;" class="input-group no-border">
+        <input type="text" name="code" class="form-control" placeholder="ابحث برقم الفاتورة">
+        <button type="submit" class="btn btn-black btn-round btn-just-icon">
+          <i class="material-icons">search</i>
+        </button>
+      </div>
+    </form>
+    @if($invoices->count()>0)
     @foreach($invoices as $invoice)
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title"> فاتورة  {{$invoice->created_at}}</h4>
+              <h4 class="card-title"> {{$invoice->created_at}}</h4>
+              <h4>رقم الفاتورة <span class="badge badge-success">{{$invoice->code}}</span></h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -144,6 +161,11 @@
         
       </div>
       @endforeach
+      @else
+      <span id="warning" class="badge badge-warning">
+        لا يوجد فواتير 
+      </span>
+      @endif
     </div>
 </div>
 {{ $invoices->links() }}

@@ -37,7 +37,8 @@
             @csrf
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title"> فاتورة  {{$invoice->created_at}}</h4>
+              <h4 class="card-title">   {{$invoice->created_at}}</h4>
+              <h4>رقم الفاتورة <span class="badge badge-success">{{$invoice->code}}</span></h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">

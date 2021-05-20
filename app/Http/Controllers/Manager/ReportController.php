@@ -35,6 +35,12 @@ class ReportController extends Controller
         return view('manager.Reports.show_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
     }
 
+    public function searchInvoicesByCode(Request $request , $id){
+        $repository = Repository::find($id);
+        $invoices = Invoice::where('repository_id',$repository->id)->where('code',$request->code)->paginate(10);
+        return view('manager.Reports.show_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
+    }
+
     public function searchPending(Request $request , $id){
         $repository = Repository::find($id);
         $invoices = Invoice::where('repository_id',$repository->id)->where('status','pending')->where('phone','like', '%' . $request->phoneSearch . '%')->paginate(5);

@@ -27,6 +27,12 @@
   input[name=date]{
     border: 1px solid white;
   }
+  #code{
+    border: 1px solid white;
+  }
+  #back{
+    float: left;
+  }
   /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -61,14 +67,24 @@ input[type=number] {
     font-size: 32px;
     background-color: white !important;
   }
+  #phoneinput{
+    font-size: 28px;
+  }
   /*#paymethods *{
     visibility: hidden;
   }
   #paymethods input[type="number"]{
     display: none;
   }*/
-  #card,#cash,#status,#client{
+  #card,#cash,#client{
     display: none;
+  }
+  #status{
+    width: 20px;
+    height: 20px;
+  }
+  #code{
+    font-size: 28px;
   }
 }
 </style>
@@ -100,6 +116,7 @@ input[type=number] {
                   <h4>
                   <span class="badge badge-success">
                       تفاصيل الفاتورة  </span> <input type="text" name="date" value="{{$date}}" readonly></h4>
+                      رقم الفاتورة <input type="text" name="code" id="code" value="{{$code}}" readonly>
                   <th>
                     الاسم  
                   </th>
@@ -183,7 +200,7 @@ input[type=number] {
                         <div style="display: flex;">
                       <input style="margin: 7px 10px 0 0" type="checkbox" id="client">
                       <h4 style="margin-right: 10px;">  جوال العميل </h4>
-                      <input style="margin-right: 10px; type="text" name="phone" id="phoneinput" class="hidden" placeholder="0519999999">
+                      <input style="margin-right: 10px; type="text" name="phone" id="phoneinput" class="form-control hidden" placeholder="أدخل رقم الجوال">
                         </div>
                     </div>
                     </div>
@@ -194,7 +211,7 @@ input[type=number] {
         {{--<button onclick="window.print();" class="btn btn-success"> طباعة </button>--}}
         <button id="submit" onclick="window.print();" type="submit" class="btn btn-success"> تأكيد الفاتورة وطباعتها </button>
         <a href="{{route('create.invoice',$repository->id)}}" class="btn btn-danger"> فاتورة جديدة </a>
-        <a style="float: left;" href="javascript:history.back()" class="btn btn-warning"> رجوع </a>
+        <a href="javascript:history.back()" class="btn btn-warning" id="back"> رجوع </a>
    </div>
 </div>
 </div>
@@ -313,7 +330,7 @@ $('#status').change(function(){
     }
   if($('#status').prop('checked') == false){    // pending
     //$('#stat').text("معلقة");
-    if(sum < $('#total_price').val())
+    if(sum <= $('#total_price').val())
     $('button[type="submit"]').prop('disabled', false);
     else
     $('button[type="submit"]').prop('disabled', true);

@@ -55,6 +55,7 @@ Route::group(['middleware'=>['permission:المبيعات','permission:التق�
 Route::get('/reports','Manager\ReportController@index')->name('reports.index');
 Route::get('/show/invoices/{repository_id}','Manager\ReportController@showInvoices')->name('show.invoices');
 Route::get('/search/invoices/{repository_id}','Manager\ReportController@searchInvoicesByDate')->name('search.invoices');
+Route::get('/search/invoices/code/{repository_id}','Manager\ReportController@searchInvoicesByCode')->name('search.invoices.code');
 Route::get('/search/pending/{repository_id}','Manager\ReportController@searchPending')->name('search.pending');
 
 

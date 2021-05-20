@@ -17,6 +17,7 @@ class CreateInvoicesTable extends Migration
             $table->id();
             $table->foreignId('repository_id');
             $table->foreignId('user_id');   // the cashier who print this invoice
+            $table->string('code',8);
             $table->string('details',10000);
             $table->float('total_price');
             $table->boolean('cash_check')->default(0);

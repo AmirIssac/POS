@@ -24,6 +24,9 @@
   input[name=date]{
     border: 1px solid white;
   }
+  #back{
+    float: left;
+  }
    /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -98,6 +101,7 @@ input[type=number] {
                   <h4>
                   <span class="badge badge-success">
                       تفاصيل الفاتورة  </span> <input type="text" name="date" value="{{$date}}" readonly></h4>
+                      <h4>رقم الفاتورة {{$invoice->code}}</h4>
                   <th>
                     الاسم  
                   </th>
@@ -170,6 +174,7 @@ input[type=number] {
 </div>
         {{--<button onclick="window.print();" class="btn btn-success"> طباعة </button>--}}
         <button onclick="window.print();" type="submit" class="btn btn-danger"> استكمال الفاتورة وطباعتها </button>
+        <a href="javascript:history.back()" class="btn btn-warning" id="back"> رجوع </a>
    </div>
 </div>
 </div>
