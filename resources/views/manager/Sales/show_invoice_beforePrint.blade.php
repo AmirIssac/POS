@@ -63,7 +63,7 @@ input[type=number] {
   button[type=submit]{
     visibility: hidden;
   }
-  .quantity,.details,.name,.price{
+  .quantity,.details,.name,.price,.delivered{
     font-size: 32px;
     background-color: white !important;
   }
@@ -129,6 +129,9 @@ input[type=number] {
                   <th>
                     الكمية 
                   </th>
+                  <th id="del" class="hidden">
+                    تم تسليمها  
+                  </th>
                 </thead>
                 <tbody>
                    <div id="record">
@@ -153,6 +156,9 @@ input[type=number] {
                      <td>
                       <input type="number" name="quantity[]"  class="form-control quantity" value="{{$product->quantity}}">
                        {{-- {{$quantities[$count]}}  --}}
+                     </td>
+                     <td>
+                      <input type="number" name="del[]"  class="form-control hidden delivered" value="0">  {{-- amount of delivered for each product --}}{{-- need it just in hanging invoices --}}
                      </td>
                 </tr>
                 {{-- php $count++ ?> --}}
@@ -330,6 +336,8 @@ $('#status').change(function(){
     }
   if($('#status').prop('checked') == false){    // pending
     //$('#stat').text("معلقة");
+    $('#del').removeClass('hidden').addClass('visible');
+    $('.delivered').removeClass('hidden').addClass('visible');
     if(sum <= $('#total_price').val())
     $('button[type="submit"]').prop('disabled', false);
     else
@@ -340,7 +348,8 @@ $('#status').change(function(){
     }
   if($('#status').prop('checked') == true){    // delivered
    // $('#stat').text("تم التسليم");
-    
+    $('#del').removeClass('visible').addClass('hidden');
+    $('.delivered').removeClass('visible').addClass('hidden');
     if(sum == $('#total_price').val()){
       $('button[type="submit"]').prop('disabled', false);
     }

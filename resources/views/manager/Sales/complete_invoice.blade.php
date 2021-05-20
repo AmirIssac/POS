@@ -114,6 +114,9 @@ input[type=number] {
                   <th>
                     الكمية 
                   </th>
+                  <th>
+                    الواجب تسليمها 
+                  </th>
                 </thead>
                 <tbody>
                    <div id="record">
@@ -125,6 +128,7 @@ input[type=number] {
                       
                      <tr>
                         <td>
+                          <input type="hidden" name="barcode[]" value="{{$detail['barcode']}}">
                             {{$detail['name']}}
                         </td>
                         <td>
@@ -135,6 +139,10 @@ input[type=number] {
                         </td>
                         <td>
                           {{$detail['quantity']}}
+                        </td>
+                        <td>
+                          <input type="hidden" name="quantity[]" value="{{$detail['quantity']-$detail['delivered']}}">
+                          {{$detail['quantity']-$detail['delivered']}}
                         </td>
                     </tr>
                     @endif

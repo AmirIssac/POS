@@ -23,7 +23,7 @@
     @csrf
     <div style="width: 300px; margin-right: 20px;" class="input-group no-border">
       <input type="date" name="dateSearch" class="form-control">
-      <button type="submit" class="btn btn-black btn-round btn-just-icon">
+      <button type="submit" class="btn btn-success btn-round btn-just-icon">
         <i class="material-icons">search</i>
       </button>
     </div>
@@ -32,7 +32,7 @@
       @csrf
       <div style="width: 300px; margin-right: 20px;" class="input-group no-border">
         <input type="text" name="code" class="form-control" placeholder="ابحث برقم الفاتورة">
-        <button type="submit" class="btn btn-black btn-round btn-just-icon">
+        <button type="submit" class="btn btn-success btn-round btn-just-icon">
           <i class="material-icons">search</i>
         </button>
       </div>
@@ -63,6 +63,9 @@
                     <th>
                         الكمية  
                     </th>
+                    <th>
+                      تم تسليمها  
+                  </th>
                   </thead>
                   <tbody>
                     @foreach(unserialize($invoice->details) as $detail)
@@ -80,6 +83,9 @@
                         <td>
                             {{$detail["quantity"]}}
                         </td>
+                        <td>
+                          {{$detail["delivered"]}}
+                      </td>
                     </tr>
                     @endif
                     @endforeach
