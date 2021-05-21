@@ -153,6 +153,12 @@
             </a>
           </li>
           @endcan
+          <li class="nav-item {{ request()->is('manager/settings')? 'active' : ''}}">
+            <a class="nav-link" href="{{route('manager.settings.index')}}">
+              <i class="material-icons">settings</i>
+              <p>الإعدادات</p>
+            </a>
+          </li>
 
 
 

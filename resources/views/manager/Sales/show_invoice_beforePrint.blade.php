@@ -33,6 +33,16 @@
   #back{
     float: left;
   }
+  #min{
+    float: left;
+  }
+ #min{
+   font-size: 18px;
+ }
+ #minVal{
+   padding: 5px;
+ }
+
   /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -117,6 +127,12 @@ input[type=number] {
                   <span class="badge badge-success">
                       تفاصيل الفاتورة  </span> <input type="text" name="date" value="{{$date}}" readonly></h4>
                       رقم الفاتورة <input type="text" name="code" id="code" value="{{$code}}" readonly>
+                      <div id="min" class="hidden">
+                         <span class="badge badge-success" id="badgecolor"> الحد الأدنى للدفع <div id="minVal">{{($repository->min_payment*$invoice_total_price)/100}}</div></span>
+                        <input type="hidden" class="" id="inputmin" value="{{($repository->min_payment*$invoice_total_price)/100}}">
+                        <input type="hidden" class="" id="percent" value="{{$repository->min_payment}}">
+
+                      </div>
                   <th>
                     الاسم  
                   </th>
@@ -210,7 +226,11 @@ input[type=number] {
                         </div>
                     </div>
                     </div>
-                    </div>
+
+          
+
+              </div>
+              
         </div>
        </div>
          <div>
@@ -292,6 +312,26 @@ $('input[name="quantity[]"]').on("keyup",function(){
   }
   $('#total_price').val(sum);
   $('#cashVal').val(sum);     // cash value input
+
+   // update min value when total price change
+    var newMin = (parseFloat($('#percent').val()) * parseFloat($('#total_price').val()))/100;
+    //console.log(newMin);
+    $('#inputmin').val(newMin);
+    $('#minVal').text(newMin);
+    // check min validation
+    var cash =  parseFloat($('#cashVal').val());
+    var card = parseFloat($('#cardVal').val());
+     // min payment
+     var min = parseFloat($('#inputmin').val());
+     if($('#status').prop('checked') == false){    // pending
+      if(card+cash<min){
+      $('button[type="submit"]').prop('disabled', true);
+      $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
+      } 
+      else{
+      $('#badgecolor').removeClass('badge-danger').addClass('badge-success');
+    }
+     }
 });
 </script>
 
@@ -300,6 +340,9 @@ $('input[name="quantity[]"]').on("keyup",function(){
     var sum;
     var cash =  parseFloat($('#cashVal').val());
     var card = parseFloat($('#cardVal').val());
+   
+     // min payment
+     var min = parseFloat($('#inputmin').val());
     if($('#cashVal').val()=="" && $('#cardVal').val()!=""){
       sum = card + 0;
     }
@@ -318,6 +361,14 @@ $('input[name="quantity[]"]').on("keyup",function(){
     if(cash <=0 || card<=0){ // dont accept values less or equal to zero
       $('#submit').prop('disabled', true);
     }
+    // min payment
+    if((cash+card)<min){
+      $('button[type="submit"]').prop('disabled', true);
+      $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
+    }
+    else{
+      $('#badgecolor').removeClass('badge-danger').addClass('badge-success');
+    }
   });
 </script>
 <script>
@@ -325,6 +376,8 @@ $('#status').change(function(){
     var sum;
     var cash =  parseFloat($('#cashVal').val());
     var card = parseFloat($('#cardVal').val());
+    // min payment
+    var min = parseFloat($('#inputmin').val());
     if($('#cashVal').val()=="" && $('#cardVal').val()!=""){
       sum = card + 0;
     }
@@ -338,10 +391,33 @@ $('#status').change(function(){
     //$('#stat').text("معلقة");
     $('#del').removeClass('hidden').addClass('visible');
     $('.delivered').removeClass('hidden').addClass('visible');
+    $('#min').removeClass('hidden').addClass('visible');
     if(sum <= $('#total_price').val())
     $('button[type="submit"]').prop('disabled', false);
     else
     $('button[type="submit"]').prop('disabled', true);
+    // min payment
+    if($('#cashVal').val()=="" && $('#cardVal').val()!=""){
+    if(card<min){
+      $('button[type="submit"]').prop('disabled', true);
+      $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
+    }
+    }
+    if($('#cashVal').val()!="" && $('#cardVal').val()==""){
+    if(cash<min){
+      $('button[type="submit"]').prop('disabled', true);
+      $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
+    }
+    }
+    if($('#cashVal').val()!="" && $('#cardVal').val()!=""){
+    if(card+cash<min){
+      $('button[type="submit"]').prop('disabled', true);
+      $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
+    }
+    else{
+      $('#badgecolor').removeClass('badge-danger').addClass('badge-success');
+    }
+    }
   }
   if(cash <=0 || card<=0){    // dont accept values less or equal to zero
       $('#submit').prop('disabled', true);
@@ -350,6 +426,7 @@ $('#status').change(function(){
    // $('#stat').text("تم التسليم");
     $('#del').removeClass('visible').addClass('hidden');
     $('.delivered').removeClass('visible').addClass('hidden');
+    $('#min').removeClass('visible').addClass('hidden');
     if(sum == $('#total_price').val()){
       $('button[type="submit"]').prop('disabled', false);
     }

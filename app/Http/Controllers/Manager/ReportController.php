@@ -16,7 +16,7 @@ class ReportController extends Controller
     public function index(){
         $user = Auth::user();
         $user = User::find($user->id);
-        $repositories = $user->repositories;   // display all repositories for the owner
+        $repositories = $user->repositories;   // display all repositories for the owner|worker
         return view('manager.Reports.index')->with(['repositories'=>$repositories]);   
     }
 

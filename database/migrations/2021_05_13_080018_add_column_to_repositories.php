@@ -14,8 +14,7 @@ class AddColumnToRepositories extends Migration
     public function up()
     {
         Schema::table('repositories', function (Blueprint $table) {
-            $table->float('cash_balance')->default(0);
-            $table->float('card_balance')->default(0);
+            $table->tinyInteger('min_payment')->default(25);
         });
     }
 

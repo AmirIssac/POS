@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -67,4 +68,7 @@ Route::post('/complete/invoice/{invoice_id}','Manager\SellController@completeInv
 
 Route::get('/ajax/get/product/{repository_id}/{barcode}','Manager\RepositoryController@getProductAjax');
 
+Route::get('manager/settings','Manager\SettingsController@index')->name('manager.settings.index');
+Route::get('settings/min/{repository_id}','Manager\SettingsController@minForm')->name('settings.min.form');
+Route::post('change/min/{repository_id}','Manager\SettingsController@min')->name('settings.min');
 //Route::get('/home', 'HomeController@index')->name('home');

@@ -17,8 +17,12 @@ class CreateRepositoriesTable extends Migration
             $table->id();
             /*$table->foreign('category_id')
             ->references('id')->on('repository_categories')->default(1);*/
+            $table->foreignId('category_id')->default(1);
             $table->string('name');
             $table->string('address');
+            $table->float('cash_balance')->default(0);
+            $table->float('card_balance')->default(0);
+            $table->tinyInteger('min_payment')->default(25);
             $table->timestamps();
         });
     }
