@@ -27,7 +27,7 @@ input[type=number] {
             <strong>{{ session('success') }}</strong>
     </div>
     @endif
- <form action="#"  method="post">
+ <form action="{{route('submit.cashier',$repository->id)}}"  method="post">
      @csrf
     <div class="container-fluid">
       <div class="row">
@@ -42,9 +42,11 @@ input[type=number] {
                   <thead class=" text-primary">
                     <th>
                       الواجب توافره في الدرج   <span class="badge badge-success">{{$repository->cash_balance}}</span>  
+                      <input type="hidden" name="cash_balance" value="{{$repository->cash_balance}}">
                     </th>
                     <th>
-                      الواجب توافره في البطاقة <span class="badge badge-success">{{$repository->card_balance}}</span>  
+                      الواجب توافره في البطاقة <span class="badge badge-success">{{$repository->card_balance}}</span>
+                      <input type="hidden" name="card_balance" value="{{$repository->card_balance}}">  
                     </th>
                   </thead>
                   <tbody>

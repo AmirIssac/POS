@@ -75,4 +75,6 @@ Route::post('change/min/{repository_id}','Manager\SettingsController@min')->name
 
 Route::get('/cashier','Manager\CashierController@index')->name('cashier.index');
 Route::get('/daily/cashier/{repository_id}','Manager\CashierController@dailyCashierForm')->name('daily.cashier.form');
+Route::post('/submit/cashier/{repository_id}','Manager\CashierController@submitCashier')->name('submit.cashier');
+Route::get('/daily/reports/{repository_id}','Manager\ReportController@dailyReports')->name('daily.reports.index');
 //Route::get('/home', 'HomeController@index')->name('home');

@@ -46,4 +46,10 @@ class ReportController extends Controller
         $invoices = Invoice::where('repository_id',$repository->id)->where('status','pending')->where('phone','like', '%' . $request->phoneSearch . '%')->paginate(5);
         return view('manager.Sales.show_pending_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
     }
+
+    public function dailyReports($id){
+        $repository = Repository::find($id);
+        $reports = $repository->dailyReports()->paginate(1);
+        return view('manager.Reports.daily_reports')->with('repository',$repository)->with('reports',$reports);
+    }
 }

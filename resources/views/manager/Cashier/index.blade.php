@@ -8,6 +8,12 @@
      <div class="main-panel">
       
        <div class="content">
+        @if (session('success'))
+        <div class="alert alert-success alert-block">
+            <button type="button" class="close" data-dismiss="alert">×</button>	
+                <strong>{{ session('success') }}</strong>
+        </div>
+        @endif
         @foreach($repositories as $repository)
         <div class="col-md-4">
          <div class="card card-chart">

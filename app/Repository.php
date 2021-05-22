@@ -28,7 +28,9 @@ class Repository extends Model
     public function invoicesDesc(){
         return $this->hasMany(Invoice::class)->orderBy('created_at','DESC');
     }
-
+    public function dailyReports(){
+        return $this->hasMany(DailyReport::class);
+    }
 
     public function owner(){   // custom function to get the owner of repository
         $users = $this->users; // relationship to get all repository users
