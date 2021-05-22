@@ -27,13 +27,12 @@
          <div class="container-fluid">
            <div class="row">
              <div class="col-lg-3 col-md-6 col-sm-6">
+              <a href="{{route('show.invoices',$repository->id)}}">
                <div class="card card-stats">
-                 <div class="card-header card-header-danger card-header-icon">
-                  <a href="{{route('show.invoices',$repository->id)}}">
+                 <div class="card-header card-header-info card-header-icon">
                    <div class="card-icon">
                    <i class="material-icons">receipt</i>
                    </div>
-                  </a>
                    <p class="card-category">الفواتير</p>
                    <h6 class="card-title">عرض</h6>
                  </div>
@@ -43,6 +42,25 @@
                    </div>
                  </div>
                </div>
+              </a>
+             </div>
+             <div class="col-lg-3 col-md-6 col-sm-6">
+              <a href="#">
+               <div class="card card-stats">
+                 <div class="card-header card-header-info card-header-icon">
+                   <div class="card-icon">
+                   <i class="material-icons">auto_stories</i>
+                   </div>
+                   <p class="card-category">التقارير اليومية</p>
+                   <h6 class="card-title">عرض</h6>
+                 </div>
+                 <div class="card-footer">
+                   <div class="stats">
+                     <i class="material-icons">receipt</i>
+                   </div>
+                 </div>
+               </div>
+              </a>
              </div>
            </div>
          

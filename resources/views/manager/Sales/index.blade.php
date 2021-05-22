@@ -27,13 +27,12 @@
          <div class="container-fluid">
            <div class="row">
              <div class="col-lg-3 col-md-6 col-sm-6">
+              <a href="{{route('create.invoice',$repository->id)}}">
                <div class="card card-stats">
                  <div class="card-header card-header-info card-header-icon">
-                  <a href="{{route('create.invoice',$repository->id)}}">
                    <div class="card-icon">
                    <i class="material-icons">add_circle_outline</i>
                    </div>
-                  </a>
                    <p class="card-category">فاتورة جديدة</p>
                    <h6 class="card-title">انشاء</h6>
                  </div>
@@ -43,15 +42,15 @@
                    </div>
                  </div>
                </div>
+              </a>
              </div>
              <div class="col-lg-3 col-md-6 col-sm-6">
+              <a href="{{route('show.pending',$repository->id)}}">
               <div class="card card-stats">
                 <div class="card-header card-header-warning card-header-icon">
-                 <a href="{{route('show.pending',$repository->id)}}">
                   <div class="card-icon">
                   <i class="material-icons">incomplete_circle</i>
                   </div>
-                 </a>
                   <p class="card-category">فاتورة معلقة</p>
                   <h6 class="card-title">استكمال</h6>
                 </div>
@@ -61,7 +60,10 @@
                   </div>
                 </div>
               </div>
+            </a>
             </div>
+          
+
            </div>
          
            </div>

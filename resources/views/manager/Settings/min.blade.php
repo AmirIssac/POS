@@ -41,7 +41,7 @@ input[type=number] {
                 <table class="table">
                   <thead class=" text-primary">
                     <th>
-                     الحد الأدنى <span class="badge badge-success">{{$repository->min_payment}}</span>  
+                     الحد الأدنى <span class="badge badge-success">%{{$repository->min_payment}}</span>  
                     </th>
                     <th>
                       تأكيد  

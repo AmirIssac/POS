@@ -27,14 +27,14 @@
          <div class="container-fluid">
            <div class="row">
              <div class="col-lg-3 col-md-6 col-sm-6">
-              <a href="{{route('settings.min.form',$repository->id)}}">
+                <a href="#">
                <div class="card card-stats">
-                 <div class="card-header card-header-danger card-header-icon">
+                 <div class="card-header card-header-warning card-header-icon">
                    <div class="card-icon">
-                   <i class="material-icons">paid</i>
+                   <i class="material-icons">input</i>
                    </div>
-                   <p class="card-category"> الإعدادات المالية </p>
-                   <h6 class="card-title">تخصيص</h6>
+                   <p class="card-category"> إيداع </p>
+                   <h6 class="card-title"></h6>
                  </div>
                  <div class="card-footer">
                    <div class="stats">
@@ -46,15 +46,14 @@
             </a>
 
              <div class="col-lg-3 col-md-6 col-sm-6">
+                <a href="#">
               <div class="card card-stats">
-                <div class="card-header card-header-danger card-header-icon">
-                 <a href="#">
+                <div class="card-header card-header-warning card-header-icon">
                   <div class="card-icon">
-                  <i class="material-icons">engineering</i>
+                  <i class="material-icons">money_off</i>
                   </div>
-                 </a>
-                  <p class="card-category">الموظفين</p>
-                  <h6 class="card-title">تخصيص</h6>
+                  <p class="card-category">سحب</p>
+                  <h6 class="card-title"></h6>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
@@ -62,18 +61,18 @@
                   </div>
                 </div>
               </div>
+            </a>
             </div>
 
             <div class="col-lg-3 col-md-6 col-sm-6">
+                <a href="{{route('daily.cashier.form',$repository->id)}}">
               <div class="card card-stats">
                 <div class="card-header card-header-danger card-header-icon">
-                 <a href="#">
                   <div class="card-icon">
-                  <i class="material-icons">settings_applications</i>
+                  <i class="material-icons">calculate</i>
                   </div>
-                 </a>
-                  <p class="card-category">التطبيق</p>
-                  <h6 class="card-title">تخصيص</h6>
+                  <p class="card-category">إغلاق الكاشير</p>
+                  <h6 class="card-title">يومي</h6>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
@@ -81,6 +80,7 @@
                   </div>
                 </div>
               </div>
+            </a>
             </div>
 
 

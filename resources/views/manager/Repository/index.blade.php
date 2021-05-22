@@ -29,13 +29,12 @@
             <div class="container-fluid">
             <div class="row">
               <div class="col-lg-3 col-md-6 col-sm-6">
+                <a href="{{route('add.product.form',$repository->id)}}">
                 <div class="card card-stats">
                   <div class="card-header card-header-success card-header-icon">
-                    <a href="{{route('add.product.form',$repository->id)}}">
                     <div class="card-icon">
                       <i class="material-icons">qr_code_scanner</i>
                     </div>
-                    </a>
                     <p class="card-category">اضافة مخزون</p>
                     <h6 class="card-title">scanner
                     </h6>
@@ -46,15 +45,15 @@
                     </div>
                   </div>
                 </div>
+              </a>
               </div>
                   <div class="col-lg-3 col-md-6 col-sm-6">
+                    <a href="{{route('import.excel.form',$repository->id)}}">
                     <div class="card card-stats">
                       <div class="card-header card-header-success card-header-icon">
-                        <a href="{{route('import.excel.form',$repository->id)}}">
                         <div class="card-icon">
                           <i class="material-icons">download</i>
                         </div>
-                        </a>
                         <p class="card-category">استيراد مخزون</p>
                         <h6 class="card-title">Excel
                         </h6>
@@ -65,16 +64,16 @@
                         </div>
                       </div>
                 </div>
+              </a>
               </div>
 
               <div class="col-lg-3 col-md-6 col-sm-6">
+                <a href="{{route('show.products',$repository->id)}}">
                 <div class="card card-stats">
                   <div class="card-header card-header-info card-header-icon">
-                    <a href="{{route('show.products',$repository->id)}}">
                     <div class="card-icon">
                       <i class="material-icons">category</i>
                     </div>
-                    </a>
                     <p class="card-category">عرض البضائع</p>
                     <h6 class="card-title">
                     </h6>
@@ -85,6 +84,7 @@
                     </div>
                   </div>
             </div>
+          </a>
           </div>
 
 
