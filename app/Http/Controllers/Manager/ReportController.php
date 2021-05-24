@@ -49,7 +49,7 @@ class ReportController extends Controller
 
     public function dailyReports($id){
         $repository = Repository::find($id);
-        $reports = $repository->dailyReports()->paginate(1);
+        $reports = $repository->dailyReportsDesc()->paginate(1);
         return view('manager.Reports.daily_reports')->with('repository',$repository)->with('reports',$reports);
     }
 }

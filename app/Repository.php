@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Repository extends Model
 {
     protected $fillable = [
-        'name', 'address','category_id','cash_balance','card_balance','min_payment',
+        'name', 'address','category_id','cash_balance','card_balance','min_payment','tax','tax_code','logo',
     ];
     //
     public function users(){
@@ -30,6 +30,10 @@ class Repository extends Model
     }
     public function dailyReports(){
         return $this->hasMany(DailyReport::class);
+    }
+
+    public function dailyReportsDesc(){
+        return $this->hasMany(DailyReport::class)->orderBy('created_at','DESC');
     }
 
     public function owner(){   // custom function to get the owner of repository

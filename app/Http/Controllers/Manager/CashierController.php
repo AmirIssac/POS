@@ -67,6 +67,7 @@ class CashierController extends Controller
             ]
             );
 
-            return redirect()->route('cashier.index', ['success' => 'تم إغلاق الكاشير اليومي بنجاح']);
+            //return redirect()->route('cashier.index', ['success' => 'تم إغلاق الكاشير اليومي بنجاح']);
+            return redirect()->route('daily.reports.index',$repository->id)->with('success','تم اغلاق الكاشير بنجاح');
         }
 }

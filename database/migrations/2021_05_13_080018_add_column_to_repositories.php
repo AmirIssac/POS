@@ -14,7 +14,8 @@ class AddColumnToRepositories extends Migration
     public function up()
     {
         Schema::table('repositories', function (Blueprint $table) {
-            $table->tinyInteger('min_payment')->default(25);
+            $table->string('tax_code')->default('0000'); 
+            $table->string('logo')->default(null); 
         });
     }
 

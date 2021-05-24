@@ -71,6 +71,8 @@ Route::get('/ajax/get/product/{repository_id}/{barcode}','Manager\RepositoryCont
 Route::get('manager/settings','Manager\SettingsController@index')->name('manager.settings.index');
 Route::get('settings/min/{repository_id}','Manager\SettingsController@minForm')->name('settings.min.form');
 Route::post('change/min/{repository_id}','Manager\SettingsController@min')->name('settings.min');
+Route::post('change/tax/{repository_id}','Manager\SettingsController@tax')->name('settings.tax');
+
 
 
 Route::get('/cashier','Manager\CashierController@index')->name('cashier.index');

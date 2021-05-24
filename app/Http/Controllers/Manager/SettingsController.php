@@ -21,7 +21,7 @@ class SettingsController extends Controller
 
     public function minForm($id){
         $repository = Repository::find($id);
-        return view('manager.Settings.min')->with('repository',$repository);
+        return view('manager.Settings.finance')->with('repository',$repository);
     }
 
     public function min(Request $request , $id){
@@ -32,5 +32,16 @@ class SettingsController extends Controller
             ]
             );
             return back()->with('success',' تم تعيين نسبة حد أدنى للدفع جديدة وهي '.$request->min);
+    }
+
+    public function tax(Request $request , $id){
+        $repository = Repository::find($id);
+        $repository->update(
+            [
+                'tax' => $request->tax,
+                'tax_code' => $request->taxcode,
+            ]
+            );
+            return back()->with('success',' تم تعيين الضريبة الجديدة بنجاح ');
     }
 }

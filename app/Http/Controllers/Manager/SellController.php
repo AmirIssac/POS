@@ -108,6 +108,9 @@ class SellController extends Controller
             }
             while($invoice);   // if the code exists before we generate new code
         $date = now();  // invoice date
+        // tax
+        $increment =($repository->tax * $invoice_total_price) / 100;
+        $final_total_price = $invoice_total_price + $increment;
         return view('manager.Sales.show_invoice_beforePrint')->with([
             'repository'=>$repository,
             'products'=>$products,
@@ -115,6 +118,7 @@ class SellController extends Controller
             'invoice_total_price' => $invoice_total_price,
             'code' => $code,
             'date' => $date,
+            'final_total_price' => $final_total_price,
             ]);
     }
 
@@ -315,7 +319,7 @@ class SellController extends Controller
 
     public function showPending($id){
         $repository = Repository::find($id);
-        $invoices = $repository->invoices()->where('status','pending')->paginate(5);
+        $invoices = $repository->invoices()->where('status','pending')->orderBy('created_at','DESC')->paginate(5);
         return view('manager.Sales.show_pending_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
     }
 

@@ -21,7 +21,12 @@ input[type=number] {
 <div class="main-panel">
    
 <div class="content">
-
+  @if (session('success'))
+        <div class="alert alert-success alert-block">
+            <button type="button" class="close" data-dismiss="alert">×</button>	
+                <strong>{{ session('success') }}</strong>
+        </div>
+        @endif
     <div class="container-fluid">
         @foreach($reports as $report)
       <div class="row">
@@ -84,6 +89,11 @@ input[type=number] {
                       </td>
                       <td>
                         مقدار الزيادة بالبطاقة &nbsp;<span class="badge badge-success">{{$report->card_plus}} </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                       موظف الإغلاق  &nbsp;  : &nbsp;{{$report->user->name}}
                       </td>
                     </tr>
                   </tbody>

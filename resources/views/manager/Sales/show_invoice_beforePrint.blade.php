@@ -1,7 +1,7 @@
 @extends('layouts.main')
 @section('links')
 <style>
-  #total_price{
+  #total_price,#final_total_price,#taxfield{
     font-size: 32px;
     background-color: white !important;
   }
@@ -27,7 +27,7 @@
   input[name=date]{
     border: 1px solid white;
   }
-  #code{
+  #code,#tax_code{
     border: 1px solid white;
   }
   #back{
@@ -55,8 +55,14 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 @media print{
+ /* body, html, #myform { 
+          height: 100%;
+      }*/
+      #myform{
+        margin: 450px 0 0 0;
+      }
   *{
-    margin: 0;
+    /*margin: 0;*/
     font-size: 32px;
     font-weight: bold;
   }
@@ -93,8 +99,8 @@ input[type=number] {
     width: 20px;
     height: 20px;
   }
-  #code{
-    font-size: 28px;
+  #code,#tax_code{
+    font-size: 24px;
   }
 }
 </style>
@@ -127,9 +133,11 @@ input[type=number] {
                   <span class="badge badge-success">
                       تفاصيل الفاتورة  </span> <input type="text" name="date" value="{{$date}}" readonly></h4>
                       رقم الفاتورة <input type="text" name="code" id="code" value="{{$code}}" readonly>
+                      الرقم الضريبي  <input type="text" name="tax_code" id="tax_code" value="{{$repository->tax_code}}" readonly>
                       <div id="min" class="hidden">
-                         <span class="badge badge-success" id="badgecolor"> الحد الأدنى للدفع <div id="minVal">{{($repository->min_payment*$invoice_total_price)/100}}</div></span>
-                        <input type="hidden" class="" id="inputmin" value="{{($repository->min_payment*$invoice_total_price)/100}}">
+                         <span class="badge badge-success" id="badgecolor"> الحد الأدنى للدفع <div id="minVal">{{($repository->min_payment*$final_total_price)/100}}</div></span>
+                        {{--<input type="hidden" class="" id="inputmin" value="{{($repository->min_payment*$invoice_total_price)/100}}">--}}
+                        <input type="hidden" class="" id="inputmin" value="{{($repository->min_payment*$final_total_price)/100}}">
                         <input type="hidden" class="" id="percent" value="{{$repository->min_payment}}">
 
                       </div>
@@ -183,12 +191,31 @@ input[type=number] {
          </tbody>
        </table>
        <div>
-         <span style="font-size: 22px;" class="badge badge-info">
-           المبلغ الإجمالي 
-         </span>
+         <h5>
+            المجموع 
+         </h5>
          {{--<h1 id="total_price">{{$invoice_total_price}}</h1>--}}
-         <input type="number" name="total_price" id="total_price" class="form-control" value="{{$invoice_total_price}}" readonly>
+         <input type="number" name="sum" id="total_price" class="form-control" value="{{$invoice_total_price}}" readonly>
        </div>
+
+       <div id="tax-container">
+         <h5>الضريبة</h5>
+        <div style="display: flex; flex-direction: column; margin-top: 3px;">
+          <div style="display: flex;">
+            <input type="text" value="{{$repository->tax}}%"  id="taxfield" class="form-control" readonly>
+            <input style="margin-right: 10px;" type="hidden" value="{{$repository->tax}}" name="tax" id="tax" class="form-control">
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h5>
+          المبلغ الإجمالي 
+        </h5>
+        {{--<h1 id="total_price">{{$invoice_total_price}}</h1>--}}
+        <input type="number" name="total_price" id="final_total_price" class="form-control" value="" readonly>
+      </div>
+
        <div id="paymethods" style="margin:10px 0;">
                     <div>
                     <span class="badge badge-secondary"> طرق الدفع </span>
@@ -197,16 +224,17 @@ input[type=number] {
                     <h4> &nbsp;الدفع كاش</h4>
                     <input style="margin: 7px 10px 0 0" type="checkbox" name="cash" id="cash" checked>
                       </div>
-                    <input style="margin-right: 0px" type="number" min="0.1" step="0.1" name="cashVal" id="cashVal" value="{{$invoice_total_price}}" class="form-control visible">
+                    <input style="margin-right: 0px" type="number" min="0.1" step="0.01" name="cashVal" id="cashVal" value="{{$invoice_total_price}}" class="form-control visible">
                     </div>
                     <div style="display: flex;flex-direction: column;">
                       <div style="display: flex;">
                     <h4> &nbsp;الدفع بالبطاقة</h4>
                     <input style="margin: 7px 10px 0 0" type="checkbox" id="card" name="card">
                       </div>
-                    <input style="margin-right: 0px" type="number" min="0.1" step="0.1" name="cardVal" id="cardVal" value="" class="form-control hidden">
+                    <input style="margin-right: 0px" type="number" min="0.1" step="0.01" name="cardVal" id="cardVal" value="" class="form-control hidden">
                     </div>
                     </div>
+                    
                     <div style="margin-right: 50px;">
                     <div id="deliverde">
                       <span class="badge badge-secondary"> حالة الفاتورة  </span>
@@ -226,12 +254,9 @@ input[type=number] {
                         </div>
                     </div>
                     </div>
-
-          
-
               </div>
-              
         </div>
+
        </div>
          <div>
         {{--<button onclick="window.print();" class="btn btn-success"> طباعة </button>--}}
@@ -245,6 +270,7 @@ input[type=number] {
 
 </div>
 </div>
+  </div>
 </form>
 </div>
 @endsection
@@ -262,7 +288,7 @@ if($('#cash').is(':checked') && $('#card').prop('checked') == false){
     $('#cardVal').val(null);
   }
   else{
-  $('#cashVal').val( $('#total_price').val());
+  $('#cashVal').val( $('#final_total_price').val());
   $('#cardVal').val(null);
   }
 }
@@ -274,7 +300,7 @@ if($('#cash').prop('checked') == false && $('#card').prop('checked') == true){
   }
   else{
   $('#cashVal').val(null);
-  $('#cardVal').val($('#total_price').val());
+  $('#cardVal').val($('#final_total_price').val());
   }
 }
 if($('#cash').prop('checked') == false && $('#card').prop('checked') == false){   // error
@@ -291,6 +317,10 @@ if($('#cash').prop('checked') == false && $('#card').prop('checked') == false){ 
 </script>
 
 <script>
+  //$('#cashVal').val($('#final_total_price').val());
+window.onload=function(){
+  $('#cashVal').val($('#final_total_price').val());
+};
   var c = $('input[name="barcode[]"]');
   var count = c.length;    // number of records
   /*var intervalId = window.setInterval(function(){
@@ -311,10 +341,16 @@ $('input[name="quantity[]"]').on("keyup",function(){
     //$('#total_price').val($('#total_price').val()+($('.price').eq(i).val()*$('.quantity').eq(i).val()));
   }
   $('#total_price').val(sum);
-  $('#cashVal').val(sum);     // cash value input
+ // tax
+    var tax =  parseFloat($('#tax').val());
+    var total_price =  parseFloat($('#total_price').val());
+    var increment = (tax * total_price) / 100;
+   $('#final_total_price').val(parseFloat($('#total_price').val())+increment);
+   //console.log($('#final_total_price').val());
+  $('#cashVal').val($('#final_total_price').val());     // cash value input
 
    // update min value when total price change
-    var newMin = (parseFloat($('#percent').val()) * parseFloat($('#total_price').val()))/100;
+    var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
     //console.log(newMin);
     $('#inputmin').val(newMin);
     $('#minVal').text(newMin);
@@ -352,10 +388,10 @@ $('input[name="quantity[]"]').on("keyup",function(){
     if($('#cashVal').val()!="" && $('#cardVal').val()!=""){
     sum = cash + card ;
     }
-    if(sum == $('#total_price').val()){
+    if(sum == $('#final_total_price').val()){
       $('#submit').prop('disabled', false);
     }
-    else if(sum != $('#total_price').val() && $('#status').prop('checked') == true){   // delivered
+    else if(sum != $('#final_total_price').val() && $('#status').prop('checked') == true){   // delivered
       $('button[type="submit"]').prop('disabled', true);   // cant submit if cash and card not equals the total
     }
     if(cash <=0 || card<=0){ // dont accept values less or equal to zero
@@ -392,7 +428,7 @@ $('#status').change(function(){
     $('#del').removeClass('hidden').addClass('visible');
     $('.delivered').removeClass('hidden').addClass('visible');
     $('#min').removeClass('hidden').addClass('visible');
-    if(sum <= $('#total_price').val())
+    if(sum <= $('#final_total_price').val())
     $('button[type="submit"]').prop('disabled', false);
     else
     $('button[type="submit"]').prop('disabled', true);
@@ -427,10 +463,10 @@ $('#status').change(function(){
     $('#del').removeClass('visible').addClass('hidden');
     $('.delivered').removeClass('visible').addClass('hidden');
     $('#min').removeClass('visible').addClass('hidden');
-    if(sum == $('#total_price').val()){
+    if(sum == $('#final_total_price').val()){
       $('button[type="submit"]').prop('disabled', false);
     }
-    else if(sum != $('#total_price').val() && $('#status').prop('checked') == true){   // delivered
+    else if(sum != $('#final_total_price').val() && $('#status').prop('checked') == true){   // delivered
       $('button[type="submit"]').prop('disabled', true);   // cant submit if cash and card not equals the total
     }
     if(cash <=0 || card<=0){    // dont accept values less or equal to zero
@@ -446,5 +482,13 @@ $('#client').change(function(){
     $('#phoneinput').removeClass('visible').addClass('hidden');
   }
 });
+</script>
+<script>  // tax
+  //$('#total_price').change(function(){
+    var tax =  parseFloat($('#tax').val());
+    var total_price =  parseFloat($('#total_price').val());
+    var increment = (tax * total_price) / 100;
+    $('#final_total_price').val(parseFloat($('#total_price').val())+increment);
+  //});
 </script>
 @endsection
