@@ -18,6 +18,10 @@
   #paymethods{
     display: flex;
   }
+  #logo{
+    border-radius: 50%;
+  }
+
   .hidden{
     visibility: hidden;
   }
@@ -102,6 +106,9 @@ input[type=number] {
   #code,#tax_code{
     font-size: 24px;
   }
+  #warning{
+    display: none;
+  }
 }
 </style>
 @endsection
@@ -132,8 +139,14 @@ input[type=number] {
                   <h4>
                   <span class="badge badge-success">
                       تفاصيل الفاتورة  </span> <input type="text" name="date" value="{{$date}}" readonly></h4>
+                      @if($repository->logo)
+                      <img src="{{asset('public/storage/'.$repository->logo)}}" width="100px" height="100px" alt="logo" id="logo">
+                      @else
+                     <span id="warning" class="badge badge-warning"> يرجى تعيين شعار المتجر من الإعدادات </span>
+                      @endif
                       رقم الفاتورة <input type="text" name="code" id="code" value="{{$code}}" readonly>
                       الرقم الضريبي  <input type="text" name="tax_code" id="tax_code" value="{{$repository->tax_code}}" readonly>
+
                       <div id="min" class="hidden">
                          <span class="badge badge-success" id="badgecolor"> الحد الأدنى للدفع <div id="minVal">{{($repository->min_payment*$final_total_price)/100}}</div></span>
                         {{--<input type="hidden" class="" id="inputmin" value="{{($repository->min_payment*$invoice_total_price)/100}}">--}}
@@ -202,7 +215,7 @@ input[type=number] {
          <h5>الضريبة</h5>
         <div style="display: flex; flex-direction: column; margin-top: 3px;">
           <div style="display: flex;">
-            <input type="text" value="{{$repository->tax}}%"  id="taxfield" class="form-control" readonly>
+            <input type="text" value=""  id="taxfield" class="form-control" readonly>
             <input style="margin-right: 10px;" type="hidden" value="{{$repository->tax}}" name="tax" id="tax" class="form-control">
           </div>
         </div>
@@ -320,6 +333,11 @@ if($('#cash').prop('checked') == false && $('#card').prop('checked') == false){ 
   //$('#cashVal').val($('#final_total_price').val());
 window.onload=function(){
   $('#cashVal').val($('#final_total_price').val());
+  // tax
+  var tax =  parseFloat($('#tax').val());
+    var total_price =  parseFloat($('#total_price').val());
+    var increment = (tax * total_price) / 100;
+    $('#taxfield').val(increment);
 };
   var c = $('input[name="barcode[]"]');
   var count = c.length;    // number of records
@@ -345,6 +363,7 @@ $('input[name="quantity[]"]').on("keyup",function(){
     var tax =  parseFloat($('#tax').val());
     var total_price =  parseFloat($('#total_price').val());
     var increment = (tax * total_price) / 100;
+    $('#taxfield').val(increment);
    $('#final_total_price').val(parseFloat($('#total_price').val())+increment);
    //console.log($('#final_total_price').val());
   $('#cashVal').val($('#final_total_price').val());     // cash value input

@@ -65,13 +65,12 @@
             </div>
 
             <div class="col-lg-3 col-md-6 col-sm-6">
+              <a href="{{route('settings.app',$repository->id)}}">
               <div class="card card-stats">
                 <div class="card-header card-header-danger card-header-icon">
-                 <a href="#">
                   <div class="card-icon">
                   <i class="material-icons">settings_applications</i>
                   </div>
-                 </a>
                   <p class="card-category">التطبيق</p>
                   <h6 class="card-title">تخصيص</h6>
                 </div>
@@ -81,6 +80,7 @@
                   </div>
                 </div>
               </div>
+            </a>
             </div>
 
 

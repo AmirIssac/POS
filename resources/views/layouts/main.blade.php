@@ -48,6 +48,16 @@
      .ps-scrollbar-x{
        display: none !important;   /* hide scroll bar */
      }
+     .logo{
+       border-radius: 50%;
+       width: 100px;
+       height: 100px;
+     }
+     .logo-container{
+       display: flex;
+       justify-content: center;
+       align-items: center;
+     }
     </style>
    @yield('links')
  
@@ -79,10 +89,18 @@
   
           Tip 2: you can also add an image using data-image tag
       -->
-        <div class="logo">
-          <a href="http://www.creative-tim.com" class="simple-text logo-normal">
-           Dani App
-          </a>
+        <div class="logo-container">
+        @isset($repositories)
+        @foreach($repositories as $repository)
+        <img src="{{asset('public/storage/'.$repository->logo)}}"  alt="logo" class="logo">
+        @endforeach
+        @endisset
+        @if(isset($repository) && !isset($repositories))
+        <img src="{{asset('public/storage/'.$repository->logo)}}"  alt="logo" class="logo">
+        @endif
+        @if(!isset($repositories) && !isset($repository))
+        Dani App
+        @endif
         </div>
         <div class="sidebar-wrapper">
           <ul class="nav">
