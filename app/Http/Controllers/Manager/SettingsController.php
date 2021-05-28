@@ -3,11 +3,16 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\PermissionCategory;
 use App\Repository;
 use App\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class SettingsController extends Controller
 {
@@ -85,4 +90,55 @@ class SettingsController extends Controller
                 return back()->with('success',' تم تعيين الاعدادات  بنجاح ');
         }
     }
+
+    public function addWorkerForm($id){
+        $repository = Repository::find($id);
+        // all permissions that owner has because its impossible to give worker a permission that the owner dont have
+        $permissionsOwner = Role::findByName('مالك-مخزن')->permissions;
+        $categories = PermissionCategory::all();
+        return view('manager.Settings.add_worker')->with(['repository'=>$repository,'permissionsOwner'=>$permissionsOwner,'categories'=>$categories]);
+    }
+
+    public function storeWorker(Request $request , $id){
+        $repository = Repository::find($id);
+       $user = User::create(
+            [
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'phone' => $request->phone,
+            ]
+            );
+            $repository->users()->attach($user->id); //pivot table insert
+            $user->assignRole('عامل-مخزن');  // this role will not contain any permission by default but we use role for dashboard
+            $user->givePermissionTo($request->permissions);
+            return redirect()->route('manager.settings.index')->with('successWorker','تم اضافة موظف جديد للمتجر بنجاح');
+  
+    }
+
+    public function showWorkers($id){
+        $repository = Repository::find($id);
+        $users = $repository->users;
+        // important closure
+        // get all users with worker role and work in this repository
+        $workers = User::whereHas("roles", function($q){ $q->where("name", "عامل-مخزن"); })->whereHas("repositories", function($p) use ($repository){ $p->where("repositories.id", $repository->id); })->get();
+        return view('manager.Settings.show_workers')->with(['repository'=>$repository,'workers'=>$workers]);
+    }
+
+    public function showWorkerPermissions($id){
+        $user = User::find($id);
+        $permissions_on = $user->getAllPermissions();
+        // all permissions that owner has because its impossible to give worker a permission that the owner dont have
+        $permissions = Role::findByName('مالك-مخزن')->permissions; 
+        $categories = PermissionCategory::all();
+        return view('manager.Settings.edit_worker')->with(['categories'=>$categories,'permissionsOwner'=>$permissions,'permissions_on'=>$permissions_on,'user'=>$user,
+        ]);
+    }   
+
+    public function editWorkerPermissions(Request $request,$id){
+        $user = User::find($id);
+        $user->syncPermissions($request->permissions);
+        return back()->with('success','تم تعديل صلاحيات الموظف بنجاح');
+    }
+    
 }

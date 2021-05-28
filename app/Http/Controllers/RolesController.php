@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\PermissionCategory;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -24,7 +25,8 @@ class RolesController extends Controller
         $role = Role::find($id); // role i want to edit
         $permissions = Permission::all();
         $role_permissions = $role->permissions;  // get all permissions for specific role
-        return view('dashboard.Roles.edit_permissions')->with(['role'=>$role,'permissions'=>$permissions,'role_permissions'=>$role_permissions]);
+        $categories = PermissionCategory::all();
+        return view('dashboard.Roles.edit_permissions')->with(['role'=>$role,'permissions'=>$permissions,'role_permissions'=>$role_permissions,'categories'=>$categories]);
     }
     public function editRolePermissions(Request $request,$id){
         $role = Role::find($id);

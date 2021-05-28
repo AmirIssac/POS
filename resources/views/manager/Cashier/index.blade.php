@@ -27,6 +27,7 @@
        </div>
          <div class="container-fluid">
            <div class="row">
+             @can('ايداع في الكاشير')
              <div class="col-lg-3 col-md-6 col-sm-6">
                 <a href="#">
                <div class="card card-stats">
@@ -43,9 +44,12 @@
                    </div>
                  </div>
                </div>
-             </div>
             </a>
+             </div>
+             @endcan
 
+            {{-- @can('سحب من الكاشير') --}}
+            @can('سحب من الكاشير')
              <div class="col-lg-3 col-md-6 col-sm-6">
                 <a href="#">
               <div class="card card-stats">
@@ -64,7 +68,10 @@
               </div>
             </a>
             </div>
+           {{-- @endcan --}}
+           @endcan
 
+            @can('اغلاق الكاشير')
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <a href="{{route('daily.cashier.form',$repository->id)}}">
               <div class="card card-stats">
@@ -83,6 +90,7 @@
               </div>
             </a>
             </div>
+            @endcan
 
 
            </div>

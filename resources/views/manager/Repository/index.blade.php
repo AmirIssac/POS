@@ -28,6 +28,7 @@
             
             <div class="container-fluid">
             <div class="row">
+              @can('ادخال بضاعة للمخزون')
               <div class="col-lg-3 col-md-6 col-sm-6">
                 <a href="{{route('add.product.form',$repository->id)}}">
                 <div class="card card-stats">
@@ -47,6 +48,8 @@
                 </div>
               </a>
               </div>
+              @endcan
+                  @can('استيراد ملف excel')
                   <div class="col-lg-3 col-md-6 col-sm-6">
                     <a href="{{route('import.excel.form',$repository->id)}}">
                     <div class="card card-stats">
@@ -66,7 +69,8 @@
                 </div>
               </a>
               </div>
-
+              @endcan
+              @can('عرض البضائع')
               <div class="col-lg-3 col-md-6 col-sm-6">
                 <a href="{{route('show.products',$repository->id)}}">
                 <div class="card card-stats">
@@ -86,6 +90,7 @@
             </div>
           </a>
           </div>
+          @endcan
 
 
 </div>

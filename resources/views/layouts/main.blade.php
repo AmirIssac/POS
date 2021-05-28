@@ -147,6 +147,14 @@
               </a>
             </li>
             @endcan
+            @can('لوحة تحكم موظف')
+            <li class="nav-item {{ request()->is('dashboard')||request()->is('/') ? 'active' : '' }}">
+              <a class="nav-link" href="/">
+                <i class="material-icons">dashboard</i>
+                <p>لوحة تحكم موظف</p>
+              </a>
+            </li>
+            @endcan
             @can('المبيعات')
            <li class="nav-item {{ request()->is('sales')? 'active' : ''}}">
             <a class="nav-link" href="{{route('sales.index')}}">
@@ -171,7 +179,7 @@
             </a>
           </li>
           @endcan
-          @can('المخزون')
+          @can('الكاشير')
           <li class="nav-item {{ request()->is('cashier')? 'active' : ''}}">
             <a class="nav-link" href="{{route('cashier.index')}}">
               <i class="material-icons">point_of_sale</i>
@@ -179,7 +187,7 @@
             </a>
           </li>
           @endcan
-          @can('المخزون')
+          @can('الاعدادات')
           <li class="nav-item {{ request()->is('manager/settings')? 'active' : ''}}">
             <a class="nav-link" href="{{route('manager.settings.index')}}">
               <i class="material-icons">settings</i>

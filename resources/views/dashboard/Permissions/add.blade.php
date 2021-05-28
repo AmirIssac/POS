@@ -25,12 +25,22 @@
                     <th>
                       اسم الصلاحية  
                     </th>
+                    <th>
+                      القسم   
+                    </th>
                   </thead>
                   <tbody>
                      
                       <tr>
                         <td>
                             <input type="text" name="permission" class="form-control" placeholder="اكتب اسم الصلاحية هنا">
+                        </td>
+                        <td>
+                          <select name="cat" class="form-control">
+                            @foreach($categories as $category)
+                            <option value="{{$category->id}}">{{$category->name}}</option>
+                            @endforeach
+                          </select>
                         </td>
                         <td>
                             <button  type="submit" class="btn btn-primary"> إضافة </button>

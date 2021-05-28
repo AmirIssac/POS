@@ -25,7 +25,7 @@
           <strong>{{ $message }}</strong>
   </div>
   @endif
-  <form method="POST" action="{{route('make.edit.role.permissions',$role->id)}}">
+  <form method="POST" action="{{route('edit.worker.permissions',$user->id)}}">
     @csrf
     @foreach($categories as $category)
     <div class="container-fluid">
@@ -54,13 +54,15 @@
 
                           @if($category->permissions && $category->permissions->count()>0)
                           @foreach($category->permissions as $permission)
+                          {{-- condition to check if this permission containing in the owner permission --}}
+                          @if($permissionsOwner->contains('id',$permission->id))
                       <tr>
                         
                         <td>
                             {{$permission->name}}
                         </td>
                         <td>
-                            @if($role_permissions->contains('id',$permission->id))  {{-- check if permission taken so checked the button --}}
+                            @if($permissions_on->contains('id',$permission->id))  {{-- check if permission taken so checked the button --}}
                             <input style="visibility: hidden" type="checkbox" class="btn-check" id="btn-check-{{$permission->id}}" value="{{$permission->name}}" name="permissions[]" checked autocomplete="off">
                             <label class="on" for="btn-check-{{$permission->id}}"></label>
                             @else
@@ -69,6 +71,7 @@
                             @endif
                         </td>
                       </tr>
+                      @endif
                       @endforeach
                       
                       @else
@@ -88,7 +91,7 @@
     </div>
       @endforeach  {{-- cat --}}
 
-      <button type="submit" class="btn btn-primary">حفظ</button>
+      <button type="submit" class="btn btn-success">حفظ</button>
               </form>
             </div>
 

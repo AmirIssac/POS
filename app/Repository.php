@@ -52,4 +52,11 @@ class Repository extends Model
         }
         return $count;
     }
+
+    // count of workers
+    public function workersCount(){
+        // all users except the owner
+        $count = $this->users()->count() - 1;
+        return $count;
+    }
 }

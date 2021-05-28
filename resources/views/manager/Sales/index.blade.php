@@ -26,6 +26,7 @@
        </div>
          <div class="container-fluid">
            <div class="row">
+            @can('انشاء فاتورة')
              <div class="col-lg-3 col-md-6 col-sm-6">
               <a href="{{route('create.invoice',$repository->id)}}">
                <div class="card card-stats">
@@ -44,6 +45,8 @@
                </div>
               </a>
              </div>
+             @endcan
+             @can('عرض الفواتير المعلقة')
              <div class="col-lg-3 col-md-6 col-sm-6">
               <a href="{{route('show.pending',$repository->id)}}">
               <div class="card card-stats">
@@ -62,7 +65,7 @@
               </div>
             </a>
             </div>
-          
+            @endcan
 
            </div>
          

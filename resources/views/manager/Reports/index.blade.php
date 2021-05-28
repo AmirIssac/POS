@@ -26,6 +26,7 @@
        </div>
          <div class="container-fluid">
            <div class="row">
+            @can('عرض الفواتير')
              <div class="col-lg-3 col-md-6 col-sm-6">
               <a href="{{route('show.invoices',$repository->id)}}">
                <div class="card card-stats">
@@ -44,6 +45,8 @@
                </div>
               </a>
              </div>
+             @endcan
+             @can('عرض التقارير اليومية')
              <div class="col-lg-3 col-md-6 col-sm-6">
               <a href="{{route('daily.reports.index',$repository->id)}}">
                <div class="card card-stats">
@@ -62,6 +65,7 @@
                </div>
               </a>
              </div>
+             @endcan
            </div>
          
            </div>

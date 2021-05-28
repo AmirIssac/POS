@@ -45,5 +45,12 @@ class HomeController extends Controller
             $repositories = $user->repositories;   // display all repositories for the owner|worker
             return view('manager.Dashboard.index')->with(['repositories'=>$repositories]);
         }
+        elseif($user->hasRole('عامل-مخزن'))
+        {
+            $user = Auth::user();
+            $user = User::find($user->id);
+            $repositories = $user->repositories;   // display all repositories for the owner|worker
+            return view('manager.Dashboard.worker_index')->with(['repositories'=>$repositories]);
+        }
     } 
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\PermissionCategory;
+use App\PermissionCustom;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 
@@ -13,10 +15,11 @@ class PermissionController extends Controller
         return view('dashboard.Permissions.permissions')->with('permissions',$permissions);
     }
     public function addPermissionForm(){
-        return view('dashboard.Permissions.add');
+        $categories = PermissionCategory::all();
+        return view('dashboard.Permissions.add')->with('categories',$categories);
     }
     public function store(Request $request){
-        Permission::create(['name' => $request->permission]);
+        Permission::create(['name' => $request->permission,'guard_name'=>'web','category_id'=>$request->cat]);
         return back()->with('success','تم إضافة الصلاحية الجديدة بنجاح');
     }
 }

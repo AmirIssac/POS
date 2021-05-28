@@ -43,6 +43,7 @@
                  </div>
                </div>
              </div>
+             @can('مشاهدة رصيد الخزينة')
              <div class="col-lg-3 col-md-6 col-sm-6">
                <div class="card card-stats">
                  <div class="card-header card-header-success card-header-icon">
@@ -64,6 +65,8 @@
                  </div>
                </div>
              </div>
+             @endcan
+             @can('رؤية عدد المنتجات')
              <div class="col-lg-3 col-md-6 col-sm-6">
                <div class="card card-stats">
                  <div class="card-header card-header-danger card-header-icon">
@@ -80,6 +83,8 @@
                  </div>
                </div>
              </div>
+             @endcan
+             @can('رؤية عدد الموظفين')
              <div class="col-lg-3 col-md-6 col-sm-6">
                <div class="card card-stats">
                  <div class="card-header card-header-info card-header-icon">
@@ -96,6 +101,7 @@
                  </div>
                </div>
              </div>
+             @endcan
            </div>
            <div class="row">
              <div class="col-md-4">
