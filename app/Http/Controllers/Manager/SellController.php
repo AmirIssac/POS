@@ -256,14 +256,14 @@ class SellController extends Controller
         $details = array(array());    // each array store details for on record (one product)
         if($request->delivered){  // delivered
         for($i=0;$i<$count;$i++){
-            $record = array("barcode"=>$request->barcode[$i],"name"=>$request->name[$i],"detail"=>$request->details[$i],"price"=>$request->price[$i],"quantity"=>$request->quantity[$i],"delivered"=>$request->quantity[$i]);
+            $record = array("barcode"=>$request->barcode[$i],"name"=>$request->name[$i],"detail"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"quantity"=>$request->quantity[$i],"delivered"=>$request->quantity[$i]);
             $details[]=$record;
         }
         $details = serialize($details);
         }
         else{  // hanging
             for($i=0;$i<$count;$i++){
-                $record = array("barcode"=>$request->barcode[$i],"name"=>$request->name[$i],"detail"=>$request->details[$i],"price"=>$request->price[$i],"quantity"=>$request->quantity[$i],"delivered"=>$request->del[$i]);
+                $record = array("barcode"=>$request->barcode[$i],"name"=>$request->name[$i],"detail"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"quantity"=>$request->quantity[$i],"delivered"=>$request->del[$i]);
                 $details[]=$record;
             }
             $details = serialize($details);

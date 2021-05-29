@@ -187,6 +187,7 @@ input[type=number] {
                         {{--{{$product->details}}--}}
                      </td>
                      <td>
+                      <input type="hidden" name="cost_price[]"  class="form-control" value="{{$product->cost_price}}">
                        <input type="number" name="price[]"  class="form-control price" value="{{$product->price}}" readonly>
                         {{--{{$product->price}}--}}
                      </td>

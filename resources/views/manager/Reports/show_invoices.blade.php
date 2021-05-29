@@ -57,6 +57,11 @@
                     <th>
                       التفاصيل  
                     </th>
+                    @can('مشاهدة سعر التكلفة')
+                    <th>
+                      سعر التكلفة  
+                    </th>
+                    @endcan
                     <th>
                       السعر  
                     </th>
@@ -77,6 +82,11 @@
                         <td>
                             {{$detail["detail"]}}
                         </td>
+                        @can('مشاهدة سعر التكلفة')
+                        <td>
+                            {{$detail["cost_price"]}}
+                         </td>
+                         @endcan
                         <td>
                             {{$detail["price"]}}
                         </td>

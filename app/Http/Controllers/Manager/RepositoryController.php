@@ -37,8 +37,10 @@ class RepositoryController extends Controller
             {
             $new_quantity = $product->quantity + $request->quantity[$i];
             $new_price = $request->price[$i];
+            $new_cost_price = $request->cost_price[$i];
             $product->update([
                 'quantity' => $new_quantity,
+                'cost_price' => $new_cost_price,
                 'price' => $new_price,
             ]);
             $totalPrice+=$request->total_price[$i];
@@ -51,6 +53,7 @@ class RepositoryController extends Controller
                     'name'=>$request->name[$i],
                     'details'=>$request->details[$i],
                     'quantity'=>$request->quantity[$i],
+                    'cost_price'=>$request->cost_price[$i],
                     'price'=>$request->price[$i],
                 ]
                 );

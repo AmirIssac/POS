@@ -8,7 +8,7 @@ class Product extends Model
 {
     //
     protected $fillable = [
-       'repository_id','barcode','name', 'details' ,'price','quantity',
+       'repository_id','barcode','name', 'details' ,'cost_price','price','quantity','accept_min'
     ];
 
     public function repository(){
