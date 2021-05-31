@@ -27,6 +27,7 @@ class CreateInvoicesTable extends Migration
             $table->enum('status',['delivered','pending']);    // حالة الفاتورة تم التسليم و معلق
             $table->string('phone')->nullable();  // client number
             $table->timestamp('created_at');   // custom timestamp
+            $table->boolean('daily_report_check')->default(0);
             //$table->timestamp('updated_at')->nullable();   // custom timestamp for update from pending to delivered
             //$table->timestamps();
         });

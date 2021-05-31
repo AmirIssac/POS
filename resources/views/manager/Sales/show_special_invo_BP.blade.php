@@ -122,7 +122,7 @@ input[type=number] {
           <strong>{{ session('fail') }}</strong>
   </div>
   @endif
-  <form id="myform" method="POST" action="{{route('make.sell',$repository->id)}}">
+  <form id="myform" method="GET" action="#">
     @csrf
   <div class="container-fluid">
     <div class="row">
@@ -138,7 +138,9 @@ input[type=number] {
                 <thead class="text-primary">
                   <h4>
                   <span class="badge badge-success">
-                      تفاصيل الفاتورة  </span> <input type="text" name="date" value="{{$date}}" readonly></h4>
+                      تفاصيل الفاتورة  </span> <input type="text" name="date" value="{{$date}}" readonly>
+                        {{$customer_name}}
+                    </h4>
                       @if($repository->logo)
                       <img src="{{asset('storage/'.$repository->logo)}}" width="100px" height="100px" alt="logo" id="logo">
                       @else
@@ -262,9 +264,8 @@ input[type=number] {
                       <span class="badge badge-secondary">  جوال العميل </span>
                       <div style="display: flex; flex-direction: column; margin-top: 10px">
                         <div style="display: flex;">
-                      <input style="margin: 7px 10px 0 0" type="checkbox" id="client">
                       <h4 style="margin-right: 10px;">  جوال العميل </h4>
-                      <input style="margin-right: 10px; type="text" name="phone" id="phoneinput" class="form-control hidden" placeholder="أدخل رقم الجوال">
+                      <input style="margin-right: 10px; type="text" name="phone" value="{{$phone}}" class="form-control" readonly>
                         </div>
                     </div>
                     </div>
@@ -275,7 +276,7 @@ input[type=number] {
          <div>
         {{--<button onclick="window.print();" class="btn btn-success"> طباعة </button>--}}
         <button id="submit" onclick="window.print();" type="submit" class="btn btn-success"> تأكيد الفاتورة وطباعتها </button>
-        <a href="{{route('create.invoice',$repository->id)}}" class="btn btn-danger"> فاتورة جديدة </a>
+        <a href="#" class="btn btn-danger"> فاتورة جديدة </a>
         <a href="javascript:history.back()" class="btn btn-warning" id="back"> رجوع </a>
    </div>
 </div>

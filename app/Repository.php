@@ -19,7 +19,7 @@ class Repository extends Model
     public function productsAsc(){
         return $this->hasMany(Product::class)->orderBy('quantity');
     }
-    public function category(){
+    public function category(){ 
         return $this->belongsTo(RepositoryCategory::class);
     }
     public function invoices(){
@@ -34,6 +34,10 @@ class Repository extends Model
 
     public function dailyReportsDesc(){
         return $this->hasMany(DailyReport::class)->orderBy('created_at','DESC');
+    }
+
+    public function customers(){
+        return $this->belongsToMany(Customer::class);
     }
 
     public function owner(){   // custom function to get the owner of repository

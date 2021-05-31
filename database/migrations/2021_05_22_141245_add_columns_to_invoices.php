@@ -14,8 +14,9 @@ class AddColumnsToInvoices extends Migration
     public function up()
     {
         Schema::table('invoices', function (Blueprint $table) {
-            $table->boolean('daily_report_check')->default(0);
-        });
+            $table->string('recipe',1000)->after('details')->nullable()->default(null); //الوصفة الطبية
+            $table->foreignId('customer_id')->after('user_id');
+        }); 
     }
 
     /**
