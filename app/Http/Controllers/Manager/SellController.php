@@ -46,7 +46,24 @@ class SellController extends Controller
             }
             while($customer);   // if the name exists before we generate new name
         } // end else
-        return view('manager.Sales.create_special_invoice')->with(['repository'=>$repository,'customer_name'=>$customer_name,'phone'=>$request->phone]);
+
+        // code generate
+        do{
+            $characters = '0123456789';
+            $charactersLength = strlen($characters);
+            $code = '';
+            for ($i = 0; $i < 8; $i++)
+            $code .= $characters[rand(0, $charactersLength - 1)];
+            // check if code exist in this repository before
+            $invoice = Invoice::where('repository_id',$repository->id)->where('code',$code)->first();
+            }
+            while($invoice);   // if the code exists before we generate new code
+        $date = now();  // invoice date
+        return view('manager.Sales.create_special_invoice')->with([
+            'repository'=>$repository,'customer_name'=>$customer_name,'phone'=>$request->phone,
+            'code' => $code,
+            'date' => $date,
+            ]);
     }
 
     

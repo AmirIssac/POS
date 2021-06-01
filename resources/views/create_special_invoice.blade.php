@@ -21,7 +21,10 @@ form i:hover{
 input[name=date]{
     border: 1px solid white;
   }
-  
+  input[name=cn]{
+    border: 1px solid white;
+    background-color: white !important;
+  }
   #code,#tax_code{
     border: 1px solid white;
   }
@@ -34,10 +37,6 @@ input[name=date]{
   .visible{
     visibility: visible;
   }
-  .displaynone{
-    display: none;
-  }
-  
   #total_price,#final_total_price,#taxfield{
     font-size: 32px;
     background-color: white !important;
@@ -111,35 +110,6 @@ input[type=number] {
 </div>
   </div>
 
-  <div class="col-md-12">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="toggle-invoices" >
-      اظهار المبيعات السابقة 
-  </button>
-    <div id="invoices" class="card">
-      <div class="card-header card-header-primary">
-        <h4 class="card-title ">المبيعات السابقة</h4>
-      </div>
-      <div class="card-body">
-        <div class="table-responsive">
-          <table id="myTable" class="table">
-            <thead class="text-primary">
-              <th>
-                
-              </th>
-              
-            </thead>
-            <tbody>
-           <tr>
-            
-           </tr>
-     </tbody>
-   </table>
-  </div>
-  </div>
-  </div>
-  </div>
-    
-  
 
   <div class="col-md-12">
     
@@ -228,7 +198,34 @@ input[type=number] {
 </div>
 
 
-
+<div class="col-md-12">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="toggle-invoices" >
+    اظهار المبيعات السابقة 
+</button>
+  <div id="invoices" class="card">
+    <div class="card-header card-header-primary">
+      <h4 class="card-title ">المبيعات السابقة</h4>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="myTable" class="table">
+          <thead class="text-primary">
+            <th>
+              
+            </th>
+            
+          </thead>
+          <tbody>
+         <tr>
+          
+         </tr>
+   </tbody>
+ </table>
+</div>
+</div>
+</div>
+</div>
+    
       
       <div class="col-md-12">
         <div class="card">
@@ -248,7 +245,7 @@ input[type=number] {
                    <input type="text" name="date" value="{{$date}}" readonly></h4>
                       رقم الفاتورة <input type="text" name="code" id="code" value="{{$code}}" readonly>
                       الرقم الضريبي  <input type="text" name="tax_code" id="tax_code" value="{{$repository->tax_code}}" readonly>
-                      العميل&nbsp;<span>{{$customer_name}}</span>
+                      <input type="text" name="cn" value="{{$customer_name}}" class="form-control" readonly>
 
                   <th>
                     Barcode  
@@ -265,42 +262,12 @@ input[type=number] {
                   <th>
                     الكمية 
                   </th>
-                  <th id="del" class="hidden">
-                    تم تسليمها  
-                  </th>
                 </thead>
 
                 <tbody>
-                  <div id="record0">
+                  @for ($count=0;$count<=10;$count++)
+                   <div class="record">
                     <tr>
-                      <td>
-                        <input type="hidden" name="repo_id" id="repo_id" class="form-control" value="{{$repository->id}}">
-                          <input type="text" id="bar0" name="barcode[]" value="{{old('barcode0')}}"  class="form-control barcode" placeholder="مدخل خاص ب scanner" id="autofocus">
-                      </td>
-                      <td>
-                        <input type="text" id="name0"  name="name[]" value="{{old('name0')}}" class="form-control name blank">
-                      </td>
-                      <td>
-                        <input type="text" id="details0"  name="details[]" value="{{old('details0')}}" class="form-control details blank">
-                      </td>
-                      <td>
-                        <input type="number" id="price0"  name="price[]" value="{{old('price0')}}" class="form-control price blank">
-                      </td>
-                      <td>
-                        @if(old('quantity0'))
-                        <input type="number" id="quantity0" name="quantity[]" value="{{old('quantity0')}}" class="form-control quantity" placeholder="الكمية">
-                        @else
-                        <input type="number" id="quantity0" name="quantity[]"  class="form-control quantity" value="1" placeholder="الكمية">
-                        @endif
-                    </td>
-                    <td>
-                      <input type="checkbox" name="del[]"  class="form-control hidden delivered" checked>  {{-- need it just in hanging invoices --}}
-                  </td>
-                </tr>
-            </div>
-                  @for ($count=1;$count<=10;$count++)
-                   <div>
-                    <tr id="record{{$count}}" class="displaynone">
                       <td>
                         <input type="hidden" name="repo_id" id="repo_id" class="form-control" value="{{$repository->id}}">
                           <input type="text" id="bar{{$count}}" name="barcode[]" value="{{old('barcode[$count]')}}"  class="form-control barcode" placeholder="مدخل خاص ب scanner" id="autofocus">
@@ -320,9 +287,6 @@ input[type=number] {
                         @else
                         <input type="number" id="quantity{{$count}}" name="quantity[]"  class="form-control quantity" value="1" placeholder="الكمية">
                         @endif
-                    </td>
-                    <td>
-                        <input type="checkbox" name="del[]"  class="form-control hidden delivered" checked>  {{-- need it just in hanging invoices --}}
                     </td>
                 </tr>
             </div>
@@ -396,7 +360,7 @@ input[type=number] {
           </div>
 
           <div id="buttons">
-            <button  id="submit" type="submit" class="btn btn-primary">تأكيد</button>
+            <button onclick="window.print();" id="submit" type="submit" class="btn btn-primary">تأكيد</button>
           </div>
 
           </div>
@@ -441,11 +405,11 @@ window.onload=function(){
           success: function(data){    // data is the response come from controller
             $.each(data,function(i,value){
               $('#name'+gold+'').val(value.name);
-              //$('#name'+gold+'').addClass('ajaxSuccess');
+              $('#name'+gold+'').addClass('ajaxSuccess');
               $('#details'+gold+'').val(value.details);
-              //$('#details'+gold+'').addClass('ajaxSuccess');
+              $('#details'+gold+'').addClass('ajaxSuccess');
               $('#price'+gold+'').val(value.price);
-              //$('#price'+gold+'').addClass('ajaxSuccess');
+              $('#price'+gold+'').addClass('ajaxSuccess');
               if(parseFloat($('#price'+gold+'').val())!=NaN){
                 var s = 0 ;
                 for(var i=0;i<=10;i++){   // number of records
@@ -777,50 +741,4 @@ $('#status').change(function(){
 
 </script>
 
-<script>   // stop submiting form when click enter
-  $(document).keypress(function(e) {
-      if (e.keyCode == 13) {
-          e.preventDefault();
-          return false;
-      }
-  });
-  </script>
-
-<script>
-window.onload=function(){
-  var count_press = 0;
-  $(document).keypress(function(e) {
-      if (e.keyCode == 13) {
-        count_press = count_press + 1 ;
-        var gold =  count_press;
-        $('#record'+gold).removeClass('displaynone');
-        // focus on next element
-        $('#bar'+gold+'').focus();
-      }
-  });
-}
-</script>
-
-<script>   // stop submiting form when click enter
-  $(document).keypress(function(e) {
-      if (e.keyCode == 13) {
-          e.preventDefault();
-          return false;
-      }
-  });
-  </script>
-  <script>
-    /*$(document).keypress(function(e) {
-      if (e.keyCode == 13) {
-        // Get the focused element:
-        var focused = $(':focus');
-        var id = focused.attr("id");  // extract id
-        var gold =  id.slice(3);   // remove bar from id to take just the number
-        var num = parseInt(gold) +1;
-        $('#record'+num).removeClass('displaynone');
-        // focus on next element
-        $('#bar'+num+'').focus();
-      }
-  });*/
-  </script>
 @endsection
