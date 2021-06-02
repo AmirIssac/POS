@@ -49,7 +49,7 @@
              @endif
              @if($repository->category->name=='محل خاص')  {{-- محل خاص --}}
              <div class="col-lg-3 col-md-6 col-sm-6">
-              <a data-toggle="modal" data-target="#exampleModal">
+              <a href="{{route('modal.customer',$repository->id)}}">
                <div class="card card-stats">
                  <div class="card-header card-header-info card-header-icon">
                    <div class="card-icon">
@@ -66,30 +66,6 @@
                </div>
               </a>
              </div>
-                 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">أدخل رقم الزبون</h5>
-       
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form action="{{route('create.special.invoice',$repository->id)}}" method="GET">
-          @csrf
-          <input type="text" name="phone" placeholder="اكتب رقم الزبون هنا (الزامي)" class="form-control" required>
-          <input type="text" name="name" placeholder="اكتب اسم الزبون هنا (ليس الزامي)" class="form-control">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-dark" data-dismiss="modal">الغاء</button>
-        <button type="submit" class="btn btn-primary">موافق</button>
-      </form>
-      </div>
-    </div>
-  </div>
-</div>
              @endif
              @endcan
 

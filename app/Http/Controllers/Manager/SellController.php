@@ -25,6 +25,11 @@ class SellController extends Controller
         return view('manager.Sales.create_invoice')->with('repository',$repository);
     }
 
+    public function modalCustomer($id){
+        $repository = Repository::find($id);
+        return view('manager.Sales.modal_customer')->with('repository',$repository);
+    }
+
     public function createSpecialInvoiceForm(Request $request,$id){
         $repository = Repository::find($id);
         // check if customer name inserted

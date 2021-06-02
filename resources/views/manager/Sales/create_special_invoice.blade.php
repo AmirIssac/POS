@@ -22,7 +22,7 @@ input[name=date]{
     border: 1px solid white;
   }
   
-  #code,#tax_code{
+  #code,#tax_code,#customer_name,#customer_phone{
     border: 1px solid white;
   }
 #invoices,#recipe{
@@ -42,6 +42,20 @@ input[name=date]{
     font-size: 32px;
     background-color: white !important;
   }
+  #myTable{
+    text-align: center
+  }
+  #myTable input{
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+  }
+  #myTable th{
+   color: black;
+   font-weight: bold;
+  }
+
    /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -56,6 +70,7 @@ input[type=number] {
 </style>
 @endsection
 @section('body')
+
 <div class="main-panel">
  
  <div class="content">
@@ -71,37 +86,43 @@ input[type=number] {
           <strong>{{ session('fail') }}</strong>
   </div>
   @endif
-  <form method="GET" action="#">
-    @csrf
+  
   <div  class="container-fluid">
+    <form method="GET" action="{{route('create.special.invoice',$repository->id)}}">
+      @csrf
     <div class="row">
 
-           
+     {{-- <form method="GET" action="{{route('create.special.invoice',$repository->id)}}">
+        @csrf --}}
       <div class="col-md-12">
         <div class="card">
           <div class="card-header card-header-primary">
-            <h4 class="card-title ">معلومات الزبون</h4>
+            <h4 class="card-title ">العميل {{$customer_name}}</h4>
           </div>
           <div class="card-body">
             <div class="table-responsive">
-              <table id="myTable" class="table">
+              <table class="table">
                 <thead class="text-primary">
+                  <th>
+                    الجوال  
+                  </th>
                   <th>
                     الاسم  
                   </th>
                   <th>
-                    الجوال  
+                    البحث  
                   </th>
                 </thead>
                 <tbody>
                <tr>
-                 <td>
-                   <input type="text" name="customer_name" value="{{$customer_name}}" class="form-control" readonly>
-                 </td>
-                 <td>
-                  <input type="phone" name="phone" value={{$phone}} class="form-control">
-                </td>
                 <td>
+                  <input type="phone" name="phone" value="" class="form-control" placeholder="اكتب هنا لإدخال عميل آخر" required>
+                </td>
+                 <td>
+                   <input type="text" name="name" value="" class="form-control">
+                 </td>
+                <td>
+                  <button type="submit" class="btn btn-primary"> ابحث </button>
                 </td>
                </tr>
          </tbody>
@@ -110,7 +131,13 @@ input[type=number] {
 </div>
 </div>
   </div>
+  </form>
+    </div>
+  </div>
 
+
+  <div  class="container-fluid">
+    <div class="row">
   <div class="col-md-12">
     <button class="btn btn-secondary dropdown-toggle" type="button" id="toggle-invoices" >
       اظهار المبيعات السابقة 
@@ -121,7 +148,7 @@ input[type=number] {
       </div>
       <div class="card-body">
         <div class="table-responsive">
-          <table id="myTable" class="table">
+          <table  class="table">
             <thead class="text-primary">
               <th>
                 
@@ -140,7 +167,8 @@ input[type=number] {
   </div>
     
   
-
+<form>
+  @csrf
   <div class="col-md-12">
     
     <button class="btn btn-secondary dropdown-toggle" type="button" id="toggle-recipe" >
@@ -152,7 +180,7 @@ input[type=number] {
       </div>
       <div class="card-body">
         <div class="table-responsive">
-          <table id="myTable" class="table">
+          <table id="myTable" class="table table-bordered">
             <thead class="text-primary">
               <th>
                 ADD  
@@ -174,50 +202,50 @@ input[type=number] {
             <tbody>
            <tr>
             <td>
-              <input type="text" name="add1" class="form-control">
+              <input type="text" name="add_r">
             </td>
             <td>
-              <input type="text" name="axis1" class="form-control">
+              <input type="text" name="axis_r">
             </td>
             <td>
-              <input type="text" name="cyl1" class="form-control">
+              <input type="text" name="cyl_r">
             </td>
             <td>
-              <input type="text" name="sph1" class="form-control">
+              <input type="text" name="sph_r">
             </td>
-            <td>
-              <input type="text" name="eye1" class="form-control">
+            <td style="text-align: center; font-weight: bold; font-size: 18px;">
+              RIGHT
             </td>
            </tr>
            <tr>
             <td>
-              <input type="text" name="add2" class="form-control">
+              <input type="text" name="add_l">
             </td>
             <td>
-              <input type="text" name="axis2" class="form-control">
+              <input type="text" name="axis_l">
             </td>
             <td>
-              <input type="text" name="cyl2" class="form-control">
+              <input type="text" name="cyl_l">
             </td>
             <td>
-              <input type="text" name="sph2" class="form-control">
+              <input type="text" name="sph_l">
             </td>
-            <td>
-              <input type="text" name="eye2" class="form-control">
+            <td style="text-align: center; font-weight: bold; font-size: 18px;">
+              LEFT
             </td>
            </tr>
            <tr>
-             <td>
+             <td style="border: none">
              </td>
              <td>
-              <input type="text" name="ipdval" class="form-control">
+              <input type="text" name="ipdval">
              </td>
-             <td style="text-align: center">
+             <td style="text-align: center; font-weight: bold; font-size: 18px;">
                IPD
              </td>
-             <td>
+             <td style="border: none">
             </td>
-            <td>
+            <td style="border: none">
             </td>
            </tr>
      </tbody>
@@ -232,23 +260,25 @@ input[type=number] {
       
       <div class="col-md-12">
         <div class="card">
-          <div class="card-header card-header-primary">
-            <h4 class="card-title ">الفاتورة</h4>
+          <div class="card-header">
+            <h4 class="card-title ">الفاتورة <input type="text" name="date" value="{{$date}}" readonly>
+              العميل<input type="text" name="customer_name" id="customer_name" value="{{$customer_name}}" readonly>
+              الجوال<input type="text" name="customer_phone" id="customer_phone" value="{{$phone}}" readonly>
+            </h4>
           </div>
           <div class="card-body">
             <div class="table-responsive">
-              <table id="myTable" class="table">
+              <table class="table">
                 <thead class="text-primary">
-                  تفاصيل الفاتورة  </span>
+                     
                   @if($repository->logo)
                       <img src="{{asset('storage/'.$repository->logo)}}" width="100px" height="100px" alt="logo" id="logo">
                       @else
                      <span id="warning" class="badge badge-warning"> يرجى تعيين شعار المتجر من الإعدادات </span>
                       @endif
-                   <input type="text" name="date" value="{{$date}}" readonly></h4>
+                    
                       رقم الفاتورة <input type="text" name="code" id="code" value="{{$code}}" readonly>
                       الرقم الضريبي  <input type="text" name="tax_code" id="tax_code" value="{{$repository->tax_code}}" readonly>
-                      العميل&nbsp;<span>{{$customer_name}}</span>
 
                   <th>
                     Barcode  
@@ -294,7 +324,7 @@ input[type=number] {
                         @endif
                     </td>
                     <td>
-                      <input type="checkbox" name="del[]"  class="form-control hidden delivered" checked>  {{-- need it just in hanging invoices --}}
+                      <input type="checkbox" name="del[]"  class="form-control  delivered" checked>  {{-- need it just in hanging invoices --}}
                   </td>
                 </tr>
             </div>
@@ -322,7 +352,7 @@ input[type=number] {
                         @endif
                     </td>
                     <td>
-                        <input type="checkbox" name="del[]"  class="form-control hidden delivered" checked>  {{-- need it just in hanging invoices --}}
+                        <input type="checkbox" name="del[]"  class="form-control delivered" checked>  {{-- need it just in hanging invoices --}}
                     </td>
                 </tr>
             </div>
@@ -359,7 +389,7 @@ input[type=number] {
        </div>
        {{--<i class="material-icons">add_circle</i>--}}
        <div id="settings">
-        <div id="min" class="hidden">
+        <div id="min" class="">
           <span class="badge badge-success" id="badgecolor"> الحد الأدنى للدفع <div id="minVal"></div></span>
          {{--<input type="hidden" class="" id="inputmin" value="{{($repository->min_payment*$invoice_total_price)/100}}">--}}
          <input type="hidden" class="" id="inputmin" value="">
@@ -385,18 +415,12 @@ input[type=number] {
           </div>
           
           <div>
-          <div id="deliverde">
-            <span class="badge badge-secondary"> حالة الفاتورة  </span>
-            <div style="display: flex; flex-direction: column; margin-top: 10px">
-              <div style="display: flex;">
-            <input style="margin: 7px 10px 0 0" type="checkbox" name="delivered" id="status" checked>
-            <h4 style="margin-right: 10px;" id="stat"> تسليم</h4>
-              </div>
-          </div>
-          </div>
+      
 
           <div id="buttons">
             <button  id="submit" type="submit" class="btn btn-primary">تأكيد</button>
+            <a style="color: white" class="btn btn-success">حفظ</a>
+            <a style="color: white; float: left;" class="btn btn-danger">الغاء</a>
           </div>
 
           </div>
@@ -404,28 +428,23 @@ input[type=number] {
    </div>
 </div>
 </div>
+</form>
+
 </div>
 
 </div>
 </div>
-</form>
 </div>
+
+
+
+
+
+
+
 @endsection
 @section('scripts')
-{{--<script>
-    var count = 1;
-    $('form i').on('click',function(){
-    $('#myTable tr:last').after('<tr><td><input type="text" name="barcode[]" id="bar'+count+'" class="form-control barcode" placeholder="مدخل خاص ب scanner" required></td> <td><input type="text" name="name[]" id="name'+count+'" class="form-control name" readonly></td><td><input type="text" name="details[]" id="details'+count+'" class="form-control details" readonly></td><td><input type="text" name="price[]" id="price'+count+'" class="form-control price" readonly></td><td><input type="number" id="quantity'+count+'" name="quantity[]" class="form-control" placeholder="الكمية" value="1" required></td> </tr>');
-    $('#myTable').find('#bar'+count+'').focus();   // we use find to select new added element
-    count = count +1;
-    //$('.barcode').last().focus();
-  });
-</script>--}}
-{{--<script>
-window.onload=function(){
-  $('#bar0').focus();
-};
-</script>--}}
+
 
 <script>    // Ajax
     $('.barcode').on('keyup',function(){
@@ -473,15 +492,14 @@ window.onload=function(){
                 var card = parseFloat($('#cardVal').val());
                 // min payment
                 var min = parseFloat($('#inputmin').val());
-                if($('#status').prop('checked') == false){    // pending
                   if(card+cash<min){
-                  $('button[type="submit"]').prop('disabled', true);
+                  $('#submit').prop('disabled', true);
                   $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
                   } 
                   else{
                   $('#badgecolor').removeClass('badge-danger').addClass('badge-success');
                   }
-                  }
+                  
               } // end if
               
            });
@@ -540,9 +558,8 @@ $(document).keypress(function(e) {
                 var card = parseFloat($('#cardVal').val());
                 // min payment
                 var min = parseFloat($('#inputmin').val());
-                if($('#status').prop('checked') == false){    // pending
                   if(card+cash<min){
-                  $('button[type="submit"]').prop('disabled', true);
+                  $('#submit').prop('disabled', true);
                   $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
                   } 
                   else{
@@ -572,24 +589,12 @@ if($('#cash').is(':checked') && $('#card').is(':checked')){
 if($('#cash').is(':checked') && $('#card').prop('checked') == false){
   $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
   $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
-  if($('#status').prop('checked') == false){  // pending so we can change value to less value
-    $('#cardVal').val(null);
-  }
-  else{
-  $('#cashVal').val( $('#final_total_price').val());
   $('#cardVal').val(null);
-  }
 }
 if($('#cash').prop('checked') == false && $('#card').prop('checked') == true){
   $('input[name="cardVal"]').removeClass('hidden').addClass('visibl');
   $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
-  if($('#status').prop('checked') == false){  // pending so we can change value to less value
-    $('#cashVal').val(null);
-  }
-  else{
   $('#cashVal').val(null);
-  $('#cardVal').val($('#final_total_price').val());
-  }
 }
 if($('#cash').prop('checked') == false && $('#card').prop('checked') == false){   // error
   //$('#cash').prop('checked',true);
@@ -659,15 +664,14 @@ $('input[name="quantity[]"]').on("keyup",function(){
     var card = parseFloat($('#cardVal').val());
      // min payment
      var min = parseFloat($('#inputmin').val());
-     if($('#status').prop('checked') == false){    // pending
       if(card+cash<min){
-      $('button[type="submit"]').prop('disabled', true);
+      $('#submit').prop('disabled', true);
       $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
       } 
       else{
       $('#badgecolor').removeClass('badge-danger').addClass('badge-success');
     }
-     }
+     
 });
 </script>
 
@@ -680,35 +684,47 @@ $('input[name="quantity[]"]').on("keyup",function(){
      // min payment
      var min = parseFloat($('#inputmin').val());
     if($('#cashVal').val()=="" && $('#cardVal').val()!=""){
-      sum = card + 0;
+    //if(!$('#cashVal').val() && $('#cardVal').val()){
+      cash = 0 ;
+      sum = card + cash;
     }
    if($('#cardVal').val()=="" && $('#cashVal').val()!=""){
-      sum = cash + 0;
+    //if(!$('#cardVal').val() && $('#cashVal').val()){
+      card = 0 ;
+      sum = cash + card;
     }
     if($('#cashVal').val()!="" && $('#cardVal').val()!=""){
+    //if($('#cashVal').val() && $('#cardVal').val()){
     sum = cash + card ;
     }
-    if(sum == $('#final_total_price').val()){
+    /*if(sum == $('#final_total_price').val()){
       $('#submit').prop('disabled', false);
-    }
-    else if(sum != $('#final_total_price').val() && $('#status').prop('checked') == true){   // delivered
-      $('button[type="submit"]').prop('disabled', true);   // cant submit if cash and card not equals the total
-    }
-    if(cash <=0 || card<=0){ // dont accept values less or equal to zero
-      $('#submit').prop('disabled', true);
-    }
-    // min payment
-    if((cash+card)<min){
-      $('button[type="submit"]').prop('disabled', true);
-      $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
+    }*/
+     if(sum > $('#final_total_price').val()){   // delivered
+      $('#submit').prop('disabled', true);   // cant submit if cash and card not equals the total
     }
     else{
-      $('#badgecolor').removeClass('badge-danger').addClass('badge-success');
+        
+      // min payment
+        if((cash+card)<min){
+        //if(sum<min)
+        $('#submit').prop('disabled', true);
+        $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
+      }
+      else{
+        $('#submit').prop('disabled', false);
+        $('#badgecolor').removeClass('badge-danger').addClass('badge-success');
+      }
+      //if(cash <= 0 || card <= 0 )
+      if(parseFloat(('#cashVal').val()) <=0.00 || parseFloat(('#cardVal').val())<=0.00){ // dont accept values less or equal to zero
+          $('#submit').prop('disabled', true);
+        }
+      
     }
   });
 </script>
 <script>
-$('#status').change(function(){
+/*$('#status').change(function(){
     var sum;
     var cash =  parseFloat($('#cashVal').val());
     var card = parseFloat($('#cardVal').val());
@@ -774,7 +790,7 @@ $('#status').change(function(){
     }
   }
 });
-
+*/
 </script>
 
 <script>   // stop submiting form when click enter
@@ -810,17 +826,5 @@ window.onload=function(){
   });
   </script>
   <script>
-    /*$(document).keypress(function(e) {
-      if (e.keyCode == 13) {
-        // Get the focused element:
-        var focused = $(':focus');
-        var id = focused.attr("id");  // extract id
-        var gold =  id.slice(3);   // remove bar from id to take just the number
-        var num = parseInt(gold) +1;
-        $('#record'+num).removeClass('displaynone');
-        // focus on next element
-        $('#bar'+num+'').focus();
-      }
-  });*/
   </script>
 @endsection

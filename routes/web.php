@@ -43,6 +43,7 @@ Route::group(['middleware' => ['permission:المبيعات']], function () {
     Route::get('/ajax/get/product/{repository_id}/{barcode}','Manager\RepositoryController@getProductAjax');
     Route::group(['middleware' => ['check_user']], function () {
         Route::get('/create/invoice/form/{repository_id}','Manager\SellController@createInvoiceForm')->name('create.invoice');
+        Route::get('/modal/customer/{repository_id}','Manager\SellController@modalCustomer')->name('modal.customer');  // 2
         Route::get('/create/special/invoice/form/{repository_id}','Manager\SellController@createSpecialInvoiceForm')->name('create.special.invoice'); // 2
         Route::post('/sell/{repository_id}','Manager\SellController@sell')->name('make.sell');
         Route::get('/show/pending/invoices/{repository_id}','Manager\SellController@showPending')->name('show.pending');
