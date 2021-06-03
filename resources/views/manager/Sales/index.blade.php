@@ -49,7 +49,7 @@
              @endif
              @if($repository->category->name=='محل خاص')  {{-- محل خاص --}}
              <div class="col-lg-3 col-md-6 col-sm-6">
-              <a href="{{route('modal.customer',$repository->id)}}">
+              <a href="{{route('create.special.invoice',$repository->id)}}">
                <div class="card card-stats">
                  <div class="card-header card-header-info card-header-icon">
                    <div class="card-icon">

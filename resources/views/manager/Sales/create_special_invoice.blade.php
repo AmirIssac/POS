@@ -97,7 +97,9 @@ input[type=number] {
       <div class="col-md-12">
         <div class="card">
           <div class="card-header card-header-primary">
-            <h4 class="card-title ">العميل {{$customer_name}}</h4>
+            <h4 class="card-title ">العميل {{isset($customer_name)?$customer_name:''}}/
+              <span>الجوال {{isset($phone)?$phone:''}}</span>
+            </h4>
           </div>
           <div class="card-body">
             <div class="table-responsive">
@@ -167,7 +169,7 @@ input[type=number] {
   </div>
     
   
-<form>
+<form action="{{route('sell.special.invoice',$repository->id)}}" method="POST">
   @csrf
   <div class="col-md-12">
     
@@ -202,16 +204,16 @@ input[type=number] {
             <tbody>
            <tr>
             <td>
-              <input type="text" name="add_r">
+              <input type="number" step="0.01" name="add_r">
             </td>
             <td>
-              <input type="text" name="axis_r">
+              <input type="number" step="0.01" name="axis_r">
             </td>
             <td>
-              <input type="text" name="cyl_r">
+              <input type="number" step="0.01" name="cyl_r">
             </td>
             <td>
-              <input type="text" name="sph_r">
+              <input type="number" step="0.01" name="sph_r">
             </td>
             <td style="text-align: center; font-weight: bold; font-size: 18px;">
               RIGHT
@@ -219,16 +221,16 @@ input[type=number] {
            </tr>
            <tr>
             <td>
-              <input type="text" name="add_l">
+              <input type="number" step="0.01" name="add_l">
             </td>
             <td>
-              <input type="text" name="axis_l">
+              <input type="number" step="0.01" name="axis_l">
             </td>
             <td>
-              <input type="text" name="cyl_l">
+              <input type="number" step="0.01" name="cyl_l">
             </td>
             <td>
-              <input type="text" name="sph_l">
+              <input type="number" step="0.01" name="sph_l">
             </td>
             <td style="text-align: center; font-weight: bold; font-size: 18px;">
               LEFT
@@ -261,25 +263,28 @@ input[type=number] {
       <div class="col-md-12">
         <div class="card">
           <div class="card-header">
-            <h4 class="card-title ">الفاتورة <input type="text" name="date" value="{{$date}}" readonly>
-              العميل<input type="text" name="customer_name" id="customer_name" value="{{$customer_name}}" readonly>
-              الجوال<input type="text" name="customer_phone" id="customer_phone" value="{{$phone}}" readonly>
-            </h4>
+            {{--<h4 class="card-title ">الفاتورة <input type="text" name="date" value="{{isset($date)?$date:''}}" readonly>
+              العميل<input type="text" name="customer_name" id="customer_name" value="{{isset($customer_name)?$customer_name:''}}" readonly>
+              الجوال<input type="text" name="customer_phone" id="customer_phone" value="{{isset($phone)?$phone:''}}" readonly>
+            </h4>--}}
+            <input style="display: none" type="text" name="date" value="{{isset($date)?$date:''}}" readonly>
+            <input style="display: none" type="text" name="customer_phone" id="customer_phone" value="{{isset($phone)?$phone:''}}" readonly>
           </div>
           <div class="card-body">
             <div class="table-responsive">
               <table class="table">
                 <thead class="text-primary">
                      
-                  @if($repository->logo)
+                  {{--@if($repository->logo)
                       <img src="{{asset('storage/'.$repository->logo)}}" width="100px" height="100px" alt="logo" id="logo">
                       @else
                      <span id="warning" class="badge badge-warning"> يرجى تعيين شعار المتجر من الإعدادات </span>
                       @endif
                     
-                      رقم الفاتورة <input type="text" name="code" id="code" value="{{$code}}" readonly>
+                      رقم الفاتورة <input type="text" name="code" id="code" value="{{isset($code)?$code:''}}" readonly>
                       الرقم الضريبي  <input type="text" name="tax_code" id="tax_code" value="{{$repository->tax_code}}" readonly>
-
+                      --}}
+                      <input style="display: none" type="text" name="code" id="code" value="{{isset($code)?$code:''}}" readonly>
                   <th>
                     Barcode  
                   </th>
@@ -295,7 +300,7 @@ input[type=number] {
                   <th>
                     الكمية 
                   </th>
-                  <th id="del" class="hidden">
+                  <th id="del" class="">
                     تم تسليمها  
                   </th>
                 </thead>
@@ -313,6 +318,9 @@ input[type=number] {
                       <td>
                         <input type="text" id="details0"  name="details[]" value="{{old('details0')}}" class="form-control details blank">
                       </td>
+                      <td style="display: none;">
+                        <input type="hidden" id="cost_price0"  name="cost_price[]" value="{{old('cost_price0')}}" class="form-control blank">
+                      </td>
                       <td>
                         <input type="number" id="price0"  name="price[]" value="{{old('price0')}}" class="form-control price blank">
                       </td>
@@ -324,7 +332,7 @@ input[type=number] {
                         @endif
                     </td>
                     <td>
-                      <input type="checkbox" name="del[]"  class="form-control  delivered" checked>  {{-- need it just in hanging invoices --}}
+                      <input type="checkbox" name="del[]"  class="form-control  delivered" value="0" checked>  {{-- need it just in hanging invoices --}}
                   </td>
                 </tr>
             </div>
@@ -341,6 +349,9 @@ input[type=number] {
                       <td>
                         <input type="text" id="details{{$count}}"  name="details[]" value="{{old('details.'.$count)}}" class="form-control details blank">
                       </td>
+                      <td style="display: none;">
+                        <input type="hidden" id="cost_price{{$count}}"  name="cost_price[]" value="{{old('cost_price.'.$count)}}" class="form-control blank">
+                      </td>
                       <td>
                         <input type="number" id="price{{$count}}"  name="price[]" value="{{old('price.'.$count)}}" class="form-control price blank">
                       </td>
@@ -352,7 +363,7 @@ input[type=number] {
                         @endif
                     </td>
                     <td>
-                        <input type="checkbox" name="del[]"  class="form-control delivered" checked>  {{-- need it just in hanging invoices --}}
+                        <input type="checkbox" name="del[]" value="{{$count}}"  class="form-control delivered" checked>  {{-- need it just in hanging invoices --}}
                     </td>
                 </tr>
             </div>
@@ -390,14 +401,13 @@ input[type=number] {
        {{--<i class="material-icons">add_circle</i>--}}
        <div id="settings">
         <div id="min" class="">
-          <span class="badge badge-success" id="badgecolor"> الحد الأدنى للدفع <div id="minVal"></div></span>
+          <span class="badge badge-success hidden" id="badgecolor"> الحد الأدنى للدفع <div id="minVal"></div></span>
          {{--<input type="hidden" class="" id="inputmin" value="{{($repository->min_payment*$invoice_total_price)/100}}">--}}
          <input type="hidden" class="" id="inputmin" value="">
          <input type="hidden" class="" id="percent" value="{{$repository->min_payment}}">
 
        </div>
         <div>
-          <span class="badge badge-secondary"> طرق الدفع </span>
           <div style="display: flex; flex-direction: column; margin-top: 10px">
             <div style="display: flex;">
           <h4> &nbsp;الدفع كاش</h4>
@@ -700,11 +710,13 @@ $('input[name="quantity[]"]').on("keyup",function(){
     /*if(sum == $('#final_total_price').val()){
       $('#submit').prop('disabled', false);
     }*/
-     if(sum > $('#final_total_price').val()){   // delivered
-      $('#submit').prop('disabled', true);   // cant submit if cash and card not equals the total
+   
+     if(sum > $('#final_total_price').val()){   
+      $('#submit').prop('disabled', true);
     }
     else{
-        
+      if ($('.delivered:checked').length != $('.delivered').length){  // hanging
+        $('#badgecolor').removeClass('hidden').addClass('visible');
       // min payment
         if((cash+card)<min){
         //if(sum<min)
@@ -714,6 +726,13 @@ $('input[name="quantity[]"]').on("keyup",function(){
       else{
         $('#submit').prop('disabled', false);
         $('#badgecolor').removeClass('badge-danger').addClass('badge-success');
+      }
+      }  // end hanging
+      if ($('.delivered:checked').length == $('.delivered').length){ //delivered
+        if(sum == $('#final_total_price').val())   // delivered
+        $('#submit').prop('disabled', false);   // cant submit if cash and card not equals the total
+        else
+        $('#submit').prop('disabled', true);
       }
       //if(cash <= 0 || card <= 0 )
       if(parseFloat(('#cashVal').val()) <=0.00 || parseFloat(('#cardVal').val())<=0.00){ // dont accept values less or equal to zero
@@ -825,6 +844,12 @@ window.onload=function(){
       }
   });
   </script>
-  <script>
+  <script>   // hanging
+    $('.delivered').on('change',function(){
+      if ($('.delivered:checked').length != $('.delivered').length)
+        $('#badgecolor').removeClass('hidden').addClass('visible');
+        else
+        $('#badgecolor').removeClass('visible').addClass('hidden');
+    });
   </script>
 @endsection
