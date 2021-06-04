@@ -25,10 +25,10 @@ class SellController extends Controller
         return view('manager.Sales.create_invoice')->with('repository',$repository);
     }
 
-    public function modalCustomer($id){
+    /*public function modalCustomer($id){
         $repository = Repository::find($id);
         return view('manager.Sales.modal_customer')->with('repository',$repository);
-    }
+    }*/
 
     public function createSpecialInvoiceForm(Request $request,$id){
         $repository = Repository::find($id);
@@ -36,11 +36,37 @@ class SellController extends Controller
         if(!$request->phone){
             return view('manager.Sales.create_special_invoice')->with(['repository'=>$repository]);
         }
+        // search for customer if exists before or create new one
+        $customer = Customer::whereHas("repositories", function($q) use ($repository){ $q->where("repositories.id",$repository->id ); })->where('phone',$request->phone)->first();
+        if($customer) // customer exists before
+            {
+                $customer_name = $customer->name;
+                $prev_invoices = $customer->invoices;
+                 // code generate
+                do{
+                    $characters = '0123456789';
+                    $charactersLength = strlen($characters);
+                    $code = '';
+                    for ($i = 0; $i < 8; $i++)
+                    $code .= $characters[rand(0, $charactersLength - 1)];
+                    // check if code exist in this repository before
+                    $invoice = Invoice::where('repository_id',$repository->id)->where('code',$code)->first();
+                    }
+                    while($invoice);   // if the code exists before we generate new code
+                $date = now();  // invoice date
+                return view('manager.Sales.create_special_invoice')->with([
+                    'repository'=>$repository,'customer_name'=>$customer_name,'phone'=>$request->phone,
+                    'code' => $code,
+                    'date' => $date,
+                    'invoices' => $prev_invoices,
+                    ]);
+                    } // end customer exists before
+        else{ // not exists before
         // check if customer name inserted
         if($request->name){
             $customer_name = $request->name;
         }
-        else{
+        else{ 
         // customer name generate
         $customer_name = 'customer-';
         do{
@@ -55,7 +81,6 @@ class SellController extends Controller
             }
             while($customer);   // if the name exists before we generate new name
         } // end else
-
         // code generate
         do{
             $characters = '0123456789';
@@ -67,12 +92,16 @@ class SellController extends Controller
             $invoice = Invoice::where('repository_id',$repository->id)->where('code',$code)->first();
             }
             while($invoice);   // if the code exists before we generate new code
-        $date = now();  // invoice date
-        return view('manager.Sales.create_special_invoice')->with([
-            'repository'=>$repository,'customer_name'=>$customer_name,'phone'=>$request->phone,
-            'code' => $code,
-            'date' => $date,
-            ]);
+            $date = now();  // invoice date
+            return view('manager.Sales.create_special_invoice')->with([
+                'repository'=>$repository,'customer_name'=>$customer_name,'phone'=>$request->phone,
+                'code' => $code,
+                'date' => $date,
+                ]);
+    } // end customer not exists
+
+
+       
     }
 
     
@@ -173,7 +202,7 @@ class SellController extends Controller
             ]);
     }
 
-    public function specialInvoiceDetails(Request $request , $id){
+   /* public function specialInvoiceDetails(Request $request , $id){
             $repository = Repository::find($id);
             //return $request->barcode;
             $count = count($request->barcode);    // number of records
@@ -221,7 +250,7 @@ class SellController extends Controller
                 'phone' => $request->phone,
                 'customer_name' => $request->customer_name,
                 ]);
-    }
+    }*/
     
 
    /* public function sell(Request $request , $id){
@@ -420,6 +449,9 @@ class SellController extends Controller
     }
 
     public function sellSpecialInvoice(Request $request , $id){
+        // make sure we determine customer
+        if(!$request->customer_phone || !$request->customer_name)
+            return back()->with('failCustomer','يرجى ادخال رقم الزبون');
         $repository = Repository::find($id);
         $count = count($request->barcode);
         $count2 = count( $request->del);
@@ -579,14 +611,38 @@ class SellController extends Controller
         else{
             $cardVal = $request->cardVal;
         }
-
+        
+        $recipe = array('add_r'=>$request->add_r,'axis_r'=>$request->axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
+                        'add_l'=>$request->add_l,'axis_l'=>$request->axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
+                        'ipd'=>$request->ipdval,);
+        $recipe = serialize($recipe);
+        // check if customer exists before so we not create new one
+        $customer = Customer::whereHas("repositories", function($q) use ($repository){ $q->where("repositories.id",$repository->id ); })->where('phone',$request->customer_phone)->first();
+        if($customer){ // exists
+            $customer->update(
+                [
+                    'points' => $customer->points + 1,
+                ]
+                );
+        } 
+        else{ // not exists before
+        $customer = Customer::create(
+            [
+                'name' => $request->customer_name,
+                'phone' => $request->customer_phone,
+                'points' => 1,
+            ]
+            );
+        $repository->customers()->attach($customer->id);  // pivot table
+        }
         Invoice::create(
             [
                 'repository_id' => $repository->id,
                 'user_id' => Auth::user()->id,
-                'customer_id' => 1,
+                'customer_id' => $customer->id,
                 'code' => $request->code,
                 'details' => $details,
+                'recipe' => $recipe,
                 'total_price' => $request->total_price,
                 'cash_check' => $cash,
                 'card_check' => $card,

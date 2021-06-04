@@ -22,7 +22,7 @@ class ReportController extends Controller
 
     public function showInvoices($id){
         $repository = Repository::find($id);
-        $invoices = $repository->invoicesDesc()->paginate(10);
+        $invoices = $repository->invoicesDesc()->paginate(4);
         /*$re = $invoices->first();
         $re = unserialize($re->details);
         return $re;*/

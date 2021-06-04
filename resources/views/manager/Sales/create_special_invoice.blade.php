@@ -67,13 +67,30 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+@media print{
+ /* body, html, #myform { 
+          height: 100%;
+      }*/
+      body * {
+    visibility: hidden;
+  }
+  #print-content, #print-content * {
+    visibility: visible;
+  }
+  #print-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+}
 </style>
 @endsection
 @section('body')
 
 <div class="main-panel">
  
- <div class="content">
+ <div class="content" id="content">
   @if (session('sellSuccess'))
   <div class="alert alert-success alert-block">
       <button type="button" class="close" data-dismiss="alert">×</button>	
@@ -86,6 +103,13 @@ input[type=number] {
           <strong>{{ session('fail') }}</strong>
   </div>
   @endif
+  @if (session('failCustomer'))
+  <div class="alert alert-danger alert-block">
+      <button type="button" class="close" data-dismiss="alert">×</button>	
+          <strong>{{ session('failCustomer') }}</strong>
+  </div>
+  @endif
+  
   
   <div  class="container-fluid">
     <form method="GET" action="{{route('create.special.invoice',$repository->id)}}">
@@ -97,7 +121,7 @@ input[type=number] {
       <div class="col-md-12">
         <div class="card">
           <div class="card-header card-header-primary">
-            <h4 class="card-title ">العميل {{isset($customer_name)?$customer_name:''}}/
+            <h4 class="card-title ">العميل {{isset($customer_name)?$customer_name:''}}
               <span>الجوال {{isset($phone)?$phone:''}}</span>
             </h4>
           </div>
@@ -146,29 +170,62 @@ input[type=number] {
   </button>
     <div id="invoices" class="card">
       <div class="card-header card-header-primary">
-        <h4 class="card-title ">المبيعات السابقة</h4>
+        @isset($invoices)
+        @if($invoices)
+        <h4 class="card-title ">المبيعات السابقة {{$invoices->count()}}</h4>
+        @endisset
+        @else
+        <h4 class="card-title "> لا يوجد مبيعات سابقة </h4>
+        @endif
       </div>
+      @isset($invoices)
+      @if($invoices)
       <div class="card-body">
         <div class="table-responsive">
           <table  class="table">
             <thead class="text-primary">
               <th>
-                
+                رقم الفاتورة
               </th>
-              
+              <th>
+                حالة الفاتورة
+              </th>
+              <th>
+                المبلغ الكلي
+              </th>
+              <th>
+                التاريخ
+              </th>
             </thead>
             <tbody>
+              @foreach ($invoices as $invoice)
            <tr>
-            
+            <td>
+              {{$invoice->code}}
+            </td>
+            <td>
+              {{$invoice->status}}
+            </td>
+            <td>
+              {{$invoice->total_price}}
+            </td>
+            <td>
+              {{$invoice->created_at}}
+            </td>
            </tr>
+           @endforeach
      </tbody>
    </table>
   </div>
   </div>
+  @endif
+  @endisset
   </div>
   </div>
     
   
+{{--<form action="{{route('sell.special.invoice',$repository->id)}}" method="POST">--}}
+  <div id="print-content">
 <form action="{{route('sell.special.invoice',$repository->id)}}" method="POST">
   @csrf
   <div class="col-md-12">
@@ -269,6 +326,7 @@ input[type=number] {
             </h4>--}}
             <input style="display: none" type="text" name="date" value="{{isset($date)?$date:''}}" readonly>
             <input style="display: none" type="text" name="customer_phone" id="customer_phone" value="{{isset($phone)?$phone:''}}" readonly>
+            <input type="hidden" name="customer_name" value="{{isset($customer_name)?$customer_name:''}}">
           </div>
           <div class="card-body">
             <div class="table-responsive">
@@ -425,11 +483,14 @@ input[type=number] {
           </div>
           
           <div>
-      
+
+
+         
 
           <div id="buttons">
             <button  id="submit" type="submit" class="btn btn-primary">تأكيد</button>
             <a style="color: white" class="btn btn-success">حفظ</a>
+            {{--<a onclick="PrintElem($('#print-content').attr('id'));" style="color: white" class="btn btn-success">حفظ</a>--}}
             <a style="color: white; float: left;" class="btn btn-danger">الغاء</a>
           </div>
 
@@ -439,7 +500,7 @@ input[type=number] {
 </div>
 </div>
 </form>
-
+  </div> {{-- end print content --}}
 </div>
 
 </div>
@@ -455,7 +516,29 @@ input[type=number] {
 @endsection
 @section('scripts')
 
+<script>
+  
+  function PrintElem(elem)
+{
+    var mywindow = window.open('', 'PRINT', 'height=1000,width=1500');
+    mywindow.document.write('<html><head><title>' + document.title  + '</title>');
+    mywindow.document.write('</head>   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css"> <style>.hidden{visibility: hidden;}.visible{visibility: visible;}.displaynone{display: none;}</style>');
+    mywindow.document.write('<style>*{font-size: 16px;font-weight: bold;}</style>');
+    mywindow.document.write('<body>');
+    mywindow.document.write('<h1>' + document.title  + '</h1>');
+    mywindow.document.write(document.getElementById(elem).innerHTML);
+    mywindow.document.write('</body></html>');
 
+    mywindow.document.close(); // necessary for IE >= 10
+    mywindow.focus(); // necessary for IE >= 10*/
+
+    mywindow.print();
+    mywindow.close();
+
+    return true;
+}
+ 
+</script>
 <script>    // Ajax
     $('.barcode').on('keyup',function(){
      

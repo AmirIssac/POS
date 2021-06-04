@@ -17,7 +17,7 @@ class CreateCustomersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('phone');
-            $table->integer('num_of_buying')->default(0);
+            $table->integer('points')->default(0);
             $table->timestamps();
         });
     }

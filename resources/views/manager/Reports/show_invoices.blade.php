@@ -10,6 +10,14 @@
   #code{
     float: left;
   }
+  #myTable th{
+   color: black;
+   font-weight: bold;
+  }
+  #myTable td{
+   color: black;
+   font-weight: bold;
+  }
 </style>
 @endsection
 @section('body')
@@ -170,6 +178,81 @@
                     </tr>
                   </tbody>
                 </table>
+            @if($invoice->recipe)
+            <?php $recipe = unserialize($invoice->recipe) ?>
+                <table id="myTable" class="table table-bordered">
+                  <thead class="text-primary">
+                    <th>
+                      ADD  
+                    </th>
+                    <th>
+                      Axis  
+                    </th>
+                    <th>
+                      CYL  
+                     </th>   
+                    <th>
+                      SPH  
+                  </th>
+                    <th>
+                      EYE  
+                    </th>
+                   
+                  </thead>
+                  <tbody>
+                 <tr>
+                  <td>
+                    {{$recipe['add_r']}}
+                  </td>
+                  <td>
+                    {{$recipe['axis_r']}}
+                  </td>
+                  <td>
+                    {{$recipe['cyl_r']}}
+                  </td>
+                  <td>
+                    {{$recipe['sph_r']}}
+                  </td>
+                  <td style="text-align: center; font-weight: bold; font-size: 18px;">
+                    RIGHT
+                  </td>
+                 </tr>
+                 <tr>
+                  <td>
+                    {{$recipe['add_l']}}
+                  </td>
+                  <td>
+                    {{$recipe['axis_l']}}
+                  </td>
+                  <td>
+                    {{$recipe['cyl_l']}}
+                  </td>
+                  <td>
+                    {{$recipe['sph_l']}}
+                  </td>
+                  <td style="text-align: center; font-weight: bold; font-size: 18px;">
+                    LEFT
+                  </td>
+                 </tr>
+                 <tr>
+                   <td style="border: none">
+                   </td>
+                   <td>
+                    {{$recipe['ipd']}}
+                   </td>
+                   <td style="text-align: center; font-weight: bold; font-size: 18px;">
+                     IPD
+                   </td>
+                   <td style="border: none">
+                  </td>
+                  <td style="border: none">
+                  </td>
+                 </tr>
+           </tbody>
+         </table>
+         @endif
+
+
               </div>
             </div>
           </div>

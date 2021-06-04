@@ -96,7 +96,7 @@
         @endforeach
         @endisset
         @if(isset($repository) && !isset($repositories))
-        <img src="{{asset('storage/'.$repository->logo)}}"  alt="logo" class="logo">
+        <img src="{{asset('public/storage/'.$repository->logo)}}"  alt="logo" class="logo">
         @endif
         @if(!isset($repositories) && !isset($repository))
         Dani App
