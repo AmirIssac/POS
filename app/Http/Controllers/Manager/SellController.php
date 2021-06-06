@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Invoice;
 use App\Product;
 use App\Repository;
+use App\SavedRecipe;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,12 +37,22 @@ class SellController extends Controller
         if(!$request->phone){
             return view('manager.Sales.create_special_invoice')->with(['repository'=>$repository]);
         }
+        $new = true;
         // search for customer if exists before or create new one
         $customer = Customer::whereHas("repositories", function($q) use ($repository){ $q->where("repositories.id",$repository->id ); })->where('phone',$request->phone)->first();
         if($customer) // customer exists before
             {
+                $new = false;
                 $customer_name = $customer->name;
                 $prev_invoices = $customer->invoices;
+                // check if customer has saved recipe
+                $saved_recipe = $customer->savedRecipes()->get();
+                //return $saved_recipe;
+                if($saved_recipe && $saved_recipe->count()>0){
+                    $saved_recipe = $saved_recipe->pluck('recipe');
+                    $saved_recipe = unserialize($saved_recipe[0]);
+                    //return $saved_recipe;
+                }
                  // code generate
                 do{
                     $characters = '0123456789';
@@ -59,6 +70,8 @@ class SellController extends Controller
                     'code' => $code,
                     'date' => $date,
                     'invoices' => $prev_invoices,
+                    'saved_recipe' => $saved_recipe,
+                    'new' => $new
                     ]);
                     } // end customer exists before
         else{ // not exists before
@@ -97,6 +110,7 @@ class SellController extends Controller
                 'repository'=>$repository,'customer_name'=>$customer_name,'phone'=>$request->phone,
                 'code' => $code,
                 'date' => $date,
+                'new' => $new,
                 ]);
     } // end customer not exists
 
@@ -653,6 +667,10 @@ class SellController extends Controller
                 'created_at' => $request->date,
             ]
             );
+            // check if there was any saved_recipe so we delete it after sell proccess
+            $saved = $customer->savedRecipes()->first();
+            if($saved)
+                $saved->delete();
         return redirect(route('create.special.invoice',$repository->id))->with('sellSuccess','تمت عملية البيع بنجاح');
 
     }
@@ -730,5 +748,48 @@ class SellController extends Controller
                     );
             }
                 return redirect()->route('show.pending',[$repository->id])->with('completeSuccess','تمت عملية استكمال الفاتورة بنجاح');
+    }
+
+    public function saveSpecialInvoice(Request $request , $id){
+        // make sure we determine customer
+        if(!$request->customer_phone_s || !$request->customer_name_s)
+            return back()->with('failCustomer','يرجى ادخال رقم الزبون');
+        $repository = Repository::find($id);
+        // check if customer exist in system before
+        $customer = Customer::whereHas("repositories", function($q) use ($repository){ $q->where("repositories.id",$repository->id ); })->where('phone',$request->customer_phone_s)->first();
+        $recipe = array('add_r'=>$request->add_rs,'axis_r'=>$request->axis_rs,'cyl_r'=>$request->cyl_rs,'sph_r'=>$request->sph_rs,
+        'add_l'=>$request->add_ls,'axis_l'=>$request->axis_ls,'cyl_l'=>$request->cyl_ls,'sph_l'=>$request->sph_ls,
+        'ipd'=>$request->ipdvals,);
+        $recipe = serialize($recipe);
+        if($customer){ // exist
+            // check if this customer has already saved recipe so he cant save new one
+            $saved = $customer->savedRecipes()->count();
+            if($saved>0)
+                return back()->with('hasSavedRecipeAlready','هذا الزبون يملك وصفة محفوظة مسبقا يجب استكمالها');
+            else{
+                SavedRecipe::create([
+                    'repository_id' => $repository->id,
+                    'customer_id' => $customer->id,
+                    'user_id' => Auth::user()->id,
+                    'recipe' => $recipe,
+                ]);
+            }
+        }
+        else{ // not exist
+            $customer = Customer::create([
+                'name' => $request->customer_name_s,
+                'phone' => $request->customer_phone_s,
+                'points' => 0,
+            ]);
+            $repository->customers()->attach($customer->id); // pivot table
+            SavedRecipe::create([
+                'repository_id' => $repository->id,
+                'customer_id' => $customer->id,
+                'user_id' => Auth::user()->id,
+                'recipe' => $recipe,
+            ]);
+        }
+        //return back()->with('saveSuccess','تم حفظ الوصفة بنجاح');
+        return redirect(route('create.special.invoice',$repository->id))->with('saveSuccess','تم حفظ الوصفة بنجاح');
     }
 }

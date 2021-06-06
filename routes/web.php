@@ -51,6 +51,7 @@ Route::group(['middleware' => ['permission:المبيعات']], function () {
         Route::get('/show/invoice/details/{repository_id}','Manager\SellController@invoiceDetails')->name('invoice.details');
         //Route::get('/show/special/invoice/details/{repository_id}','Manager\SellController@specialInvoiceDetails')->name('special.invoice.details');  // 2
         Route::post('/sell/special/invoice/{repository_id}','Manager\SellController@sellSpecialInvoice')->name('sell.special.invoice');  // 2
+        Route::post('/save/special/invoice/{repository_id}','Manager\SellController@saveSpecialInvoice')->name('save.special.invoice');  // 2
     });
     // need middleware for variable id
     Route::get('/complete/invoice/form/{invoice_id}','Manager\SellController@completeInvoiceForm')->name('complete.invoice.form')->middleware('permission:استكمل فاتورة معلقة');
@@ -103,7 +104,7 @@ Route::group(['middleware'=>['permission:الكاشير']], function () {
     });
 });
 
-
+Route::get('/clients/{repository_id}','Manager\SettingsController@clients')->name('clients');
 
 
 

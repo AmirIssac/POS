@@ -40,6 +40,10 @@ class Repository extends Model
         return $this->belongsToMany(Customer::class);
     }
 
+    public function savedRecipes(){
+        return $this->hasMany(SavedRecipe::class);
+    }
+
     public function owner(){   // custom function to get the owner of repository
         $users = $this->users; // relationship to get all repository users
         foreach($users as $user){

@@ -67,7 +67,9 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
-
+#buttons{
+  display: flex;
+}
 @media print{
  /* body, html, #myform { 
           height: 100%;
@@ -97,6 +99,12 @@ input[type=number] {
           <strong>{{ session('sellSuccess') }}</strong>
   </div>
   @endif
+  @if (session('saveSuccess'))
+  <div class="alert alert-success alert-block">
+      <button type="button" class="close" data-dismiss="alert">×</button>	
+          <strong>{{ session('saveSuccess') }}</strong>
+  </div>
+  @endif
   @if (session('fail'))
   <div class="alert alert-danger alert-block">
       <button type="button" class="close" data-dismiss="alert">×</button>	
@@ -109,7 +117,12 @@ input[type=number] {
           <strong>{{ session('failCustomer') }}</strong>
   </div>
   @endif
-  
+  @if (session('hasSavedRecipeAlready'))
+  <div class="alert alert-danger alert-block">
+      <button type="button" class="close" data-dismiss="alert">×</button>	
+          <strong>{{ session('hasSavedRecipeAlready') }}</strong>
+  </div>
+  @endif
   
   <div  class="container-fluid">
     <form method="GET" action="{{route('create.special.invoice',$repository->id)}}">
@@ -121,8 +134,15 @@ input[type=number] {
       <div class="col-md-12">
         <div class="card">
           <div class="card-header card-header-primary">
-            <h4 class="card-title ">العميل {{isset($customer_name)?$customer_name:''}}
-              <span>الجوال {{isset($phone)?$phone:''}}</span>
+            <h4 class="card-title ">العميل <span class="badge badge-success"> {{isset($customer_name)?$customer_name:''}} </span>
+              <span>الجوال <span class="badge badge-success">{{isset($phone)?$phone:''}}</span></span>
+              @if(isset($new))
+              @if($new)
+              <span class="badge badge-info">عميل جديد</span>
+              @else
+              <span class="badge badge-info">عميل موجود</span>
+              @endif
+              @endif
             </h4>
           </div>
           <div class="card-body">
@@ -233,7 +253,11 @@ input[type=number] {
     <button class="btn btn-secondary dropdown-toggle" type="button" id="toggle-recipe" >
       اظهار الوصفة الطبية 
   </button>
+  @if(isset($saved_recipe) && count($saved_recipe)>0)
+  <div style="display: block" id="recipe" class="card">
+  @else
     <div id="recipe" class="card">
+      @endif
       <div class="card-header card-header-primary">
         <h4 class="card-title ">الوصفة الطبية</h4>
       </div>
@@ -241,6 +265,9 @@ input[type=number] {
         <div class="table-responsive">
           <table id="myTable" class="table table-bordered">
             <thead class="text-primary">
+              @if(isset($saved_recipe) && count($saved_recipe)>0)
+              <span class="badge badge-success"> مؤرشف </span>
+              @endif
               <th>
                 ADD  
               </th>
@@ -259,6 +286,56 @@ input[type=number] {
              
             </thead>
             <tbody>
+              @if(isset($saved_recipe) && count($saved_recipe)>0)
+           <tr>
+            <td>
+              <input type="number" step="0.01" name="add_r" value="{{$saved_recipe['add_r']}}">
+            </td>
+            <td>
+            <input type="number" step="0.01" name="axis_r" value="{{$saved_recipe['axis_r']}}">
+            </td>
+            <td>
+              <input type="number" step="0.01" name="cyl_r" value="{{$saved_recipe['cyl_r']}}">
+            </td>
+            <td>
+              <input type="number" step="0.01" name="sph_r" value="{{$saved_recipe['sph_r']}}">
+            </td>
+            <td style="text-align: center; font-weight: bold; font-size: 18px;">
+              RIGHT
+            </td>
+           </tr>
+           <tr>
+            <td>
+              <input type="number" step="0.01" name="add_l" value="{{$saved_recipe['add_l']}}">
+            </td>
+            <td>
+              <input type="number" step="0.01" name="axis_l" value="{{$saved_recipe['axis_l']}}">
+            </td>
+            <td>
+              <input type="number" step="0.01" name="cyl_l" value="{{$saved_recipe['cyl_l']}}">
+            </td>
+            <td>
+              <input type="number" step="0.01" name="sph_l" value="{{$saved_recipe['sph_l']}}">
+            </td>
+            <td style="text-align: center; font-weight: bold; font-size: 18px;">
+              LEFT
+            </td>
+           </tr>
+           <tr>
+             <td style="border: none">
+             </td>
+             <td>
+              <input type="number" name="ipdval" value="{{$saved_recipe['ipd']}}">
+             </td>
+             <td style="text-align: center; font-weight: bold; font-size: 18px;">
+               IPD
+             </td>
+             <td style="border: none">
+            </td>
+            <td style="border: none">
+            </td>
+           </tr>
+           @else
            <tr>
             <td>
               <input type="number" step="0.01" name="add_r">
@@ -297,7 +374,7 @@ input[type=number] {
              <td style="border: none">
              </td>
              <td>
-              <input type="text" name="ipdval">
+              <input type="number" name="ipdval">
              </td>
              <td style="text-align: center; font-weight: bold; font-size: 18px;">
                IPD
@@ -307,6 +384,7 @@ input[type=number] {
             <td style="border: none">
             </td>
            </tr>
+           @endif
      </tbody>
    </table>
 </div>
@@ -368,7 +446,7 @@ input[type=number] {
                     <tr>
                       <td>
                         <input type="hidden" name="repo_id" id="repo_id" class="form-control" value="{{$repository->id}}">
-                          <input type="text" id="bar0" name="barcode[]" value="{{old('barcode0')}}"  class="form-control barcode" placeholder="مدخل خاص ب scanner" id="autofocus">
+                          <input type="text" id="bar0" name="barcode[]" value="{{old('barcode0')}}"  class="form-control barcode" placeholder="مدخل خاص ب scanner" id="autofocus" required>
                       </td>
                       <td>
                         <input type="text" id="name0"  name="name[]" value="{{old('name0')}}" class="form-control name blank">
@@ -398,7 +476,6 @@ input[type=number] {
                    <div>
                     <tr id="record{{$count}}" class="displaynone">
                       <td>
-                        <input type="hidden" name="repo_id" id="repo_id" class="form-control" value="{{$repository->id}}">
                           <input type="text" id="bar{{$count}}" name="barcode[]" value="{{old('barcode[$count]')}}"  class="form-control barcode" placeholder="مدخل خاص ب scanner" id="autofocus">
                       </td>
                       <td>
@@ -489,17 +566,33 @@ input[type=number] {
 
           <div id="buttons">
             <button  id="submit" type="submit" class="btn btn-primary">تأكيد</button>
-            <a style="color: white" class="btn btn-success">حفظ</a>
+          </form>
+            <form action="{{route('save.special.invoice',$repository->id)}}" method="POST">
+              @csrf
+              <div style="display: none;">
+              <input type="number" step="0.01" name="add_rs">
+              <input type="number" step="0.01" name="axis_rs">
+              <input type="number" step="0.01" name="cyl_rs">
+              <input type="number" step="0.01" name="sph_rs">
+              <input type="number" step="0.01" name="add_ls">
+              <input type="number" step="0.01" name="axis_ls">
+              <input type="number" step="0.01" name="cyl_ls">
+              <input type="number" step="0.01" name="sph_ls">
+              <input type="number" name="ipdvals">
+              <input type="text" name="customer_phone_s" value="{{isset($phone)?$phone:''}}">
+              <input type="text" name="customer_name_s" value="{{isset($customer_name)?$customer_name:''}}">
+              </div>
+              <button type="submit" class="btn btn-success">حفظ</button>
+            </form>
             {{--<a onclick="PrintElem($('#print-content').attr('id'));" style="color: white" class="btn btn-success">حفظ</a>--}}
             <a style="color: white; float: left;" class="btn btn-danger">الغاء</a>
           </div>
-
           </div>
        </div>
    </div>
 </div>
 </div>
-</form>
+
   </div> {{-- end print content --}}
 </div>
 
@@ -619,6 +712,7 @@ $(document).keypress(function(e) {
       var num = parseInt(gold) +1;
       // focus on next element
       $('#bar'+num+'').focus();
+      $('#bar'+num+'').prop('required',true);
     }
   //$('.barcode').last().focus();
 });
@@ -933,6 +1027,35 @@ window.onload=function(){
         $('#badgecolor').removeClass('hidden').addClass('visible');
         else
         $('#badgecolor').removeClass('visible').addClass('hidden');
+    });
+  </script>
+  <script>  // save recipe
+    $('input[name="add_r"]').on('change',function(){
+      $('input[name="add_rs"]').val($('input[name="add_r"]').val());
+    });
+    $('input[name="axis_r"]').on('change',function(){
+      $('input[name="axis_rs"]').val($('input[name="axis_r"]').val());
+    })
+    $('input[name="cyl_r"]').on('change',function(){
+      $('input[name="cyl_rs"]').val($('input[name="cyl_r"]').val());
+    });
+    $('input[name="sph_r"]').on('change',function(){
+      $('input[name="sph_rs"]').val($('input[name="sph_r"]').val());
+    });
+    $('input[name="add_l"]').on('change',function(){
+      $('input[name="add_ls"]').val($('input[name="add_l"]').val());
+    });
+    $('input[name="axis_l"]').on('change',function(){
+      $('input[name="axis_ls"]').val($('input[name="axis_l"]').val());
+    });
+    $('input[name="cyl_l"]').on('change',function(){
+      $('input[name="cyl_ls"]').val($('input[name="cyl_l"]').val());
+    });
+    $('input[name="sph_l"]').on('change',function(){
+      $('input[name="sph_ls"]').val($('input[name="sph_l"]').val());
+    });
+    $('input[name="ipdval"]').on('change',function(){
+      $('input[name="ipdvals"]').val($('input[name="ipdval"]').val());
     });
   </script>
 @endsection

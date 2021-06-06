@@ -47,4 +47,7 @@ class User extends Authenticatable
     public function dailyReports(){
         return $this->hasMany(DailyReport::class);
     }
+    public function savedRecipes(){
+        return $this->hasMany(SavedRecipe::class);
+    }
 }

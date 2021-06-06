@@ -45,11 +45,12 @@
         </button>
       </div>
     </form>
-    @if($invoices->count()>0)
-    @foreach($invoices as $invoice)
+    
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
+          @if($invoices->count()>0)
+         @foreach($invoices as $invoice)
           <div class="card">
             <div class="card-header card-header-primary">
               <h4 class="card-title"> {{$invoice->created_at}}</h4>
@@ -252,20 +253,21 @@
          </table>
          @endif
 
-
+              </div>
               </div>
             </div>
+            @endforeach
+            @else
+            <span id="warning" class="badge badge-warning">
+              لا يوجد فواتير 
+            </span>
+            @endif
           </div>
         </div>
-        
+        {{ $invoices->links() }}
+
       </div>
-      @endforeach
-      @else
-      <span id="warning" class="badge badge-warning">
-        لا يوجد فواتير 
-      </span>
-      @endif
+     
     </div>
 </div>
-{{ $invoices->links() }}
 @endsection

@@ -140,5 +140,11 @@ class SettingsController extends Controller
         $user->syncPermissions($request->permissions);
         return back()->with('success','تم تعديل صلاحيات الموظف بنجاح');
     }
+
+    public function clients($id){
+        $repository =  Repository::find($id);
+        $customers = $repository->customers()->orderBy('points','DESC')->paginate(15);
+        return view('manager.Settings.clients')->with(['repository'=>$repository,'customers'=>$customers]);
+    }
     
 }
