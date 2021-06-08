@@ -70,6 +70,17 @@ input[type=number] {
 #buttons{
   display: flex;
 }
+#toggle-invoices{
+  background-color: #93cb52;
+  color: #344b5e;
+  font-weight: bold
+}
+#toggle-recipe{
+  background-color: #93cb52;
+  color: #344b5e;
+  font-weight: bold;
+  width: 157px;
+}
 @media print{
  /* body, html, #myform { 
           height: 100%;
@@ -134,14 +145,16 @@ input[type=number] {
       <div class="col-md-12">
         <div class="card">
           <div class="card-header card-header-primary">
-            <h4 class="card-title ">العميل <span class="badge badge-success"> {{isset($customer_name)?$customer_name:''}} </span>
-              <span>الجوال <span class="badge badge-success">{{isset($phone)?$phone:''}}</span></span>
+            <h4 class="card-title ">{{--العميل <span class="badge badge-success"> {{isset($customer_name)?$customer_name:''}} </span>
+              <span>الجوال <span class="badge badge-success">{{isset($phone)?$phone:''}}</span></span>--}}
               @if(isset($new))
               @if($new)
               <span class="badge badge-info">عميل جديد</span>
               @else
-              <span class="badge badge-info">عميل موجود</span>
+              <span class="badge badge-success">عميل موجود</span>
               @endif
+              @else
+              ابحث
               @endif
             </h4>
           </div>
@@ -156,19 +169,26 @@ input[type=number] {
                     الاسم  
                   </th>
                   <th>
-                    البحث  
+                    بحث/اضافة  
                   </th>
                 </thead>
                 <tbody>
                <tr>
                 <td>
-                  <input type="phone" name="phone" value="" class="form-control" placeholder="اكتب هنا لإدخال عميل آخر" required>
+                  <input type="phone" name="phone" value="{{isset($phone)?$phone:''}}" class="form-control" placeholder="اكتب هنا لإدخال عميل آخر" required>
                 </td>
                  <td>
-                   <input type="text" name="name" value="" class="form-control">
+                   <input type="text" name="name" id="customerName" value="{{isset($customer_name)?$customer_name:''}}" class="form-control">
+                   <div>
+                   @if(isset($name_generated))
+                    @if($name_generated)
+                    <span class="badge badge-warning">اسم منشأ من قبل النظام يمكنك تغييره</span>
+                    @endif
+                    @endif
+                   </div>
                  </td>
                 <td>
-                  <button type="submit" class="btn btn-primary"> ابحث </button>
+                  <button type="submit" class="btn btn-primary"> بحث / اضافة </button>
                 </td>
                </tr>
          </tbody>
@@ -186,7 +206,7 @@ input[type=number] {
     <div class="row">
   <div class="col-md-12">
     <button class="btn btn-secondary dropdown-toggle" type="button" id="toggle-invoices" >
-      اظهار المبيعات السابقة 
+       المبيعات السابقة 
   </button>
     <div id="invoices" class="card">
       <div class="card-header card-header-primary">
@@ -251,7 +271,7 @@ input[type=number] {
   <div class="col-md-12">
     
     <button class="btn btn-secondary dropdown-toggle" type="button" id="toggle-recipe" >
-      اظهار الوصفة الطبية 
+     الوصفة الطبية 
   </button>
   @if(isset($saved_recipe) && count($saved_recipe)>0)
   <div style="display: block" id="recipe" class="card">
@@ -266,7 +286,7 @@ input[type=number] {
           <table id="myTable" class="table table-bordered">
             <thead class="text-primary">
               @if(isset($saved_recipe) && count($saved_recipe)>0)
-              <span class="badge badge-success"> مؤرشف </span>
+              <span class="badge badge-success"> مؤرشف  </span>
               @endif
               <th>
                 ADD  
@@ -404,7 +424,7 @@ input[type=number] {
             </h4>--}}
             <input style="display: none" type="text" name="date" value="{{isset($date)?$date:''}}" readonly>
             <input style="display: none" type="text" name="customer_phone" id="customer_phone" value="{{isset($phone)?$phone:''}}" readonly>
-            <input type="hidden" name="customer_name" value="{{isset($customer_name)?$customer_name:''}}">
+            <input type="hidden" name="customer_name" id="customerN" value="{{isset($customer_name)?$customer_name:''}}">
           </div>
           <div class="card-body">
             <div class="table-responsive">
@@ -449,16 +469,16 @@ input[type=number] {
                           <input type="text" id="bar0" name="barcode[]" value="{{old('barcode0')}}"  class="form-control barcode" placeholder="مدخل خاص ب scanner" id="autofocus" required>
                       </td>
                       <td>
-                        <input type="text" id="name0"  name="name[]" value="{{old('name0')}}" class="form-control name blank">
+                        <input type="text" id="name0"  name="name[]" value="{{old('name0')}}" class="form-control name blank" readonly>
                       </td>
                       <td>
-                        <input type="text" id="details0"  name="details[]" value="{{old('details0')}}" class="form-control details blank">
+                        <input type="text" id="details0"  name="details[]" value="{{old('details0')}}" class="form-control details blank" readonly>
                       </td>
                       <td style="display: none;">
-                        <input type="hidden" id="cost_price0"  name="cost_price[]" value="{{old('cost_price0')}}" class="form-control blank">
+                        <input type="hidden" id="cost_price0"  name="cost_price[]" value="{{old('cost_price0')}}" class="form-control blank" readonly>
                       </td>
                       <td>
-                        <input type="number" id="price0"  name="price[]" value="{{old('price0')}}" class="form-control price blank">
+                        <input type="number" id="price0"  name="price[]" value="{{old('price0')}}" class="form-control price blank" readonly>
                       </td>
                       <td>
                         @if(old('quantity0'))
@@ -468,7 +488,7 @@ input[type=number] {
                         @endif
                     </td>
                     <td>
-                      <input type="checkbox" name="del[]"  class="form-control  delivered" value="0" checked>  {{-- need it just in hanging invoices --}}
+                      <input type="checkbox" name="del[]" id="d0"  class="form-control  delivered hidden" value="0" checked>  {{-- need it just in hanging invoices --}}
                   </td>
                 </tr>
             </div>
@@ -479,16 +499,16 @@ input[type=number] {
                           <input type="text" id="bar{{$count}}" name="barcode[]" value="{{old('barcode[$count]')}}"  class="form-control barcode" placeholder="مدخل خاص ب scanner" id="autofocus">
                       </td>
                       <td>
-                        <input type="text" id="name{{$count}}"  name="name[]" value="{{old('name.'.$count)}}" class="form-control name blank">
+                        <input type="text" id="name{{$count}}"  name="name[]" value="{{old('name.'.$count)}}" class="form-control name blank" readonly>
                       </td>
                       <td>
-                        <input type="text" id="details{{$count}}"  name="details[]" value="{{old('details.'.$count)}}" class="form-control details blank">
+                        <input type="text" id="details{{$count}}"  name="details[]" value="{{old('details.'.$count)}}" class="form-control details blank" readonly>
                       </td>
                       <td style="display: none;">
-                        <input type="hidden" id="cost_price{{$count}}"  name="cost_price[]" value="{{old('cost_price.'.$count)}}" class="form-control blank">
+                        <input type="hidden" id="cost_price{{$count}}"  name="cost_price[]" value="{{old('cost_price.'.$count)}}" class="form-control blank" readonly>
                       </td>
                       <td>
-                        <input type="number" id="price{{$count}}"  name="price[]" value="{{old('price.'.$count)}}" class="form-control price blank">
+                        <input type="number" id="price{{$count}}"  name="price[]" value="{{old('price.'.$count)}}" class="form-control price blank" readonly>
                       </td>
                       <td>
                         @if(old('quantity.'.$count))
@@ -498,7 +518,7 @@ input[type=number] {
                         @endif
                     </td>
                     <td>
-                        <input type="checkbox" name="del[]" value="{{$count}}"  class="form-control delivered" checked>  {{-- need it just in hanging invoices --}}
+                        <input type="checkbox" name="del[]" id="d{{$count}}" value="{{$count}}"  class="form-control delivered hidden" checked>  {{-- need it just in hanging invoices --}}
                     </td>
                 </tr>
             </div>
@@ -651,6 +671,7 @@ input[type=number] {
               //$('#details'+gold+'').addClass('ajaxSuccess');
               $('#price'+gold+'').val(value.price);
               //$('#price'+gold+'').addClass('ajaxSuccess');
+              $('#d'+gold+'').removeClass('hidden').addClass('visible');
               if(parseFloat($('#price'+gold+'').val())!=NaN){
                 var s = 0 ;
                 for(var i=0;i<=10;i++){   // number of records
@@ -919,74 +940,7 @@ $('input[name="quantity[]"]').on("keyup",function(){
     }
   });
 </script>
-<script>
-/*$('#status').change(function(){
-    var sum;
-    var cash =  parseFloat($('#cashVal').val());
-    var card = parseFloat($('#cardVal').val());
-    // min payment
-    var min = parseFloat($('#inputmin').val());
-    if($('#cashVal').val()=="" && $('#cardVal').val()!=""){
-      sum = card + 0;
-    }
-   if($('#cardVal').val()=="" && $('#cashVal').val()!=""){
-      sum = cash + 0;
-    }
-    if($('#cashVal').val()!="" && $('#cardVal').val()!=""){
-    sum = cash + card ;
-    }
-  if($('#status').prop('checked') == false){    // pending
-    //$('#stat').text("معلقة");
-    $('#del').removeClass('hidden').addClass('visible');
-    $('.delivered').removeClass('hidden').addClass('visible');
-    $('#min').removeClass('hidden').addClass('visible');
-    if(sum <= $('#final_total_price').val())
-    $('button[type="submit"]').prop('disabled', false);
-    else
-    $('button[type="submit"]').prop('disabled', true);
-    // min payment
-    if($('#cashVal').val()=="" && $('#cardVal').val()!=""){
-    if(card<min){
-      $('button[type="submit"]').prop('disabled', true);
-      $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
-    }
-    }
-    if($('#cashVal').val()!="" && $('#cardVal').val()==""){
-    if(cash<min){
-      $('button[type="submit"]').prop('disabled', true);
-      $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
-    }
-    }
-    if($('#cashVal').val()!="" && $('#cardVal').val()!=""){
-    if(card+cash<min){
-      $('button[type="submit"]').prop('disabled', true);
-      $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
-    }
-    else{
-      $('#badgecolor').removeClass('badge-danger').addClass('badge-success');
-    }
-    }
-  }
-  if(cash <=0 || card<=0){    // dont accept values less or equal to zero
-      $('#submit').prop('disabled', true);
-    }
-  if($('#status').prop('checked') == true){    // delivered
-   // $('#stat').text("تم التسليم");
-    $('#del').removeClass('visible').addClass('hidden');
-    $('.delivered').removeClass('visible').addClass('hidden');
-    $('#min').removeClass('visible').addClass('hidden');
-    if(sum == $('#final_total_price').val()){
-      $('button[type="submit"]').prop('disabled', false);
-    }
-    else if(sum != $('#final_total_price').val() && $('#status').prop('checked') == true){   // delivered
-      $('button[type="submit"]').prop('disabled', true);   // cant submit if cash and card not equals the total
-    }
-    if(cash <=0 || card<=0){    // dont accept values less or equal to zero
-      $('#submit').prop('disabled', true);
-    }
-  }
-});
-*/
+
 </script>
 
 <script>   // stop submiting form when click enter
@@ -1010,6 +964,16 @@ window.onload=function(){
         $('#bar'+gold+'').focus();
       }
   });
+  $('input[name="add_rs"]').val($('input[name="add_r"]').val());
+  $('input[name="axis_rs"]').val($('input[name="axis_r"]').val());
+  $('input[name="cyl_rs"]').val($('input[name="cyl_r"]').val());
+  $('input[name="sph_rs"]').val($('input[name="sph_r"]').val());
+  $('input[name="add_ls"]').val($('input[name="add_l"]').val());
+  $('input[name="axis_ls"]').val($('input[name="axis_l"]').val());
+  $('input[name="cyl_ls"]').val($('input[name="cyl_l"]').val());
+  $('input[name="sph_ls"]').val($('input[name="sph_l"]').val());
+  $('input[name="ipdvals"]').val($('input[name="ipdval"]').val());
+          $('#submit').prop('disabled', true);
 }
 </script>
 
@@ -1056,6 +1020,12 @@ window.onload=function(){
     });
     $('input[name="ipdval"]').on('change',function(){
       $('input[name="ipdvals"]').val($('input[name="ipdval"]').val());
+    });
+  </script>
+  <script>  // changing the name dynamically
+    $('#customerName').on('keyup',function(){
+        $('#customerN').val($(this).val());
+        $('input[name="customer_name_s"]').val($(this).val());
     });
   </script>
 @endsection

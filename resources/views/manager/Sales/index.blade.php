@@ -91,6 +91,26 @@
             </div>
             @endcan
 
+            @if($repository->category->name=='محل خاص')  {{-- محل خاص --}}
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <a href="{{route('clients',$repository->id)}}">
+              <div class="card card-stats">
+                <div class="card-header card-header-danger card-header-icon">
+                  <div class="card-icon">
+                  <i class="material-icons">people</i>
+                  </div>
+                  <p class="card-category">العملاء</p>
+                  <h6 class="card-title">عرض</h6>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">update</i>
+                  </div>
+                </div>
+              </div>
+            </a>
+            </div>
+            @endif
            </div>
          
            </div>

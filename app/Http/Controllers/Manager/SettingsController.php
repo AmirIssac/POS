@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Customer;
 use App\Http\Controllers\Controller;
 use App\PermissionCategory;
 use App\Repository;
@@ -145,6 +146,20 @@ class SettingsController extends Controller
         $repository =  Repository::find($id);
         $customers = $repository->customers()->orderBy('points','DESC')->paginate(15);
         return view('manager.Settings.clients')->with(['repository'=>$repository,'customers'=>$customers]);
+    }
+
+    public function editClient($id){
+        $customer = Customer::find($id);
+        return view('manager.Settings.edit_client')->with('customer',$customer);
+    }
+
+    public function updateClient(Request $request,$id){
+        $customer = Customer::find($id);
+        $customer->update([
+            'name' => $request->name,
+            'phone' => $request->phone,
+        ]);
+        return back()->with('success','تم التعديل بنجاح');
     }
     
 }

@@ -22,7 +22,12 @@
 @endsection
 @section('body')
 <div class="main-panel">
-  
+    @if (session('success'))
+    <div class="alert alert-success alert-block">
+        <button type="button" class="close" data-dismiss="alert">×</button>	
+            <strong>{{ session('success') }}</strong>
+    </div>
+    @endif
 <div class="content">
     <div class="container-fluid">
       <div class="row">
@@ -30,50 +35,40 @@
           
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title"> العملاء </h4>
+              <h4 class="card-title"> العميل {{$customer->name}} </h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
+                <form action="{{route('update.client',$customer->id)}}" method="POST">
+                    @csrf
                 <table class="table">
                   <thead class=" text-primary">
-                    <th>
-                      الاسم  
-                    </th>
                     <th>
                       الجوال  
                     </th>
                     <th>
-                      النقاط  
+                      الاسم  
                     </th>
                     <th>
-                      تعديل  
+                      تأكيد  
                     </th>
                   </thead>
                   <tbody>
-                    @if($customers->count()>0)
-                    @foreach($customers as $customer)
-                      <tr>
-                          <td>
-                              {{$customer->name}}
-                          </td>
-                          <td>
-                            {{$customer->phone}}
-                          </td>
-                          <td>
-                            {{$customer->points}}
-                          </td>
-                          <td>
-                            <a href="{{route('edit.client',$customer->id)}}" class="btn btn-info"> تعديل </a>
-                          </td>
-                      </tr>
-                      @endforeach
-                      @else
-                      <span id="warning" class="badge badge-warning">
-                        لا يوجد عملاء بعد 
-                      </span>
-                      @endif
+                   <tr>
+                      
+                       <td>
+                           <input type="text" name="phone" class="form-control" value="{{$customer->phone}}">
+                       </td>
+                       <td>
+                        <input type="text" name="name" class="form-control" value="{{$customer->name}}">
+                       </td>
+                       <td>
+                           <button type="submit" class="btn btn-success"> تأكيد </button>
+                       </td>
+                   </tr>
                   </tbody>
                 </table>
+            </form>
 
               </div>
               </div>
@@ -81,7 +76,7 @@
            
           </div>
         </div>
-        {{ $customers->links() }}
+       
 
       </div>
      

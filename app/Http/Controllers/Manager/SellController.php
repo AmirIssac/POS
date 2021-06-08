@@ -38,6 +38,7 @@ class SellController extends Controller
             return view('manager.Sales.create_special_invoice')->with(['repository'=>$repository]);
         }
         $new = true;
+        $name_generated = false;
         // search for customer if exists before or create new one
         $customer = Customer::whereHas("repositories", function($q) use ($repository){ $q->where("repositories.id",$repository->id ); })->where('phone',$request->phone)->first();
         if($customer) // customer exists before
@@ -71,7 +72,8 @@ class SellController extends Controller
                     'date' => $date,
                     'invoices' => $prev_invoices,
                     'saved_recipe' => $saved_recipe,
-                    'new' => $new
+                    'new' => $new,
+                    'name_generated' => $name_generated,
                     ]);
                     } // end customer exists before
         else{ // not exists before
@@ -83,6 +85,7 @@ class SellController extends Controller
         // customer name generate
         $customer_name = 'customer-';
         do{
+            $name_generated = true;
             $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $charactersLength = strlen($characters);
             $code = '';
@@ -111,6 +114,7 @@ class SellController extends Controller
                 'code' => $code,
                 'date' => $date,
                 'new' => $new,
+                'name_generated' => $name_generated,
                 ]);
     } // end customer not exists
 
@@ -482,7 +486,7 @@ class SellController extends Controller
                             $sum_quantity = 0;
                         for($j=0;$j<$count;$j++){
                             if($request->barcode[$j]){
-                                if(strcmp($request->barcode[$j],$request->barcode[$i]))
+                                if(strcmp($request->barcode[$j],$request->barcode[$i])==0)
                                     $sum_quantity = $sum_quantity + $request->quantity[$j];
                             }
                             if($product[0]->quantity<$sum_quantity){
@@ -494,8 +498,10 @@ class SellController extends Controller
                         //return 'كمية غير متوفرة فواتير مستلمة';
                         return back()->with('fail','الكمية أكبر من المتوفر للقطعة'.'  '.$product[0]->name);
                         }
+
                         }
                     }    
+                    
                 } 
                 for($i=0;$i<$count;$i++){
                     if($request->barcode[$i]){
@@ -525,7 +531,7 @@ class SellController extends Controller
                     $sum_quantity = 0;
                 for($j=0;$j<$count;$j++){
                     if($request->barcode[$j]){
-                        if(strcmp($request->barcode[$j],$request->barcode[$i]) && in_array($j,$request->del)) // is this item delivered for quantity 
+                        if(strcmp($request->barcode[$j],$request->barcode[$i])==0 && in_array($j,$request->del)) // is this item delivered for quantity 
                             $sum_quantity = $sum_quantity + $request->quantity[$j];
                     }
                     if($product[0]->quantity<$sum_quantity){
@@ -667,10 +673,10 @@ class SellController extends Controller
                 'created_at' => $request->date,
             ]
             );
-            // check if there was any saved_recipe so we delete it after sell proccess
+             /* // check if there was any saved_recipe so we delete it after sell proccess
             $saved = $customer->savedRecipes()->first();
             if($saved)
-                $saved->delete();
+                $saved->delete();*/
         return redirect(route('create.special.invoice',$repository->id))->with('sellSuccess','تمت عملية البيع بنجاح');
 
     }
@@ -691,6 +697,34 @@ class SellController extends Controller
     public function completeInvoice(Request $request , $id){
         $invoice = Invoice::find($id);
         $repository = $invoice->repository;
+
+        // check if delivered quantity <= quantity in store // new 6-8-2021
+        $count = count($request->barcode);
+        for($i=0;$i<$count;$i++){ 
+            if($request->barcode[$i]){
+                $product = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->get();
+                // check all the quantities if <= the stored quantity of stored products
+                if($product){
+                    // check all records for this barcode for quantity because the repeated values is available
+                    $sum_quantity = 0;
+                for($j=0;$j<$count;$j++){
+                    if($request->barcode[$j]){
+                        if(strcmp($request->barcode[$j],$request->barcode[$i])==0)
+                            $sum_quantity = $sum_quantity + $request->quantity[$j];
+                            //return $sum_quantity;
+                    }
+                    if($product[0]->quantity<$sum_quantity){
+                        return back()->with('fail','الكمية أكبر من المتوفر للقطعة'.'  '.$product[0]->name);
+                        }
+                }
+                if($product[0]->quantity<$request->quantity[$i]){
+                return back()->with('fail','الكمية أكبر من المتوفر للقطعة'.'  '.$product[0]->name);
+                }
+
+                }
+            }    
+            
+        } 
 
         if($request->cash){
             $cash = true;
@@ -736,7 +770,6 @@ class SellController extends Controller
                 );
                 
             // delete the delivered products from repository
-            $count = count($request->barcode);
             for($i=0;$i<$count;$i++){
                 $product = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->get();
                 foreach($product as $prod)
@@ -762,10 +795,20 @@ class SellController extends Controller
         'ipd'=>$request->ipdvals,);
         $recipe = serialize($recipe);
         if($customer){ // exist
-            // check if this customer has already saved recipe so he cant save new one
+           /* // check if this customer has already saved recipe so he cant save new one
             $saved = $customer->savedRecipes()->count();
             if($saved>0)
                 return back()->with('hasSavedRecipeAlready','هذا الزبون يملك وصفة محفوظة مسبقا يجب استكمالها');
+                */
+
+            // check if this customer has already saved recipe so we update his recipe
+            $saved = $customer->savedRecipes;
+            if($saved->count()>0){
+                $saved[0]->update([
+                    'user_id' => Auth::user()->id,
+                    'recipe' => $recipe,
+                ]);
+            }
             else{
                 SavedRecipe::create([
                     'repository_id' => $repository->id,

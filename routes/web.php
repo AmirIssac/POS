@@ -105,9 +105,8 @@ Route::group(['middleware'=>['permission:الكاشير']], function () {
 });
 
 Route::get('/clients/{repository_id}','Manager\SettingsController@clients')->name('clients');
-
-
-
+Route::get('/client/edit/{client_id}','Manager\SettingsController@editClient')->name('edit.client');
+Route::post('/client/update/{client_id}','Manager\SettingsController@updateClient')->name('update.client');
 
 
 
