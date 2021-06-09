@@ -15464,8 +15464,10 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
   box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(156, 39, 176, 0.4);
 }
 
+
 .sidebar[data-color="azure"] li.active>a {
-  background-color: #00bcd4;
+  /*background-color: #00bcd4;*/
+  background-color:#021aa9;
   box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(0, 188, 212, 0.4);
 }
 
@@ -15810,7 +15812,8 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 }
 
 .fixed-plugin .badge-azure {
-  background-color: #2CA8FF;
+  /*background-color: #2CA8FF;*/
+  background-color:#021aa9;
 }
 
 .fixed-plugin .badge-green {

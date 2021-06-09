@@ -48,10 +48,13 @@
      .ps-scrollbar-x{
        display: none !important;   /* hide scroll bar */
      }
-     .logo{
+     #logo{
        border-radius: 50%;
        width: 100px;
        height: 100px;
+       z-index: 2;
+       margin-top: 25px;
+       filter: drop-shadow(0px 3px 5px black);
      }
      .logo-container{
        display: flex;
@@ -83,24 +86,16 @@
     <!-- Extra details for Live View on GitHub Pages -->
   
     <div class="wrapper ">
-      <div class="sidebar" data-color="purple" data-background-color="white" data-image="{{asset('public/img/sidebar-1.jpg')}}">
+      <div class="sidebar" data-color="azure" data-background-color="white" data-image="{{asset('public/img/sidebar-1.jpg')}}">
         <!--
           Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
   
           Tip 2: you can also add an image using data-image tag
       -->
         <div class="logo-container">
-        @isset($repositories)
-        @foreach($repositories as $repository)
-        <img src="{{asset('public/storage/'.$repository->logo)}}"  alt="logo" class="logo">
-        @endforeach
-        @endisset
-        @if(isset($repository) && !isset($repositories))
-        <img src="{{asset('public/storage/'.$repository->logo)}}"  alt="logo" class="logo">
-        @endif
-        @if(!isset($repositories) && !isset($repository))
-        Dani App
-        @endif
+          <a style="z-index: 2" href="/">
+        <img src="{{asset('public/img/rofood.jpg')}}" id="logo">
+          </a>
         </div>
         <div class="sidebar-wrapper">
           <ul class="nav">

@@ -81,6 +81,9 @@ input[type=number] {
   font-weight: bold;
   width: 157px;
 }
+.delete:hover{
+  cursor: pointer;
+}
 @media print{
  /* body, html, #myform { 
           height: 100%;
@@ -459,6 +462,8 @@ input[type=number] {
                   <th id="del" class="">
                     تم تسليمها  
                   </th>
+                  <th>
+                  </th>
                 </thead>
 
                 <tbody>
@@ -466,7 +471,8 @@ input[type=number] {
                     <tr>
                       <td>
                         <input type="hidden" name="repo_id" id="repo_id" class="form-control" value="{{$repository->id}}">
-                          <input type="text" id="bar0" name="barcode[]" value="{{old('barcode0')}}"  class="form-control barcode" placeholder="مدخل خاص ب scanner" id="autofocus" required>
+                          
+                          <input type="text" id="bar0" name="barcode[]" value="{{old('barcode0')}}"  class="form-control barcode" placeholder="مدخل خاص ب scanner" id="autofocus">
                       </td>
                       <td>
                         <input type="text" id="name0"  name="name[]" value="{{old('name0')}}" class="form-control name blank" readonly>
@@ -482,14 +488,17 @@ input[type=number] {
                       </td>
                       <td>
                         @if(old('quantity0'))
-                        <input type="number" id="quantity0" name="quantity[]" value="{{old('quantity0')}}" class="form-control quantity" placeholder="الكمية">
+                        <input type="number" id="quantity0" min="1" name="quantity[]" value="{{old('quantity0')}}" class="form-control quantity" placeholder="الكمية">
                         @else
-                        <input type="number" id="quantity0" name="quantity[]"  class="form-control quantity" value="1" placeholder="الكمية">
+                        <input type="number" id="quantity0" min="1" name="quantity[]"  class="form-control quantity" value="1" placeholder="الكمية">
                         @endif
                     </td>
                     <td>
                       <input type="checkbox" name="del[]" id="d0"  class="form-control  delivered hidden" value="0" checked>  {{-- need it just in hanging invoices --}}
                   </td>
+                  <td>
+                    <a id="delete0" class="delete"><img src="{{asset('img/delete-icon.jpg')}}" width="45px" height="45px"></a>
+                </td>
                 </tr>
             </div>
                   @for ($count=1;$count<=10;$count++)
@@ -512,14 +521,17 @@ input[type=number] {
                       </td>
                       <td>
                         @if(old('quantity.'.$count))
-                        <input type="number" id="quantity{{$count}}" name="quantity[]" value="{{old('quantity.'.$count)}}" class="form-control quantity" placeholder="الكمية">
+                        <input type="number" id="quantity{{$count}}" min="1" name="quantity[]" value="{{old('quantity.'.$count)}}" class="form-control quantity" placeholder="الكمية">
                         @else
-                        <input type="number" id="quantity{{$count}}" name="quantity[]"  class="form-control quantity" value="1" placeholder="الكمية">
+                        <input type="number" id="quantity{{$count}}" min="1" name="quantity[]"  class="form-control quantity" value="1" placeholder="الكمية">
                         @endif
                     </td>
                     <td>
                         <input type="checkbox" name="del[]" id="d{{$count}}" value="{{$count}}"  class="form-control delivered hidden" checked>  {{-- need it just in hanging invoices --}}
                     </td>
+                    <td>
+                      <a id="delete{{$count}}" class="delete"><img src="{{asset('img/delete-icon.jpg')}}" width="45px" height="45px"></a>
+                  </td>
                 </tr>
             </div>
             @endfor
@@ -605,7 +617,7 @@ input[type=number] {
               <button type="submit" class="btn btn-success">حفظ</button>
             </form>
             {{--<a onclick="PrintElem($('#print-content').attr('id'));" style="color: white" class="btn btn-success">حفظ</a>--}}
-            <a style="color: white; float: left;" class="btn btn-danger">الغاء</a>
+            <a href="{{route('create.special.invoice',$repository->id)}}" style="color: white;" class="btn btn-danger">الغاء</a>
           </div>
           </div>
        </div>
@@ -733,7 +745,7 @@ $(document).keypress(function(e) {
       var num = parseInt(gold) +1;
       // focus on next element
       $('#bar'+num+'').focus();
-      $('#bar'+num+'').prop('required',true);
+      //$('#bar'+num+'').prop('required',true);
     }
   //$('.barcode').last().focus();
 });
@@ -1028,4 +1040,103 @@ window.onload=function(){
         $('input[name="customer_name_s"]').val($(this).val());
     });
   </script>
+  <script>  // delete record by clicking the icon
+    $('.delete').on('click',function(){
+      var id = $(this).attr("id");  // extract id
+      var gold =  id.slice(6);   // remove bar from id to take just the number
+      $('#bar'+gold).val(null);
+      $('#name'+gold).val(null);
+      $('#details'+gold).val(null);
+      $('#cost_price'+gold).val(null);
+                $('#total_price').val($('#total_price').val()-$('#price'+gold).val()*$('#quantity'+gold).val());
+                //tax
+                var tax =  parseFloat($('#tax').val());
+                var total_price =  parseFloat($('#total_price').val());
+                var increment = (tax * total_price) / 100;
+                $('#taxfield').val(increment);
+                $('#final_total_price').val(increment+parseFloat($('#total_price').val()));
+                //min
+                $('#cashVal').val($('#final_total_price').val());     // cash value input
+
+                // update min value when total price change
+                var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
+                //console.log(newMin);
+                $('#inputmin').val(newMin);
+                $('#minVal').text(newMin);
+                // check min validation
+                var cash =  parseFloat($('#cashVal').val());
+                var card = parseFloat($('#cardVal').val());
+                // min payment
+                var min = parseFloat($('#inputmin').val());
+                  if(card+cash<min){
+                  $('#submit').prop('disabled', true);
+                  $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
+                  } 
+                  else{
+                  $('#badgecolor').removeClass('badge-danger').addClass('badge-success');
+                  }
+                  
+      $('#price'+gold).val(null);
+      $('#quantity'+gold).val(1);
+      $('#d'+gold).removeClass('visible').addClass('hidden');
+      $('#d'+gold).prop('checked',true); // return to default
+      if ($('.delivered:checked').length == $('.delivered').length){
+        $('#badgecolor').removeClass('visible').addClass('hidden');
+      }
+    });
+
+    $(document).keydown(function(e) {  // delete record by clicking backspace on barcode input field
+    if (e.keyCode == 46	) {
+      // Get the focused element:
+      var focused = $(':focus');
+      var id = focused.attr("id");  // extract id
+      // make sure we are on barcode field focus
+      var strFirstThree = id.substring(0,3);
+      if(strFirstThree=='bar'){
+      var gold =  id.slice(3);   // remove bar from id to take just the number
+      $('#bar'+gold).val(null);
+      $('#name'+gold).val(null);
+      $('#details'+gold).val(null);
+      $('#cost_price'+gold).val(null);
+                $('#total_price').val($('#total_price').val()-$('#price'+gold).val()*$('#quantity'+gold).val());
+                //tax
+                var tax =  parseFloat($('#tax').val());
+                var total_price =  parseFloat($('#total_price').val());
+                var increment = (tax * total_price) / 100;
+                $('#taxfield').val(increment);
+                $('#final_total_price').val(increment+parseFloat($('#total_price').val()));
+                //min
+                $('#cashVal').val($('#final_total_price').val());     // cash value input
+
+                // update min value when total price change
+                var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
+                //console.log(newMin);
+                $('#inputmin').val(newMin);
+                $('#minVal').text(newMin);
+                // check min validation
+                var cash =  parseFloat($('#cashVal').val());
+                var card = parseFloat($('#cardVal').val());
+                // min payment
+                var min = parseFloat($('#inputmin').val());
+                  if(card+cash<min){
+                  $('#submit').prop('disabled', true);
+                  $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
+                  } 
+                  else{
+                  $('#badgecolor').removeClass('badge-danger').addClass('badge-success');
+                  }
+                  
+      $('#price'+gold).val(null);
+      $('#quantity'+gold).val(1);
+      $('#d'+gold).removeClass('visible').addClass('hidden');
+      $('#d'+gold).prop('checked',true); // return to default
+      if ($('.delivered:checked').length == $('.delivered').length){
+        $('#badgecolor').removeClass('visible').addClass('hidden');
+      }
+      }
+    }
+});
+    
+  </script>
+ 
 @endsection
