@@ -497,7 +497,7 @@ input[type=number] {
                       <input type="checkbox" name="del[]" id="d0"  class="form-control  delivered hidden" value="0" checked>  {{-- need it just in hanging invoices --}}
                   </td>
                   <td>
-                    <a id="delete0" class="delete"><img src="{{asset('img/delete-icon.jpg')}}" width="45px" height="45px"></a>
+                    <a id="delete0" class="delete"><img src="{{asset('public/img/delete-icon.jpg')}}" width="45px" height="45px"></a>
                 </td>
                 </tr>
             </div>
@@ -530,7 +530,7 @@ input[type=number] {
                         <input type="checkbox" name="del[]" id="d{{$count}}" value="{{$count}}"  class="form-control delivered hidden" checked>  {{-- need it just in hanging invoices --}}
                     </td>
                     <td>
-                      <a id="delete{{$count}}" class="delete"><img src="{{asset('img/delete-icon.jpg')}}" width="45px" height="45px"></a>
+                      <a id="delete{{$count}}" class="delete"><img src="{{asset('public/img/delete-icon.jpg')}}" width="45px" height="45px"></a>
                   </td>
                 </tr>
             </div>
@@ -601,7 +601,7 @@ input[type=number] {
           </form>
             <form action="{{route('save.special.invoice',$repository->id)}}" method="POST">
               @csrf
-              <div style="display: none;">
+              <div style="display: none;"">
               <input type="number" step="0.01" name="add_rs">
               <input type="number" step="0.01" name="axis_rs">
               <input type="number" step="0.01" name="cyl_rs">

@@ -179,7 +179,7 @@
                     </tr>
                   </tbody>
                 </table>
-            @if($invoice->recipe)
+           {{-- @if($invoice->recipe)
             <?php $recipe = unserialize($invoice->recipe) ?>
                 <table id="myTable" class="table table-bordered">
                   <thead class="text-primary">
@@ -251,7 +251,7 @@
                  </tr>
            </tbody>
          </table>
-         @endif
+         @endif--}}
 
               </div>
               </div>
