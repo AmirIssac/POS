@@ -677,6 +677,23 @@ class SellController extends Controller
             $saved = $customer->savedRecipes()->first();
             if($saved)
                 $saved->delete();*/
+            
+            // archive the recipe after sell proccess
+            $saved = $customer->savedRecipes;
+            if($saved->count()>0){
+                $saved[0]->update([
+                    'user_id' => Auth::user()->id,
+                    'recipe' => $recipe,
+                ]);
+            }
+            else{
+                SavedRecipe::create([
+                    'repository_id' => $repository->id,
+                    'customer_id' => $customer->id,
+                    'user_id' => Auth::user()->id,
+                    'recipe' => $recipe,
+                ]);
+            }
         return redirect(route('create.special.invoice',$repository->id))->with('sellSuccess','تمت عملية البيع بنجاح');
 
     }

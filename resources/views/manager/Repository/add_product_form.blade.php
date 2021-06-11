@@ -119,7 +119,7 @@ form i:hover{
 <script>
   var intervalId = window.setInterval(function(){
   for(var i=0;i<count;i++){
-      $('#myTable').find('#total_price'+i+'').val($('#myTable').find('#price'+i+'').val()*$('#myTable').find('#quantity'+i+'').val());
+      $('#myTable').find('#total_price'+i+'').val($('#myTable').find('#cost_price'+i+'').val()*$('#myTable').find('#quantity'+i+'').val());
   }
 }, 500);
 </script>

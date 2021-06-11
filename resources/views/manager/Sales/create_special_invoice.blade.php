@@ -415,6 +415,8 @@ input[type=number] {
 </div>
 </div>
 
+  {{--</div>--}}
+  
 
 
       
@@ -680,6 +682,7 @@ input[type=number] {
               $('#name'+gold+'').val(value.name);
               //$('#name'+gold+'').addClass('ajaxSuccess');
               $('#details'+gold+'').val(value.details);
+              $('#cost_price'+gold+'').val(value.cost_price);
               //$('#details'+gold+'').addClass('ajaxSuccess');
               $('#price'+gold+'').val(value.price);
               //$('#price'+gold+'').addClass('ajaxSuccess');

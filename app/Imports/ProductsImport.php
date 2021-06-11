@@ -47,9 +47,11 @@ class ProductsImport implements ToModel , SkipsOnError , WithValidation , SkipsO
         if($product)  // found it
         {
         $new_quantity = $product->quantity + $row[4];
-        $new_price = $row[3];
+        $new_cost_price = $row[3];
+        $new_price = $row[4];
         $product->update([
             'quantity' => $new_quantity,
+            'cost_price' => $new_cost_price,
             'price' => $new_price,
         ]);
         }
@@ -59,8 +61,9 @@ class ProductsImport implements ToModel , SkipsOnError , WithValidation , SkipsO
            'barcode' => $row[0],
            'name'    => $row[1], 
            'details' => $row[2],
-           'price'   => $row[3],
-           'quantity'=> $row[4],
+           'cost_price' => $row[3],
+           'price'   => $row[4],
+           'quantity'=> $row[5],
         ]);
         }
     }

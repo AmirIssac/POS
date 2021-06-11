@@ -54,8 +54,8 @@ class RepositoryController extends Controller
         ]);
         if($request->category_id==1)
         $user->assignRole('مالك-مخزن');
-        /*if($request->category_id==2)
-        $user->assignRole('مالك-محل خاص');*/
+        if($request->category_id==2)
+        $user->assignRole('مالك-مخزن');
         $repository->users()->attach($user->id); //pivot table insert
        }
        else{    // owner exist before
