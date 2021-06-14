@@ -30,12 +30,20 @@
                     <th>
                       التفاصيل  
                     </th>
+                    @can('مشاهدة سعر التكلفة')
                     <th>
-                        السعر  
+                      سعر التكلفة  
+                  </th>
+                  @endcan
+                    <th>
+                        سعر البيع  
                     </th>
                     <th>
                         الكمية المتوفرة  
                     </th>
+                    <th>
+                      تعديل   
+                  </th>
                   </thead>
                   <tbody>
                     @if($products && $products->count()>0)
@@ -46,6 +54,11 @@
                      <td>
                         {{$product->details}}
                      </td>
+                     @can('مشاهدة سعر التكلفة')
+                     <td>
+                      {{$product->cost_price}}
+                    </td>
+                    @endcan
                      <td>
                         {{$product->price}}
                     </td>
@@ -63,6 +76,13 @@
                         {{$product->quantity}}
                         </span>
                       @endif
+                    </td>
+                    <td>
+                      <form action="{{route('edit.product')}}" method="POST">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{$product->id}}">
+                        <button type="submit" class="btn btn-info"> تعديل </button>
+                      </form>
                     </td>
                     </tr>
                     @endforeach

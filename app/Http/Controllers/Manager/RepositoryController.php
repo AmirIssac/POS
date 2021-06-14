@@ -93,4 +93,22 @@ class RepositoryController extends Controller
         $product = Product::where('repository_id',$repo_id)->where('barcode',$barcode)->get(); // first record test
         return response($product);
     }
+
+    public function editProductForm(Request $request){    // we use form input hidden to use id and not passing it into url
+        $product = Product::find($request->product_id);
+        return view('manager.Repository.edit_product')->with(['product'=>$product]);
+    }
+
+    public function updateProduct(Request $request){
+        $product = Product::find($request->product_id);
+         $product->update([
+            'barcode' => $request->barcode,
+            'name' => $request->name,
+            'details' => $request->details,
+            'cost_price' => $request->cost_price,
+            'price' => $request->price,
+            'quantity' => $request->quantity,
+        ]);
+        return redirect(route('repository.index'))->with('editProductSuccess',' تم تعديل المنتج '.$product->name.' بنجاح ');
+    }
 }

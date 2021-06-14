@@ -16,8 +16,6 @@ form i:hover{
   background-color: rgb(41, 206, 41) !important;
   color: white;
 }
-
-
 input[name=date]{
     border: 1px solid white;
   }
@@ -55,18 +53,18 @@ input[name=date]{
    color: black;
    font-weight: bold;
   }
-
-   /* Chrome, Safari, Edge, Opera */
+  #myTable{
+    direction: ltr;
+  }
+   /* Chrome, Safari, Edge, Opera 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
-/* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
-}
+}*/
 #buttons{
   display: flex;
 }
@@ -269,7 +267,7 @@ input[type=number] {
   
 {{--<form action="{{route('sell.special.invoice',$repository->id)}}" method="POST">--}}
   <div id="print-content">
-<form action="{{route('sell.special.invoice',$repository->id)}}" method="POST">
+<form id="sell-form" action="{{route('sell.special.invoice',$repository->id)}}" method="POST">
   @csrf
   <div class="col-md-12">
     
@@ -277,7 +275,7 @@ input[type=number] {
      الوصفة الطبية 
   </button>
   @if(isset($saved_recipe) && count($saved_recipe)>0)
-  <div style="display: block" id="recipe" class="card">
+  <div id="recipe" class="card">
   @else
     <div id="recipe" class="card">
       @endif
@@ -292,119 +290,118 @@ input[type=number] {
               <span class="badge badge-success"> مؤرشف  </span>
               @endif
               <th>
-                ADD  
+                EYE  
               </th>
               <th>
-                Axis  
+                SPH  
               </th>
               <th>
                 CYL  
                </th>   
-              <th>
-                SPH  
-            </th>
-              <th>
-                EYE  
+               <th>
+                Axis  
               </th>
-             
+              <th>
+                ADD  
+              </th>
             </thead>
             <tbody>
               @if(isset($saved_recipe) && count($saved_recipe)>0)
            <tr>
-            <td>
-              <input type="number" step="0.01" name="add_r" value="{{$saved_recipe['add_r']}}">
-            </td>
-            <td>
-            <input type="number" step="0.01" name="axis_r" value="{{$saved_recipe['axis_r']}}">
-            </td>
-            <td>
-              <input type="number" step="0.01" name="cyl_r" value="{{$saved_recipe['cyl_r']}}">
-            </td>
-            <td>
-              <input type="number" step="0.01" name="sph_r" value="{{$saved_recipe['sph_r']}}">
-            </td>
             <td style="text-align: center; font-weight: bold; font-size: 18px;">
               RIGHT
             </td>
+            <td>
+              <input type="number" step="0.25" min="-20" max="20" name="sph_r" value="{{$saved_recipe['sph_r']}}">
+            </td>
+            <td>
+              <input type="number" step="0.25" min="-20" max="20" name="cyl_r" value="{{$saved_recipe['cyl_r']}}">
+            </td>
+            <td>
+              <input type="number" step="1" max="180" name="axis_r" value="{{$saved_recipe['axis_r']}}">
+              </td>
+            <td>
+              <input type="number" step="0.25" min="0" max="20" name="add_r" value="{{$saved_recipe['add_r']}}">
+            </td>
            </tr>
            <tr>
-            <td>
-              <input type="number" step="0.01" name="add_l" value="{{$saved_recipe['add_l']}}">
-            </td>
-            <td>
-              <input type="number" step="0.01" name="axis_l" value="{{$saved_recipe['axis_l']}}">
-            </td>
-            <td>
-              <input type="number" step="0.01" name="cyl_l" value="{{$saved_recipe['cyl_l']}}">
-            </td>
-            <td>
-              <input type="number" step="0.01" name="sph_l" value="{{$saved_recipe['sph_l']}}">
-            </td>
             <td style="text-align: center; font-weight: bold; font-size: 18px;">
               LEFT
             </td>
+            <td>
+              <input type="number" step="0.25" min="-20" max="20" name="sph_l" value="{{$saved_recipe['sph_l']}}">
+            </td>
+            <td>
+              <input type="number" step="0.25" min="-20" max="20" name="cyl_l" value="{{$saved_recipe['cyl_l']}}">
+            </td>
+            <td>
+              <input type="number" min="0" max="180" name="axis_l" value="{{$saved_recipe['axis_l']}}">
+            </td>
+            <td>
+              <input type="number" step="0.25" min="0" max="20" name="add_l" value="{{$saved_recipe['add_l']}}">
+            </td>
            </tr>
            <tr>
-             <td style="border: none">
-             </td>
-             <td>
-              <input type="number" name="ipdval" value="{{$saved_recipe['ipd']}}">
-             </td>
-             <td style="text-align: center; font-weight: bold; font-size: 18px;">
-               IPD
-             </td>
-             <td style="border: none">
+            <td style="border: none">
             </td>
             <td style="border: none">
+            </td>
+            <td style="text-align: center; font-weight: bold; font-size: 18px;">
+              IPD
+            </td>
+             <td>
+              <input type="number" min="0" max="100" name="ipdval" value="{{$saved_recipe['ipd']}}">
+             </td>
+             <td style="border: none">
             </td>
            </tr>
            @else
            <tr>
-            <td>
-              <input type="number" step="0.01" name="add_r">
-            </td>
-            <td>
-              <input type="number" step="0.01" name="axis_r">
-            </td>
-            <td>
-              <input type="number" step="0.01" name="cyl_r">
-            </td>
-            <td>
-              <input type="number" step="0.01" name="sph_r">
-            </td>
             <td style="text-align: center; font-weight: bold; font-size: 18px;">
               RIGHT
             </td>
+            <td>
+              <input type="number" step="0.25" min="-20" max="20" name="sph_r" value="0">
+            </td>
+            <td>
+              <input type="number" step="0.25" min="-20" max="20" name="cyl_r" value="0">
+            </td>
+            <td>
+              <input type="number" min="0" max="180" name="axis_r" value="0">
+            </td>
+            <td>
+              <input type="number" step="0.25" min="0" max="20" name="add_r" value="0">
+            </td>
            </tr>
            <tr>
-            <td>
-              <input type="number" step="0.01" name="add_l">
-            </td>
-            <td>
-              <input type="number" step="0.01" name="axis_l">
-            </td>
-            <td>
-              <input type="number" step="0.01" name="cyl_l">
-            </td>
-            <td>
-              <input type="number" step="0.01" name="sph_l">
-            </td>
             <td style="text-align: center; font-weight: bold; font-size: 18px;">
               LEFT
             </td>
+            <td>
+              <input type="number" step="0.25" min="-20" max="20" name="sph_l" value="0">
+            </td>
+            <td>
+              <input type="number" step="0.25" min="-20" max="20" name="cyl_l" value="0">
+            </td>
+            <td>
+              <input type="number" min="0" max="180" name="axis_l" value="0">
+            </td>
+            <td>
+              <input type="number" step="0.25" min="0" max="20" name="add_l" value="0">
+            </td>
            </tr>
            <tr>
-             <td style="border: none">
-             </td>
-             <td>
-              <input type="number" name="ipdval">
-             </td>
-             <td style="text-align: center; font-weight: bold; font-size: 18px;">
-               IPD
-             </td>
-             <td style="border: none">
+            <td style="border: none">
             </td>
             <td style="border: none">
+            </td>
+            <td style="text-align: center; font-weight: bold; font-size: 18px;">
+              IPD
+            </td>
+             <td>
+              <input type="number" min="0" max="100" name="ipdval" value="0">
+             </td>
+             <td style="border: none">
             </td>
            </tr>
            @endif
@@ -496,7 +493,7 @@ input[type=number] {
                         @endif
                     </td>
                     <td>
-                      <input type="checkbox" name="del[]" id="d0"  class="form-control  delivered hidden" value="0" checked>  {{-- need it just in hanging invoices --}}
+                      <input type="checkbox" name="del[]" id="d0"  class="form-control  delivered hidden" value="0">  {{-- need it just in hanging invoices --}}
                   </td>
                   <td>
                     <a id="delete0" class="delete"><img src="{{asset('public/img/delete-icon.jpg')}}" width="45px" height="45px"></a>
@@ -626,23 +623,13 @@ input[type=number] {
    </div>
 </div>
 </div>
-
   </div> {{-- end print content --}}
 </div>
-
 </div>
 </div>
 </div>
-
-
-
-
-
-
-
 @endsection
 @section('scripts')
-
 <script>
   
   function PrintElem(elem)
@@ -655,13 +642,10 @@ input[type=number] {
     mywindow.document.write('<h1>' + document.title  + '</h1>');
     mywindow.document.write(document.getElementById(elem).innerHTML);
     mywindow.document.write('</body></html>');
-
     mywindow.document.close(); // necessary for IE >= 10
     mywindow.focus(); // necessary for IE >= 10*/
-
     mywindow.print();
     mywindow.close();
-
     return true;
 }
  
@@ -687,6 +671,7 @@ input[type=number] {
               $('#price'+gold+'').val(value.price);
               //$('#price'+gold+'').addClass('ajaxSuccess');
               $('#d'+gold+'').removeClass('hidden').addClass('visible');
+              $('#d'+gold+'').prop('checked',false); // because the default value is hanging
               if(parseFloat($('#price'+gold+'').val())!=NaN){
                 var s = 0 ;
                 for(var i=0;i<=10;i++){   // number of records
@@ -703,7 +688,6 @@ input[type=number] {
                 $('#final_total_price').val(increment+parseFloat($('#total_price').val()));
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
-
                 // update min value when total price change
                 var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
                 //console.log(newMin);
@@ -730,16 +714,15 @@ input[type=number] {
   });
 </script>
 <script>   // stop submiting form when click enter
-$(document).keypress(function(e) {
+$('#sell-form').keypress(function(e) {
     if (e.keyCode == 13) {
         e.preventDefault();
         return false;
     }
 });
 </script>
-
 <script>
-  $(document).keypress(function(e) {
+  $('#sell-form').keypress(function(e) {
     if (e.keyCode == 13) {
       // Get the focused element:
       var focused = $(':focus');
@@ -770,7 +753,6 @@ $(document).keypress(function(e) {
                 $('#final_total_price').val(increment+parseFloat($('#total_price').val()));
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
-
                 // update min value when total price change
                 var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
                 //console.log(newMin);
@@ -799,9 +781,6 @@ $(document).keypress(function(e) {
     $("#invoices").toggle();
     });
 </script>
-
-
-
 {{--  scripts from beforeprint blade --}}
 <script>
   $('input[type="checkbox"]').change(function(){
@@ -831,7 +810,6 @@ if($('#cash').prop('checked') == false && $('#card').prop('checked') == false){ 
 }
 });
 </script>
-
 <script>
   //$('#cashVal').val($('#final_total_price').val());
 window.onload=function(){
@@ -842,11 +820,9 @@ window.onload=function(){
     var total_price =  parseFloat($('#total_price').val());
     var increment = (tax * total_price) / 100;
     $('#taxfield').val(increment);
-
     // min init
     var initmin = parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()) / 100 ;
     $('#inputmin').val(initmin);
-
 };
   var c = $('input[name="barcode[]"]');
   var count = c.length;    // number of records
@@ -860,7 +836,6 @@ window.onload=function(){
   $('#total_price').val(sum);
   $('#cashVal').val(sum);     // cash value input
 }, 500);*/
-
 $('input[name="quantity[]"]').on("keyup",function(){
   var sum = 0 ;
   for(var i=0;i<count;i++){
@@ -876,7 +851,6 @@ $('input[name="quantity[]"]').on("keyup",function(){
    $('#final_total_price').val(parseFloat($('#total_price').val())+increment);
    //console.log($('#final_total_price').val());
   $('#cashVal').val($('#final_total_price').val());     // cash value input
-
    // update min value when total price change
     var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
     //console.log(newMin);
@@ -897,7 +871,6 @@ $('input[name="quantity[]"]').on("keyup",function(){
      
 });
 </script>
-
 <script>    // cant submit if cash + card != total real price    //Except if we make invoice pending
  $('input[name="quantity[]"],#cashVal,#cardVal,#cash,#card').on("keyup change",function(){
     var sum;
@@ -955,22 +928,19 @@ $('input[name="quantity[]"]').on("keyup",function(){
     }
   });
 </script>
-
 </script>
-
 <script>   // stop submiting form when click enter
-  $(document).keypress(function(e) {
+  $('#sell-form').keypress(function(e) {
       if (e.keyCode == 13) {
           e.preventDefault();
           return false;
       }
   });
   </script>
-
 <script>
 window.onload=function(){
   var count_press = 0;
-  $(document).keypress(function(e) {
+  $('#sell-form').keypress(function(e) {
       if (e.keyCode == 13) {
         count_press = count_press + 1 ;
         var gold =  count_press;
@@ -991,9 +961,8 @@ window.onload=function(){
           $('#submit').prop('disabled', true);
 }
 </script>
-
 <script>   // stop submiting form when click enter
-  $(document).keypress(function(e) {
+  $('#sell-form').keypress(function(e) {
       if (e.keyCode == 13) {
           e.preventDefault();
           return false;
@@ -1060,7 +1029,6 @@ window.onload=function(){
                 $('#final_total_price').val(increment+parseFloat($('#total_price').val()));
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
-
                 // update min value when total price change
                 var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
                 //console.log(newMin);
@@ -1087,7 +1055,6 @@ window.onload=function(){
         $('#badgecolor').removeClass('visible').addClass('hidden');
       }
     });
-
     $(document).keydown(function(e) {  // delete record by clicking backspace on barcode input field
     if (e.keyCode == 46	) {
       // Get the focused element:
@@ -1110,7 +1077,6 @@ window.onload=function(){
                 $('#final_total_price').val(increment+parseFloat($('#total_price').val()));
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
-
                 // update min value when total price change
                 var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
                 //console.log(newMin);

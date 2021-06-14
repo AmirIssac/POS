@@ -4,8 +4,11 @@
 form i{
   float: left;
 }
-form i:hover{
+form #plus:hover{
   cursor: pointer;
+}
+form #tooltip:hover{
+  cursor: default;
 }
 </style>
 @endsection
@@ -57,10 +60,13 @@ form i:hover{
                       سعر التكلفة 
                     </th>
                     <th>
-                      السعر 
+                      سعر البيع 
                     </th>
                     <th>   {{-- for future use to save every input details in table of repository inputs --}}
                       المبلغ الإجمالي 
+                      <td>
+                      <i id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title="المبلغ الإجمالي =" data-content="سعر التكلفة X الكمية">live_help</i>
+                      </td>
                     </th>
                   </thead>
                   <tbody>
@@ -96,7 +102,7 @@ form i:hover{
                   </tbody>
                 </table>
                 <button  type="submit" class="btn btn-primary"> إضافة </button>
-                <i class="material-icons">add_circle</i>
+                <i id="plus" class="material-icons">add_circle</i>
             </div>
         </div>
       </div>
@@ -128,7 +134,7 @@ form i:hover{
   // create new input record after click + button and focus into scanner input
   //$('.target').last().focus(function() {
     var count = 1;
-    $('form i').on('click',function(){
+    $('form #plus').on('click',function(){
     $('#myTable tr:last').after('<tr><td><input type="text" name="barcode[]" id="bar'+count+'" class="form-control" placeholder="مدخل خاص ب scanner" required></td> <td><input type="text" name="name[]" class="form-control" placeholder="اسم المنتج" required></td><td><input type="text" name="details[]" class="form-control" placeholder="تفاصيل المنتج" required></td><td><input type="number" id="quantity'+count+'" name="quantity[]" class="form-control" placeholder="الكمية" required></td><td><input id="cost_price'+count+'"  type="number" name="cost_price[]" step="0.01" class="form-control" value="0" placeholder="سعر التكلفة" required></td><td><input  type="number" id="price'+count+'" name="price[]" step="0.01" class="form-control target" value="0" placeholder="السعر" required></td><td><input type="number" id="total_price'+count+'" name="total_price[]" step="0.01" class="form-control" placeholder="المبلغ الإجمالي"><input type="hidden" name="repo_id" value="{{$repository->id}}"></td></tr>');
     $('#myTable').find('#bar'+count+'').focus();   // we use find to select new added element
     count = count +1;
@@ -138,6 +144,9 @@ form i:hover{
 <script>
   window.onload=function(){
     $('#autofocus').focus();
+    $(function () {
+  $('[data-toggle="popover"]').popover()
+  });
   };
   </script>
 @endsection
