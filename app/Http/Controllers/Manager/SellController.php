@@ -694,7 +694,22 @@ class SellController extends Controller
                     'recipe' => $recipe,
                 ]);
             }
-        return redirect(route('create.special.invoice',$repository->id))->with('sellSuccess','تمت عملية البيع بنجاح');
+       // return redirect(route('create.special.invoice',$repository->id))->with('sellSuccess','تمت عملية البيع بنجاح');
+
+       // prepare to send data to print page
+       $records = array(array());
+       $temp=0;
+       for($i=0;$i<$count;$i++){   
+        if($request->barcode[$i] && $request->price[$i]){
+            //return $request->del;
+            if(in_array($i,$request->del))
+                $del = 'نعم';
+                else
+                $del = 'لا';
+        $records[]=array('barcode'=>$request->barcode[$i],'name'=>$request->name[$i],'details'=>$request->details[$i],'cost_price'=>$request->cost_price[$i],'price'=>$request->price[$i],'quantity'=>$request->quantity[$i],'del'=>$del);
+        }
+      }
+      return view('manager.Sales.print_special_invoice')->with(['records'=>$records,'num'=>count($records),'sum'=>$request->sum,'tax'=>$request->taxprint,'total_price'=>$request->total_price,'cash'=>$cashVal,'card'=>$cardVal,'repo_id'=>$repository->id]);
 
     }
 

@@ -550,7 +550,7 @@ input[type=number] {
           <h5>الضريبة</h5>
          <div style="display: flex; flex-direction: column; margin-top: 3px;">
            <div style="display: flex;">
-             <input type="number" value="0"  id="taxfield" class="form-control" readonly>
+             <input type="number" name="taxprint" value="0"  id="taxfield" class="form-control" readonly>
              <input style="margin-right: 10px;" type="hidden" value="{{$repository->tax}}" name="tax" id="tax" class="form-control">
            </div>
          </div>
@@ -1107,5 +1107,10 @@ window.onload=function(){
 });
     
   </script>
- 
+ <script>
+  const btnscrollTotop = document.querySelector('#submit');
+  btnscrollTotop.addEventListener("click" , function(){
+    window.scrollTo(0,0);
+  });
+</script>
 @endsection
