@@ -67,4 +67,11 @@ class Repository extends Model
         $count = $this->users()->count() - 1;
         return $count;
     }
+
+    // get the last daily_report date to check if the submit cashier will be available or not
+    public function lastDailyReportDate(){
+        $object = $this->dailyReportsDesc()->get();
+        $day = $object[0]->created_at->format('d');
+        return $day;
+    }
 }

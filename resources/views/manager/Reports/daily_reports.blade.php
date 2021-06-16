@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.withScrollBar')
 @section('links')
 <style>
   table span{
@@ -14,6 +14,30 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+.price{
+  font-size: 22px;
+}
+.button{
+  float: left;
+}
+@media print{
+ /* body, html, #myform { 
+          height: 100%;
+      }*/
+      
+  *{
+    /*margin: 0;*/
+    font-size: 32px;
+    font-weight: bold;
+  }
+  .card-title{
+    font-weight: bold;
+    color: black !important;
+  }
+  #pagination,.button{
+    visibility: hidden;
+  }
 }
 </style>
 @endsection
@@ -33,7 +57,8 @@ input[type=number] {
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title"> تقرير يومي {{$report->created_at->format('d/m/Y')}}</h4>
+              <h4 class="card-title"> تقرير يومي {{$report->created_at->format('d/m/Y')}}<span class="button"><button onclick="window.print();" class="btn btn-danger"> طباعة </button> </span>
+              </h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -46,59 +71,98 @@ input[type=number] {
                      حالة الفاتورة   
                      </th>
                      <th>
-                        المبلغ   
+                      كاش    
+                      </th>
+                      <th>
+                        بطاقة    
+                        </th>
+                     <th>
+                        المبلغ الكلي   
                       </th>
                   </thead>
                   <tbody>
+                    <?php $total_sum_invoices = 0 ?>
                       @foreach($report->invoices as $invoice)
                     <tr>
                       <td>
                           {{$invoice->code}}
                       </td>
-                      <td>
+
                         @if($invoice->status=='delivered')
-                        <span class="badge badge-success"> تم التسليم </span>
+                        <td>
+                         تم التسليم
+                        </td>
                         @else
-                        <span class="badge badge-warning"> معلقة </span>
+                        <td>
+                         معلقة
+                        </td>
                         @endif
+                      
+                      <td>
+                        {{$invoice->cash_amount}}
+                      </td>
+                      <td>
+                        {{$invoice->card_amount}}
                       </td>
                       <td>
                         {{$invoice->total_price}}
                       </td>
                     </tr>
+                    <?php $total_sum_invoices += $invoice->total_price ?>
                     @endforeach
-                    <tr>
+                    <tr class="price">
                       <td>
-                        الدرج&nbsp;<span class="badge badge-info">{{$report->cash_balance+($report->cash_plus-$report->cash_shortage)}}</span>
+                        الدرج&nbsp;{{$report->cash_balance+($report->cash_plus-$report->cash_shortage)}}
                       </td>
                       <td>
-                        البطاقة&nbsp;<span class="badge badge-info">{{$report->card_balance+($report->card_plus-$report->card_shortage)}}</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        مقدار النقص بالدرج &nbsp;<span class="badge badge-danger">{{$report->cash_shortage}}</span>
-                      </td>
-                      <td>
-                        مقدار النقص بالبطاقة &nbsp;<span class="badge badge-danger">{{$report->card_shortage}}</span>
+                        البطاقة&nbsp;{{$report->card_balance+($report->card_plus-$report->card_shortage)}}
                       </td>
                     </tr>
-                    <tr>
+                    <tr class="price">
                       <td>
-                        مقدار الزيادة بالدرج &nbsp;<span class="badge badge-success">{{$report->cash_plus}} </span>
+                        مقدار النقص بالدرج &nbsp;{{$report->cash_shortage}}
                       </td>
                       <td>
-                        مقدار الزيادة بالبطاقة &nbsp;<span class="badge badge-success">{{$report->card_plus}} </span>
+                        مقدار النقص بالبطاقة &nbsp;{{$report->card_shortage}}
                       </td>
                     </tr>
-                    <tr>
+                    <tr class="price">
+                      <td>
+                        مقدار الزيادة بالدرج &nbsp;{{$report->cash_plus}} 
+                      </td>
+                      <td>
+                        مقدار الزيادة بالبطاقة &nbsp;{{$report->card_plus}} 
+                      </td>
+                    </tr>
+                    <tr class="price">
+                      <td>
+                        مجموع الفواتير &nbsp;&nbsp;{{$total_sum_invoices}}
+                      </td>
+                    </tr>
+                    <tr class="price">
+                      <td>
+                         اجمالي الرصيد &nbsp;&nbsp;{{$report->cash_balance+($report->cash_plus-$report->cash_shortage) + $report->card_balance+($report->card_plus-$report->card_shortage)}}
+                      </td>
+                    </tr>
+                    <tr class="price">
                       <td>
                        موظف الإغلاق  &nbsp;  : &nbsp;{{$report->user->name}}
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td class="button">
+                        <button onclick="window.print();" class="btn btn-danger"> طباعة </button>
                       </td>
                     </tr>
                   </tbody>
                 </table>
+                <div id="pagination">
                 {{ $reports->links() }}
+                </div>
               </div>
             </div>
           </div>

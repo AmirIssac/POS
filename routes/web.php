@@ -111,6 +111,7 @@ Route::post('/client/update/{client_id}','Manager\SettingsController@updateClien
 
 Route::post('edit/product','Manager\RepositoryController@editProductForm')->name('edit.product'); // we use form input hidden to use id and not passing it into url
 Route::post('update/product','Manager\RepositoryController@updateProduct')->name('update.product'); // we use form input hidden to use id and not passing it into url
+Route::post('delete/product','Manager\RepositoryController@deleteProduct')->name('delete.product'); // we use form input hidden to use id and not passing it into url
 
 
 //Route::get('/home', 'HomeController@index')->name('home');

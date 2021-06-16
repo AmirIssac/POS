@@ -71,11 +71,31 @@
            {{-- @endcan --}}
            @endcan
 
-            @can('اغلاق الكاشير')
+
+           @can('اغلاق الكاشير')
+            @if($repository->dailyReportsDesc->count()>0)
+           @if($repository->lastDailyReportDate()==now()->format('d'))
+           <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="card card-stats">
+            <div class="card-header card-header-secondary card-header-icon">
+              <div class="card-icon">
+              <i class="material-icons">calculate</i>
+              </div>
+              <p class="card-category">إغلاق الكاشير</p>
+              <h6 class="card-title">غير متاح</h6>
+            </div>
+            <div class="card-footer">
+              <div class="stats">
+                <i class="material-icons">update</i>
+              </div>
+            </div>
+          </div>
+        </div>
+           @else
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <a href="{{route('daily.cashier.form',$repository->id)}}">
               <div class="card card-stats">
-                <div class="card-header card-header-danger card-header-icon">
+                <div class="card-header card-header-success card-header-icon">
                   <div class="card-icon">
                   <i class="material-icons">calculate</i>
                   </div>
@@ -90,6 +110,27 @@
               </div>
             </a>
             </div>
+            @endif
+            @else  {{-- there is no dailyreports yet --}}
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <a href="{{route('daily.cashier.form',$repository->id)}}">
+            <div class="card card-stats">
+              <div class="card-header card-header-success card-header-icon">
+                <div class="card-icon">
+                <i class="material-icons">calculate</i>
+                </div>
+                <p class="card-category">إغلاق الكاشير</p>
+                <h6 class="card-title">يومي</h6>
+              </div>
+              <div class="card-footer">
+                <div class="stats">
+                  <i class="material-icons">update</i>
+                </div>
+              </div>
+            </div>
+          </a>
+          </div>
+            @endif
             @endcan
 
 

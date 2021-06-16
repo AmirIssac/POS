@@ -18,7 +18,7 @@ class CashierController extends Controller
         $user = Auth::user();
         $user = User::find($user->id);
         $repositories = $user->repositories;   // display all repositories for the owner|worker
-        return view('manager.Cashier.index')->with(['repositories'=>$repositories]);   
+        return view('manager.Cashier.index')->with(['repositories'=>$repositories]);    
     }
 
     public function dailyCashierForm($id){

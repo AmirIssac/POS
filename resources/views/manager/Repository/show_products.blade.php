@@ -42,8 +42,11 @@
                         الكمية المتوفرة  
                     </th>
                     <th>
-                      تعديل   
+                         
                   </th>
+                  <th>
+   
+                </th>
                   </thead>
                   <tbody>
                     @if($products && $products->count()>0)
@@ -82,6 +85,13 @@
                         @csrf
                         <input type="hidden" name="product_id" value="{{$product->id}}">
                         <button type="submit" class="btn btn-info"> تعديل </button>
+                      </form>
+                    </td>
+                    <td>
+                      <form action="{{route('delete.product')}}" method="POST">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{$product->id}}">
+                        <button type="submit" class="btn btn-danger"> حذف </button>
                       </form>
                     </td>
                     </tr>

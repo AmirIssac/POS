@@ -135,6 +135,12 @@ input[type=number] {
           <strong>{{ session('hasSavedRecipeAlready') }}</strong>
   </div>
   @endif
+  @if (session('failPayment'))
+  <div class="alert alert-danger alert-block">
+      <button type="button" class="close" data-dismiss="alert">×</button>	
+          <strong>{{ session('failPayment') }}</strong>
+  </div>
+  @endif
   
   <div  class="container-fluid">
     <form method="GET" action="{{route('create.special.invoice',$repository->id)}}">

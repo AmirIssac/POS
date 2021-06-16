@@ -14,6 +14,12 @@
         <strong>{{ session('editProductSuccess') }}</strong>
       </div>
       @endif
+      @if (session('deleteProductSuccess'))
+      <div class="alert alert-success alert-block">
+      <button type="button" class="close" data-dismiss="alert">×</button>	
+      <strong>{{ session('deleteProductSuccess') }}</strong>
+    </div>
+    @endif
            @foreach($repositories as $repository)
           
            <div class="col-md-4">

@@ -111,4 +111,10 @@ class RepositoryController extends Controller
         ]);
         return redirect(route('repository.index'))->with('editProductSuccess',' تم تعديل المنتج '.$product->name.' بنجاح ');
     }
+
+    public function deleteProduct(Request $request){
+        $product = Product::find($request->product_id);
+        $product->delete();
+        return redirect(route('repository.index'))->with('deleteProductSuccess','تم حذف المنتج بنجاح');
+    }
 }
