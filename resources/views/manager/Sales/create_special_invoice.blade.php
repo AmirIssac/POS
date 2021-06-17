@@ -82,6 +82,13 @@ input[type=number] {
 .delete:hover{
   cursor: pointer;
 }
+select{
+  font-size: 32px;
+  font-weight: bold;
+}
+option{
+  text-align: center;
+}
 @media print{
  /* body, html, #myform { 
           height: 100%;
@@ -243,6 +250,9 @@ input[type=number] {
               <th>
                 التاريخ
               </th>
+              <th>
+                موظف البيع
+              </th>
             </thead>
             <tbody>
               @foreach ($invoices as $invoice)
@@ -258,6 +268,9 @@ input[type=number] {
             </td>
             <td>
               {{$invoice->created_at}}
+            </td>
+            <td>
+              {{$invoice->user->name}}
             </td>
            </tr>
            @endforeach
@@ -318,16 +331,68 @@ input[type=number] {
               RIGHT
             </td>
             <td>
-              <input type="number" step="0.25" min="-20" max="20" name="sph_r" value="{{$saved_recipe['sph_r']}}">
+              <select name="sph_r" class="form-control">
+                @for($i=20.00;$i>=-20.00;$i-=0.25)
+                @if($i==$saved_recipe['sph_r'] && $i>0)
+                <option value="{{$i}}" selected>+{{$i}}</option>
+                @elseif($i==$saved_recipe['sph_r'] && $i<=0)
+                <option value="{{$i}}" selected>{{$i}}</option>
+                @elseif($i!=$saved_recipe['sph_r'] && $i>0))
+                <option value="{{$i}}">+{{$i}}</option>
+                @else
+                <option value="{{$i}}">{{$i}}</option>
+                @endif
+                @endfor
+              </select>
+              {{--<input type="number" step="0.25" min="-20" max="20" name="sph_r" value="{{$saved_recipe['sph_r']}}">--}}
             </td>
             <td>
-              <input type="number" step="0.25" min="-20" max="20" name="cyl_r" value="{{$saved_recipe['cyl_r']}}">
+              <select name="cyl_r" class="form-control">
+                @for($i=20.00;$i>=-20.00;$i-=0.25)
+                @if($i==$saved_recipe['cyl_r'] && $i>0)
+                <option value="{{$i}}" selected>+{{$i}}</option>
+                @elseif($i==$saved_recipe['cyl_r'] && $i<=0)
+                <option value="{{$i}}" selected>{{$i}}</option>
+                @elseif($i!=$saved_recipe['cyl_r'] && $i>0))
+                <option value="{{$i}}">+{{$i}}</option>
+                @else
+                <option value="{{$i}}">{{$i}}</option>
+                @endif
+                @endfor
+              </select>
+              {{--<input type="number" step="0.25" min="-20" max="20" name="cyl_r" value="{{$saved_recipe['cyl_r']}}">--}}
             </td>
             <td>
-              <input type="number" step="1" max="180" name="axis_r" value="{{$saved_recipe['axis_r']}}">
+              <select name="axis_r" class="form-control">
+                @for($i=180;$i>=0;$i-=1)
+                @if($i==$saved_recipe['axis_r'] && $i>0)
+                <option value="{{$i}}" selected>+{{$i}}</option>
+                @elseif($i==$saved_recipe['axis_r'] && $i==0)
+                <option value="{{$i}}" selected>{{$i}}</option>
+                @elseif($i!=$saved_recipe['axis_r'] && $i>0))
+                <option value="{{$i}}">+{{$i}}</option>
+                @else
+                <option value="{{$i}}">{{$i}}</option>
+                @endif
+                @endfor
+              </select>
+              {{--<input type="number" step="1" max="180" name="axis_r" value="{{$saved_recipe['axis_r']}}">--}}
               </td>
             <td>
-              <input type="number" step="0.25" min="0" max="20" name="add_r" value="{{$saved_recipe['add_r']}}">
+              <select name="add_r" class="form-control">
+                @for($i=20.00;$i>=0;$i-=0.25)
+                @if($i==$saved_recipe['add_r'] && $i>0)
+                <option value="{{$i}}" selected>+{{$i}}</option>
+                @elseif($i==$saved_recipe['add_r'] && $i==0)
+                <option value="{{$i}}" selected>{{$i}}</option>
+                @elseif($i!=$saved_recipe['add_r'] && $i>0))
+                <option value="{{$i}}">+{{$i}}</option>
+                @else
+                <option value="{{$i}}">{{$i}}</option>
+                @endif
+                @endfor
+              </select>
+              {{--<input type="number" step="0.25" min="0" max="20" name="add_r" value="{{$saved_recipe['add_r']}}">--}}
             </td>
            </tr>
            <tr>
@@ -335,16 +400,68 @@ input[type=number] {
               LEFT
             </td>
             <td>
-              <input type="number" step="0.25" min="-20" max="20" name="sph_l" value="{{$saved_recipe['sph_l']}}">
+              <select name="sph_l" class="form-control">
+                @for($i=20.00;$i>=-20.00;$i-=0.25)
+                @if($i==$saved_recipe['sph_l'] && $i>0)
+                <option value="{{$i}}" selected>+{{$i}}</option>
+                @elseif($i==$saved_recipe['sph_l'] && $i<=0)
+                <option value="{{$i}}" selected>{{$i}}</option>
+                @elseif($i!=$saved_recipe['sph_l'] && $i>0))
+                <option value="{{$i}}">+{{$i}}</option>
+                @else
+                <option value="{{$i}}">{{$i}}</option>
+                @endif
+                @endfor
+              </select>
+             {{-- <input type="number" step="0.25" min="-20" max="20" name="sph_l" value="{{$saved_recipe['sph_l']}}"> --}}
             </td>
             <td>
-              <input type="number" step="0.25" min="-20" max="20" name="cyl_l" value="{{$saved_recipe['cyl_l']}}">
+              <select name="cyl_l" class="form-control">
+                @for($i=20.00;$i>=-20.00;$i-=0.25)
+                @if($i==$saved_recipe['cyl_l'] && $i>0)
+                <option value="{{$i}}" selected>+{{$i}}</option>
+                @elseif($i==$saved_recipe['cyl_l'] && $i<=0)
+                <option value="{{$i}}" selected>{{$i}}</option>
+                @elseif($i!=$saved_recipe['cyl_l'] && $i>0))
+                <option value="{{$i}}">+{{$i}}</option>
+                @else
+                <option value="{{$i}}">{{$i}}</option>
+                @endif
+                @endfor
+              </select>
+              {{--<input type="number" step="0.25" min="-20" max="20" name="cyl_l" value="{{$saved_recipe['cyl_l']}}">--}}
             </td>
             <td>
-              <input type="number" min="0" max="180" name="axis_l" value="{{$saved_recipe['axis_l']}}">
+              <select name="axis_l" class="form-control">
+                @for($i=180;$i>=0;$i-=1)
+                @if($i==$saved_recipe['axis_l'] && $i>0)
+                <option value="{{$i}}" selected>+{{$i}}</option>
+                @elseif($i==$saved_recipe['axis_l'] && $i==0)
+                <option value="{{$i}}" selected>{{$i}}</option>
+                @elseif($i!=$saved_recipe['axis_l'] && $i>0))
+                <option value="{{$i}}">+{{$i}}</option>
+                @else
+                <option value="{{$i}}">{{$i}}</option>
+                @endif
+                @endfor
+              </select>
+              {{--<input type="number" min="0" max="180" name="axis_l" value="{{$saved_recipe['axis_l']}}">--}}
             </td>
             <td>
-              <input type="number" step="0.25" min="0" max="20" name="add_l" value="{{$saved_recipe['add_l']}}">
+              <select name="add_l" class="form-control">
+                @for($i=20.00;$i>=0;$i-=0.25)
+                @if($i==$saved_recipe['add_l'] && $i>0)
+                <option value="{{$i}}" selected>+{{$i}}</option>
+                @elseif($i==$saved_recipe['add_l'] && $i==0)
+                <option value="{{$i}}" selected>{{$i}}</option>
+                @elseif($i!=$saved_recipe['add_l'] && $i>0))
+                <option value="{{$i}}">+{{$i}}</option>
+                @else
+                <option value="{{$i}}">{{$i}}</option>
+                @endif
+                @endfor
+              </select>
+              {{--<input type="number" step="0.25" min="0" max="20" name="add_l" value="{{$saved_recipe['add_l']}}">--}}
             </td>
            </tr>
            <tr>
@@ -367,16 +484,60 @@ input[type=number] {
               RIGHT
             </td>
             <td>
-              <input type="number" step="0.25" min="-20" max="20" name="sph_r" value="0">
+              <select name="sph_r" class="form-control">
+                @for($i=20.00;$i>=-20.00;$i-=0.25)
+                @if($i==0)  {{-- default value --}}
+                <option value="{{$i}}" selected>{{$i}}</option>
+                @elseif($i>0)
+                <option value="{{$i}}">+{{$i}}</option>
+                @else
+                <option value="{{$i}}">{{$i}}</option>
+                @endif
+                @endfor
+              </select>
+             {{-- <input type="number" step="0.25" min="-20" max="20" name="sph_r" value="0"> --}}
             </td>
             <td>
-              <input type="number" step="0.25" min="-20" max="20" name="cyl_r" value="0">
+              <select name="cyl_r" class="form-control">
+                @for($i=20.00;$i>=-20.00;$i-=0.25)
+                @if($i==0)  {{-- default value --}}
+                <option value="{{$i}}" selected>{{$i}}</option>
+                @elseif($i>0)
+                <option value="{{$i}}">+{{$i}}</option>
+                @else
+                <option value="{{$i}}">{{$i}}</option>
+                @endif
+                @endfor
+              </select>
+              {{--<input type="number" step="0.25" min="-20" max="20" name="cyl_r" value="0">--}}
             </td>
             <td>
-              <input type="number" min="0" max="180" name="axis_r" value="0">
+              <select name="axis_r" class="form-control">
+                @for($i=180;$i>=0;$i-=1)
+                @if($i==0)  {{-- default value --}}
+                <option value="{{$i}}" selected>{{$i}}</option>
+                @elseif($i>0)
+                <option value="{{$i}}">+{{$i}}</option>
+                @else
+                <option value="{{$i}}">{{$i}}</option>
+                @endif
+                @endfor
+              </select>
+              {{--<input type="number" min="0" max="180" name="axis_r" value="0">--}}
             </td>
             <td>
-              <input type="number" step="0.25" min="0" max="20" name="add_r" value="0">
+              <select name="add_r" class="form-control">
+                @for($i=20.00;$i>=0;$i-=0.25)
+                @if($i==0)  {{-- default value --}}
+                <option value="{{$i}}" selected>{{$i}}</option>
+                @elseif($i>0)
+                <option value="{{$i}}">+{{$i}}</option>
+                @else
+                <option value="{{$i}}">{{$i}}</option>
+                @endif
+                @endfor
+              </select>
+              {{--<input type="number" step="0.25" min="0" max="20" name="add_r" value="0">--}}
             </td>
            </tr>
            <tr>
@@ -384,16 +545,60 @@ input[type=number] {
               LEFT
             </td>
             <td>
-              <input type="number" step="0.25" min="-20" max="20" name="sph_l" value="0">
+              <select name="sph_l" class="form-control">
+                @for($i=20.00;$i>=-20.00;$i-=0.25)
+                @if($i==0)  {{-- default value --}}
+                <option value="{{$i}}" selected>{{$i}}</option>
+                @elseif($i>0)
+                <option value="{{$i}}">+{{$i}}</option>
+                @else
+                <option value="{{$i}}">{{$i}}</option>
+                @endif
+                @endfor
+              </select>
+              {{--<input type="number" step="0.25" min="-20" max="20" name="sph_l" value="0">--}}
             </td>
             <td>
-              <input type="number" step="0.25" min="-20" max="20" name="cyl_l" value="0">
+              <select name="cyl_l" class="form-control">
+                @for($i=20.00;$i>=-20.00;$i-=0.25)
+                @if($i==0)  {{-- default value --}}
+                <option value="{{$i}}" selected>{{$i}}</option>
+                @elseif($i>0)
+                <option value="{{$i}}">+{{$i}}</option>
+                @else
+                <option value="{{$i}}">{{$i}}</option>
+                @endif
+                @endfor
+              </select>
+              {{--<input type="number" step="0.25" min="-20" max="20" name="cyl_l" value="0">--}}
             </td>
             <td>
-              <input type="number" min="0" max="180" name="axis_l" value="0">
+              <select name="axis_l" class="form-control">
+                @for($i=180;$i>=0;$i-=1)
+                @if($i==0)  {{-- default value --}}
+                <option value="{{$i}}" selected>{{$i}}</option>
+                @elseif($i>0)
+                <option value="{{$i}}">+{{$i}}</option>
+                @else
+                <option value="{{$i}}">{{$i}}</option>
+                @endif
+                @endfor
+              </select>
+             {{--<input type="number" min="0" max="180" name="axis_l" value="0">--}}
             </td>
             <td>
-              <input type="number" step="0.25" min="0" max="20" name="add_l" value="0">
+              <select name="add_l" class="form-control">
+                @for($i=20.00;$i>=0;$i-=0.25)
+                @if($i==0)  {{-- default value --}}
+                <option value="{{$i}}" selected>{{$i}}</option>
+                @elseif($i>0)
+                <option value="{{$i}}">+{{$i}}</option>
+                @else
+                <option value="{{$i}}">{{$i}}</option>
+                @endif
+                @endfor
+              </select>
+              {{--<input type="number" step="0.25" min="0" max="20" name="add_l" value="0">--}}
             </td>
            </tr>
            <tr>
@@ -606,7 +811,7 @@ input[type=number] {
           </form>
             <form action="{{route('save.special.invoice',$repository->id)}}" method="POST">
               @csrf
-              <div style="display: none;"">
+              <div style="display: none;">
               <input type="number" step="0.01" name="add_rs">
               <input type="number" step="0.01" name="axis_rs">
               <input type="number" step="0.01" name="cyl_rs">
@@ -955,14 +1160,14 @@ window.onload=function(){
         $('#bar'+gold+'').focus();
       }
   });
-  $('input[name="add_rs"]').val($('input[name="add_r"]').val());
-  $('input[name="axis_rs"]').val($('input[name="axis_r"]').val());
-  $('input[name="cyl_rs"]').val($('input[name="cyl_r"]').val());
-  $('input[name="sph_rs"]').val($('input[name="sph_r"]').val());
-  $('input[name="add_ls"]').val($('input[name="add_l"]').val());
-  $('input[name="axis_ls"]').val($('input[name="axis_l"]').val());
-  $('input[name="cyl_ls"]').val($('input[name="cyl_l"]').val());
-  $('input[name="sph_ls"]').val($('input[name="sph_l"]').val());
+  $('input[name="add_rs"]').val($('select[name="add_r"]').val());
+  $('input[name="axis_rs"]').val($('select[name="axis_r"]').val());
+  $('input[name="cyl_rs"]').val($('select[name="cyl_r"]').val());
+  $('input[name="sph_rs"]').val($('select[name="sph_r"]').val());
+  $('input[name="add_ls"]').val($('select[name="add_l"]').val());
+  $('input[name="axis_ls"]').val($('select[name="axis_l"]').val());
+  $('input[name="cyl_ls"]').val($('select[name="cyl_l"]').val());
+  $('input[name="sph_ls"]').val($('select[name="sph_l"]').val());
   $('input[name="ipdvals"]').val($('input[name="ipdval"]').val());
           $('#submit').prop('disabled', true);
 }
@@ -984,7 +1189,8 @@ window.onload=function(){
     });
   </script>
   <script>  // save recipe
-    $('input[name="add_r"]').on('change',function(){
+
+    /*$('input[name="add_r"]').on('change',function(){
       $('input[name="add_rs"]').val($('input[name="add_r"]').val());
     });
     $('input[name="axis_r"]').on('change',function(){
@@ -1007,6 +1213,33 @@ window.onload=function(){
     });
     $('input[name="sph_l"]').on('change',function(){
       $('input[name="sph_ls"]').val($('input[name="sph_l"]').val());
+    });
+    $('input[name="ipdval"]').on('change',function(){
+      $('input[name="ipdvals"]').val($('input[name="ipdval"]').val());
+    });*/
+    $('select[name="add_r"]').on('change',function(){
+      $('input[name="add_rs"]').val($('select[name="add_r"]').val());
+    });
+    $('select[name="axis_r"]').on('change',function(){
+      $('input[name="axis_rs"]').val($('select[name="axis_r"]').val());
+    })
+    $('select[name="cyl_r"]').on('change',function(){
+      $('input[name="cyl_rs"]').val($('select[name="cyl_r"]').val());
+    });
+    $('select[name="sph_r"]').on('change',function(){
+      $('input[name="sph_rs"]').val($('select[name="sph_r"]').val());
+    });
+    $('select[name="add_l"]').on('change',function(){
+      $('input[name="add_ls"]').val($('select[name="add_l"]').val());
+    });
+    $('select[name="axis_l"]').on('change',function(){
+      $('input[name="axis_ls"]').val($('select[name="axis_l"]').val());
+    });
+    $('select[name="cyl_l"]').on('change',function(){
+      $('input[name="cyl_ls"]').val($('select[name="cyl_l"]').val());
+    });
+    $('select[name="sph_l"]').on('change',function(){
+      $('input[name="sph_ls"]').val($('select[name="sph_l"]').val());
     });
     $('input[name="ipdval"]').on('change',function(){
       $('input[name="ipdvals"]').val($('input[name="ipdval"]').val());

@@ -71,6 +71,9 @@ input[type=number] {
                      حالة الفاتورة   
                      </th>
                      <th>
+                      موظف البيع    
+                      </th>
+                     <th>
                       كاش    
                       </th>
                       <th>
@@ -97,7 +100,9 @@ input[type=number] {
                          معلقة
                         </td>
                         @endif
-                      
+                      <td>
+                        {{$invoice->user->name}}
+                      </td>
                       <td>
                         {{$invoice->cash_amount}}
                       </td>

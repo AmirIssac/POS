@@ -4,6 +4,9 @@
   .card-header a{
     color:white !important;
   }
+  #modalicon:hover{
+    cursor: pointer;
+  }
 </style>
      <div class="main-panel">
       
@@ -76,21 +79,40 @@
             @if($repository->dailyReportsDesc->count()>0)
            @if($repository->lastDailyReportDate()==now()->format('d'))
            <div class="col-lg-3 col-md-6 col-sm-6">
-          <div class="card card-stats">
+          <div class="card card-stats" data-toggle="modal" data-target="#exampleModal" id="modalicon">
             <div class="card-header card-header-secondary card-header-icon">
               <div class="card-icon">
-              <i class="material-icons">calculate</i>
+                <i class="material-icons">live_help</i>
               </div>
               <p class="card-category">إغلاق الكاشير</p>
-              <h6 class="card-title">غير متاح</h6>
+              <h6 class="card-title"> سيكون متاح بعد  {{$repository->timeRemaining()}} </h6>
             </div>
             <div class="card-footer">
               <div class="stats">
-                <i class="material-icons">update</i>
+                غير متاح
               </div>
             </div>
           </div>
         </div>
+        <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        قام باغلاق الكاشير الموظف {{$repository->dailyReportsDesc()->first()->user->name}} بتاريخ {{$repository->dailyReportsDesc()->first()->created_at}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">موافق</button>
+      </div>
+    </div>
+  </div>
+</div>
            @else
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <a href="{{route('daily.cashier.form',$repository->id)}}">
@@ -104,7 +126,7 @@
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons">update</i>
+                    متاح
                   </div>
                 </div>
               </div>
@@ -124,7 +146,7 @@
               </div>
               <div class="card-footer">
                 <div class="stats">
-                  <i class="material-icons">update</i>
+                  متاح
                 </div>
               </div>
             </div>

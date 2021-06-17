@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Repository extends Model
@@ -73,5 +74,13 @@ class Repository extends Model
         $object = $this->dailyReportsDesc()->get();
         $day = $object[0]->created_at->format('d');
         return $day;
+    }
+    // calculate the time remaining to open cashier again
+    public function timeRemaining(){
+        $object = $this->dailyReportsDesc()->first();
+        $t1 = now();
+        $t2 = Carbon::parse($object->created_at)->addDays(1)->startOfDay();
+        $diff = $t2->diff($t1);
+        return $diff->h.'ساعة و '.$diff->i.'دقيقة';
     }
 }
