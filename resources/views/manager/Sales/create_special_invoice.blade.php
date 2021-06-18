@@ -41,11 +41,10 @@ input[name=date]{
     background-color: white !important;
   }
   #myTable{
-    text-align: center
+    text-align: left;
   }
   #myTable input{
-    text-align: center;
-    font-size: 18px;
+    text-align: left;
     font-weight: bold;
     border: none;
   }
@@ -86,9 +85,7 @@ select{
   font-size: 32px;
   font-weight: bold;
 }
-option{
-  text-align: center;
-}
+
 @media print{
  /* body, html, #myform { 
           height: 100%;
@@ -308,7 +305,7 @@ option{
               @if(isset($saved_recipe) && count($saved_recipe)>0)
               <span class="badge badge-success"> مؤرشف  </span>
               @endif
-              <th>
+              <th style="text-align: center; font-weight: bold; font-size: 18px;">
                 EYE  
               </th>
               <th>
@@ -331,39 +328,39 @@ option{
               RIGHT
             </td>
             <td>
-              <select name="sph_r" class="form-control">
+              <select name="sph_r" class="form-control" required>
                 @for($i=20.00;$i>=-20.00;$i-=0.25)
                 @if($i==$saved_recipe['sph_r'] && $i>0)
-                <option value="{{$i}}" selected>+{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>+{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i==$saved_recipe['sph_r'] && $i<=0)
-                <option value="{{$i}}" selected>{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i!=$saved_recipe['sph_r'] && $i>0))
-                <option value="{{$i}}">+{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
                 @else
-                <option value="{{$i}}">{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
                 @endif
                 @endfor
               </select>
               {{--<input type="number" step="0.25" min="-20" max="20" name="sph_r" value="{{$saved_recipe['sph_r']}}">--}}
             </td>
             <td>
-              <select name="cyl_r" class="form-control">
+              <select name="cyl_r" class="form-control" required>
                 @for($i=20.00;$i>=-20.00;$i-=0.25)
                 @if($i==$saved_recipe['cyl_r'] && $i>0)
-                <option value="{{$i}}" selected>+{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>+{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i==$saved_recipe['cyl_r'] && $i<=0)
-                <option value="{{$i}}" selected>{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i!=$saved_recipe['cyl_r'] && $i>0))
-                <option value="{{$i}}">+{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
                 @else
-                <option value="{{$i}}">{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
                 @endif
                 @endfor
               </select>
               {{--<input type="number" step="0.25" min="-20" max="20" name="cyl_r" value="{{$saved_recipe['cyl_r']}}">--}}
             </td>
             <td>
-              <select name="axis_r" class="form-control">
+              {{--<select name="axis_r" class="form-control">
                 @for($i=180;$i>=0;$i-=1)
                 @if($i==$saved_recipe['axis_r'] && $i>0)
                 <option value="{{$i}}" selected>+{{$i}}</option>
@@ -375,20 +372,20 @@ option{
                 <option value="{{$i}}">{{$i}}</option>
                 @endif
                 @endfor
-              </select>
-              {{--<input type="number" step="1" max="180" name="axis_r" value="{{$saved_recipe['axis_r']}}">--}}
+              </select>--}}
+              <input type="number" step="1" max="180" name="axis_r" value="{{$saved_recipe['axis_r']}}" class="form-control" required>
               </td>
             <td>
-              <select name="add_r" class="form-control">
+              <select name="add_r" class="form-control" required>
                 @for($i=20.00;$i>=0;$i-=0.25)
                 @if($i==$saved_recipe['add_r'] && $i>0)
-                <option value="{{$i}}" selected>+{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>+{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i==$saved_recipe['add_r'] && $i==0)
-                <option value="{{$i}}" selected>{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i!=$saved_recipe['add_r'] && $i>0))
-                <option value="{{$i}}">+{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
                 @else
-                <option value="{{$i}}">{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
                 @endif
                 @endfor
               </select>
@@ -400,39 +397,39 @@ option{
               LEFT
             </td>
             <td>
-              <select name="sph_l" class="form-control">
+              <select name="sph_l" class="form-control" required>
                 @for($i=20.00;$i>=-20.00;$i-=0.25)
                 @if($i==$saved_recipe['sph_l'] && $i>0)
-                <option value="{{$i}}" selected>+{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>+{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i==$saved_recipe['sph_l'] && $i<=0)
-                <option value="{{$i}}" selected>{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i!=$saved_recipe['sph_l'] && $i>0))
-                <option value="{{$i}}">+{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
                 @else
-                <option value="{{$i}}">{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
                 @endif
                 @endfor
               </select>
              {{-- <input type="number" step="0.25" min="-20" max="20" name="sph_l" value="{{$saved_recipe['sph_l']}}"> --}}
             </td>
             <td>
-              <select name="cyl_l" class="form-control">
+              <select name="cyl_l" class="form-control" required>
                 @for($i=20.00;$i>=-20.00;$i-=0.25)
                 @if($i==$saved_recipe['cyl_l'] && $i>0)
-                <option value="{{$i}}" selected>+{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>+{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i==$saved_recipe['cyl_l'] && $i<=0)
-                <option value="{{$i}}" selected>{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i!=$saved_recipe['cyl_l'] && $i>0))
-                <option value="{{$i}}">+{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
                 @else
-                <option value="{{$i}}">{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
                 @endif
                 @endfor
               </select>
               {{--<input type="number" step="0.25" min="-20" max="20" name="cyl_l" value="{{$saved_recipe['cyl_l']}}">--}}
             </td>
             <td>
-              <select name="axis_l" class="form-control">
+              {{--<select name="axis_l" class="form-control">
                 @for($i=180;$i>=0;$i-=1)
                 @if($i==$saved_recipe['axis_l'] && $i>0)
                 <option value="{{$i}}" selected>+{{$i}}</option>
@@ -444,20 +441,20 @@ option{
                 <option value="{{$i}}">{{$i}}</option>
                 @endif
                 @endfor
-              </select>
-              {{--<input type="number" min="0" max="180" name="axis_l" value="{{$saved_recipe['axis_l']}}">--}}
+              </select>--}}
+              <input type="number" min="0" max="180" name="axis_l" value="{{$saved_recipe['axis_l']}}" class="form-control" required>
             </td>
             <td>
-              <select name="add_l" class="form-control">
+              <select name="add_l" class="form-control" required>
                 @for($i=20.00;$i>=0;$i-=0.25)
                 @if($i==$saved_recipe['add_l'] && $i>0)
-                <option value="{{$i}}" selected>+{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>+{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i==$saved_recipe['add_l'] && $i==0)
-                <option value="{{$i}}" selected>{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i!=$saved_recipe['add_l'] && $i>0))
-                <option value="{{$i}}">+{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
                 @else
-                <option value="{{$i}}">{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
                 @endif
                 @endfor
               </select>
@@ -473,7 +470,7 @@ option{
               IPD
             </td>
              <td>
-              <input type="number" min="0" max="100" name="ipdval" value="{{$saved_recipe['ipd']}}">
+              <input type="number" min="0" max="100" name="ipdval" value="{{$saved_recipe['ipd']}}" class="form-control" required>
              </td>
              <td style="border: none">
             </td>
@@ -484,56 +481,45 @@ option{
               RIGHT
             </td>
             <td>
-              <select name="sph_r" class="form-control">
+              <select name="sph_r" class="form-control" required>
                 @for($i=20.00;$i>=-20.00;$i-=0.25)
                 @if($i==0)  {{-- default value --}}
-                <option value="{{$i}}" selected>{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i>0)
-                <option value="{{$i}}">+{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
                 @else
-                <option value="{{$i}}">{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
                 @endif
                 @endfor
               </select>
              {{-- <input type="number" step="0.25" min="-20" max="20" name="sph_r" value="0"> --}}
             </td>
             <td>
-              <select name="cyl_r" class="form-control">
+              <select name="cyl_r" class="form-control" required>
                 @for($i=20.00;$i>=-20.00;$i-=0.25)
                 @if($i==0)  {{-- default value --}}
-                <option value="{{$i}}" selected>{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i>0)
-                <option value="{{$i}}">+{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
                 @else
-                <option value="{{$i}}">{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
                 @endif
                 @endfor
               </select>
               {{--<input type="number" step="0.25" min="-20" max="20" name="cyl_r" value="0">--}}
             </td>
             <td>
-              <select name="axis_r" class="form-control">
-                @for($i=180;$i>=0;$i-=1)
-                @if($i==0)  {{-- default value --}}
-                <option value="{{$i}}" selected>{{$i}}</option>
-                @elseif($i>0)
-                <option value="{{$i}}">+{{$i}}</option>
-                @else
-                <option value="{{$i}}">{{$i}}</option>
-                @endif
-                @endfor
-              </select>
-              {{--<input type="number" min="0" max="180" name="axis_r" value="0">--}}
+              <input type="number" min="0" max="180" name="axis_r" value="0" class="form-control" required>
             </td>
             <td>
-              <select name="add_r" class="form-control">
+              <select name="add_r" class="form-control" required>
                 @for($i=20.00;$i>=0;$i-=0.25)
                 @if($i==0)  {{-- default value --}}
-                <option value="{{$i}}" selected>{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i>0)
-                <option value="{{$i}}">+{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
                 @else
-                <option value="{{$i}}">{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
                 @endif
                 @endfor
               </select>
@@ -545,59 +531,53 @@ option{
               LEFT
             </td>
             <td>
-              <select name="sph_l" class="form-control">
+              <select name="sph_l" class="form-control" required>
                 @for($i=20.00;$i>=-20.00;$i-=0.25)
                 @if($i==0)  {{-- default value --}}
-                <option value="{{$i}}" selected>{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i>0)
-                <option value="{{$i}}">+{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
                 @else
-                <option value="{{$i}}">{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
                 @endif
                 @endfor
               </select>
               {{--<input type="number" step="0.25" min="-20" max="20" name="sph_l" value="0">--}}
             </td>
             <td>
-              <select name="cyl_l" class="form-control">
+              <select name="cyl_l" class="form-control" required>
                 @for($i=20.00;$i>=-20.00;$i-=0.25)
                 @if($i==0)  {{-- default value --}}
-                <option value="{{$i}}" selected>{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i>0)
-                <option value="{{$i}}">+{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
                 @else
-                <option value="{{$i}}">{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
                 @endif
                 @endfor
               </select>
               {{--<input type="number" step="0.25" min="-20" max="20" name="cyl_l" value="0">--}}
             </td>
             <td>
-              <select name="axis_l" class="form-control">
-                @for($i=180;$i>=0;$i-=1)
-                @if($i==0)  {{-- default value --}}
-                <option value="{{$i}}" selected>{{$i}}</option>
-                @elseif($i>0)
-                <option value="{{$i}}">+{{$i}}</option>
-                @else
-                <option value="{{$i}}">{{$i}}</option>
-                @endif
-                @endfor
-              </select>
-             {{--<input type="number" min="0" max="180" name="axis_l" value="0">--}}
+             
+             <input type="number" min="0" max="180" name="axis_l" value="0" class="form-control" required>
             </td>
             <td>
-              <select name="add_l" class="form-control">
+              {{--<input type="text" list="addl" min="0" max="20.00" step="0.25">
+              <datalist id="addl">--}}
+                <select name="add_l" class="form-control" required>
                 @for($i=20.00;$i>=0;$i-=0.25)
                 @if($i==0)  {{-- default value --}}
-                <option value="{{$i}}" selected>{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i>0)
-                <option value="{{$i}}">+{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
                 @else
-                <option value="{{$i}}">{{$i}}</option>
+                <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
                 @endif
                 @endfor
-              </select>
+                </select>
+              {{--</datalist>--}}
+              
               {{--<input type="number" step="0.25" min="0" max="20" name="add_l" value="0">--}}
             </td>
            </tr>
@@ -610,7 +590,7 @@ option{
               IPD
             </td>
              <td>
-              <input type="number" min="0" max="100" name="ipdval" value="0">
+              <input type="number" min="0" max="100" name="ipdval" value="0" class="form-control" required>
              </td>
              <td style="border: none">
             </td>
@@ -812,15 +792,15 @@ option{
             <form action="{{route('save.special.invoice',$repository->id)}}" method="POST">
               @csrf
               <div style="display: none;">
-              <input type="number" step="0.01" name="add_rs">
-              <input type="number" step="0.01" name="axis_rs">
-              <input type="number" step="0.01" name="cyl_rs">
-              <input type="number" step="0.01" name="sph_rs">
-              <input type="number" step="0.01" name="add_ls">
-              <input type="number" step="0.01" name="axis_ls">
-              <input type="number" step="0.01" name="cyl_ls">
-              <input type="number" step="0.01" name="sph_ls">
-              <input type="number" name="ipdvals">
+              <input type="number" step="0.01" min="0" max="20" name="add_rs" required>
+              <input type="number" step="0.01" min="0" max="180" name="axis_rs" required>
+              <input type="number" step="0.01" min="-20" max="20" name="cyl_rs" required>
+              <input type="number" step="0.01" min="-20" max="20" name="sph_rs" required>
+              <input type="number" step="0.01" min="0" max="20" name="add_ls" required>
+              <input type="number" step="0.01" min="0" max="180" name="axis_ls" required>
+              <input type="number" step="0.01" min="-20" max="20" name="cyl_ls" required>
+              <input type="number" step="0.01" min="-20" max="20" name="sph_ls" required>
+              <input type="number" min="0" max="100" name="ipdvals">
               <input type="text" name="customer_phone_s" value="{{isset($phone)?$phone:''}}">
               <input type="text" name="customer_name_s" value="{{isset($customer_name)?$customer_name:''}}">
               </div>
@@ -1161,11 +1141,11 @@ window.onload=function(){
       }
   });
   $('input[name="add_rs"]').val($('select[name="add_r"]').val());
-  $('input[name="axis_rs"]').val($('select[name="axis_r"]').val());
+  $('input[name="axis_rs"]').val($('input[name="axis_r"]').val());
   $('input[name="cyl_rs"]').val($('select[name="cyl_r"]').val());
   $('input[name="sph_rs"]').val($('select[name="sph_r"]').val());
   $('input[name="add_ls"]').val($('select[name="add_l"]').val());
-  $('input[name="axis_ls"]').val($('select[name="axis_l"]').val());
+  $('input[name="axis_ls"]').val($('input[name="axis_l"]').val());
   $('input[name="cyl_ls"]').val($('select[name="cyl_l"]').val());
   $('input[name="sph_ls"]').val($('select[name="sph_l"]').val());
   $('input[name="ipdvals"]').val($('input[name="ipdval"]').val());
@@ -1220,8 +1200,8 @@ window.onload=function(){
     $('select[name="add_r"]').on('change',function(){
       $('input[name="add_rs"]').val($('select[name="add_r"]').val());
     });
-    $('select[name="axis_r"]').on('change',function(){
-      $('input[name="axis_rs"]').val($('select[name="axis_r"]').val());
+    $('input[name="axis_r"]').on('change',function(){
+      $('input[name="axis_rs"]').val($('input[name="axis_r"]').val());
     })
     $('select[name="cyl_r"]').on('change',function(){
       $('input[name="cyl_rs"]').val($('select[name="cyl_r"]').val());
@@ -1232,8 +1212,8 @@ window.onload=function(){
     $('select[name="add_l"]').on('change',function(){
       $('input[name="add_ls"]').val($('select[name="add_l"]').val());
     });
-    $('select[name="axis_l"]').on('change',function(){
-      $('input[name="axis_ls"]').val($('select[name="axis_l"]').val());
+    $('input[name="axis_l"]').on('change',function(){
+      $('input[name="axis_ls"]').val($('input[name="axis_l"]').val());
     });
     $('select[name="cyl_l"]').on('change',function(){
       $('input[name="cyl_ls"]').val($('select[name="cyl_l"]').val());
