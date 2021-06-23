@@ -1,0 +1,33 @@
+<?php
+
+return [
+    'add_stock' => 'Add stock',
+    'import_stock' => 'Import stock',
+    'view_products' => 'View products',
+    'add_product_to_stock' => 'Add product to stock',
+    'arabic_name' => 'Arabic name',
+    'english_name' => 'English name',
+    'product_type' => 'Product type',
+    'accept_min' => 'Accept min limit',
+    'import_stock_by_excel' => 'Import stock by excel sheet',
+    'file' => 'File',
+    'important_info' => 'Important information before import',
+    'file_dont_has_headers' => 'That the file does not contain headers, that is, it contains only the data to be entered',
+    'order_columns' => 'The columns in the file should be in the following order:',
+    'special_column_one' => 'The first column contains the barcode',
+    'special_column_two' => 'The second column contains the name of the product in Arabic',
+    'special_column_three' => 'The third column contains the name of the product in English',
+    'special_column_four' => 'The fourth column contains the cost price',
+    'special_column_five' => 'The fifth column contains the selling price',
+    'special_column_six' => 'The sixth column contains the quantity',
+    'special_column_seven' => 'The seventh column contains the product type number',
+    'special_column_eight' => 'The eighth column contains the value 1 if the product accepts the minimum, and the value 0 if the minimum is not accepted',
+    'click_here_to_see_number_of_types' => 'Click here to see the number of types',
+    'quantity_available' => 'Quantity available',
+    'all_products' => 'All products',
+    'edit_product' => 'Edit product',
+    'repository_empty' => 'Repository is empty',
+    'yes' => 'Yes',
+    'no' => 'No',
+];
+?>

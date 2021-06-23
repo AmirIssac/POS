@@ -48,16 +48,15 @@ input[type=number] {
                 <table class="table">
                   <thead class=" text-primary">
                     <th>
-                        شعار امتجر
+                        شعار المتجر
                     </th>
                   </thead>
                   <tbody>
                     <tr>
                       <td>
-                          <input type="file" name="logo" class="form-control"required>
+                          <input type="file" name="logo" class="form-control">
                       </td>
                       <td>
-                          <button type="submit" class="btn btn-success"> تأكيد </button>
                       </td>
                     </tr>
                   </tbody>
@@ -67,7 +66,54 @@ input[type=number] {
           </div>
         </div>
       </div>
+      
+
+
+      @if($repository->isSpecial())
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-primary">
+              <h4 class="card-title">أنواع المنتجات</h4>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead class=" text-primary">
+                    <th>
+                        تحديد أنواع المنتجات في النظام 
+                    </th>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <select class="form-control">  {{-- just for display --}}
+                      @foreach($repository->types as $type)
+                      <option value="" disabled selected hidden> انقر هنا لمشاهدة كل الأنواع التي سجلتها في نظامك </option>
+                      <option disabled> {{$type->name}} </option>
+                      @endforeach
+                      </select>
+                    </tr>
+                    <tr>
+                      <td>
+                        إضافة نوع جديد
+                      </td>
+                      <td>
+                          <input type="text" name="type_name" class="form-control" placeholder=" قم هنا بكتابة النوع الجديد الذي تريد اضافته">
+                      </td>
+                      <td>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      @endif
+      <button type="submit" class="btn btn-success"> تأكيد </button>
       </form>
+
 
 
       </div>

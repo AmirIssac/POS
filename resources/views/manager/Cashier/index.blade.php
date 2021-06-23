@@ -38,7 +38,7 @@
                    <div class="card-icon">
                    <i class="material-icons">input</i>
                    </div>
-                   <p class="card-category"> إيداع </p>
+                   <p class="card-category"> {{__('cashier.deposit')}} </p>
                    <h6 class="card-title"></h6>
                  </div>
                  <div class="card-footer">
@@ -60,7 +60,7 @@
                   <div class="card-icon">
                   <i class="material-icons">money_off</i>
                   </div>
-                  <p class="card-category">سحب</p>
+                  <p class="card-category">{{__('cashier.withdraw')}}</p>
                   <h6 class="card-title"></h6>
                 </div>
                 <div class="card-footer">
@@ -84,12 +84,12 @@
               <div class="card-icon">
                 <i class="material-icons">live_help</i>
               </div>
-              <p class="card-category">إغلاق الكاشير</p>
-              <h6 class="card-title"> سيكون متاح بعد  {{$repository->timeRemaining()}} </h6>
+              <p class="card-category">{{__('cashier.close_cashier')}}</p>
+              <h6 class="card-title">   {{__('cashier.will_be_available')}}  {{$repository->timeRemaining()}} </h6>
             </div>
             <div class="card-footer">
               <div class="stats">
-                غير متاح
+                {{__('cashier.unavailable')}}
               </div>
             </div>
           </div>
@@ -105,7 +105,7 @@
         </button>
       </div>
       <div class="modal-body">
-        قام باغلاق الكاشير الموظف {{$repository->dailyReportsDesc()->first()->user->name}} بتاريخ {{$repository->dailyReportsDesc()->first()->created_at}}
+        {{__('cashier.employee_close')}} {{$repository->dailyReportsDesc()->first()->user->name}} {{__('cashier.in_date')}} {{$repository->dailyReportsDesc()->first()->created_at}}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal">موافق</button>
@@ -121,12 +121,12 @@
                   <div class="card-icon">
                   <i class="material-icons">calculate</i>
                   </div>
-                  <p class="card-category">إغلاق الكاشير</p>
-                  <h6 class="card-title">يومي</h6>
+                  <p class="card-category">{{__('cashier.close_cashier')}}</p>
+                  <h6 class="card-title">{{__('cashier.daily')}}</h6>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    متاح
+                    {{__('cashier.available')}}
                   </div>
                 </div>
               </div>
@@ -141,12 +141,12 @@
                 <div class="card-icon">
                 <i class="material-icons">calculate</i>
                 </div>
-                <p class="card-category">إغلاق الكاشير</p>
-                <h6 class="card-title">يومي</h6>
+                <p class="card-category">{{__('cashier.close_cashier')}}</p>
+                <h6 class="card-title">{{__('cashier.daily')}}</h6>
               </div>
               <div class="card-footer">
                 <div class="stats">
-                  متاح
+                  {{__('cashier.available')}}
                 </div>
               </div>
             </div>

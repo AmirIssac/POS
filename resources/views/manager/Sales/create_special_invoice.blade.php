@@ -160,12 +160,12 @@ select{
               <span>الجوال <span class="badge badge-success">{{isset($phone)?$phone:''}}</span></span>--}}
               @if(isset($new))
               @if($new)
-              <span class="badge badge-info">عميل جديد</span>
+              <span class="badge badge-info">{{__('sales.new_customer')}}</span>
               @else
-              <span class="badge badge-success">عميل موجود</span>
+              <span class="badge badge-success">{{__('sales.exist_customer')}}</span>
               @endif
               @else
-              ابحث
+              {{__('sales.search')}}
               @endif
             </h4>
           </div>
@@ -174,32 +174,32 @@ select{
               <table class="table">
                 <thead class="text-primary">
                   <th>
-                    الجوال  
+                    {{__('sales.phone')}}  
                   </th>
                   <th>
-                    الاسم  
+                    {{__('sales.name')}}  
                   </th>
                   <th>
-                    بحث/اضافة  
+                    {{__('sales.search/add')}}  
                   </th>
                 </thead>
                 <tbody>
                <tr>
                 <td>
-                  <input type="phone" name="phone" value="{{isset($phone)?$phone:''}}" class="form-control" placeholder="اكتب هنا لإدخال عميل آخر" required>
+                  <input type="phone" name="phone" value="{{isset($phone)?$phone:''}}" class="form-control" placeholder="{{__('sales.type_here_input_new_cust')}}" required>
                 </td>
                  <td>
                    <input type="text" name="name" id="customerName" value="{{isset($customer_name)?$customer_name:''}}" class="form-control">
                    <div>
                    @if(isset($name_generated))
                     @if($name_generated)
-                    <span class="badge badge-warning">اسم منشأ من قبل النظام يمكنك تغييره</span>
+                    <span class="badge badge-warning">{{__('sales.generated_name')}}</span>
                     @endif
                     @endif
                    </div>
                  </td>
                 <td>
-                  <button type="submit" class="btn btn-primary"> بحث / اضافة </button>
+                  <button type="submit" class="btn btn-primary"> {{__('sales.search/add')}} </button>
                 </td>
                </tr>
          </tbody>
@@ -217,16 +217,16 @@ select{
     <div class="row">
   <div class="col-md-12">
     <button class="btn btn-secondary dropdown-toggle" type="button" id="toggle-invoices" >
-       المبيعات السابقة 
+      {{__('sales.previous_sales')}}  
   </button>
     <div id="invoices" class="card">
       <div class="card-header card-header-primary">
         @isset($invoices)
         @if($invoices)
-        <h4 class="card-title ">المبيعات السابقة {{$invoices->count()}}</h4>
+        <h4 class="card-title "> {{__('sales.previous_sales')}} {{$invoices->count()}}</h4>
         @endisset
         @else
-        <h4 class="card-title "> لا يوجد مبيعات سابقة </h4>
+        <h4 class="card-title "> {{__('sales.no_previous_sales')}} </h4>
         @endif
       </div>
       @isset($invoices)
@@ -236,19 +236,19 @@ select{
           <table  class="table">
             <thead class="text-primary">
               <th>
-                رقم الفاتورة
+                {{__('sales.invoice_code')}} 
               </th>
               <th>
-                حالة الفاتورة
+                {{__('sales.invoice_status')}} 
               </th>
               <th>
-                المبلغ الكلي
+                {{__('sales.total_price')}}
               </th>
               <th>
-                التاريخ
+                {{__('sales.date')}}
               </th>
               <th>
-                موظف البيع
+                {{__('sales.sales_employee')}} 
               </th>
             </thead>
             <tbody>
@@ -288,7 +288,7 @@ select{
   <div class="col-md-12">
     
     <button class="btn btn-secondary dropdown-toggle" type="button" id="toggle-recipe" >
-     الوصفة الطبية 
+      {{__('sales.prescription')}} 
   </button>
   @if(isset($saved_recipe) && count($saved_recipe)>0)
   <div id="recipe" class="card">
@@ -296,14 +296,14 @@ select{
     <div id="recipe" class="card">
       @endif
       <div class="card-header card-header-primary">
-        <h4 class="card-title ">الوصفة الطبية</h4>
+        <h4 class="card-title ">  {{__('sales.prescription')}}  </h4>
       </div>
       <div class="card-body">
         <div class="table-responsive">
           <table id="myTable" class="table table-bordered">
             <thead class="text-primary">
               @if(isset($saved_recipe) && count($saved_recipe)>0)
-              <span class="badge badge-success"> مؤرشف  </span>
+              <span class="badge badge-success"> {{__('sales.archived')}}  </span>
               @endif
               <th style="text-align: center; font-weight: bold; font-size: 18px;">
                 EYE  
@@ -638,19 +638,16 @@ select{
                     Barcode  
                   </th>
                   <th>
-                    الاسم  
+                    {{__('sales.name')}}  
                   </th>
                   <th>
-                    المواصفات  
+                    {{__('sales.price')}}  
                   </th>
                   <th>
-                    السعر  
-                  </th>
-                  <th>
-                    الكمية 
+                    {{__('sales.quantity')}} 
                   </th>
                   <th id="del" class="">
-                    تم تسليمها  
+                    {{__('sales.delivered')}}   
                   </th>
                   <th>
                   </th>
@@ -662,14 +659,25 @@ select{
                       <td>
                         <input type="hidden" name="repo_id" id="repo_id" class="form-control" value="{{$repository->id}}">
                           
-                          <input type="text" id="bar0" name="barcode[]" value="{{old('barcode0')}}"  class="form-control barcode" placeholder="مدخل خاص ب scanner" id="autofocus">
+                          <input type="text" id="bar0" name="barcode[]" value="{{old('barcode0')}}"  class="form-control barcode" placeholder="{{__('sales.scanner_input')}}" id="autofocus">
                       </td>
+                      @if(LaravelLocalization::getCurrentLocale() == 'ar')
                       <td>
+                        <input type="text" id="name0"  name="name[]" value="{{old('name0')}}" class="form-control name blank" readonly>
+                      </td>
+                      <td class="displaynone">
+                       {{-- we get the english input beacause we need it in storing invoice details all --}}
+                        <input type="text" id="details0"  name="details[]" value="{{old('details0')}}" class="form-control details blank" readonly>
+                      </td>
+                      @else
+                      <td class="displaynone">
+                        {{-- we get the arabic input beacause we need it in storing invoice details all --}}
                         <input type="text" id="name0"  name="name[]" value="{{old('name0')}}" class="form-control name blank" readonly>
                       </td>
                       <td>
                         <input type="text" id="details0"  name="details[]" value="{{old('details0')}}" class="form-control details blank" readonly>
                       </td>
+                      @endif
                       <td style="display: none;">
                         <input type="hidden" id="cost_price0"  name="cost_price[]" value="{{old('cost_price0')}}" class="form-control blank" readonly>
                       </td>
@@ -695,14 +703,23 @@ select{
                    <div>
                     <tr id="record{{$count}}" class="displaynone">
                       <td>
-                          <input type="text" id="bar{{$count}}" name="barcode[]" value="{{old('barcode[$count]')}}"  class="form-control barcode" placeholder="مدخل خاص ب scanner" id="autofocus">
+                          <input type="text" id="bar{{$count}}" name="barcode[]" value="{{old('barcode[$count]')}}"  class="form-control barcode" placeholder="{{__('sales.scanner_input')}}" id="autofocus">
                       </td>
-                      <td>
+                      @if(LaravelLocalization::getCurrentLocale() == 'ar')
+                      <td>{{-- الاسم بالعربي --}}
+                        <input type="text" id="name{{$count}}"  name="name[]" value="{{old('name.'.$count)}}" class="form-control name blank" readonly>
+                      </td>
+                      <td class="displaynone">{{-- الاسم بالانكليزي --}}
+                        <input type="text" id="details{{$count}}"  name="details[]" value="{{old('details.'.$count)}}" class="form-control details blank" readonly>
+                      </td>
+                      @else
+                      <td class="displaynone">
                         <input type="text" id="name{{$count}}"  name="name[]" value="{{old('name.'.$count)}}" class="form-control name blank" readonly>
                       </td>
                       <td>
                         <input type="text" id="details{{$count}}"  name="details[]" value="{{old('details.'.$count)}}" class="form-control details blank" readonly>
                       </td>
+                      @endif
                       <td style="display: none;">
                         <input type="hidden" id="cost_price{{$count}}"  name="cost_price[]" value="{{old('cost_price.'.$count)}}" class="form-control blank" readonly>
                       </td>
@@ -731,14 +748,14 @@ select{
        <div id="cash-info">
         <div>
           <h5>
-             المجموع 
+            {{__('sales.sum')}} 
           </h5>
           {{--<h1 id="total_price">{{$invoice_total_price}}</h1>--}}
           <input type="number" name="sum" id="total_price" class="form-control" value="0" readonly>
         </div>
  
         <div id="tax-container">
-          <h5>الضريبة</h5>
+          <h5>{{__('sales.tax')}}</h5>
          <div style="display: flex; flex-direction: column; margin-top: 3px;">
            <div style="display: flex;">
              <input type="number" name="taxprint" value="0"  id="taxfield" class="form-control" readonly>
@@ -749,7 +766,7 @@ select{
  
        <div>
          <h5>
-           المبلغ الإجمالي 
+          {{__('sales.total_price')}} 
          </h5>
          {{--<h1 id="total_price">{{$invoice_total_price}}</h1>--}}
          <input type="number" name="total_price" id="final_total_price" class="form-control" value="0" readonly>
@@ -758,7 +775,7 @@ select{
        {{--<i class="material-icons">add_circle</i>--}}
        <div id="settings">
         <div id="min" class="">
-          <span class="badge badge-success hidden" id="badgecolor"> الحد الأدنى للدفع <div id="minVal"></div></span>
+          <span class="badge badge-success hidden" id="badgecolor">   {{__('sales.min_limit_pay')}} <div id="minVal"></div></span>
          {{--<input type="hidden" class="" id="inputmin" value="{{($repository->min_payment*$invoice_total_price)/100}}">--}}
          <input type="hidden" class="" id="inputmin" value="">
          <input type="hidden" class="" id="percent" value="{{$repository->min_payment}}">
@@ -767,14 +784,14 @@ select{
         <div>
           <div style="display: flex; flex-direction: column; margin-top: 10px">
             <div style="display: flex;">
-          <h4> &nbsp;الدفع كاش</h4>
+          <h4> &nbsp; {{__('sales.cash')}}</h4>
           <input style="margin: 7px 10px 0 0" type="checkbox" name="cash" id="cash" checked>
             </div>
           <input style="margin-right: 0px" type="number" min="0.1" step="0.01" name="cashVal" id="cashVal" value="" class="form-control visible">
           </div>
           <div style="display: flex;flex-direction: column;">
             <div style="display: flex;">
-          <h4> &nbsp;الدفع بالبطاقة</h4>
+          <h4> &nbsp; {{__('sales.card')}}</h4>
           <input style="margin: 7px 10px 0 0" type="checkbox" id="card" name="card">
             </div>
           <input style="margin-right: 0px" type="number" min="0.1" step="0.01" name="cardVal" id="cardVal" value="" class="form-control hidden">
@@ -787,7 +804,7 @@ select{
          
 
           <div id="buttons">
-            <button  id="submit" type="submit" class="btn btn-primary">تأكيد</button>
+            <button  id="submit" type="submit" class="btn btn-primary">{{__('buttons.confirm')}}</button>
           </form>
             <form action="{{route('save.special.invoice',$repository->id)}}" method="POST">
               @csrf
@@ -804,10 +821,10 @@ select{
               <input type="text" name="customer_phone_s" value="{{isset($phone)?$phone:''}}">
               <input type="text" name="customer_name_s" value="{{isset($customer_name)?$customer_name:''}}">
               </div>
-              <button type="submit" class="btn btn-success">حفظ</button>
+              <button type="submit" class="btn btn-success">{{__('buttons.save')}}</button>
             </form>
             {{--<a onclick="PrintElem($('#print-content').attr('id'));" style="color: white" class="btn btn-success">حفظ</a>--}}
-            <a href="{{route('create.special.invoice',$repository->id)}}" style="color: white;" class="btn btn-danger">الغاء</a>
+            <a href="{{route('create.special.invoice',$repository->id)}}" style="color: white;" class="btn btn-danger">{{__('buttons.cancel')}}</a>
           </div>
           </div>
        </div>
@@ -854,9 +871,9 @@ select{
            //dataType: 'json',
           success: function(data){    // data is the response come from controller
             $.each(data,function(i,value){
-              $('#name'+gold+'').val(value.name);
+              $('#name'+gold+'').val(value.name_ar);
               //$('#name'+gold+'').addClass('ajaxSuccess');
-              $('#details'+gold+'').val(value.details);
+              $('#details'+gold+'').val(value.name_en);
               $('#cost_price'+gold+'').val(value.cost_price);
               //$('#details'+gold+'').addClass('ajaxSuccess');
               $('#price'+gold+'').val(value.price);

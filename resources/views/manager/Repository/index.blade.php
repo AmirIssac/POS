@@ -49,7 +49,7 @@
                     <div class="card-icon">
                       <i class="material-icons">qr_code_scanner</i>
                     </div>
-                    <p class="card-category">اضافة مخزون</p>
+                    <p class="card-category">{{__('repository.add_stock')}}</p>
                     <h6 class="card-title">scanner
                     </h6>
                   </div>
@@ -70,7 +70,7 @@
                         <div class="card-icon">
                           <i class="material-icons">download</i>
                         </div>
-                        <p class="card-category">استيراد مخزون</p>
+                        <p class="card-category">{{__('repository.import_stock')}}</p>
                         <h6 class="card-title">Excel
                         </h6>
                       </div>
@@ -91,7 +91,7 @@
                     <div class="card-icon">
                       <i class="material-icons">category</i>
                     </div>
-                    <p class="card-category">عرض البضائع</p>
+                    <p class="card-category">{{__('repository.view_products')}}</p>
                     <h6 class="card-title">
                     </h6>
                   </div>

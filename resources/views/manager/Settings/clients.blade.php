@@ -30,23 +30,23 @@
           
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title"> العملاء </h4>
+              <h4 class="card-title"> {{__('sales.customers')}} </h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table">
                   <thead class=" text-primary">
                     <th>
-                      الاسم  
+                      {{__('sales.name')}}  
                     </th>
                     <th>
-                      الجوال  
+                      {{__('sales.customer_mobile')}}  
                     </th>
                     <th>
-                      النقاط  
+                      {{__('sales.points')}}  
                     </th>
                     <th>
-                      تعديل  
+                      {{__('sales.edit')}}  
                     </th>
                   </thead>
                   <tbody>

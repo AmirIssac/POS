@@ -100,22 +100,19 @@ input[type=number] {
                 <thead class="text-primary">
                   <h4>
                   <span class="badge badge-success">
-                      تفاصيل الفاتورة  </span> <input type="text" name="date" value="{{$date}}" readonly></h4>
-                      <h4>رقم الفاتورة {{$invoice->code}}</h4>
+                    {{__('sales.invoice_details')}}   </span> <input type="text" name="date" value="{{$date}}" readonly></h4>
+                      <h4>{{__('sales.invoice_code')}}  {{$invoice->code}}</h4>
                   <th>
-                    الاسم  
+                    {{__('sales.name')}}  
                   </th>
                   <th>
-                    التفاصيل 
+                    {{__('sales.price')}} 
                   </th>
                   <th>
-                    السعر 
+                    {{__('sales.quantity')}} 
                   </th>
                   <th>
-                    الكمية 
-                  </th>
-                  <th>
-                    الواجب تسليمها 
+                    {{__('sales.must_deliver')}}  
                   </th>
                 </thead>
                 <tbody>
@@ -129,10 +126,7 @@ input[type=number] {
                      <tr>
                         <td>
                           <input type="hidden" name="barcode[]" value="{{$detail['barcode']}}">
-                            {{$detail['name']}}
-                        </td>
-                        <td>
-                          {{$detail['detail']}}
+                            {{$detail['name_'.LaravelLocalization::getCurrentLocale()]}}
                         </td>
                         <td>
                           {{$detail['price']}}
@@ -152,37 +146,37 @@ input[type=number] {
        </table>
        <div>
          <span style="font-size: 22px;" class="badge badge-success">
-           المبلغ الإجمالي 
+          {{__('sales.total_price')}}  
          </span>
          {{--<h1 id="total_price">{{$invoice_total_price}}</h1>--}}
          <input type="number" name="total_price" id="total_price" class="form-control" value="{{$invoice->total_price}}" readonly>
        </div>
        <div>
         <span style="font-size: 22px;" class="badge badge-warning">
-            المبلغ المتبقي للدفع 
+          {{__('sales.remaining_price_complete')}}   
           </span>
           <input type="number" name="extra_price" id="extra_price" class="form-control" value="{{($invoice->total_price)-($invoice->cash_amount+$invoice->card_amount)}}" readonly>
        </div>
   <div id="paymethods" style="margin:10px 0;">
-        <span class="badge badge-secondary"> طرق الدفع </span>
+        <span class="badge badge-secondary"> {{__('sales.payment_methods')}}  </span>
         <div style="display: flex; flex-direction: column; margin-top: 10px">
           <div style="display: flex;">
-        <h4> &nbsp;الدفع كاش</h4>
+        <h4> &nbsp; {{__('sales.cash')}}</h4>
         <input style="margin: 7px 10px 0 0" type="checkbox" name="cash" id="cash" checked>
           </div>
         <input style="margin-right: 0px" type="number" min="0,1" step="0.1" name="cashVal" id="cashVal" value="{{($invoice->total_price)-($invoice->cash_amount+$invoice->card_amount)}}" class="form-control visible">
         </div>
         <div style="display: flex;flex-direction: column;">
           <div style="display: flex;">
-        <h4> &nbsp;الدفع بالبطاقة</h4>
+        <h4> &nbsp; {{__('sales.card')}}</h4>
         <input style="margin: 7px 10px 0 0" type="checkbox" id="card" name="card">
           </div>
         <input style="margin-right: 0px" type="number" min="0.1" step="0.1" name="cardVal" id="cardVal" value="" class="form-control hidden">
         </div>
 </div>
         {{--<button onclick="window.print();" class="btn btn-success"> طباعة </button>--}}
-        <button onclick="window.print();" type="submit" class="btn btn-danger"> استكمال الفاتورة وطباعتها </button>
-        <a href="javascript:history.back()" class="btn btn-warning" id="back"> رجوع </a>
+        <button onclick="window.print();" type="submit" class="btn btn-danger">   {{__('buttons.complete_invoice_print')}} </button>
+        <a href="javascript:history.back()" class="btn btn-warning" id="back"> {{__('buttons.back')}} </a>
    </div>
 </div>
 </div>

@@ -25,6 +25,9 @@ form i:hover{
 .row{
   margin-right: 100px;
 }
+.displaynone{
+  display: none;
+}
 </style>
 @endsection
 @section('body')
@@ -51,7 +54,7 @@ form i:hover{
       <div class="col-md-12">
         <div class="card">
           <div class="card-header card-header-primary">
-            <h4 class="card-title ">اضافة فاتورة جديدة</h4>
+            <h4 class="card-title ">{{__('sales.add_new_invoice')}}</h4>
           </div>
           <div class="card-body">
             <div class="table-responsive">
@@ -61,16 +64,13 @@ form i:hover{
                     Barcode  
                   </th>
                   <th>
-                    الاسم  
+                    {{__('sales.name')}}  
                   </th>
                   <th>
-                    المواصفات  
+                    {{__('sales.price')}}  
                   </th>
                   <th>
-                    السعر  
-                  </th>
-                  <th>
-                    الكمية 
+                    {{__('sales.quantity')}} 
                   </th>
                 </thead>
 
@@ -80,14 +80,23 @@ form i:hover{
                     <tr>
                       <td>
                         <input type="hidden" name="repo_id" id="repo_id" class="form-control" value="{{$repository->id}}">
-                          <input type="text" id="bar{{$count}}" name="barcode[]" value="{{old('barcode[$count]')}}"  class="form-control barcode" placeholder="مدخل خاص ب scanner" id="autofocus">
+                          <input type="text" id="bar{{$count}}" name="barcode[]" value="{{old('barcode[$count]')}}"  class="form-control barcode" placeholder="{{__('sales.scanner_input')}}" id="autofocus">
                       </td>
-                      <td>
+                      @if(LaravelLocalization::getCurrentLocale() == 'ar')
+                      <td> {{-- الاسم بالعربي --}}
+                        <input type="text" id="name{{$count}}"  name="name[]" value="{{old('name.'.$count)}}" class="form-control name blank">
+                      </td> {{-- الاسم بالانكليزي --}}
+                      <td class="displaynone"> {{-- because we need it to store invoice detail--}}
+                        <input type="text" id="details{{$count}}"  name="details[]" value="{{old('details.'.$count)}}" class="form-control details blank">
+                      </td>
+                      @else
+                      <td class="displaynone"> {{-- because we need it to store invoice detail--}}
                         <input type="text" id="name{{$count}}"  name="name[]" value="{{old('name.'.$count)}}" class="form-control name blank">
                       </td>
                       <td>
                         <input type="text" id="details{{$count}}"  name="details[]" value="{{old('details.'.$count)}}" class="form-control details blank">
                       </td>
+                      @endif
                       <td>
                         <input type="text" id="price{{$count}}"  name="price[]" value="{{old('price.'.$count)}}" class="form-control price blank">
                       </td>
@@ -103,7 +112,7 @@ form i:hover{
             @endfor
          </tbody>
        </table>
-       <button id="submit"  type="submit" class="btn btn-success"> عرض الفاتورة</button>
+       <button id="submit"  type="submit" class="btn btn-success"> {{__('buttons.view_invoice')}} </button>
        {{--<i class="material-icons">add_circle</i>--}}
    </div>
 </div>
@@ -143,9 +152,9 @@ window.onload=function(){
            //dataType: 'json',
           success: function(data){    // data is the response come from controller
             $.each(data,function(i,value){
-              $('#name'+gold+'').val(value.name);
+              $('#name'+gold+'').val(value.name_ar);
               $('#name'+gold+'').addClass('ajaxSuccess');
-              $('#details'+gold+'').val(value.details);
+              $('#details'+gold+'').val(value.name_en);
               $('#details'+gold+'').addClass('ajaxSuccess');
               $('#price'+gold+'').val(value.price);
               $('#price'+gold+'').addClass('ajaxSuccess');

@@ -57,7 +57,7 @@ input[type=number] {
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title"> تقرير يومي {{$report->created_at->format('d/m/Y')}}<span class="button"><button onclick="window.print();" class="btn btn-danger"> طباعة </button> </span>
+              <h4 class="card-title">  {{__('reports.daily_report')}} {{$report->created_at->format('d/m/Y')}}<span class="button"><button onclick="window.print();" class="btn btn-danger"> {{__('buttons.print')}} </button> </span>
               </h4>
             </div>
             <div class="card-body">
@@ -65,22 +65,22 @@ input[type=number] {
                 <table class="table">
                   <thead class=" text-primary">
                     <th>
-                     رقم الفاتورة  
+                      {{__('sales.invoice_code')}}   
                     </th>
                     <th>
-                     حالة الفاتورة   
+                      {{__('sales.invoice_status')}}    
                      </th>
                      <th>
-                      موظف البيع    
+                      {{__('sales.sales_employee')}}    
                       </th>
                      <th>
-                      كاش    
+                      {{__('sales.cash')}}    
                       </th>
                       <th>
-                        بطاقة    
+                        {{__('sales.card')}}    
                         </th>
                      <th>
-                        المبلغ الكلي   
+                      {{__('sales.total_price')}}   
                       </th>
                   </thead>
                   <tbody>
@@ -93,11 +93,11 @@ input[type=number] {
 
                         @if($invoice->status=='delivered')
                         <td>
-                         تم التسليم
+                          {{__('sales.del_badge')}} 
                         </td>
                         @else
                         <td>
-                         معلقة
+                          {{__('sales.hang_badge')}}
                         </td>
                         @endif
                       <td>
@@ -117,41 +117,41 @@ input[type=number] {
                     @endforeach
                     <tr class="price">
                       <td>
-                        الدرج&nbsp;{{$report->cash_balance+($report->cash_plus-$report->cash_shortage)}}
+                        {{__('reports.cashier')}}&nbsp;{{$report->cash_balance+($report->cash_plus-$report->cash_shortage)}}
                       </td>
                       <td>
-                        البطاقة&nbsp;{{$report->card_balance+($report->card_plus-$report->card_shortage)}}
-                      </td>
-                    </tr>
-                    <tr class="price">
-                      <td>
-                        مقدار النقص بالدرج &nbsp;{{$report->cash_shortage}}
-                      </td>
-                      <td>
-                        مقدار النقص بالبطاقة &nbsp;{{$report->card_shortage}}
+                        {{__('sales.card')}}&nbsp;{{$report->card_balance+($report->card_plus-$report->card_shortage)}}
                       </td>
                     </tr>
                     <tr class="price">
                       <td>
-                        مقدار الزيادة بالدرج &nbsp;{{$report->cash_plus}} 
+                        {{__('reports.decrease_amount_in_cashier')}}   &nbsp;{{$report->cash_shortage}}
                       </td>
                       <td>
-                        مقدار الزيادة بالبطاقة &nbsp;{{$report->card_plus}} 
-                      </td>
-                    </tr>
-                    <tr class="price">
-                      <td>
-                        مجموع الفواتير &nbsp;&nbsp;{{$total_sum_invoices}}
+                        {{__('reports.decrease_amount_in_card')}} &nbsp;{{$report->card_shortage}}
                       </td>
                     </tr>
                     <tr class="price">
                       <td>
-                         اجمالي الرصيد &nbsp;&nbsp;{{$report->cash_balance+($report->cash_plus-$report->cash_shortage) + $report->card_balance+($report->card_plus-$report->card_shortage)}}
+                        {{__('reports.increase_amount_in_cashier')}}   &nbsp;{{$report->cash_plus}} 
+                      </td>
+                      <td>
+                        {{__('reports.increase_amount_in_card')}} &nbsp;{{$report->card_plus}} 
                       </td>
                     </tr>
                     <tr class="price">
                       <td>
-                       موظف الإغلاق  &nbsp;  : &nbsp;{{$report->user->name}}
+                        {{__('reports.sum_invoices')}} &nbsp;&nbsp;{{$total_sum_invoices}}
+                      </td>
+                    </tr>
+                    <tr class="price">
+                      <td>
+                        {{__('reports.total_balance')}} &nbsp;&nbsp;{{$report->cash_balance+($report->cash_plus-$report->cash_shortage) + $report->card_balance+($report->card_plus-$report->card_shortage)}}
+                      </td>
+                    </tr>
+                    <tr class="price">
+                      <td>
+                        {{__('reports.close_employee')}}  &nbsp;  : &nbsp;{{$report->user->name}}
                       </td>
                       <td>
                       </td>
@@ -160,7 +160,7 @@ input[type=number] {
                       <td>
                       </td>
                       <td class="button">
-                        <button onclick="window.print();" class="btn btn-danger"> طباعة </button>
+                        <button onclick="window.print();" class="btn btn-danger"> {{__('buttons.print')}} </button>
                       </td>
                     </tr>
                   </tbody>

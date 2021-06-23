@@ -14,11 +14,13 @@ class CreateInvoicesTable extends Migration
     public function up()
     {
         Schema::create('invoices', function (Blueprint $table) {
-            $table->id();
+            $table->id(); 
             $table->foreignId('repository_id');
             $table->foreignId('user_id');   // the cashier who print this invoice
+            $table->foreignId('customer_id')->nullable()->default(null); // null in original repository
             $table->string('code',8);
             $table->string('details',10000);
+            $table->string('recipe',1000)->nullable()->default(null); //الوصفة الطبية
             $table->float('total_price');
             $table->boolean('cash_check')->default(0);
             $table->boolean('card_check')->default(0);

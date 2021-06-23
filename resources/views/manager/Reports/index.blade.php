@@ -34,8 +34,8 @@
                    <div class="card-icon">
                    <i class="material-icons">receipt</i>
                    </div>
-                   <p class="card-category">الفواتير</p>
-                   <h6 class="card-title">عرض</h6>
+                   <p class="card-category">{{__('reports.invoices')}}</p>
+                   <h6 class="card-title">{{__('reports.view')}}</h6>
                  </div>
                  <div class="card-footer">
                    <div class="stats">
@@ -54,8 +54,8 @@
                    <div class="card-icon">
                    <i class="material-icons">auto_stories</i>
                    </div>
-                   <p class="card-category">التقارير اليومية</p>
-                   <h6 class="card-title">عرض</h6>
+                   <p class="card-category">{{__('reports.daily_reports')}}</p>
+                   <h6 class="card-title">{{__('reports.view')}}</h6>
                  </div>
                  <div class="card-footer">
                    <div class="stats">

@@ -38,26 +38,23 @@
           <div class="card">
             <div class="card-header card-header-primary">
               <h4 class="card-title">   {{$invoice->created_at}}</h4>
-              <h4>رقم الفاتورة <span class="badge badge-success">{{$invoice->code}}</span></h4>
+              <h4> {{__('sales.invoice_code')}}<span class="badge badge-success">{{$invoice->code}}</span></h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table">
                   <thead class=" text-primary">
                     <th>
-                      الاسم  
+                      {{__('sales.name')}}  
                     </th>
                     <th>
-                      التفاصيل  
+                      {{__('sales.price')}}  
                     </th>
                     <th>
-                      السعر  
+                      {{__('sales.quantity')}}  
                     </th>
                     <th>
-                        الكمية  
-                    </th>
-                    <th>
-                        تم تسليمها  
+                      {{__('sales.delivered')}}   
                     </th>
                   </thead>
                   <tbody>
@@ -65,10 +62,7 @@
                     @if($detail)
                     <tr>
                         <td>
-                            {{$detail['name']}}
-                        </td>
-                        <td>
-                          {{$detail['detail']}}
+                            {{$detail['name_'.LaravelLocalization::getCurrentLocale()]}}
                         </td>
                         <td>
                           {{$detail['price']}}
@@ -84,22 +78,22 @@
                     @endforeach
                     <tr>
                         <td>
-                            السعر الكلي
+                          {{__('sales.total_price')}} 
                         </td>
                         <td>
-                              كاش
+                          {{__('sales.cash')}}
                         </td>
                         <td>
-                              بطاقة
+                          {{__('sales.card')}}
                         </td>
                         <td>
-                            حالة الفاتورة
+                          {{__('sales.invoice_status')}} 
                         </td>
                         <td>
-                            رقم الزبون
+                          {{__('sales.customer_mobile')}} 
                         </td>
                         <td>
-                          موظف البيع 
+                          {{__('sales.sales_employee')}}  
                       </td>
                     </tr>
                     <tr>
@@ -132,11 +126,11 @@
                         <td>
                             @if($invoice->status=="delivered")
                             <span class="badge badge-success">
-                                تم التسليم
+                                {{__('sales.del_badge')}} 
                             </span>
                             @else
                             <span class="badge badge-warning">
-                                معلقة
+                              {{__('sales.hang_badge')}}
                             </span>
                             @endif 
                         </td>
@@ -144,7 +138,7 @@
                             @if($invoice->phone)
                             {{$invoice->phone}}
                             @else
-                            لا يوجد رقم زبون
+                            {{__('sales.no_number')}}
                             @endif
                         </td>
                         <td>
@@ -154,10 +148,10 @@
                   </tbody>
                 </table>
                 <di>
-                  المبلغ المتبقي للاستكمال
+                  {{__('sales.remaining_price_complete')}}
                     <h2>{{($invoice->total_price)-($invoice->cash_amount+$invoice->card_amount)}}</h2>
                 </div>
-                  <button type="submit" class="btn btn-danger"> استكمال </button>
+                  <button type="submit" class="btn btn-danger"> {{__('sales.complete')}} </button>
                 </form>
               </div>
             </div>
@@ -167,7 +161,7 @@
       @endforeach
       @else
       <span id="warning" class="badge badge-warning">
-        لا يوجد فواتير معلقة
+        {{__('sales.no_hanging_invoices')}}
       </span>
       @endif
     </div>

@@ -88,9 +88,6 @@
                               الاسم  
                             </th>
                             <th>
-                              المواصفات  
-                            </th>
-                            <th>
                               السعر  
                             </th>
                             <th>
@@ -108,11 +105,8 @@
                                 <td>
                                     <input type="text"  name="barcode[]" value="{{$records[$i]['barcode']}}"  class="form-control barcode" readonly>
                                 </td>
-                                <td>
-                                  <input type="text"   name="name[]" value="{{$records[$i]['name']}}" class="form-control name blank" readonly>
-                                </td>
-                                <td>
-                                  <input type="text"   name="details[]" value="{{$records[$i]['details']}}" class="form-control details blank" readonly>
+                                <td>  {{-- في الطباعة تم الطلب بعرض الاسم بالعربية فقط دوما --}}
+                                  <input type="text"   name="name[]" value="{{$records[$i]['name_ar']}}" class="form-control name blank" readonly>
                                 </td>
                                 <td style="display: none;">
                                   <input type="hidden"  name="cost_price[]" value="{{$records[$i]['cost_price']}}" class="form-control blank" readonly>

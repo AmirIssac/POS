@@ -13,7 +13,11 @@
 
  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
  <!DOCTYPE html>
+ @if( LaravelLocalization::getCurrentLocale() == 'en')
+ <html lang="fa">
+ @elseif(LaravelLocalization::getCurrentLocale() == 'ar')
  <html lang="fa" dir="rtl">
+  @endif
  
  <head>
    <meta charset="utf-8" />
@@ -37,11 +41,15 @@
    <link href="{{asset('public/css/material-dashboard-rtl.min.css?v=1.1')}}" rel="stylesheet" />
    <!-- CSS Just for demo purpose, don't include it in your project -->
    <link href="{{asset('public/demo/demo.css')}}" rel="stylesheet" />
+   @if(LaravelLocalization::getCurrentLocale() == 'ar')
    <style>
      body{
        text-align: right !important;
        direction: rtl !important;
      }
+     </style>
+    @endif
+     <style>
      form a:hover{
        color: white !important;
      }
@@ -138,7 +146,7 @@
             <li class="nav-item {{ request()->is('dashboard')||request()->is('/') ? 'active' : '' }}">
               <a class="nav-link" href="/">
                 <i class="material-icons">dashboard</i>
-                <p>لوحة تحكم مالك-مخزن</p>
+                <p> {{__('menu.owner_dashboard')}}</p>
               </a>
             </li>
             @endcan
@@ -146,7 +154,7 @@
             <li class="nav-item {{ request()->is('dashboard')||request()->is('/') ? 'active' : '' }}">
               <a class="nav-link" href="/">
                 <i class="material-icons">dashboard</i>
-                <p>لوحة تحكم موظف</p>
+                <p>{{__('menu.employee')}}</p>
               </a>
             </li>
             @endcan
@@ -154,7 +162,7 @@
            <li class="nav-item {{ request()->is('sales')? 'active' : ''}}">
             <a class="nav-link" href="{{route('sales.index')}}">
               <i class="material-icons">shopping_bag</i>
-              <p>المبيعات</p>
+              <p>{{__('menu.sales')}}</p>
             </a>
           </li>
           @endcan
@@ -162,7 +170,7 @@
           <li class="nav-item {{ request()->is('reports')? 'active' :'' }}">
             <a class="nav-link" href="{{route('reports.index')}}">
               <i class="material-icons">receipt_long</i>
-              <p>التقارير</p>
+              <p>{{__('menu.reports')}}</p>
             </a>
           </li>
          @endcan
@@ -170,7 +178,7 @@
           <li class="nav-item {{ request()->is('repository')||request()->is('add/product/form/*')||request()->is('show/products/*')||request()->is('import/products/excel/*')? 'active' : ''}}">
             <a class="nav-link" href="{{route('repository.index')}}">
               <i class="material-icons">store</i>
-              <p>المخزون</p>
+              <p>{{__('menu.store')}}</p>
             </a>
           </li>
           @endcan
@@ -178,7 +186,7 @@
           <li class="nav-item {{ request()->is('cashier')? 'active' : ''}}">
             <a class="nav-link" href="{{route('cashier.index')}}">
               <i class="material-icons">point_of_sale</i>
-              <p>الكاشير</p>
+              <p>{{__('menu.cashier')}}</p>
             </a>
           </li>
           @endcan
@@ -186,7 +194,7 @@
           <li class="nav-item {{ request()->is('manager/settings')? 'active' : ''}}">
             <a class="nav-link" href="{{route('manager.settings.index')}}">
               <i class="material-icons">settings</i>
-              <p>الإعدادات</p>
+              <p>{{__('menu.settings')}}</p>
             </a>
           </li>
           @endcan
@@ -194,7 +202,7 @@
           <li class="nav-item">
             <a class="nav-link" href="#">
               <i class="material-icons">support_agent</i>
-              <p>الدعم التقني</p>
+              <p>{{__('menu.tech_support')}}</p>
             </a>
           </li>
           @endcan
@@ -243,16 +251,19 @@
           <span class="navbar-toggler-icon icon-bar"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end">
-          <form class="navbar-form">
-            <div class="input-group no-border">
-              <input type="text" value="" class="form-control" placeholder="Search...">
-              <button type="submit" class="btn btn-white btn-round btn-just-icon">
-                <i class="material-icons">search</i>
-                <div class="ripple-container"></div>
-              </button>
-            </div>
-          </form>
+          
           <ul class="navbar-nav">
+            {{-- laravel localization language selector --}}
+           {{-- @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties) --}}
+            <li>
+                <a rel="alternate" hreflang="ar" href="{{ LaravelLocalization::getLocalizedURL('ar', null, [], true) }}">
+                  <img src="{{asset('public/img/ar_lang.png')}}" width="75px" height="50px">
+                </a>
+                <a rel="alternate" hreflang="en" href="{{ LaravelLocalization::getLocalizedURL('en', null, [], true) }}">
+                  <img src="{{asset('public/img/en_lang.png')}}" width="75px" height="50px">
+                </a>
+            </li>
+         {{-- @endforeach --}}
             <li class="nav-item">
               <a class="nav-link" href="javascript:;">
                 <i class="material-icons">email</i>
@@ -290,6 +301,7 @@
                 </form>
               </div>
             </li>
+         
           </ul>
         </div>
       </div>

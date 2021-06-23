@@ -32,7 +32,7 @@
                    <div class="card-icon">
                      <i class="material-icons">attach_money</i>
                    </div>
-                   <p class="card-category"> أرباح اليوم</p>
+                   <p class="card-category">{{__('dashboard.today_revenue')}}</p>
                    <h3 class="card-title">0
                    </h3>
                  </div>
@@ -49,7 +49,7 @@
                    <div class="card-icon">
                      <i class="material-icons">account_balance_wallet</i>
                    </div>
-                   <p class="card-category">الخزينة</p>
+                   <p class="card-category">{{__('dashboard.safe')}}</p>
                    <h3 class="card-title">{{$repository->cash_balance+$repository->card_balance}}</h3>
                  </div>
                  <div class="card-footer">
@@ -70,7 +70,7 @@
                    <div class="card-icon">
                      <i class="material-icons">qr_code_2</i>
                    </div>
-                   <p class="card-category">عدد المنتجات</p>
+                   <p class="card-category">{{__('dashboard.number_of_products')}}</p>
                    <h3 class="card-title">{{$repository->productsCount()}}</h3>   {{-- custom func in Repository model --}}
                  </div>
                  <div class="card-footer">
@@ -86,7 +86,7 @@
                    <div class="card-icon">
                     <i class="material-icons">badge</i>
                    </div>
-                   <p class="card-category">عدد الموظفين</p>
+                   <p class="card-category">{{__('dashboard.number_of_employees')}}</p>
                    <h3 class="card-title">{{$repository->workersCount()}}</h3>
                  </div>
                  <div class="card-footer">
@@ -104,14 +104,14 @@
                    <div class="ct-chart" id="dailySalesChart"></div>
                  </div>
                  <div class="card-body">
-                   <h4 class="card-title">معلومات</h4>
+                   <h4 class="card-title">{{__('dashboard.information')}}</h4>
                    <p class="card-category">
                      <span class="text-success">
-                       <i class="fa fa-long-arrow-up"></i> 55% </span> معلومات.</p>
+                       <i class="fa fa-long-arrow-up"></i> 55% </span> {{__('dashboard.information')}}.</p>
                  </div>
                  <div class="card-footer">
                    <div class="stats">
-                     <i class="material-icons">access_time</i> معلومات  
+                     <i class="material-icons">access_time</i> {{__('dashboard.information')}}  
                    </div>
                  </div>
                </div>
@@ -122,12 +122,12 @@
                    <div class="ct-chart" id="websiteViewsChart"></div>
                  </div>
                  <div class="card-body">
-                   <h4 class="card-title"> معلومات</h4>
-                   <p class="card-category">معلومات</p>
+                   <h4 class="card-title"> {{__('dashboard.information')}}</h4>
+                   <p class="card-category">{{__('dashboard.information')}}</p>
                  </div>
                  <div class="card-footer">
                    <div class="stats">
-                     <i class="material-icons">access_time</i>  معلومات
+                     <i class="material-icons">access_time</i>  {{__('dashboard.information')}}
                    </div>
                  </div>
                </div>
@@ -138,12 +138,12 @@
                    <div class="ct-chart" id="completedTasksChart"></div>
                  </div>
                  <div class="card-body">
-                   <h4 class="card-title"> معلومات</h4>
-                   <p class="card-category"> معلومات</p>
+                   <h4 class="card-title"> {{__('dashboard.information')}}</h4>
+                   <p class="card-category"> {{__('dashboard.information')}}</p>
                  </div>
                  <div class="card-footer">
                    <div class="stats">
-                     <i class="material-icons">access_time</i>   معلومات
+                     <i class="material-icons">access_time</i>   {{__('dashboard.information')}}
                    </div>
                  </div>
                </div>

@@ -15,7 +15,7 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Validators\Failure;
 use Throwable;
 
-class ProductsImport implements ToModel , SkipsOnError , WithValidation , SkipsOnFailure , WithBatchInserts , WithChunkReading
+class ProductsImportSpecial implements ToModel , SkipsOnError , WithValidation , SkipsOnFailure , WithBatchInserts , WithChunkReading
 {
     use Importable , SkipsErrors , SkipsFailures;
     /**
@@ -23,36 +23,29 @@ class ProductsImport implements ToModel , SkipsOnError , WithValidation , SkipsO
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
-
     private $repository_id;
 
     public function __construct($repo_id){
          $this->repository_id = $repo_id;
     }
     
-    /*public function model(array $row)
-    {
-        return new Product([
-        'repository_id' => $this->repository_id,
-           'barcode' => $row[0],
-           'name'    => $row[1], 
-           'details' => $row[2],
-           'price'   => $row[3],
-           'quantity'=> $row[4],
-        ]);
-    }*/
+    
     public function model(array $row)
     {   
-        $product = Product::where('repository_id',$this->repository_id)->where('barcode',$row[0])->first();
+        $product = Product::where('repository_id',$this->repository_id)->where('barcode','=',$row[0])->first();
         if($product)  // found it
         {
         $new_quantity = $product->quantity + $row[5];
         $new_cost_price = $row[3];
         $new_price = $row[4];
+        $new_type = $row[6];
+        $new_acceptmin = $row[7];
         $product->update([
             'quantity' => $new_quantity,
             'cost_price' => $new_cost_price,
             'price' => $new_price,
+            'type_id' => $new_type,
+            'accept_min' => $new_acceptmin,
         ]);
         }
     else{
@@ -64,6 +57,8 @@ class ProductsImport implements ToModel , SkipsOnError , WithValidation , SkipsO
            'cost_price' => $row[3],
            'price'   => $row[4],
            'quantity'=> $row[5],
+           'type_id' => $row[6],
+           'accept_min' => $row[7],
         ]);
         }
     }
@@ -80,6 +75,8 @@ class ProductsImport implements ToModel , SkipsOnError , WithValidation , SkipsO
             '*.3' => 'required',
             '*.4' => 'required',
             '*.5' => 'required',
+            '*.6' => 'required|numeric',
+            '*.7' => 'required|numeric|min:0|max:1',
         ];
     }
     

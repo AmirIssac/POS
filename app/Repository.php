@@ -45,6 +45,10 @@ class Repository extends Model
         return $this->hasMany(SavedRecipe::class);
     }
 
+    public function types(){
+        return $this->hasMany(Type::class);
+    }
+
     public function owner(){   // custom function to get the owner of repository
         $users = $this->users; // relationship to get all repository users
         foreach($users as $user){
@@ -53,6 +57,14 @@ class Repository extends Model
         }
         return $owner;
     }
+
+    public function isSpecial(){
+        if($this->category->name=='محل خاص')
+            return true;
+        else
+            return false;
+    }
+
     public function productsCount(){    // custom function calculate the count of products in repository
         $count = 0;
         $products = $this->products;
@@ -81,6 +93,6 @@ class Repository extends Model
         $t1 = now();
         $t2 = Carbon::parse($object->created_at)->addDays(1)->startOfDay();
         $diff = $t2->diff($t1);
-        return $diff->h.'ساعة و '.$diff->i.'دقيقة';
+        return $diff->h.__('cashier.hour').$diff->i.__('cashier.minute'); 
     }
 }

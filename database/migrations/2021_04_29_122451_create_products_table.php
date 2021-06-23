@@ -17,10 +17,13 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->foreignId('repository_id');
             $table->string('barcode'); // read from scanner
-            $table->string('name');
-            $table->string('details');  
+            $table->string('name_ar');
+            $table->string('name_en')->nullable();
+            $table->float('cost_price')->default(0);  // سعر التكلفة
             $table->float('price');
             $table->integer('quantity');
+            $table->foreignId('type_id')->nullable();  // null able for original products
+            $table->boolean('accept_min')->default(1);   // يقبل الحد الأدنى  
             $table->timestamps();
         });
     }

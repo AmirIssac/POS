@@ -35,7 +35,7 @@
           
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title"> العميل {{$customer->name}} </h4>
+              <h4 class="card-title">  {{$customer->name}} </h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -44,13 +44,13 @@
                 <table class="table">
                   <thead class=" text-primary">
                     <th>
-                      الجوال  
+                      {{__('sales.customer_mobile')}}  
                     </th>
                     <th>
-                      الاسم  
+                      {{__('sales.name')}}  
                     </th>
                     <th>
-                      تأكيد  
+                      {{__('sales.confirm')}}  
                     </th>
                   </thead>
                   <tbody>

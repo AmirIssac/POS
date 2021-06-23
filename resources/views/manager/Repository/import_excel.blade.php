@@ -48,14 +48,14 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title "> استيراد مخزون عن طريق excel sheet</h4>
+              <h4 class="card-title ">{{__('repository.import_stock_by_excel')}}</h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
                 <table id="myTable" class="table">
                   <thead class="text-primary">
                     <th>
-                      الملف  
+                      {{__('repository.file')}}  
                     </th>
                   </thead>
                   <tbody>
@@ -64,7 +64,7 @@
                              <input type="file" name="excel">
                          </td>
                          <td>
-                            <button type="submit" class="btn btn-primary"> تأكيد </button>
+                            <button type="submit" class="btn btn-primary"> {{__('buttons.confirm')}} </button>
                         </td>
                      </tr>
                   </tbody>
@@ -80,61 +80,127 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header card-header-warning">
-          <h4 class="card-title "> معلومات هامة قبل الاستيراد </h4>
+          <h4 class="card-title ">  {{__('repository.important_info')}}  </h4>
         </div>
         <div class="card-body">
           <div class="table-responsive">
   <div class="table-responsive">
+    @if($repository->isSpecial())
     <table id="myTable" class="table">
 
       <tbody>
          <tr>
              <td>
-               أن يكون الملف لا يحوي ترويسات أي يحوي المعطيات المراد إدخالها فقط
+              {{__('repository.file_dont_has_headers')}}
              </td>
          </tr>
          <tr>
            <td>
-            أن تكون الأعمدة في الملف بالترتيب التالي :
+            {{__('repository.order_columns')}}
            </td>
          </tr>
          <tr>
            <td>
-             العامود الأول يحوي رمز الباركود
+            {{__('repository.special_column_one')}}
            </td>
          </tr>
          <tr>
           <td>
-            العامود الثاني يحوي  اسم المنتج
+            {{__('repository.special_column_two')}}
           </td>
         </tr>
         <tr>
           <td>
-            العامود الثالث يحوي  معلومات المنتج
+            {{__('repository.special_column_three')}}
           </td>
         </tr>
         <tr>
           <td>
-            العامود الرابع يحوي  سعر التكلفة
+            {{__('repository.special_column_four')}}
           </td>
         </tr>
         <tr>
           <td>
-            العامود الخامس يحوي  سعر المبيع  
+            {{__('repository.special_column_five')}}
           </td>
         </tr>
         <tr>
           <td>
-            العامود السادس  يحوي الكمية  
+            {{__('repository.special_column_six')}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            {{__('repository.special_column_seven')}}
+            <select class="form-control">
+              @foreach($repository->types as $type)
+                      <option value="" disabled selected hidden>  انقر هنا لمشاهدة أرقام الأنواع للمنتجات </option>
+                      <option disabled> {{$type->name.'  '.($type->id)}} </option>
+              @endforeach
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            {{__('repository.special_column_eight')}}
           </td>
         </tr>
       </tbody>
     </table>
+    @else
+    <table id="myTable" class="table">
+
+      <tbody>
+         <tr>
+             <td>
+              {{__('repository.file_dont_has_headers')}}
+            </td>
+         </tr>
+         <tr>
+           <td>
+            {{__('repository.order_columns')}}
+           </td>
+         </tr>
+         <tr>
+           <td>
+            {{__('repository.special_column_one')}}
+           </td>
+         </tr>
+         <tr>
+          <td>
+            {{__('repository.special_column_two')}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            {{__('repository.special_column_three')}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            {{__('repository.special_column_four')}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            {{__('repository.special_column_five')}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            {{__('repository.special_column_six')}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    @endif
+
   </div>
   </div>
         </div>
       </div>
-
+    </div>
+  </div>
 
 
 

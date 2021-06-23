@@ -35,7 +35,7 @@
           
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title"> تعديل منتج </h4>
+              <h4 class="card-title"> {{__('repository.edit_product')}}  </h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -44,22 +44,30 @@
                 <table class="table">
                   <thead class=" text-primary">
                     <th>
-                        الباركود
+                        Barcode
                     </th>
                     <th>
-                      الاسم  
+                      {{__('repository.arabic_name')}}  
                     </th>
                     <th>
-                      التفاصيل  
+                      {{__('repository.english_name')}} 
+                    </th>
+                    @if($repository->isSpecial())  {{-- محل خاص --}}
+                    <th>
+                      {{__('repository.product_type')}} 
                     </th>
                     <th>
-                        سعر التكلفة  
+                      {{__('repository.accept_min')}}  
+                    </th>
+                    @endif
+                    <th>
+                      {{__('reports.cost_price')}}   
                     </th>
                     <th>
-                        سعر البيع  
+                      {{__('sales.sell_price')}}   
                       </th>
                       <th>
-                        الكمية  
+                        {{__('sales.quantity')}}  
                       </th>
                   </thead>
                   <tbody>
@@ -70,11 +78,31 @@
                            <input type="text" name="barcode" class="form-control" value="{{$product->barcode}}" required>
                        </td>
                        <td>
-                        <input type="text" name="name" class="form-control" value="{{$product->name}}" required>
+                        <input type="text" name="name" class="form-control" value="{{$product->name_ar}}" required>
                        </td>
                        <td>
-                        <input type="text" name="details" class="form-control" value="{{$product->details}}" required>
+                        <input type="text" name="details" class="form-control" value="{{$product->name_en}}">
                        </td>
+                     @if($repository->isSpecial())  {{-- محل خاص --}}
+                      <td>
+                      <select name="type" class="form-control">
+                        @foreach($repository->types as $type)
+                        @if($product->type_id == $type->id)
+                        <option value="{{$type->id}}" selected>{{$type->name}}</option>
+                        @else
+                        <option value="{{$type->id}}">{{$type->name}}</option>
+                        @endif
+                        @endforeach
+                      </select>
+                      </td>
+                      <td>
+                        @if($product->isAcceptMin())
+                       <input type="checkbox" name="acceptmin" class="form-control" value="1" checked>
+                       @else
+                       <input type="checkbox" name="acceptmin" class="form-control" value="1">
+                       @endif
+                      </td>
+                     @endif
                        <td>
                         <input type="number" name="cost_price" min="0.01" step="0.01" class="form-control" value="{{$product->cost_price}}" required>
                        </td>
@@ -85,7 +113,7 @@
                         <input type="number" name="quantity" min="0" class="form-control" value="{{$product->quantity}}" required>
                        </td>
                        <td>
-                           <button type="submit" class="btn btn-success"> تأكيد </button>
+                           <button type="submit" class="btn btn-success"> {{__('buttons.confirm')}} </button>
                        </td>
                    </tr>
                   </tbody>

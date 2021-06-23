@@ -28,6 +28,9 @@
   .visible{
     visibility: visible;
   }
+  .displaynone{
+    display: none;
+  }
   input[name=date]{
     border: 1px solid white;
   }
@@ -138,36 +141,33 @@ input[type=number] {
                 <thead class="text-primary">
                   <h4>
                   <span class="badge badge-success">
-                      تفاصيل الفاتورة  </span> <input type="text" name="date" value="{{$date}}" readonly></h4>
+                    {{__('sales.invoice_details')}}  </span> <input type="text" name="date" value="{{$date}}" readonly></h4>
                       @if($repository->logo)
                       <img src="{{asset('storage/'.$repository->logo)}}" width="100px" height="100px" alt="logo" id="logo">
                       @else
                      <span id="warning" class="badge badge-warning"> يرجى تعيين شعار المتجر من الإعدادات </span>
                       @endif
-                      رقم الفاتورة <input type="text" name="code" id="code" value="{{$code}}" readonly>
-                      الرقم الضريبي  <input type="text" name="tax_code" id="tax_code" value="{{$repository->tax_code}}" readonly>
+                      {{__('sales.invoice_code')}}  <input type="text" name="code" id="code" value="{{$code}}" readonly>
+                      {{__('sales.tax_number')}}  <input type="text" name="tax_code" id="tax_code" value="{{$repository->tax_code}}" readonly>
 
                       <div id="min" class="hidden">
-                         <span class="badge badge-success" id="badgecolor"> الحد الأدنى للدفع <div id="minVal">{{($repository->min_payment*$final_total_price)/100}}</div></span>
+                         <span class="badge badge-success" id="badgecolor"> {{__('sales.min_limit_pay')}} <div id="minVal">{{($repository->min_payment*$final_total_price)/100}}</div></span>
                         {{--<input type="hidden" class="" id="inputmin" value="{{($repository->min_payment*$invoice_total_price)/100}}">--}}
                         <input type="hidden" class="" id="inputmin" value="{{($repository->min_payment*$final_total_price)/100}}">
                         <input type="hidden" class="" id="percent" value="{{$repository->min_payment}}">
 
                       </div>
                   <th> 
-                    الاسم  
+                    {{__('sales.name')}}  
                   </th>
                   <th>
-                    التفاصيل 
+                    {{__('sales.price')}} 
                   </th>
                   <th>
-                    السعر 
-                  </th>
-                  <th>
-                    الكمية 
+                    {{__('sales.quantity')}} 
                   </th>
                   <th id="del" class="hidden">
-                    تم تسليمها  
+                    {{__('sales.delivered')}}
                   </th>
                 </thead>
                 <tbody>
@@ -179,11 +179,11 @@ input[type=number] {
                       <input type="hidden" name="barcode[]" value="{{$product->barcode}}">
                       
                       <td>
-                        <input type="text" name="name[]" class="form-control name" value="{{$product->name}}" readonly>
+                        <input type="text" name="name[]" class="form-control name" value="{{$product->name_ar}}" readonly>
                         {{--{{$product->name}}--}}
                       </td>
-                      <td>
-                        <input type="text" name="details[]" class="form-control details" value="{{$product->details}}" readonly>
+                      <td class="displaynone">
+                        <input type="text" name="details[]" class="form-control details" value="{{$product->name_en}}" readonly>
                         {{--{{$product->details}}--}}
                      </td>
                      <td>
@@ -206,14 +206,14 @@ input[type=number] {
        </table>
        <div>
          <h5>
-            المجموع 
+          {{__('sales.sum')}} 
          </h5>
          {{--<h1 id="total_price">{{$invoice_total_price}}</h1>--}}
          <input type="number" name="sum" id="total_price" class="form-control" value="{{$invoice_total_price}}" readonly>
        </div>
 
        <div id="tax-container">
-         <h5>الضريبة</h5>
+         <h5>{{__('sales.tax')}}</h5>
         <div style="display: flex; flex-direction: column; margin-top: 3px;">
           <div style="display: flex;">
             <input type="text" value=""  id="taxfield" class="form-control" readonly>
@@ -224,7 +224,7 @@ input[type=number] {
 
       <div>
         <h5>
-          المبلغ الإجمالي 
+          {{__('sales.total_price')}} 
         </h5>
         {{--<h1 id="total_price">{{$invoice_total_price}}</h1>--}}
         <input type="number" name="total_price" id="final_total_price" class="form-control" value="" readonly>
@@ -232,17 +232,17 @@ input[type=number] {
 
        <div id="paymethods" style="margin:10px 0;">
                     <div>
-                    <span class="badge badge-secondary"> طرق الدفع </span>
+                    <span class="badge badge-secondary"> {{__('sales.payment_methods')}}  </span>
                     <div style="display: flex; flex-direction: column; margin-top: 10px">
                       <div style="display: flex;">
-                    <h4> &nbsp;الدفع كاش</h4>
+                    <h4> &nbsp; {{__('sales.cash')}}</h4>
                     <input style="margin: 7px 10px 0 0" type="checkbox" name="cash" id="cash" checked>
                       </div>
                     <input style="margin-right: 0px" type="number" min="0.1" step="0.01" name="cashVal" id="cashVal" value="{{$invoice_total_price}}" class="form-control visible">
                     </div>
                     <div style="display: flex;flex-direction: column;">
                       <div style="display: flex;">
-                    <h4> &nbsp;الدفع بالبطاقة</h4>
+                    <h4> &nbsp; {{__('sales.card')}}</h4>
                     <input style="margin: 7px 10px 0 0" type="checkbox" id="card" name="card">
                       </div>
                     <input style="margin-right: 0px" type="number" min="0.1" step="0.01" name="cardVal" id="cardVal" value="" class="form-control hidden">
@@ -251,20 +251,20 @@ input[type=number] {
                     
                     <div style="margin-right: 50px;">
                     <div id="deliverde">
-                      <span class="badge badge-secondary"> حالة الفاتورة  </span>
+                      <span class="badge badge-secondary"> {{__('sales.invoice_status')}}</span>
                       <div style="display: flex; flex-direction: column; margin-top: 10px">
                         <div style="display: flex;">
                       <input style="margin: 7px 10px 0 0" type="checkbox" name="delivered" id="status" checked>
-                      <h4 style="margin-right: 10px;" id="stat"> تسليم</h4>
+                      <h4 style="margin-right: 10px;" id="stat"> {{__('sales.deliver')}}</h4>
                         </div>
                     </div>
                     <div id="phone">
-                      <span class="badge badge-secondary">  جوال العميل </span>
+                      <span class="badge badge-secondary">   {{__('sales.customer_mobile')}} </span>
                       <div style="display: flex; flex-direction: column; margin-top: 10px">
                         <div style="display: flex;">
                       <input style="margin: 7px 10px 0 0" type="checkbox" id="client">
-                      <h4 style="margin-right: 10px;">  جوال العميل </h4>
-                      <input style="margin-right: 10px; type="text" name="phone" id="phoneinput" class="form-control hidden" placeholder="أدخل رقم الجوال">
+                      <h4 style="margin-right: 10px;">  {{__('sales.customer_mobile')}}  </h4>
+                      <input style="margin-right: 10px; type="text" name="phone" id="phoneinput" class="form-control hidden" placeholder="{{__('sales.input_mobile_number')}}">
                         </div>
                     </div>
                     </div>
@@ -274,9 +274,9 @@ input[type=number] {
        </div>
          <div>
         {{--<button onclick="window.print();" class="btn btn-success"> طباعة </button>--}}
-        <button id="submit" onclick="window.print();" type="submit" class="btn btn-success"> تأكيد الفاتورة وطباعتها </button>
-        <a href="{{route('create.invoice',$repository->id)}}" class="btn btn-danger"> فاتورة جديدة </a>
-        <a href="javascript:history.back()" class="btn btn-warning" id="back"> رجوع </a>
+        <button id="submit" onclick="window.print();" type="submit" class="btn btn-success">   {{__('buttons.confirm_and_print')}} </button>
+        <a href="{{route('create.invoice',$repository->id)}}" class="btn btn-danger">  {{__('buttons.new_invoice')}} </a>
+        <a href="javascript:history.back()" class="btn btn-warning" id="back"> {{__('buttons.back')}} </a>
    </div>
 </div>
 </div>

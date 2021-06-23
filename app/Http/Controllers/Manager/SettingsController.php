@@ -6,6 +6,7 @@ use App\Customer;
 use App\Http\Controllers\Controller;
 use App\PermissionCategory;
 use App\Repository;
+use App\Type;
 use App\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -60,12 +61,13 @@ class SettingsController extends Controller
     public function submitApp(Request $request , $id){
         $repository = Repository::find($id);
        
+        if($request->file('logo')){
          // Build the input for validation
         $fileArray = array('image' => $request->logo);
 
         // Tell the validator that this file should be an image
          $rules = array(
-        'image' => 'mimes:jpeg,jpg,png,gif|required|max:10000' // max 10000kb
+        'image' => 'mimes:jpeg,jpg,png,gif|max:10000' // max 10000kb
         );
 
         // Now pass the input and rules into the validator
@@ -88,8 +90,15 @@ class SettingsController extends Controller
                     'logo' => $imagePath,
                 ]
                 );
-                return back()->with('success',' تم تعيين الاعدادات  بنجاح ');
+            }
         }
+            if($request->type_name)    
+            Type::create([
+                'repository_id' => $repository->id,
+                'name' => $request->type_name,
+            ]);
+                return back()->with('success',' تم تعيين الاعدادات  بنجاح ');
+        
     }
 
     public function addWorkerForm($id){

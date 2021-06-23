@@ -15,7 +15,7 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title float-right">كل المنتجات</h4>
+              <h4 class="card-title">{{__('repository.all_products')}}</h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -25,21 +25,29 @@
                       Barcode  
                     </th>
                     <th>
-                      الاسم  
+                      {{__('repository.arabic_name')}}   
                     </th>
                     <th>
-                      التفاصيل  
+                      {{__('repository.english_name')}}
                     </th>
+                    @if($repository->isSpecial())
+                    <th>
+                      {{__('repository.product_type')}} 
+                    </th>
+                    <th>
+                      {{__('repository.accept_min')}}
+                    </th>
+                    @endif
                     @can('مشاهدة سعر التكلفة')
                     <th>
-                      سعر التكلفة  
+                      {{__('reports.cost_price')}}   
                   </th>
                   @endcan
                     <th>
-                        سعر البيع  
+                      {{__('sales.sell_price')}}   
                     </th>
                     <th>
-                        الكمية المتوفرة  
+                      {{__('repository.quantity_available')}}   
                     </th>
                     <th>
                          
@@ -53,10 +61,22 @@
                     @foreach($products as $product)
                     <tr>
                      <td>{{$product->barcode}}</td>
-                     <td>{{$product->name}}</td>
+                     <td>{{$product->name_ar}}</td>
                      <td>
-                        {{$product->details}}
+                        {{$product->name_en}}
                      </td>
+                     @if($repository->isSpecial())
+                     <td>
+                       {{$product->type->name}}
+                     </td>
+                     <td>
+                       @if($product->isAcceptMin())
+                       {{__('repository.yes')}}
+                        @else
+                        {{__('repository.no')}}
+                       @endif
+                     </td>
+                     @endif
                      @can('مشاهدة سعر التكلفة')
                      <td>
                       {{$product->cost_price}}
@@ -84,14 +104,15 @@
                       <form action="{{route('edit.product')}}" method="POST">
                         @csrf
                         <input type="hidden" name="product_id" value="{{$product->id}}">
-                        <button type="submit" class="btn btn-info"> تعديل </button>
+                        <input type="hidden" name="repository_id" value="{{$repository->id}}">
+                        <button type="submit" class="btn btn-info"> {{__('buttons.edit')}} </button>
                       </form>
                     </td>
                     <td>
                       <form action="{{route('delete.product')}}" method="POST">
                         @csrf
                         <input type="hidden" name="product_id" value="{{$product->id}}">
-                        <button type="submit" class="btn btn-danger"> حذف </button>
+                        <button type="submit" class="btn btn-danger"> {{__('buttons.delete')}} </button>
                       </form>
                     </td>
                     </tr>
@@ -100,7 +121,7 @@
                     <tr>
                         <td>
                             <span class="badge badge-warning">
-                            المخزن فارغ لا يوجد أي منتجات
+                              {{__('repository.repository_empty')}}
                             </span>
                         </td>
                     </tr>

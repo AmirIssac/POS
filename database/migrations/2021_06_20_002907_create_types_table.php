@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnToProducts extends Migration
+class CreateTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddColumnToProducts extends Migration
      */
     public function up()
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->string('measurements',500)->after('accept_min')->nullable()->default(null); //الوصفة الطبية
+        Schema::create('types', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('repository_id');
+            $table->string('name');   // the type of product (we use it just in the special repositories)
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddColumnToProducts extends Migration
      */
     public function down()
     {
-        Schema::table('products', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('types');
     }
 }

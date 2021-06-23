@@ -1,0 +1,19 @@
+<?php
+
+return [
+    'invoices' => 'invoices',
+    'view' => 'view',
+    'daily_reports' => 'daily reports',
+    'cost_price' => 'cost price',
+    'daily_report' => 'daily report',
+    'cashier' => 'cashier',
+    'decrease_amount_in_cashier' => 'amount of decrease in cashier',
+    'increase_amount_in_cashier' => 'amount of increase in cashier',
+    'decrease_amount_in_card' => 'amount of decrease in card',
+    'increase_amount_in_card' => 'amount of increase in card',
+    'sum_invoices' => 'sum invoices',
+    'total_balance' => 'total balance',
+    'close_employee' => 'close employee',
+    'no_invoices' => 'there is no invoices',
+];
+?>

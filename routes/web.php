@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,14 +15,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+
+Auth::routes();
+
+Route::group(['prefix' => LaravelLocalization::setLocale(),'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]], function()
+{
 Route::get('/',  'HomeController@main')->middleware('auth');
 Route::get('/home','HomeController@index')->middleware('auth');
 Route::get('/ltr',function () {
     return view('settings.ltr');
 })->name('ltr');
-
-Auth::routes();
-
 //Route::group(['middleware' => ['permission:المناصب']], function () {
 Route::get('/roles','RolesController@index')->name('roles');
 Route::get('/role/add/form','RolesController@addRoleForm')->name('role.add.form');
@@ -115,3 +119,7 @@ Route::post('delete/product','Manager\RepositoryController@deleteProduct')->name
 
 
 //Route::get('/home', 'HomeController@index')->name('home');
+
+}); // end of localization
+
+Route::get('/ajax/get/typeName/{type_id}','Manager\RepositoryController@getTypeNameAjax');

@@ -10,6 +10,13 @@ form #plus:hover{
 form #tooltip:hover{
   cursor: default;
 }
+.measurements input{
+  width: 45px;
+  margin-top: 10px;
+}
+.displaynone{
+  display: none;
+}
 </style>
 @endsection
 @section('body')
@@ -38,7 +45,7 @@ form #tooltip:hover{
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title ">اضافة منتج للمخزون</h4>
+              <h4 class="card-title ">{{__('repository.add_product_to_stock')}}</h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -48,24 +55,32 @@ form #tooltip:hover{
                       Barcode  
                     </th>
                     <th>
-                      الاسم 
+                      {{__('repository.arabic_name')}}  
                     </th>
                     <th>
-                      التفاصيل 
+                      {{__('repository.english_name')}}
+                    </th>
+                    @if($repository->isSpecial())  {{-- محل خاص --}}
+                    <th>
+                      {{__('repository.product_type')}}
                     </th>
                     <th>
-                      الكمية 
+                      {{__('repository.accept_min')}}  
+                    </th>
+                    @endif
+                    <th>
+                      {{__('sales.quantity')}} 
                     </th>
                     <th>
-                      سعر التكلفة 
+                      {{__('reports.cost_price')}}  
                     </th>
                     <th>
-                      سعر البيع 
+                      {{__('sales.sell_price')}}  
                     </th>
                     <th>   {{-- for future use to save every input details in table of repository inputs --}}
-                      المبلغ الإجمالي 
+                      {{__('sales.total_price')}}  
                       <td>
-                      <i id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title="المبلغ الإجمالي =" data-content="سعر التكلفة X الكمية">live_help</i>
+                      <i id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title=" {{__('sales.total_price')}} =" data-content=" {{__('reports.cost_price')}} X {{__('sales.quantity')}}">live_help</i>
                       </td>
                     </th>
                   </thead>
@@ -73,35 +88,96 @@ form #tooltip:hover{
                      <div id="record">
                       <tr>
                         <td>
-                            <input type="text" name="barcode[]" class="form-control barcode" placeholder="مدخل خاص ب scanner" id="autofocus"  required>
+                            <input type="text" name="barcode[]" class="form-control barcode" placeholder=" {{__('sales.scanner_input')}} " id="autofocus"  required>
                         </td>
                         <td>
-                          <input type="text" name="name[]" class="form-control" placeholder="اسم المنتج" required>
+                          <input type="text" name="name[]" class="form-control" placeholder="{{__('repository.arabic_name')}}" id="ar0" required>
                       </td>
                       <td>
-                        <input type="text" name="details[]" class="form-control" placeholder="تفاصيل المنتج" required>
+                        <input type="text" name="details[]" class="form-control" placeholder="{{__('repository.english_name')}}">
                     </td>
+                    @if($repository->isSpecial())  {{-- محل خاص --}}
                     <td>
-                      <input id="quantity0" type="number" name="quantity[]" class="form-control" value="1" placeholder="الكمية" required>
+                      <select id="sel0" name="type[]" class="form-control sel">
+                        @foreach($repository->types as $type)
+                        <option value="{{$type->id}}">{{$type->name}}</option>
+                        @endforeach
+                      </select>
+                      <span class="measurements displaynone" id="meas0">
+                      <input type="number" id="sph0" min="-20.00" max="20.00" step="0.25" name="sph[]" placeholder="sph">
+                      <input type="number" id="cyl0" min="-20.00" max="20.00" step="0.25" name="cyl[]" placeholder="cyl">
+                      <input type="number" id="add0" min="0.00" max="20.00" step="0.25" name="add[]" placeholder="add">
+                      <input type="text" id="ty0" name="type[]" placeholder="type">
+                      </span>
+                  </td>
+                  <td>
+                    <input type="checkbox" name="acceptmin[]" class="form-control" value="0" checked>
+                  </td>
+                  @endif
+                    <td>
+                      <input id="quantity0" type="number" name="quantity[]" min="0" class="form-control" value="1" placeholder="{{__('sales.quantity')}}" required>
                   </td>
                       <td>
-                        <input id="cost_price0"  type="number" name="cost_price[]" step="0.01" class="form-control" value="0" placeholder="سعر التكلفة" required>
+                        <input id="cost_price0"  type="number" name="cost_price[]" step="0.01" class="form-control" value="0" placeholder="{{__('reports.cost_price')}}" required>
                       </td>
                         <td>
-                            <input id="price0"  type="number" name="price[]" step="0.01" class="form-control target" value="0" placeholder="السعر" required>
+                            <input id="price0"  type="number" name="price[]" step="0.01" class="form-control target" value="0" placeholder="{{__('sales.price')}}" required>
                         </td>
                         <td>
-                            <input id="total_price0" type="number" name="total_price[]" step="0.01" class="form-control" placeholder="المبلغ الإجمالي" required>
+                            <input id="total_price0" type="number" name="total_price[]" step="0.01" class="form-control" placeholder="{{__('sales.total_price')}}" required>
                             <input type="hidden" name="repo_id" value="{{$repository->id}}">
                         </td>
                         
                             
                         
                       </tr>
+                      @for ($count=1;$count<=10;$count++)
+                      <tr id="record{{$count}}" class="displaynone">
+                      <td>
+                        <input type="text" name="barcode[]" class="form-control barcode" placeholder=" {{__('sales.scanner_input')}}"  id="bar{{$count}}">
+                    </td>
+                    <td>
+                      <input type="text" name="name[]" class="form-control" placeholder="{{__('repository.arabic_name')}}" id="ar{{$count}}">
+                  </td>
+                  <td>
+                    <input type="text" name="details[]" class="form-control" placeholder="{{__('repository.english_name')}}">
+                </td>
+                @if($repository->isSpecial())  {{-- محل خاص --}}
+                <td>
+                  <select id="sel{{$count}}" name="type[]" class="form-control sel">
+                    @foreach($repository->types as $type)
+                    <option value="{{$type->id}}">{{$type->name}}</option>
+                    @endforeach
+                  </select>
+                  <span class="measurements displaynone" id="meas{{$count}}">
+                  <input type="number" id="sph{{$count}}" min="-20.00" max="20.00" step="0.25" name="sph[]" placeholder="sph">
+                  <input type="number" id="cyl{{$count}}" min="-20.00" max="20.00" step="0.25" name="cyl[]" placeholder="cyl">
+                  <input type="number" id="add{{$count}}" min="0.00" max="20.00" step="0.25" name="add[]" placeholder="add">
+                  <input type="text" id="ty{{$count}}" name="type[]" placeholder="type">
+                  </span>
+              </td>
+              <td>
+                <input type="checkbox" name="acceptmin[]" class="form-control" value="0" checked>
+              </td>
+              @endif
+                <td>
+                  <input id="quantity{{$count}}" type="number" name="quantity[]" min="0" class="form-control" value="1" placeholder="{{__('sales.quantity')}}">
+              </td>
+                  <td>
+                    <input id="cost_price{{$count}}"  type="number" name="cost_price[]" step="0.01" class="form-control" value="0" placeholder="{{__('reports.cost_price')}}">
+                  </td>
+                    <td>
+                        <input id="price{{$count}}"  type="number" name="price[]" step="0.01" class="form-control target" value="0" placeholder="{{__('sales.price')}}">
+                    </td>
+                    <td>
+                        <input id="total_price{{$count}}" type="number" name="total_price[]" step="0.01" class="form-control" placeholder="{{__('sales.total_price')}}">
+                    </td>
+                  </tr>
+                      @endfor
                      </div>
                   </tbody>
                 </table>
-                <button  type="submit" class="btn btn-primary"> إضافة </button>
+                <button  type="submit" class="btn btn-primary"> {{__('buttons.add')}} </button>
                 <i id="plus" class="material-icons">add_circle</i>
             </div>
         </div>
@@ -125,21 +201,35 @@ form #tooltip:hover{
 <script>
   var intervalId = window.setInterval(function(){
   for(var i=0;i<count;i++){
-      $('#myTable').find('#total_price'+i+'').val($('#myTable').find('#cost_price'+i+'').val()*$('#myTable').find('#quantity'+i+'').val());
+      $('#total_price'+i+'').val($('#cost_price'+i+'').val()*$('#quantity'+i+'').val());
   }
 }, 500);
 </script>
-<script>
+{{--<script>
 
   // create new input record after click + button and focus into scanner input
   //$('.target').last().focus(function() {
     var count = 1;
     $('form #plus').on('click',function(){
-    $('#myTable tr:last').after('<tr><td><input type="text" name="barcode[]" id="bar'+count+'" class="form-control" placeholder="مدخل خاص ب scanner" required></td> <td><input type="text" name="name[]" class="form-control" placeholder="اسم المنتج" required></td><td><input type="text" name="details[]" class="form-control" placeholder="تفاصيل المنتج" required></td><td><input type="number" id="quantity'+count+'" name="quantity[]" class="form-control" placeholder="الكمية" required></td><td><input id="cost_price'+count+'"  type="number" name="cost_price[]" step="0.01" class="form-control" value="0" placeholder="سعر التكلفة" required></td><td><input  type="number" id="price'+count+'" name="price[]" step="0.01" class="form-control target" value="0" placeholder="السعر" required></td><td><input type="number" id="total_price'+count+'" name="total_price[]" step="0.01" class="form-control" placeholder="المبلغ الإجمالي"><input type="hidden" name="repo_id" value="{{$repository->id}}"></td></tr>');
+    $('#myTable tr:last').after('<tr><td><input type="text" name="barcode[]" id="bar'+count+'" class="form-control" placeholder="مدخل خاص ب scanner" required></td> <td><input type="text" name="name[]" class="form-control" placeholder="الاسم بالعربية" required></td><td><input type="text" name="details[]" class="form-control" placeholder="الاسم بالانجليزية"></td>@if($repository->isSpecial())<td><select id="sel'+count+'" name="type[]" class="form-control sel">@foreach($repository->types as $type)<option value="{{$type->id}}">{{$type->name}}</option>@endforeach</select><span class="measurements displaynone" id="meas'+count+'"><input type="number" name="sph[]" placeholder="sph"><input type="number" name="cyl[]" placeholder="cyl"> <input type="number" name="add[]" placeholder="add"><input type="text" name="type[]" placeholder="type"></span></td><td><input type="checkbox" name="acceptmin[]" class="form-control" value="'+count+'" checked></td>@endif<td><input type="number" id="quantity'+count+'" name="quantity[]" min="0" value="1" class="form-control" placeholder="الكمية" required></td><td><input id="cost_price'+count+'"  type="number" name="cost_price[]" step="0.01" class="form-control" value="0" placeholder="سعر التكلفة" required></td><td><input  type="number" id="price'+count+'" name="price[]" step="0.01" class="form-control target" value="0" placeholder="السعر" required></td><td><input type="number" id="total_price'+count+'" name="total_price[]" step="0.01" class="form-control" placeholder="المبلغ الإجمالي"><input type="hidden" name="repo_id" value="{{$repository->id}}"></td></tr>');
     $('#myTable').find('#bar'+count+'').focus();   // we use find to select new added element
     count = count +1;
     //$('.barcode').last().focus();
   });
+</script>--}}
+<script>
+    var count = 1;
+    $('form #plus').on('click',function(){
+      $('#record'+count).removeClass('displaynone');
+      $('#bar'+count).focus();
+      $('#bar'+count).prop('required',true);
+      $('#ar'+count).prop('required',true);
+      $('#quantity'+count).prop('required',true);
+      $('#cost_price'+count).prop('required',true);
+      $('#price'+count).prop('required',true);
+      $('#total_price'+count).prop('required',true);
+      count = count + 1;
+    });
 </script>
 <script>
   window.onload=function(){
@@ -148,5 +238,35 @@ form #tooltip:hover{
   $('[data-toggle="popover"]').popover()
   });
   };
+  </script>
+  <script>
+    $('.sel').on('change',function(){
+      var id = $(this).attr("id");  // extract id
+      var gold =  id.slice(3);   // remove sel from id to take just the number    
+      var type_id = $('#sel'+gold).val();
+      $.ajax({
+           type: "get",
+           url: '/ajax/get/typeName/'+type_id,
+           //dataType: 'json',
+          success: function(data){    // data is the response come from controller
+              //alert(data.name);
+              var string = data.name;
+              var substring = 'عدس';
+              if(string.includes(substring)){   // now we display the measurements fields
+              //alert(gold);
+                $('#meas'+gold).removeClass('displaynone');
+              }
+              else{
+                $('#meas'+gold).addClass('displaynone');
+                // make the measurements inputs null
+                $('#sph'+gold).val(null);
+                $('#cyl'+gold).val(null);
+                $('#add'+gold).val(null);
+                $('#ty'+gold).val(null);
+              }
+          }
+        });
+      });
+     
   </script>
 @endsection

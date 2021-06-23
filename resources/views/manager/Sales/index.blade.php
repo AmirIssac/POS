@@ -35,8 +35,8 @@
                    <div class="card-icon">
                    <i class="material-icons">add_circle_outline</i>
                    </div>
-                   <p class="card-category">فاتورة جديدة</p>
-                   <h6 class="card-title">انشاء</h6>
+                   <p class="card-category">{{__('sales.new_invoice')}}</p>
+                   <h6 class="card-title">{{__('sales.create')}}</h6>
                  </div>
                  <div class="card-footer">
                    <div class="stats">
@@ -55,8 +55,8 @@
                    <div class="card-icon">
                    <i class="material-icons">loupe</i>
                    </div>
-                   <p class="card-category">فاتورة جديدة</p>
-                   <h6 class="card-title">انشاء</h6>
+                   <p class="card-category">{{__('sales.new_invoice')}}</p>
+                   <h6 class="card-title">{{__('sales.create')}}</h6>
                  </div>
                  <div class="card-footer">
                    <div class="stats">
@@ -78,8 +78,8 @@
                   <div class="card-icon">
                   <i class="material-icons">incomplete_circle</i>
                   </div>
-                  <p class="card-category">فاتورة معلقة</p>
-                  <h6 class="card-title">استكمال</h6>
+                  <p class="card-category">{{__('sales.hanging_invoice')}}</p>
+                  <h6 class="card-title">{{__('sales.complete')}}</h6>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
@@ -99,8 +99,8 @@
                   <div class="card-icon">
                   <i class="material-icons">people</i>
                   </div>
-                  <p class="card-category">العملاء</p>
-                  <h6 class="card-title">عرض</h6>
+                  <p class="card-category">{{__('sales.customers')}}</p>
+                  <h6 class="card-title">{{__('sales.view')}}</h6>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
