@@ -9,23 +9,23 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title float-right"> الموظفين في متجر {{$repository->name}}</h4>
+              <h4 class="card-title">  {{__('settings.employees_in')}}  {{$repository->name}}</h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table">
                   <thead class=" text-primary">
                     <th>
-                      الاسم
+                      {{__('settings.name')}}
                     </th>
                     <th>
-                       الايميل
+                      {{__('settings.email')}}
                     </th>
                     <th>
-                        رقم الجوال
+                      {{__('settings.mobile')}} 
                      </th>
                      <th>
-                        تخصيص 
+                      {{__('settings.customize')}} 
                      </th>
                   </thead>
                   <tbody>
@@ -35,7 +35,7 @@
                      <td>{{$worker->email}}</td>
                      <td>{{$worker->phone}}</td>
                      <td>
-                         <a style="color: white" href="{{route('show.worker.permissions',$worker->id)}}" role="button" class="btn btn-info"> تعديل </a>
+                         <a style="color: white" href="{{route('show.worker.permissions',$worker->id)}}" role="button" class="btn btn-info"> {{__('buttons.edit')}} </a>
                      </td>
                     </tr>
                     @endforeach

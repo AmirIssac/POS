@@ -133,10 +133,18 @@
           <td>
             {{__('repository.special_column_seven')}}
             <select class="form-control">
-              @foreach($repository->types as $type)
-                      <option value="" disabled selected hidden>  انقر هنا لمشاهدة أرقام الأنواع للمنتجات </option>
-                      <option disabled> {{$type->name.'  '.($type->id)}} </option>
+              @if(LaravelLocalization::getCurrentLocale() == 'ar')
+              @foreach($types as $type)
+                      <option value="" disabled selected hidden> {{__('repository.click_here_to_see_number_of_types')}} </option>
+                      <option disabled> {{$type->name_ar.'  '.($type->id)}} </option>
               @endforeach
+              @endif
+              @if(LaravelLocalization::getCurrentLocale() == 'en')
+              @foreach($types as $type)
+                      <option value="" disabled selected hidden> {{__('repository.click_here_to_see_number_of_types')}} </option>
+                      <option disabled> {{$type->name_en.'  '.($type->id)}} </option>
+              @endforeach
+              @endif
             </select>
           </td>
         </tr>

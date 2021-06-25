@@ -35,39 +35,39 @@
                
                   <div class="card">
                     <div class="card-header card-header-primary">
-                      <h4 class="card-title float-right">بيانات الموظف</h4>
+                      <h4 class="card-title">{{__('settings.emp_data')}}</h4>
                         </div>
                          <div class="card-body">
                           <div class="table-responsive">
                             <table class="table">
                               <thead class=" text-primary">
                                 <th>
-                                  الاسم  
+                                  {{__('settings.name')}}  
                                 </th>
                               <th>
-                                الايميل 
+                                {{__('settings.email')}} 
                               </th>
                               <th>
-                                كلمة المرور 
+                                {{__('settings.password')}} 
                               </th>
                               <th>
-                                رقم الجوال 
+                                {{__('settings.mobile')}}  
                               </th>
                                </thead>
                                  <tbody>
 
                                  <tr>
                                    <td>
-                                       <input type="text" name="name" class="form-control" placeholder="الاسم ">
+                                       <input type="text" name="name" class="form-control" placeholder="{{__('settings.name')}} ">
                                    </td>
                                    <td>
-                                    <input type="email" name="email" class="form-control" placeholder="الايميل">
+                                    <input type="email" name="email" class="form-control" placeholder="{{__('settings.email')}}">
                                   </td>
                                   <td>
-                                    <input type="password" name="password" class="form-control" placeholder="كلمة المرور">
+                                    <input type="password" name="password" class="form-control" placeholder="{{__('settings.password')}}">
                                   </td>
                                   <td>
-                                    <input type="text" name="phone" class="form-control" placeholder="رقم الجوال">
+                                    <input type="text" name="phone" class="form-control" placeholder="{{__('settings.mobile')}}">
                                      </td>
                                   </tr>
                                       
@@ -88,7 +88,7 @@
                     
                           <div class="card">
                             <div class="card-header card-header-primary">
-                              <h4 class="card-title float-right">{{$category->name}}</h4>
+                              <h4 class="card-title">{{$category->name}}</h4>
                                 </div>
                                  <div class="card-body">
                                   <div class="table-responsive">
@@ -126,7 +126,7 @@
                         </div>
                       </div>
               @endforeach
-              <button class="btn btn-success"> حفظ </button>
+              <button class="btn btn-success"> {{__('buttons.save')}} </button>
 
             </form>
 

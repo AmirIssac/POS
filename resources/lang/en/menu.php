@@ -5,9 +5,14 @@ return [
     'employee' => 'employee dashboard',
     'sales' => 'sales',
     'reports' => 'reports',
-    'store' => 'store',
+    'stock' => 'stock',
     'cashier' => 'cashier',
     'settings' => 'settings',
     'tech_support' => 'support',
+    'dashboard' => 'Dashboard',
+    'roles' => 'Roles',
+    'permissions' => 'Permissions',
+    'repositories' => 'Repositories',
+    'products' => 'Products',
 ];
 ?>

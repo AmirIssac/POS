@@ -14,7 +14,7 @@
  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
  <!DOCTYPE html>
  @if( LaravelLocalization::getCurrentLocale() == 'en')
- <html lang="fa">
+ <html lang="en">
  @elseif(LaravelLocalization::getCurrentLocale() == 'ar')
  <html lang="fa" dir="rtl">
   @endif
@@ -46,7 +46,7 @@
      body{
        text-align: right !important;
        direction: rtl !important;
-     }
+     } 
      </style>
     @endif
      <style>
@@ -108,42 +108,50 @@
         <div class="sidebar-wrapper">
           <ul class="nav">
             @can('لوحة التحكم')
-            <li class="nav-item {{ request()->is('dashboard')||request()->is('/') ? 'active' : '' }}">
+            <li class="nav-item {{ request()->is('dashboard')||request()->is('/') ||request()->is('en') ? 'active' : '' }}">
               <a class="nav-link" href="/">
                 <i class="material-icons">dashboard</i>
-                <p>لوحة التحكم</p>
+                <p>{{__('menu.dashboard')}}</p>
               </a>
             </li>
             @endcan
             @can('المناصب')
-            <li class="nav-item {{ request()->is('roles')||request()->is('role/add/form')||request()->is('edit/role/permissions/*') ? 'active' : '' }}">
+            <li class="nav-item {{ request()->is('roles')||request()->is('role/add/form')||request()->is('edit/role/permissions/*')||request()->is('en/roles') ? 'active' : '' }}">
              <a class="nav-link" href="{{route('roles')}}">
                <i class="material-icons">
                  work </i>
-               <p> المناصب</p>
+               <p> {{__('menu.roles')}}</p>
              </a>
            </li>
            @endcan
            @can('صلاحيات الوصول')
-           <li class="nav-item {{ request()->is('permissions')||request()->is('permission/add/form') ? 'active' : '' }} ">
+           <li class="nav-item {{ request()->is('permissions')||request()->is('permission/add/form')||request()->is('en/permissions') ? 'active' : '' }} ">
             <a class="nav-link" href="{{route('permissions')}}">
               <i class="material-icons">
                 accessibility</i>
-              <p> صلاحيات الوصول</p>
+              <p>{{__('menu.permissions')}}</p>
             </a>
           </li>
           @endcan
   
           @can('المخازن')
-          <li class="nav-item {{ request()->is('repositories')||request()->is('repositories/create')? 'active' : ''}}">
+          <li class="nav-item {{ request()->is('repositories')||request()->is('repositories/create') ||request()->is('en/repositories')? 'active' : ''}}">
             <a class="nav-link" href="{{route('repositories.index')}}">
               <i class="material-icons">storefront</i>
-              <p>المخازن</p>
+              <p>{{__('menu.repositories')}}</p>
+            </a>
+          </li>
+           @endcan 
+           @can('المخازن')
+          <li class="nav-item {{ request()->is('products')||request()->is('en/products')? 'active' : ''}}">
+            <a class="nav-link" href="{{route('products.index')}}">
+              <i class="material-icons">category</i>
+              <p>{{__('menu.products')}}</p>
             </a>
           </li>
            @endcan 
            @can('لوحة تحكم مالك-مخزن')
-            <li class="nav-item {{ request()->is('dashboard')||request()->is('/') ? 'active' : '' }}">
+            <li class="nav-item {{ request()->is('dashboard')||request()->is('/')||request()->is('en') ? 'active' : '' }}">
               <a class="nav-link" href="/">
                 <i class="material-icons">dashboard</i>
                 <p> {{__('menu.owner_dashboard')}}</p>
@@ -159,7 +167,7 @@
             </li>
             @endcan
             @can('المبيعات')
-           <li class="nav-item {{ request()->is('sales')? 'active' : ''}}">
+           <li class="nav-item {{ request()->is('sales')||request()->is('en/sales')? 'active' : ''}}">
             <a class="nav-link" href="{{route('sales.index')}}">
               <i class="material-icons">shopping_bag</i>
               <p>{{__('menu.sales')}}</p>
@@ -167,7 +175,7 @@
           </li>
           @endcan
           @can('التقارير')
-          <li class="nav-item {{ request()->is('reports')? 'active' :'' }}">
+          <li class="nav-item {{ request()->is('reports')||request()->is('en/reports')? 'active' :'' }}">
             <a class="nav-link" href="{{route('reports.index')}}">
               <i class="material-icons">receipt_long</i>
               <p>{{__('menu.reports')}}</p>
@@ -175,15 +183,15 @@
           </li>
          @endcan
           @can('المخزون')
-          <li class="nav-item {{ request()->is('repository')||request()->is('add/product/form/*')||request()->is('show/products/*')||request()->is('import/products/excel/*')? 'active' : ''}}">
+          <li class="nav-item {{ request()->is('repository')||request()->is('add/product/form/*')||request()->is('show/products/*')||request()->is('import/products/excel/*')||request()->is('en/repository')? 'active' : ''}}">
             <a class="nav-link" href="{{route('repository.index')}}">
               <i class="material-icons">store</i>
-              <p>{{__('menu.store')}}</p>
+              <p>{{__('menu.stock')}}</p>
             </a>
           </li>
           @endcan
           @can('الكاشير')
-          <li class="nav-item {{ request()->is('cashier')? 'active' : ''}}">
+          <li class="nav-item {{ request()->is('cashier')||request()->is('en/cashier')? 'active' : ''}}">
             <a class="nav-link" href="{{route('cashier.index')}}">
               <i class="material-icons">point_of_sale</i>
               <p>{{__('menu.cashier')}}</p>
@@ -191,7 +199,7 @@
           </li>
           @endcan
           @can('الاعدادات')
-          <li class="nav-item {{ request()->is('manager/settings')? 'active' : ''}}">
+          <li class="nav-item {{ request()->is('manager/settings')||request()->is('en/manager/settings')? 'active' : ''}}">
             <a class="nav-link" href="{{route('manager.settings.index')}}">
               <i class="material-icons">settings</i>
               <p>{{__('menu.settings')}}</p>
@@ -292,12 +300,12 @@
                 </p>
               </a>
               <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownProfile">
-                <a class="dropdown-item" href="#">الحساب</a>
-                <a class="dropdown-item" href="#">الاعدادات</a>
+                <a class="dropdown-item" href="#">{{__('settings.account')}}</a>
+                <a class="dropdown-item" href="#">{{__('settings.settings')}}</a>
                 <div class="dropdown-divider"></div>
                 <form method="POST" action="{{route('logout')}}">
                   @csrf
-                  <a style="cursor: pointer;color:red;" onclick="this.parentNode.submit();" class="dropdown-item">تسجيل الخروج</a>
+                  <a style="cursor: pointer;color:red;" onclick="this.parentNode.submit();" class="dropdown-item">{{__('settings.logout')}}</a>
                 </form>
               </div>
             </li>
@@ -324,7 +332,7 @@
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="{{asset('public/js/material-dashboard.min.js?v=2.1.2')}}" type="text/javascript"></script>
   
- 
+    
  @yield('scripts')
     </body>
  </html>

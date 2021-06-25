@@ -13,7 +13,7 @@
               <div class="ct-chart" id="dailySalesChart"></div>
             </div>
             <div class="card-body">
-              <h4 class="card-title">مخزن {{$repository->name}}</h4>
+              <h4 class="card-title">{{__('repository.store')}} {{$repository->name}}</h4>
             </div>
             <div class="card-footer">
               <div class="stats">
@@ -55,11 +55,11 @@
                  <div class="card-footer">
                    <div class="stats">
                      <i class="material-icons">point_of_sale</i>
-                     الدرج {{$repository->cash_balance}}
+                     {{__('dashboard.cashier')}} {{$repository->cash_balance}}
                    </div>
                    <div class="stats">
                     <i class="material-icons">payment</i>
-                    البطاقة {{$repository->card_balance}}
+                    {{__('dashboard.card')}} {{$repository->card_balance}}
                   </div>
                  </div>
                </div>

@@ -5,9 +5,14 @@ return [
     'employee' => 'لوحة تحكم موظف',
     'sales' => 'المبيعات',
     'reports' => 'التقارير',
-    'store' => 'المخزن',
+    'stock' => 'المخزون',
     'cashier' => 'الكاشير',
     'settings' => 'الإعدادات',
     'tech_support' => 'الدعم',
+    'dashboard' => 'لوحة التحكم',
+    'roles' => 'المناصب',
+    'permissions' => 'صلاحيات الوصول',
+    'repositories' => 'المخازن',
+    'products' => 'المنتجات',
 ];
 ?>

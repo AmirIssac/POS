@@ -41,14 +41,14 @@ input[type=number] {
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title">شعار المتجر</h4>
+              <h4 class="card-title">{{__('settings.repository_logo')}}</h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table">
                   <thead class=" text-primary">
                     <th>
-                        شعار المتجر
+                      {{__('settings.repository_logo')}}
                     </th>
                   </thead>
                   <tbody>
@@ -69,36 +69,36 @@ input[type=number] {
       
 
 
-      @if($repository->isSpecial())
+     {{-- @if($repository->isSpecial())
       <div class="row">
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title">أنواع المنتجات</h4>
+              <h4 class="card-title">{{__('settings.prod_types')}}</h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table">
                   <thead class=" text-primary">
                     <th>
-                        تحديد أنواع المنتجات في النظام 
+                      {{__('settings.determine_types')}} 
                     </th>
                   </thead>
                   <tbody>
                     <tr>
-                      <select class="form-control">  {{-- just for display --}}
+                      <select class="form-control">  
                       @foreach($repository->types as $type)
-                      <option value="" disabled selected hidden> انقر هنا لمشاهدة كل الأنواع التي سجلتها في نظامك </option>
+                      <option value="" disabled selected hidden> {{__('settings.click_here_to_see_types')}} </option>
                       <option disabled> {{$type->name}} </option>
                       @endforeach
                       </select>
                     </tr>
                     <tr>
                       <td>
-                        إضافة نوع جديد
+                        {{__('settings.add_new_type')}}
                       </td>
                       <td>
-                          <input type="text" name="type_name" class="form-control" placeholder=" قم هنا بكتابة النوع الجديد الذي تريد اضافته">
+                          <input type="text" name="type_name" class="form-control" placeholder=" {{__('settings.type_here_the_new_type')}} ">
                       </td>
                       <td>
                       </td>
@@ -110,8 +110,8 @@ input[type=number] {
           </div>
         </div>
       </div>
-      @endif
-      <button type="submit" class="btn btn-success"> تأكيد </button>
+      @endif --}}
+      <button type="submit" class="btn btn-success"> {{__('buttons.confirm')}} </button>
       </form>
 
 

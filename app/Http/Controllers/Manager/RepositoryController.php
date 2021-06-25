@@ -25,7 +25,8 @@ class RepositoryController extends Controller
     }
     public function addProductForm($id){
         $repository = Repository::find($id);
-        return view('manager.Repository.add_product_form')->with('repository',$repository);
+        $types = Type::all();
+        return view('manager.Repository.add_product_form')->with('repository',$repository)->with('types',$types);
     }
 
 
@@ -103,7 +104,8 @@ class RepositoryController extends Controller
 
     public function importExcelForm($id){
         $repository = Repository::find($id);
-        return view('manager.Repository.import_excel')->with('repository',$repository);    // i need repo id to put it as hidden input in the form  << its bad to put it as hidden input but the best way to put it in the action in form route
+        $types = Type::all();
+        return view('manager.Repository.import_excel')->with(['repository'=>$repository , 'types' => $types]);    // i need repo id to put it as hidden input in the form  << its bad to put it as hidden input but the best way to put it in the action in form route
     }
 
     public function importExcel(Request $request,$id){
@@ -130,7 +132,8 @@ class RepositoryController extends Controller
     public function editProductForm(Request $request){    // we use form input hidden to use id and not passing it into url
         $product = Product::find($request->product_id);
         $repository = Repository::find($request->repository_id); // i need repo in next page
-        return view('manager.Repository.edit_product')->with(['product'=>$product,'repository'=>$repository]);
+        $types = Type::all();
+        return view('manager.Repository.edit_product')->with(['product'=>$product,'repository'=>$repository,'types' => $types]);
     }
 
     public function updateProduct(Request $request){

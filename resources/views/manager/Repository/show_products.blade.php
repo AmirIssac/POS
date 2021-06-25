@@ -67,7 +67,12 @@
                      </td>
                      @if($repository->isSpecial())
                      <td>
-                       {{$product->type->name}}
+                      @if(LaravelLocalization::getCurrentLocale() == 'ar')
+                       {{$product->type->name_ar}}
+                       @endif
+                       @if(LaravelLocalization::getCurrentLocale() == 'en')
+                       {{$product->type->name_en}}
+                       @endif
                      </td>
                      <td>
                        @if($product->isAcceptMin())

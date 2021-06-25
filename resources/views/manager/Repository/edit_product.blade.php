@@ -86,13 +86,25 @@
                      @if($repository->isSpecial())  {{-- محل خاص --}}
                       <td>
                       <select name="type" class="form-control">
-                        @foreach($repository->types as $type)
+                        @if(LaravelLocalization::getCurrentLocale() == 'ar')
+                        @foreach($types as $type)
                         @if($product->type_id == $type->id)
-                        <option value="{{$type->id}}" selected>{{$type->name}}</option>
+                        <option value="{{$type->id}}" selected>{{$type->name_ar}}</option>
                         @else
-                        <option value="{{$type->id}}">{{$type->name}}</option>
+                        <option value="{{$type->id}}">{{$type->name_ar}}</option>
                         @endif
                         @endforeach
+                        @endif
+
+                        @if(LaravelLocalization::getCurrentLocale() == 'en')
+                        @foreach($types as $type)
+                        @if($product->type_id == $type->id)
+                        <option value="{{$type->id}}" selected>{{$type->name_en}}</option>
+                        @else
+                        <option value="{{$type->id}}">{{$type->name_en}}</option>
+                        @endif
+                        @endforeach
+                        @endif
                       </select>
                       </td>
                       <td>

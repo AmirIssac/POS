@@ -19,7 +19,7 @@
              <div class="ct-chart" id="dailySalesChart"></div>
            </div>
            <div class="card-body">
-             <h4 class="card-title">مخزن {{$repository->name}}</h4>
+             <h4 class="card-title">{{__('repository.store')}} {{$repository->name}}</h4>
            </div>
            <div class="card-footer">
              <div class="stats">

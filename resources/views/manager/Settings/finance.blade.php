@@ -35,14 +35,14 @@ input[type=number] {
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title">تحديد الحد الأنى للدفع في الفواتير المعلقة</h4>
+              <h4 class="card-title">{{__('settings.determine_min')}}</h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table">
                   <thead class=" text-primary">
                     <th>
-                     الحد الأدنى <span class="badge badge-success">%{{$repository->min_payment}}</span>  
+                      {{__('settings.min')}}  <span class="badge badge-success">%{{$repository->min_payment}}</span>  
                     </th>
                   </thead>
                   <tbody>
@@ -51,7 +51,7 @@ input[type=number] {
                           <input type="number" name="min" min="1" max="100" value="{{$repository->min_payment}}" class="form-control" placeholder="  اكتب هنا النسبة المئوية مثال 30 تعني 30% " required>
                       </td>
                       <td>
-                          <button type="submit" class="btn btn-success"> تأكيد </button>
+                          <button type="submit" class="btn btn-success"> {{__('buttons.confirm')}} </button>
                       </td>
                     </tr>
                   </tbody>
@@ -69,17 +69,17 @@ input[type=number] {
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title">تحديد قيمة الضريبة</h4>
+              <h4 class="card-title">{{__('settings.determine_tax')}}</h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table">
                   <thead class=" text-primary">
                     <th>
-                     الضريبة  <span class="badge badge-success">%{{$repository->tax}}</span>  
+                      {{__('settings.tax')}}  <span class="badge badge-success">%{{$repository->tax}}</span>  
                     </th>
                     <th>
-                      الرقم الضريبي 
+                      {{__('settings.tax_num')}}  
                      </th>
                   </thead>
                   <tbody>
@@ -91,7 +91,7 @@ input[type=number] {
                         <input type="text" name="taxcode" value="{{ $repository->tax_code }}" class="form-control" placeholder="اكتب هنا  الرقم الضريبي" required>
                     </td>
                       <td>
-                          <button type="submit" class="btn btn-success"> تأكيد </button>
+                          <button type="submit" class="btn btn-success"> {{__('buttons.confirm')}} </button>
                       </td>
                     </tr>
                   </tbody>

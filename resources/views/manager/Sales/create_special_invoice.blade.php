@@ -693,6 +693,7 @@ select{
                     </td>
                     <td>
                       <input type="checkbox" name="del[]" id="d0"  class="form-control  delivered hidden" value="0">  {{-- need it just in hanging invoices --}}
+                      <input type="hidden" id="accept_min0">
                   </td>
                   <td>
                     <a id="delete0" class="delete"><img src="{{asset('public/img/delete-icon.jpg')}}" width="45px" height="45px"></a>
@@ -738,6 +739,7 @@ select{
                     </td>
                     <td>
                       <a id="delete{{$count}}" class="delete"><img src="{{asset('public/img/delete-icon.jpg')}}" width="45px" height="45px"></a>
+                      <input type="hidden" id="accept_min{{$count}}">
                   </td>
                 </tr>
             </div>
@@ -770,6 +772,10 @@ select{
          </h5>
          {{--<h1 id="total_price">{{$invoice_total_price}}</h1>--}}
          <input type="number" name="total_price" id="final_total_price" class="form-control" value="0" readonly>
+         <input type="hidden" id="total_price_acc">
+         <input type="hidden" id="total_price_notacc">
+         <input type="hidden" id="f_total_price_acc">
+         <input type="hidden" id="f_total_price_notacc">
        </div>
        </div>
        {{--<i class="material-icons">add_circle</i>--}}
@@ -880,24 +886,50 @@ select{
               //$('#price'+gold+'').addClass('ajaxSuccess');
               $('#d'+gold+'').removeClass('hidden').addClass('visible');
               $('#d'+gold+'').prop('checked',false); // because the default value is hanging
+              $('#accept_min'+gold).val(value.accept_min);
               if(parseFloat($('#price'+gold+'').val())!=NaN){
-                var s = 0 ;
+                var s = 0 ;  
+                var s1 = 0 ; // sum for accept min value
+                var s2 = 0 ;   // sum for not accept min value
                 for(var i=0;i<=10;i++){   // number of records
                   if(!$('#price'+i+'').val().length == 0){
+                    console.log('zero');
                      s = s + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
                   }
                 } // end for loop
                 $('#total_price').val(s);
+                for(var i=0;i<=10;i++){   // number of records
+                  if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==1){
+                    console.log('first');
+                     s1 = s1 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
+                  }
+                } // end for loop
+                $('#total_price_acc').val(s1);  // hidden
+                for(var i=0;i<=10;i++){   // number of records
+                  if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==0){
+                    console.log('second');
+                     s2 = s2 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
+                  }
+                } // end for loop
+                $('#total_price_notacc').val(s2);  // hidden
                 //tax
                 var tax =  parseFloat($('#tax').val());
                 var total_price =  parseFloat($('#total_price').val());
+                var total_price_acc =  parseFloat($('#total_price_acc').val());
+                var total_price_notacc =  parseFloat($('#total_price_notacc').val());
                 var increment = (tax * total_price) / 100;
+                var increment1 = (tax * total_price_acc) / 100;
+                var increment2 = (tax * total_price_notacc) / 100;
                 $('#taxfield').val(increment);
                 $('#final_total_price').val(increment+parseFloat($('#total_price').val()));
+                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val()));
+                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val()));
+                
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
                 // update min value when total price change
-                var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
+                //var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
+                var newMin = (parseFloat($('#percent').val()) * parseFloat($('#f_total_price_acc').val()))/100 + parseFloat($('#f_total_price_notacc').val());
                 //console.log(newMin);
                 $('#inputmin').val(newMin);
                 $('#minVal').text(newMin);
@@ -947,22 +979,45 @@ $('#sell-form').keypress(function(e) {
 <script>
   $('.quantity').on('keyup',function(){
                 var s = 0 ;
+                var s1 = 0;
+                var s2 = 0 ;
                 for(var i=0;i<=10;i++){   // number of records
                   if(!$('#price'+i+'').val().length == 0){
                      s = s + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
                   }
                 } // end for loop
                 $('#total_price').val(s);
+                for(var i=0;i<=10;i++){   // number of records
+                  if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==1){
+                    console.log('first');
+                     s1 = s1 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
+                  }
+                } // end for loop
+                $('#total_price_acc').val(s1);  // hidden
+                for(var i=0;i<=10;i++){   // number of records
+                  if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==0){
+                    console.log('second');
+                     s2 = s2 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
+                  }
+                } // end for loop
+                $('#total_price_notacc').val(s2);  // hidden
                  //tax
                  var tax =  parseFloat($('#tax').val());
                 var total_price =  parseFloat($('#total_price').val());
+                var total_price_acc =  parseFloat($('#total_price_acc').val());
+                var total_price_notacc =  parseFloat($('#total_price_notacc').val());
                 var increment = (tax * total_price) / 100;
+                var increment1 = (tax * total_price_acc) / 100;
+                var increment2 = (tax * total_price_notacc) / 100;
                 $('#taxfield').val(increment);
                 $('#final_total_price').val(increment+parseFloat($('#total_price').val()));
+                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val()));
+                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val()));
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
                 // update min value when total price change
-                var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
+                //var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
+                var newMin = (parseFloat($('#percent').val()) * parseFloat($('#f_total_price_acc').val()))/100 + parseFloat($('#f_total_price_notacc').val());
                 //console.log(newMin);
                 $('#inputmin').val(newMin);
                 $('#minVal').text(newMin);
@@ -1046,21 +1101,44 @@ window.onload=function(){
 }, 500);*/
 $('input[name="quantity[]"]').on("keyup",function(){
   var sum = 0 ;
+  var s1 = 0;
+  var s2 = 0 ;
   for(var i=0;i<count;i++){
     sum = sum + $('.price').eq(i).val()*$('.quantity').eq(i).val();
     //$('#total_price').val($('#total_price').val()+($('.price').eq(i).val()*$('.quantity').eq(i).val()));
   }
   $('#total_price').val(sum);
+  for(var i=0;i<=10;i++){   // number of records
+                  if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==1){
+                    console.log('first');
+                     s1 = s1 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
+                  }
+                } // end for loop
+                $('#total_price_acc').val(s1);  // hidden
+                for(var i=0;i<=10;i++){   // number of records
+                  if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==0){
+                    console.log('second');
+                     s2 = s2 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
+                  }
+                } // end for loop
+                $('#total_price_notacc').val(s2);  // hidden
  // tax
     var tax =  parseFloat($('#tax').val());
     var total_price =  parseFloat($('#total_price').val());
-    var increment = (tax * total_price) / 100;
+    var total_price_acc =  parseFloat($('#total_price_acc').val());
+    var total_price_notacc =  parseFloat($('#total_price_notacc').val());
+                var increment = (tax * total_price) / 100;
+                var increment1 = (tax * total_price_acc) / 100;
+                var increment2 = (tax * total_price_notacc) / 100;
     $('#taxfield').val(increment);
    $('#final_total_price').val(parseFloat($('#total_price').val())+increment);
+   $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val()));
+    $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val()));
    //console.log($('#final_total_price').val());
   $('#cashVal').val($('#final_total_price').val());     // cash value input
    // update min value when total price change
-    var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
+    //var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
+    var newMin = (parseFloat($('#percent').val()) * parseFloat($('#f_total_price_acc').val()))/100 + parseFloat($('#f_total_price_notacc').val());
     //console.log(newMin);
     $('#inputmin').val(newMin);
     $('#minVal').text(newMin);
@@ -1079,7 +1157,7 @@ $('input[name="quantity[]"]').on("keyup",function(){
      
 });
 </script>
-<script>    // cant submit if cash + card != total real price    //Except if we make invoice pending
+{{--<script>    // cant submit if cash + card != total real price    //Except if we make invoice pending
  $('input[name="quantity[]"],#cashVal,#cardVal,#cash,#card').on("keyup change",function(){
     var sum;
     var cash =  parseFloat($('#cashVal').val());
@@ -1134,8 +1212,10 @@ $('input[name="quantity[]"]').on("keyup",function(){
         }
       
     }
+    if($('#cardVal').val()=="" && $('#cashVal').val()=="")
+      $('#submit').prop('disabled', true);
   });
-</script>
+</script>--}}
 </script>
 <script>   // stop submiting form when click enter
   $('#sell-form').keypress(function(e) {
@@ -1257,16 +1337,29 @@ window.onload=function(){
       $('#details'+gold).val(null);
       $('#cost_price'+gold).val(null);
                 $('#total_price').val($('#total_price').val()-$('#price'+gold).val()*$('#quantity'+gold).val());
+                if(parseInt($('#accept_min'+gold+'').val())==0){  // deleted record not accept min
+                  $('#total_price_notacc').val($('#total_price_notacc').val()-$('#price'+gold).val()*$('#quantity'+gold).val());
+                }
+                if(parseInt($('#accept_min'+gold+'').val())==1){  // deleted record accept min
+                  $('#total_price_acc').val($('#total_price_acc').val()-$('#price'+gold).val()*$('#quantity'+gold).val());
+                }
                 //tax
                 var tax =  parseFloat($('#tax').val());
                 var total_price =  parseFloat($('#total_price').val());
+                var total_price_acc =  parseFloat($('#total_price_acc').val());
+                var total_price_notacc =  parseFloat($('#total_price_notacc').val());
                 var increment = (tax * total_price) / 100;
+                var increment1 = (tax * total_price_acc) / 100;
+                var increment2 = (tax * total_price_notacc) / 100;
                 $('#taxfield').val(increment);
                 $('#final_total_price').val(increment+parseFloat($('#total_price').val()));
+                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val()));
+                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val()));
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
                 // update min value when total price change
-                var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
+                //var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
+                var newMin = (parseFloat($('#percent').val()) * parseFloat($('#f_total_price_acc').val()))/100 + parseFloat($('#f_total_price_notacc').val());
                 //console.log(newMin);
                 $('#inputmin').val(newMin);
                 $('#minVal').text(newMin);
@@ -1349,4 +1442,65 @@ window.onload=function(){
     window.scrollTo(0,0);
   });
 </script>
+
+<script>    // cant submit if cash + card != total real price    //Except if we make invoice pending
+  $('input[name="quantity[]"],#cashVal,#cardVal,#cash,#card').on("keyup change",function(){
+     var sum;
+     var cash =  parseFloat($('#cashVal').val());
+     var card = parseFloat($('#cardVal').val());
+    
+      // min payment
+      var min = parseFloat($('#inputmin').val());
+     if($('#cashVal').val()=="" && $('#cardVal').val()!=""){
+     //if(!$('#cashVal').val() && $('#cardVal').val()){
+       cash = 0 ;
+       sum = card + cash;
+     }
+    if($('#cardVal').val()=="" && $('#cashVal').val()!=""){
+     //if(!$('#cardVal').val() && $('#cashVal').val()){
+       card = 0 ;
+       sum = cash + card;
+     }
+     if($('#cashVal').val()!="" && $('#cardVal').val()!=""){
+     //if($('#cashVal').val() && $('#cardVal').val()){
+     sum = cash + card ;
+     }
+     /*if(sum == $('#final_total_price').val()){
+       $('#submit').prop('disabled', false);
+     }*/
+    
+      if(sum > $('#final_total_price').val()){   
+       $('#submit').prop('disabled', true);
+     }
+     else{
+       if ($('.delivered:checked').length != $('.delivered').length){  // hanging
+         $('#badgecolor').removeClass('hidden').addClass('visible');
+       // min payment
+         if((cash+card)<min){
+         //if(sum<min)
+         $('#submit').prop('disabled', true);
+         $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
+       }
+       else{
+         $('#submit').prop('disabled', false);
+         $('#badgecolor').removeClass('badge-danger').addClass('badge-success');
+       }
+       }  // end hanging
+       if ($('.delivered:checked').length == $('.delivered').length){ //delivered
+         if(sum == $('#final_total_price').val())   // delivered
+         $('#submit').prop('disabled', false);   // cant submit if cash and card not equals the total
+         else
+         $('#submit').prop('disabled', true);
+       }
+       //if(cash <= 0 || card <= 0 )
+       if(parseFloat($('#cashVal').val()) <=0.00 || parseFloat($('#cardVal').val())<=0.00){ // dont accept values less or equal to zero
+           $('#submit').prop('disabled', true);
+         }
+       
+     }
+     if($('#cardVal').val()=="" && $('#cashVal').val()==""){
+       $('#submit').prop('disabled', true);
+     }
+   });
+ </script>
 @endsection

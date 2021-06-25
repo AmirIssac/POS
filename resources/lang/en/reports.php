@@ -15,5 +15,7 @@ return [
     'total_balance' => 'total balance',
     'close_employee' => 'close employee',
     'no_invoices' => 'there is no invoices',
+    'search_by_inv_num' => 'search by invoice number..',
+    'click_calendar_to_search_by_date' => 'Click on the calendar to search by date',
 ];
 ?>

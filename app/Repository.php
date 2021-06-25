@@ -45,9 +45,9 @@ class Repository extends Model
         return $this->hasMany(SavedRecipe::class);
     }
 
-    public function types(){
+    /*public function types(){
         return $this->hasMany(Type::class);
-    }
+    }*/
 
     public function owner(){   // custom function to get the owner of repository
         $users = $this->users; // relationship to get all repository users

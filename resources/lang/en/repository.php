@@ -29,5 +29,6 @@ return [
     'repository_empty' => 'Repository is empty',
     'yes' => 'Yes',
     'no' => 'No',
+    'store' => 'Store',
 ];
 ?>

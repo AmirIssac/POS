@@ -6,5 +6,7 @@ return [
     'safe' => 'الخزينة',
     'today_revenue' => 'ارباح اليوم',
     'information' => 'معلومات',
+    'card' => 'البطاقة',
+    'cashier' => 'الدرج',
 ];
 ?>

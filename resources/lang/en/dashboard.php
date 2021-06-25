@@ -6,5 +6,7 @@ return [
     'safe' => 'safe',
     'today_revenue' => 'today revenue',
     'information' => 'information',
+    'card' => 'card',
+    'cashier' => 'cashier',
 ];
 ?>

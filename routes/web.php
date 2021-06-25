@@ -27,6 +27,8 @@ Route::get('/ltr',function () {
     return view('settings.ltr');
 })->name('ltr');
 //Route::group(['middleware' => ['permission:المناصب']], function () {
+
+    // Admin
 Route::get('/roles','RolesController@index')->name('roles');
 Route::get('/role/add/form','RolesController@addRoleForm')->name('role.add.form');
 Route::post('/role/add','RolesController@addRole')->name('role.add');
@@ -40,6 +42,10 @@ Route::post('/permission/store','PermissionController@store')->name('permission.
 
 
 Route::resource('/repositories','RepositoryController');
+
+Route::get('/products','ProductsController@index')->name('products.index');
+Route::get('/products/show','ProductsController@show')->name('products.show');
+Route::post('/store/type','ProductsController@storeType')->name('store.type');
 
 // manager
 Route::group(['middleware' => ['permission:المبيعات']], function () {

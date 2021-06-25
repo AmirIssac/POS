@@ -63,7 +63,7 @@
                             {{$customer->points}}
                           </td>
                           <td>
-                            <a href="{{route('edit.client',$customer->id)}}" class="btn btn-info"> تعديل </a>
+                            <a href="{{route('edit.client',$customer->id)}}" class="btn btn-info"> {{__('buttons.edit')}} </a>
                           </td>
                       </tr>
                       @endforeach

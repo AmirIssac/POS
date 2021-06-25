@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Type extends Model
 {
     protected $fillable = [
-        'repository_id','name', 
+        'name_ar', 'name_en', 
     ];
     //
-    public function repository(){
+    /*public function repository(){
         return $this->belongsTo(Repository::class);
-    }
+    }*/
     public function products(){
         return $this->hasMany(Product::class);
     }

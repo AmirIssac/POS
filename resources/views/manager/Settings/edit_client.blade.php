@@ -63,7 +63,7 @@
                         <input type="text" name="name" class="form-control" value="{{$customer->name}}">
                        </td>
                        <td>
-                           <button type="submit" class="btn btn-success"> تأكيد </button>
+                           <button type="submit" class="btn btn-success"> {{__('buttons.confirm')}} </button>
                        </td>
                    </tr>
                   </tbody>

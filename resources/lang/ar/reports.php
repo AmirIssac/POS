@@ -15,5 +15,7 @@ return [
     'total_balance' => 'اجمالي الرصيد',
     'close_employee' => 'موظف الإغلاق',
     'no_invoices' => 'لا يوجد فواتير',
+    'search_by_inv_num' => 'ابحث برقم الفاتورة',
+    'click_calendar_to_search_by_date' => 'اضغط على الروزنامة للبحث بالتاريخ',
 ];
 ?>

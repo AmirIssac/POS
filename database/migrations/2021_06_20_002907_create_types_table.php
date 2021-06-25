@@ -15,8 +15,9 @@ class CreateTypesTable extends Migration
     {
         Schema::create('types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('repository_id');
-            $table->string('name');   // the type of product (we use it just in the special repositories)
+            //$table->foreignId('repository_id');
+            $table->string('name_ar');   // the type of product (we use it just in the special repositories)
+            $table->string('name_en');   // the type of product (we use it just in the special repositories)
             $table->timestamps();
         });
     }

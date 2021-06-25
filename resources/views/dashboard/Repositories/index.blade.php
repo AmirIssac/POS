@@ -23,9 +23,9 @@
                         <th>
                           نوع المخزن 
                         </th>
-                        <th>
+                       {{-- <th>
                         مالك المخزن
-                      </th>
+                      </th> --}}
                        </thead>
                          <tbody>
                          @if($repositories && $repositories->count()>0)
@@ -40,9 +40,10 @@
                            <td>
                             {{$repository->category->name}}
                           </td>
+                          {{--
                            <td>
-                            {{$repository->owner()}}   {{-- custom func in repo Model --}}
-                           </td>
+                            {{$repository->owner()}}   
+                           </td> --}}
                           </tr>
                          @endforeach
                          @else

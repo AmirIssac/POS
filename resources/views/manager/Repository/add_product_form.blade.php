@@ -98,11 +98,20 @@ form #tooltip:hover{
                     </td>
                     @if($repository->isSpecial())  {{-- محل خاص --}}
                     <td>
+                      @if(LaravelLocalization::getCurrentLocale() == 'ar')
                       <select id="sel0" name="type[]" class="form-control sel">
-                        @foreach($repository->types as $type)
-                        <option value="{{$type->id}}">{{$type->name}}</option>
+                        @foreach($types as $type)
+                        <option value="{{$type->id}}">{{$type->name_ar}}</option>
                         @endforeach
                       </select>
+                      @endif
+                      @if(LaravelLocalization::getCurrentLocale() == 'en')
+                      <select id="sel0" name="type[]" class="form-control sel">
+                        @foreach($types as $type)
+                        <option value="{{$type->id}}">{{$type->name_en}}</option>
+                        @endforeach
+                      </select>
+                      @endif
                       <span class="measurements displaynone" id="meas0">
                       <input type="number" id="sph0" min="-20.00" max="20.00" step="0.25" name="sph[]" placeholder="sph">
                       <input type="number" id="cyl0" min="-20.00" max="20.00" step="0.25" name="cyl[]" placeholder="cyl">
@@ -144,11 +153,20 @@ form #tooltip:hover{
                 </td>
                 @if($repository->isSpecial())  {{-- محل خاص --}}
                 <td>
+                  @if(LaravelLocalization::getCurrentLocale() == 'ar')
                   <select id="sel{{$count}}" name="type[]" class="form-control sel">
-                    @foreach($repository->types as $type)
-                    <option value="{{$type->id}}">{{$type->name}}</option>
+                    @foreach($types as $type)
+                    <option value="{{$type->id}}">{{$type->name_ar}}</option>
                     @endforeach
                   </select>
+                  @endif
+                  @if(LaravelLocalization::getCurrentLocale() == 'en')
+                  <select id="sel{{$count}}" name="type[]" class="form-control sel">
+                    @foreach($types as $type)
+                    <option value="{{$type->id}}">{{$type->name_en}}</option>
+                    @endforeach
+                  </select>
+                  @endif
                   <span class="measurements displaynone" id="meas{{$count}}">
                   <input type="number" id="sph{{$count}}" min="-20.00" max="20.00" step="0.25" name="sph[]" placeholder="sph">
                   <input type="number" id="cyl{{$count}}" min="-20.00" max="20.00" step="0.25" name="cyl[]" placeholder="cyl">
@@ -250,7 +268,7 @@ form #tooltip:hover{
            //dataType: 'json',
           success: function(data){    // data is the response come from controller
               //alert(data.name);
-              var string = data.name;
+              var string = data.name_ar;
               var substring = 'عدس';
               if(string.includes(substring)){   // now we display the measurements fields
               //alert(gold);

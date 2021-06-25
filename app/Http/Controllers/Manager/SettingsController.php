@@ -92,11 +92,7 @@ class SettingsController extends Controller
                 );
             }
         }
-            if($request->type_name)    
-            Type::create([
-                'repository_id' => $repository->id,
-                'name' => $request->type_name,
-            ]);
+            
                 return back()->with('success',' تم تعيين الاعدادات  بنجاح ');
         
     }

@@ -21,7 +21,7 @@
              <div class="ct-chart" id="dailySalesChart"></div>
            </div>
            <div class="card-body">
-             <h4 class="card-title">مخزن {{$repository->name}}</h4>
+             <h4 class="card-title">{{__('repository.store')}} {{$repository->name}}</h4>
            </div>
            <div class="card-footer">
              <div class="stats">
@@ -40,8 +40,8 @@
                    <div class="card-icon">
                    <i class="material-icons">paid</i>
                    </div>
-                   <p class="card-category"> الإعدادات المالية </p>
-                   <h6 class="card-title">تخصيص</h6>
+                   <p class="card-category">  {{__('settings.financial_settings')}} </p>
+                   <h6 class="card-title">{{__('settings.customize')}}</h6>
                  </div>
                  <div class="card-footer">
                    <div class="stats">
@@ -62,8 +62,8 @@
                   <div class="card-icon">
                   <i class="material-icons">person_add_alt</i>
                   </div>
-                  <p class="card-category">اضافة</p>
-                  <h6 class="card-title">موظف جديد</h6>
+                  <p class="card-category">{{__('settings.add')}}</p>
+                  <h6 class="card-title"> {{__('settings.new_employee')}} </h6>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
@@ -87,8 +87,8 @@
                     settings_accessibility
                     </i>
                   </div>
-                  <p class="card-category">الموظفين</p>
-                  <h6 class="card-title">تخصيص</h6>
+                  <p class="card-category">{{__('settings.employees')}}</p>
+                  <h6 class="card-title">{{__('settings.customize')}}</h6>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
@@ -110,8 +110,8 @@
                   <div class="card-icon">
                   <i class="material-icons">settings_applications</i>
                   </div>
-                  <p class="card-category">التطبيق</p>
-                  <h6 class="card-title">تخصيص</h6>
+                  <p class="card-category">{{__('settings.app')}}</p>
+                  <h6 class="card-title">{{__('settings.customize')}}</h6>
                 </div>
                 <div class="card-footer">
                   <div class="stats">

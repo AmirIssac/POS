@@ -25,7 +25,7 @@
   
 <div class="content">
   <span style="margin-right: 10px" class="badge badge-warning">
-  اضغط على الروزنامة للبحث بالتاريخ
+    {{__('reports.click_calendar_to_search_by_date')}}
   </span>
   <form action="{{route('search.invoices',$repository->id)}}" method="GET">
     @csrf
@@ -39,7 +39,7 @@
     <form action="{{route('search.invoices.code',$repository->id)}}" method="GET">
       @csrf
       <div style="width: 300px; margin-right: 20px;" class="input-group no-border">
-        <input type="text" name="code" class="form-control" placeholder="ابحث برقم الفاتورة">
+        <input type="text" name="code" class="form-control" placeholder="{{__('reports.search_by_inv_num')}}">
         <button type="submit" class="btn btn-success btn-round btn-just-icon">
           <i class="material-icons">search</i>
         </button>
