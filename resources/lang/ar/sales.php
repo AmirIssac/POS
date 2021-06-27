@@ -47,9 +47,16 @@ return [
     'min_limit_pay' => 'الحد الأدنى للدفع',
     'del_badge' => 'تم تسليمها',
     'hang_badge' => 'معلقة',
+    'retrieved_badge' => 'مسترجعة',
     'no_number' => 'لا يوجد رقم',
     'add_new_invoice' => 'اضافة فاتورة جديدة',
     'prescription' => 'الوصفة الطبية',
     'confirm' => 'تأكيد',
+    'retrieve_invoice' => 'استرجاع فاتورة',
+    'retrieve' => 'استرجاع',
+    'search_by_mobile_or_invnum' => 'ابحث برقم الجوال أو برقم الفاتورة',
+    'mobile_invnum' => ' رقم الجوال |  رقم الفاتورة ',
+    'warning' => 'تنبيه',
+    'sure_you_want_retrieve_invoice_for_customer' => 'هل أنت متأكد أنك تريد استرجاع الفاتورة للعميل ',
 ];
 ?>

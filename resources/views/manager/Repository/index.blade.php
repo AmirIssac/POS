@@ -24,7 +24,7 @@
           
            <div class="col-md-4">
             <div class="card card-chart">
-              <div class="card-header card-header-success">
+              <div class="card-header card-header-primary">
                 <div class="ct-chart" id="dailySalesChart"></div>
               </div>
               <div class="card-body">
@@ -87,7 +87,7 @@
               <div class="col-lg-3 col-md-6 col-sm-6">
                 <a href="{{route('show.products',$repository->id)}}">
                 <div class="card card-stats">
-                  <div class="card-header card-header-info card-header-icon">
+                  <div class="card-header card-header-primary card-header-icon">
                     <div class="card-icon">
                       <i class="material-icons">category</i>
                     </div>

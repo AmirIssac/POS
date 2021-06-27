@@ -66,6 +66,9 @@ Route::group(['middleware' => ['permission:المبيعات']], function () {
     // need middleware for variable id
     Route::get('/complete/invoice/form/{invoice_id}','Manager\SellController@completeInvoiceForm')->name('complete.invoice.form')->middleware('permission:استكمل فاتورة معلقة');
     Route::post('/complete/invoice/{invoice_id}','Manager\SellController@completeInvoice')->name('complete.invoice')->middleware('permission:استكمل فاتورة معلقة');
+    // retrive invoice
+    Route::get('/retrieve/{repository_id}','Manager\SellController@retrieveIndex')->name('retrieve.index');
+    Route::post('/make/retrieve/{invoice_id}','Manager\SellController@retrieveInvoice')->name('retrieve.invoice');
 });
 Route::group(['middleware' => ['permission:المخزون']], function () {
     Route::get('/repository','Manager\RepositoryController@index')->name('repository.index');

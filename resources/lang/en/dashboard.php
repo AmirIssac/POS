@@ -8,5 +8,9 @@ return [
     'information' => 'information',
     'card' => 'card',
     'cashier' => 'cashier',
+    'today_invoices' => 'Today invoices',
+    'delivered' => 'Delivered',
+    'hanging' => 'Hanging',
+    'retrieved' => 'Retrieved',
 ];
 ?>

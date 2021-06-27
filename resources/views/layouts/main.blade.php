@@ -263,15 +263,27 @@
           <ul class="navbar-nav">
             {{-- laravel localization language selector --}}
            {{-- @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties) --}}
-            <li>
+           {{-- <li>
                 <a rel="alternate" hreflang="ar" href="{{ LaravelLocalization::getLocalizedURL('ar', null, [], true) }}">
-                  <img src="{{asset('public/img/ar_lang.png')}}" width="75px" height="50px">
+                  <img src="{{asset('img/ar_lang.png')}}" width="75px" height="50px">
                 </a>
                 <a rel="alternate" hreflang="en" href="{{ LaravelLocalization::getLocalizedURL('en', null, [], true) }}">
-                  <img src="{{asset('public/img/en_lang.png')}}" width="75px" height="50px">
+                  <img src="{{asset('img/en_lang.png')}}" width="75px" height="50px">
                 </a>
-            </li>
+            </li> --}}
          {{-- @endforeach --}}
+         <li class="nav-item dropdown">
+          <a class="nav-link" href="javascript:;" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="material-icons">language</i>
+            <p class="d-lg-none d-md-block">
+              الحساب
+            </p>
+          </a> {{-- language selectors --}}
+          <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownProfile">
+            <a rel="alternate" class="dropdown-item" hreflang="ar" href="{{ LaravelLocalization::getLocalizedURL('ar', null, [], true) }}"> {{__('settings.arabic')}} </a>
+            <a rel="alternate" class="dropdown-item" hreflang="en" href="{{ LaravelLocalization::getLocalizedURL('en', null, [], true) }}">{{__('settings.english')}}</a>
+              
+        </li>
             <li class="nav-item">
               <a class="nav-link" href="javascript:;">
                 <i class="material-icons">email</i>

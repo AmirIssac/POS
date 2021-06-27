@@ -253,13 +253,25 @@
         <div class="collapse navbar-collapse justify-content-end">
           
           <ul class="navbar-nav">
-            <li>
+            {{--<li>
               <a rel="alternate" hreflang="ar" href="{{ LaravelLocalization::getLocalizedURL('ar', null, [], true) }}">
-                <img src="{{asset('public/img/ar_lang.png')}}" width="75px" height="50px">
+                <img src="{{asset('img/ar_lang.png')}}" width="75px" height="50px">
               </a>
               <a rel="alternate" hreflang="en" href="{{ LaravelLocalization::getLocalizedURL('en', null, [], true) }}">
-                <img src="{{asset('public/img/en_lang.png')}}" width="75px" height="50px">
+                <img src="{{asset('img/en_lang.png')}}" width="75px" height="50px">
               </a>
+          </li>--}}
+          <li class="nav-item dropdown">
+            <a class="nav-link" href="javascript:;" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="material-icons">language</i>
+              <p class="d-lg-none d-md-block">
+                الحساب
+              </p>
+            </a> {{-- language selectors --}}
+            <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownProfile">
+              <a rel="alternate" class="dropdown-item" hreflang="ar" href="{{ LaravelLocalization::getLocalizedURL('ar', null, [], true) }}"> العربية </a>
+              <a rel="alternate" class="dropdown-item" hreflang="en" href="{{ LaravelLocalization::getLocalizedURL('en', null, [], true) }}">الانجليزية</a>
+                
           </li>
             <li class="nav-item">
               <a class="nav-link" href="javascript:;">

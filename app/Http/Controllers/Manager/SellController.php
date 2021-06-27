@@ -794,6 +794,7 @@ class SellController extends Controller
                 'card_amount' => $invoice->card_amount + $cardVal,
                 'status' => 'delivered',
                 'created_at' => $request->date,
+                'daily_report_check' => false,
             ]
             );
             // add money to repository safe
@@ -869,5 +870,44 @@ class SellController extends Controller
         }
         //return back()->with('saveSuccess','تم حفظ الوصفة بنجاح');
         return redirect(route('create.special.invoice',$repository->id))->with('saveSuccess','تم حفظ الوصفة بنجاح');
+    }
+
+    public function retrieveIndex(Request $request , $id){
+        $repository = Repository::find($id);
+        $invoices = Invoice::where('repository_id',$repository->id)
+        ->where('status','!=','retrieved')
+        ->where(function($query) use ($request) {
+            $query->where('phone', $request->search)
+                  ->orWhere('code', $request->search); })->orderBy('created_at','DESC')->paginate(10);
+        return view('manager.Sales.retrieve_invoice')->with(['invoices'=>$invoices,'repository'=>$repository]);
+    }
+
+    public function retrieveInvoice(Request $request,$id){
+        $invoice = Invoice::find($id);
+        $records = unserialize($invoice->details); // array of arrays
+        //foreach($records as $record)
+        for($i=1;$i<count($records);$i++)
+        {
+           // return $records[$i];
+            $product = Product::where('repository_id',$request->repo_id)->where('barcode',$records[$i]['barcode'])->get(); // collection because we use get()
+            $new_quantity = $product[0]->quantity + floatval($records[$i]['delivered']);
+            $product[0]->update([   // retrieve the products to stock
+                'quantity' => $new_quantity,
+            ]);
+        }
+        // give the money back to the customer
+        // !? for now we will do the back money just from cash for both cash and card !?
+        $repository = Repository::find($request->repo_id);
+        $cash_retrieved = $invoice->cash_amount + $invoice->card_amount;
+        $repository->update([
+            'cash_balance' => $repository->cash_balance - $cash_retrieved,
+        ]);
+        // change invoice status
+        $invoice->update([
+            'status' => 'retrieved',
+            'created_at' => now(),
+            'daily_report_check' => false,
+        ]);
+        return redirect(route('sales.index'))->with('retrievedSuccess','تم استرجاع الفاتورة بنجاح');
     }
 }

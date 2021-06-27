@@ -8,5 +8,9 @@ return [
     'information' => 'معلومات',
     'card' => 'البطاقة',
     'cashier' => 'الدرج',
+    'today_invoices' => 'فواتير اليوم',
+    'delivered' => 'مستلمة',
+    'hanging' => 'معلقة',
+    'retrieved' => 'مسترجعة',
 ];
 ?>

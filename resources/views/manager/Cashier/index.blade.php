@@ -15,7 +15,7 @@
         @foreach($repositories as $repository)
         <div class="col-md-4">
          <div class="card card-chart">
-           <div class="card-header card-header-success">
+           <div class="card-header card-header-primary">
              <div class="ct-chart" id="dailySalesChart"></div>
            </div>
            <div class="card-body">

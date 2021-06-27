@@ -9,7 +9,7 @@
         @foreach($repositories as $repository)
         <div class="col-md-4">
           <div class="card card-chart">
-            <div class="card-header card-header-success">
+            <div class="card-header card-header-primary">
               <div class="ct-chart" id="dailySalesChart"></div>
             </div>
             <div class="card-body">
@@ -27,21 +27,25 @@
          <div class="container-fluid">
            <div class="row">
              <div class="col-lg-3 col-md-6 col-sm-6">
+              <a href="{{route('show.invoices',$repository->id)}}">
                <div class="card card-stats">
-                 <div class="card-header card-header-warning card-header-icon">
+                 <div class="card-header card-header-primary card-header-icon">
                    <div class="card-icon">
-                     <i class="material-icons">attach_money</i>
+                     <i class="material-icons">feed</i>
                    </div>
-                   <p class="card-category">{{__('dashboard.today_revenue')}}</p>
-                   <h3 class="card-title">0
-                   </h3>
+                   <p class="card-category">{{__('dashboard.today_invoices')}}</p>
+                   <?php $arr = $repository->dailyInvoicesCount() ?>
+                   <p class="card-title">
+                    {{__('dashboard.delivered')}}  {{$arr['delivered']}}
+                   </br>
+                   {{__('dashboard.hanging')}}  {{$arr['hanging']}}
+                   {{__('dashboard.retrieved')}}  {{$arr['retrieved']}}
+                   </p>
                  </div>
                  <div class="card-footer">
-                   <div class="stats">
-                     <i class="material-icons text-danger">warning</i>
-                   </div>
                  </div>
                </div>
+              </a>
              </div>
              <div class="col-lg-3 col-md-6 col-sm-6">
                <div class="card card-stats">
@@ -65,6 +69,7 @@
                </div>
              </div>
              <div class="col-lg-3 col-md-6 col-sm-6">
+              <a href="{{route('show.products',$repository->id)}}">
                <div class="card card-stats">
                  <div class="card-header card-header-danger card-header-icon">
                    <div class="card-icon">
@@ -79,8 +84,10 @@
                    </div>
                  </div>
                </div>
+              </a>
              </div>
              <div class="col-lg-3 col-md-6 col-sm-6">
+              <a href="{{route('show.workers',$repository->id)}}">
                <div class="card card-stats">
                  <div class="card-header card-header-info card-header-icon">
                    <div class="card-icon">
@@ -95,6 +102,7 @@
                    </div>
                  </div>
                </div>
+              </a>
              </div>
            </div>
            <div class="row">

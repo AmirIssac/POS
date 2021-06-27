@@ -26,5 +26,7 @@
         'account' => 'Account',
         'settings' => 'Settings',
         'logout' => 'Logout',
+        'arabic' => 'Arabic',
+        'english' => 'English',
     ];
     ?>

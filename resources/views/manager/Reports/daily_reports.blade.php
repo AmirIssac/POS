@@ -95,9 +95,13 @@ input[type=number] {
                         <td>
                           {{__('sales.del_badge')}} 
                         </td>
-                        @else
+                        @elseif($invoice->status=="pending")
                         <td>
                           {{__('sales.hang_badge')}}
+                        </td>
+                        @else
+                        <td>
+                          {{__('sales.retrieved_badge')}}
                         </td>
                         @endif
                       <td>

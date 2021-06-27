@@ -20,13 +20,13 @@ class CreateInvoicesTable extends Migration
             $table->foreignId('customer_id')->nullable()->default(null); // null in original repository
             $table->string('code',8);
             $table->string('details',10000);
-            $table->string('recipe',1000)->nullable()->default(null); //الوصفة الطبية
+            $table->string('recipe',500)->nullable()->default(null); //الوصفة الطبية
             $table->float('total_price');
             $table->boolean('cash_check')->default(0);
             $table->boolean('card_check')->default(0);
             $table->float('cash_amount')->default(0);
             $table->float('card_amount')->default(0);
-            $table->enum('status',['delivered','pending']);    // حالة الفاتورة تم التسليم و معلق ومؤرشفة لمحل النظارات
+            $table->enum('status',['delivered','pending','retrieved']);    // حالة الفاتورة تم التسليم و معلق ومؤرشفة لمحل النظارات
             $table->string('phone')->nullable();  // client number
             $table->timestamp('created_at');   // custom timestamp
             $table->boolean('daily_report_check')->default(0);

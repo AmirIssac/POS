@@ -95,4 +95,25 @@ class Repository extends Model
         $diff = $t2->diff($t1);
         return $diff->h.__('cashier.hour').$diff->i.__('cashier.minute'); 
     }
+
+    public function dailyInvoices(){
+        return $this->hasMany(Invoice::class)->whereDate('created_at',now());
+    }
+
+    public function dailyInvoicesCount(){
+        $del = 0;
+        $hang = 0;
+        $retrieved = 0;
+        $invoices = $this->dailyInvoices;
+        foreach($invoices as $invoice){
+            if($invoice->status=='delivered')
+                $del+=1;
+            elseif($invoice->status=='pending')
+                $hang+=1;
+            else
+            $retrieved+=1;
+        }
+        $arr = array('delivered'=>$del,'hanging'=>$hang,'retrieved'=>$retrieved);
+        return $arr;
+    }
 }

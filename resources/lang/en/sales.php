@@ -47,9 +47,16 @@ return [
     'min_limit_pay' => 'min limit for pay',
     'del_badge' => 'delivered',
     'hang_badge' => 'hanging',
+    'retrieved_badge' => 'retrieved',
     'no_number' => 'no number',
     'add_new_invoice' => 'Add new invoice',
     'prescription' => 'Prescription',
     'confirm' => 'confirm',
+    'retrieve_invoice' => 'Retrieve invoice',
+    'retrieve' => 'Retrieve',
+    'search_by_mobile_or_invnum' => 'Search by mobile number OR invoice number',
+    'mobile_invnum' => 'mobile number | invoice number',
+    'warning' => 'Warning',
+    'sure_you_want_retrieve_invoice_for_customer' => 'Are you sure you want to retrieve the invoice for customer',
 ];
 ?>

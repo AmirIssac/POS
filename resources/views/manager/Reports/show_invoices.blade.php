@@ -52,7 +52,9 @@
           @if($invoices->count()>0)
          @foreach($invoices as $invoice)
           <div class="card">
-            <div class="card-header card-header-primary">
+            
+              <div class="card-header card-header-primary">
+                
               <h4 class="card-title"> {{$invoice->created_at}}</h4>
               <h4>{{__('sales.invoice_code')}}  <span class="badge badge-success">{{$invoice->code}}</span></h4>
             </div>
@@ -154,9 +156,13 @@
                             <span class="badge badge-success">
                               {{__('sales.del_badge')}} 
                             </span>
-                            @else
+                            @elseif($invoice->status=="pending")
                             <span class="badge badge-warning">
-                              {{__('sales.hang_badge')}}
+                              {{__('sales.hang_badge')}} 
+                            </span>
+                            @else
+                            <span class="badge badge-secondary">
+                              {{__('sales.retrieved_badge')}} 
                             </span>
                             @endif 
                         </td>
