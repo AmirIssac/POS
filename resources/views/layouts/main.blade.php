@@ -280,9 +280,11 @@
             </p>
           </a> {{-- language selectors --}}
           <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownProfile">
-            <a rel="alternate" class="dropdown-item" hreflang="ar" href="{{ LaravelLocalization::getLocalizedURL('ar', null, [], true) }}"> {{__('settings.arabic')}} </a>
+            @if(LaravelLocalization::getCurrentLocale() == 'ar')
             <a rel="alternate" class="dropdown-item" hreflang="en" href="{{ LaravelLocalization::getLocalizedURL('en', null, [], true) }}">{{__('settings.english')}}</a>
-              
+            @elseif(LaravelLocalization::getCurrentLocale() == 'en')
+            <a rel="alternate" class="dropdown-item" hreflang="ar" href="{{ LaravelLocalization::getLocalizedURL('ar', null, [], true) }}"> {{__('settings.arabic')}} </a>
+            @endif
         </li>
             <li class="nav-item">
               <a class="nav-link" href="javascript:;">

@@ -22,10 +22,16 @@ class ReportController extends Controller
 
     public function showInvoices($id){
         $repository = Repository::find($id);
-        $invoices = $repository->invoicesDesc()->paginate(4);
+        $invoices = $repository->invoicesDesc()->paginate(5);
         /*$re = $invoices->first();
         $re = unserialize($re->details);
         return $re;*/
+        return view('manager.Reports.show_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
+    }
+
+    public function showTodayInvoices($id){
+        $repository = Repository::find($id);
+        $invoices = $repository->dailyInvoices()->paginate(5);
         return view('manager.Reports.show_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
     }
     

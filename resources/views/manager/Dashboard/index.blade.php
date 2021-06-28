@@ -27,7 +27,7 @@
          <div class="container-fluid">
            <div class="row">
              <div class="col-lg-3 col-md-6 col-sm-6">
-              <a href="{{route('show.invoices',$repository->id)}}">
+              <a href="{{route('show.today.invoices',$repository->id)}}">
                <div class="card card-stats">
                  <div class="card-header card-header-primary card-header-icon">
                    <div class="card-icon">
@@ -36,13 +36,18 @@
                    <p class="card-category">{{__('dashboard.today_invoices')}}</p>
                    <?php $arr = $repository->dailyInvoicesCount() ?>
                    <p class="card-title">
-                    {{__('dashboard.delivered')}}  {{$arr['delivered']}}
+                     <span class="badge badge-success">
+                    {{__('dashboard.delivered')}}  {{$arr['delivered']}}</span>
                    </br>
-                   {{__('dashboard.hanging')}}  {{$arr['hanging']}}
-                   {{__('dashboard.retrieved')}}  {{$arr['retrieved']}}
+                   <span class="badge badge-warning">
+                   {{__('dashboard.hanging')}}  {{$arr['hanging']}}</span>
+                   <span class="badge badge-secondary">
+                   {{__('dashboard.retrieved')}}  {{$arr['retrieved']}}</span>
                    </p>
                  </div>
                  <div class="card-footer">
+                  <div class="stats">
+                  </div>
                  </div>
                </div>
               </a>

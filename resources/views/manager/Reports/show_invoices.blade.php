@@ -24,6 +24,7 @@
 <div class="main-panel">
   
 <div class="content">
+  @if(request()->is('show/invoices/*'))
   <span style="margin-right: 10px" class="badge badge-warning">
     {{__('reports.click_calendar_to_search_by_date')}}
   </span>
@@ -45,7 +46,7 @@
         </button>
       </div>
     </form>
-    
+    @endif
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">

@@ -144,9 +144,9 @@ input[type=number] {
                       </td>
                     </tr>
                     <tr class="price">
-                      <td>
-                        {{__('reports.sum_invoices')}} &nbsp;&nbsp;{{$total_sum_invoices}}
-                      </td>
+                     {{--  <td>
+                       {{__('reports.sum_invoices')}} &nbsp;&nbsp;{{$total_sum_invoices}}
+                      </td> --}}
                     </tr>
                     <tr class="price">
                       <td>
