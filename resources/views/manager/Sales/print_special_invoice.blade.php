@@ -145,6 +145,15 @@
                  </div>
            
                  <div>
+                  <h5>الحسم</h5>
+                 <div style="display: flex; flex-direction: column; margin-top: 3px;">
+                   <div style="display: flex;">
+                     %<input type="number" value="{{$discount}}" class="form-control" readonly>
+                   </div>
+                 </div>
+               </div>
+
+                 <div>
                    <h5>
                      المبلغ الإجمالي 
                    </h5>

@@ -14,8 +14,7 @@ class AddColumnToRepositories extends Migration
     public function up()
     {
         Schema::table('repositories', function (Blueprint $table) {
-            $table->string('tax_code')->default('0000'); 
-            $table->string('logo')->default(null); 
+            $table->float('max_discount')->after('min_payment')->default(0); // أعلى حد للخصم نسبة مئوية
         });
     }
 

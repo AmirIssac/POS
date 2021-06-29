@@ -55,7 +55,7 @@ input[name=date]{
   #myTable{
     direction: ltr;
   }
-   /* Chrome, Safari, Edge, Opera 
+   /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -63,7 +63,7 @@ input::-webkit-inner-spin-button {
 }
 input[type=number] {
   -moz-appearance: textfield;
-}*/
+}
 #buttons{
   display: flex;
 }
@@ -85,7 +85,9 @@ select{
   font-size: 32px;
   font-weight: bold;
 }
-
+#tooltip:hover{
+  cursor: default;
+}
 @media print{
  /* body, html, #myform { 
           height: 100%;
@@ -765,6 +767,17 @@ select{
            </div>
          </div>
        </div>
+
+       <div>
+        <h5>{{__('sales.discount')}}</h5>
+       <div style="display: flex; flex-direction: column; margin-top: 3px;">
+         <div style="display: flex;">
+           %<input type="number" name="max_discount" value="0" step="0.01" min="0" max="{{$repository->max_discount}}"  id="max-field" class="form-control" required>
+           <input type="hidden" name="discountVal" id="discountVal" value="0.00">
+           <i id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title=" {{__('sales.max_is')}} %{{$repository->max_discount}} ">live_help</i>
+         </div>
+       </div>
+     </div>
  
        <div>
          <h5>
@@ -921,9 +934,14 @@ select{
                 var increment1 = (tax * total_price_acc) / 100;
                 var increment2 = (tax * total_price_notacc) / 100;
                 $('#taxfield').val(increment);
-                $('#final_total_price').val(increment+parseFloat($('#total_price').val()));
-                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val()));
-                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val()));
+                var discount_percent = parseFloat($('#max-field').val());
+                var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                $('#discountVal').val(discount);
+                var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discount);
+                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discount1);
+                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discount2);
                 
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
@@ -1010,9 +1028,14 @@ $('#sell-form').keypress(function(e) {
                 var increment1 = (tax * total_price_acc) / 100;
                 var increment2 = (tax * total_price_notacc) / 100;
                 $('#taxfield').val(increment);
-                $('#final_total_price').val(increment+parseFloat($('#total_price').val()));
-                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val()));
-                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val()));
+                var discount_percent = parseFloat($('#max-field').val());
+                var discount = parseFloat(( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100).toFixed(2);
+                $('#discountVal').val(discount);
+                var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discount);
+                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discount1);
+                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discount2);
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
                 // update min value when total price change
@@ -1131,9 +1154,14 @@ $('input[name="quantity[]"]').on("keyup",function(){
                 var increment1 = (tax * total_price_acc) / 100;
                 var increment2 = (tax * total_price_notacc) / 100;
     $('#taxfield').val(increment);
-   $('#final_total_price').val(parseFloat($('#total_price').val())+increment);
-   $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val()));
-    $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val()));
+    var discount_percent = parseFloat($('#max-field').val());
+    var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
+    $('#discountVal').val(discount);
+    var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+    var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+   $('#final_total_price').val((parseFloat($('#total_price').val())+increment)-discount);
+   $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discount1);
+    $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discount2);
    //console.log($('#final_total_price').val());
   $('#cashVal').val($('#final_total_price').val());     // cash value input
    // update min value when total price change
@@ -1352,9 +1380,14 @@ window.onload=function(){
                 var increment1 = (tax * total_price_acc) / 100;
                 var increment2 = (tax * total_price_notacc) / 100;
                 $('#taxfield').val(increment);
-                $('#final_total_price').val(increment+parseFloat($('#total_price').val()));
-                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val()));
-                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val()));
+                var discount_percent = parseFloat($('#max-field').val());
+                var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                $('#discountVal').val(discount);
+                var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discount);
+                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discount1);
+                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discount2);
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
                 // update min value when total price change
@@ -1403,6 +1436,7 @@ window.onload=function(){
                 var total_price =  parseFloat($('#total_price').val());
                 var increment = (tax * total_price) / 100;
                 $('#taxfield').val(increment);
+                
                 $('#final_total_price').val(increment+parseFloat($('#total_price').val()));
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
@@ -1502,5 +1536,70 @@ window.onload=function(){
        $('#submit').prop('disabled', true);
      }
    });
+ </script>
+ <script>  /* change discount value */
+  $('#max-field').on("keyup",function(){
+                var s = 0 ;
+                var s1 = 0;
+                var s2 = 0 ;
+                for(var i=0;i<=10;i++){   // number of records
+                  if(!$('#price'+i+'').val().length == 0){
+                     s = s + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
+                  }
+                } // end for loop
+                $('#total_price').val(s);
+                for(var i=0;i<=10;i++){   // number of records
+                  if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==1){
+                    console.log('first');
+                     s1 = s1 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
+                  }
+                } // end for loop
+                $('#total_price_acc').val(s1);  // hidden
+                for(var i=0;i<=10;i++){   // number of records
+                  if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==0){
+                    console.log('second');
+                     s2 = s2 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
+                  }
+                } // end for loop
+                $('#total_price_notacc').val(s2);  // hidden
+                 //tax
+                 var tax =  parseFloat($('#tax').val());
+                var total_price =  parseFloat($('#total_price').val());
+                var total_price_acc =  parseFloat($('#total_price_acc').val());
+                var total_price_notacc =  parseFloat($('#total_price_notacc').val());
+                var increment = (tax * total_price) / 100;
+                var increment1 = (tax * total_price_acc) / 100;
+                var increment2 = (tax * total_price_notacc) / 100;
+                $('#taxfield').val(increment);
+                var discount_percent = parseFloat($('#max-field').val());
+                var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                $('#discountVal').val(discount);
+                var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discount);
+                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discount1);
+                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discount2);
+                //min
+                $('#cashVal').val($('#final_total_price').val());     // cash value input
+                // update min value when total price change
+                //var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
+                var newMin = (parseFloat($('#percent').val()) * parseFloat($('#f_total_price_acc').val()))/100 + parseFloat($('#f_total_price_notacc').val());
+                //console.log(newMin);
+                $('#inputmin').val(newMin);
+                $('#minVal').text(newMin);
+                // check min validation
+                var cash =  parseFloat($('#cashVal').val());
+                var card = parseFloat($('#cardVal').val());
+                // min payment
+                var min = parseFloat($('#inputmin').val());
+                  if(card+cash<min){
+                  $('#submit').prop('disabled', true);
+                  $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
+                  } 
+                  else{
+                  $('#badgecolor').removeClass('badge-danger').addClass('badge-success');
+                  }
+                  
+  });
  </script>
 @endsection

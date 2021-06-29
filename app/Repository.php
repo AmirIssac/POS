@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Repository extends Model
 {
     protected $fillable = [
-        'name', 'address','category_id','cash_balance','card_balance','min_payment','tax','tax_code','logo',
+        'name', 'address','category_id','cash_balance','card_balance','min_payment','max_discount','tax','tax_code','logo',
     ];
     //
     public function users(){

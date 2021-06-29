@@ -58,5 +58,7 @@ return [
     'mobile_invnum' => 'mobile number | invoice number',
     'warning' => 'Warning',
     'sure_you_want_retrieve_invoice_for_customer' => 'Are you sure you want to retrieve the invoice for customer',
+    'discount' => 'Discount',
+    'max_is' => 'Max is ',
 ];
 ?>

@@ -99,6 +99,7 @@ Route::group(['middleware'=>['permission:الاعدادات']], function () {
         Route::get('settings/min/{repository_id}','Manager\SettingsController@minForm')->name('settings.min.form');
         Route::post('change/min/{repository_id}','Manager\SettingsController@min')->name('settings.min');
         Route::post('change/tax/{repository_id}','Manager\SettingsController@tax')->name('settings.tax');
+        Route::post('change/maxDiscount/{repository_id}','Manager\SettingsController@maxDiscount')->name('settings.max.discount');
         Route::get('settings/app/{repository_id}','Manager\SettingsController@app')->name('settings.app');
         Route::post('submit/settings/app/{repository_id}','Manager\SettingsController@submitApp')->name('submit.settings.app'); 
         Route::get('/worker/add/{repository_id}','Manager\SettingsController@addWorkerForm')->name('add.worker')->middleware('permission:اضافة موظف جديد');

@@ -100,7 +100,46 @@ input[type=number] {
             </div>
           </div>
         </div>
+      </div>
+      
       </form>
+
+      <form action="{{route('settings.max.discount',$repository->id)}}"  method="post">
+        @csrf
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-primary">
+              <h4 class="card-title">تحديد الحد الأعلى للخصم</h4>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead class=" text-primary">
+                    <th>
+                      الحد الأعلى للخصم  <span class="badge badge-success">%{{$repository->max_discount}}</span>  
+                    </th>
+                   
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                          <input type="number" name="max_discount" min="0" max="100" value="{{$repository->max_discount}}" class="form-control" required>
+                      </td>
+                      <td>
+                          <button type="submit" class="btn btn-success"> {{__('buttons.confirm')}} </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </form>
+
+      
 
       </div>
     

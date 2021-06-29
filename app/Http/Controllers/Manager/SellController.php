@@ -667,6 +667,7 @@ class SellController extends Controller
                 'details' => $details,
                 'recipe' => $recipe,
                 'total_price' => $request->total_price,
+                'discount' => $request->discountVal,
                 'cash_check' => $cash,
                 'card_check' => $card,
                 'cash_amount' => $cashVal,
@@ -712,7 +713,8 @@ class SellController extends Controller
         $records[]=array('barcode'=>$request->barcode[$i],'name_ar'=>$request->name[$i],'name_en'=>$request->details[$i],'cost_price'=>$request->cost_price[$i],'price'=>$request->price[$i],'quantity'=>$request->quantity[$i],'del'=>$del);
         }
       }
-      return view('manager.Sales.print_special_invoice')->with(['records'=>$records,'num'=>count($records),'sum'=>$request->sum,'tax'=>$request->taxprint,'total_price'=>$request->total_price,'cash'=>$cashVal,'card'=>$cardVal,'repo_id'=>$repository->id]);
+
+      return view('manager.Sales.print_special_invoice')->with(['records'=>$records,'num'=>count($records),'sum'=>$request->sum,'tax'=>$request->taxprint,'total_price'=>$request->total_price,'cash'=>$cashVal,'card'=>$cardVal,'repo_id'=>$repository->id,'discount'=>$request->max_discount]);
 
     }
 

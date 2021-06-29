@@ -66,11 +66,7 @@
                     <th>
                       {{__('sales.name')}}  
                     </th>
-                    @can('مشاهدة سعر التكلفة')
-                    <th>
-                       {{__('reports.cost_price')}}  
-                    </th>
-                    @endcan
+                   
                     <th>
                       {{__('sales.price')}}  
                     </th>
@@ -88,11 +84,7 @@
                         <td>
                             {{$detail['name_'.LaravelLocalization::getCurrentLocale()]}}
                         </td>
-                        @can('مشاهدة سعر التكلفة')
-                        <td>
-                            {{$detail["cost_price"]}}
-                         </td>
-                         @endcan
+                       
                         <td>
                             {{$detail["price"]}}
                         </td>
@@ -109,7 +101,9 @@
                         <td>
                           {{__('sales.total_price')}}
                         </td>
-                       
+                        <td>
+                          {{__('sales.discount')}}
+                        </td>
                         <td>
                           {{__('sales.cash')}}
                         </td>
@@ -129,6 +123,9 @@
                     <tr>
                         <td>
                             {{$invoice->total_price}}
+                        </td>
+                        <td>
+                          {{$invoice->discount}}
                         </td>
                         <td>
                             @if($invoice->cash_amount>0)

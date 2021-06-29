@@ -31,7 +31,7 @@ class ReportController extends Controller
 
     public function showTodayInvoices($id){
         $repository = Repository::find($id);
-        $invoices = $repository->dailyInvoices()->paginate(5);
+        $invoices = $repository->dailyInvoices()->orderBy('created_at','DESC')->paginate(5);
         return view('manager.Reports.show_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
     }
     

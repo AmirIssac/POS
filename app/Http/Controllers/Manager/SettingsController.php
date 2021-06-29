@@ -53,6 +53,14 @@ class SettingsController extends Controller
             return back()->with('success',' تم تعيين الضريبة الجديدة بنجاح ');
     }
 
+    public function maxDiscount(Request $request , $id){
+        $repository = Repository::find($id);
+        $repository->update([
+            'max_discount' => $request->max_discount,
+        ]);
+        return back()->with('success',' تم تعيين  الحد الأعلى للخصم بنجاح ');
+    }
+
     public function app($id){
         $repository = Repository::find($id);
         return view('manager.Settings.app')->with('repository',$repository);

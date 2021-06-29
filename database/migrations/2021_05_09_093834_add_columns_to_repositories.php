@@ -15,6 +15,8 @@ class AddColumnsToRepositories extends Migration
     {
         Schema::table('repositories', function (Blueprint $table) {
             $table->foreignId('category_id')->default(1);
+            $table->string('tax_code')->default('0000'); 
+            $table->string('logo')->default(null);  
         });
     }
 
