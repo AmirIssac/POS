@@ -155,7 +155,7 @@ input[type=number] {
         <span style="font-size: 22px;" class="badge badge-warning">
           {{__('sales.remaining_price_complete')}}   
           </span>
-          <input type="number" name="extra_price" id="extra_price" class="form-control" value="{{($invoice->total_price)-($invoice->cash_amount+$invoice->card_amount)}}" readonly>
+          <input type="number" name="extra_price" id="extra_price" class="form-control" value="{{($invoice->total_price)-($invoice->cash_amount+$invoice->card_amount+$invoice->stc_amount)}}" readonly>
        </div>
   <div id="paymethods" style="margin:10px 0;">
         <span class="badge badge-secondary"> {{__('sales.payment_methods')}}  </span>
@@ -164,7 +164,7 @@ input[type=number] {
         <h4> &nbsp; {{__('sales.cash')}}</h4>
         <input style="margin: 7px 10px 0 0" type="checkbox" name="cash" id="cash" checked>
           </div>
-        <input style="margin-right: 0px" type="number" min="0,1" step="0.1" name="cashVal" id="cashVal" value="{{($invoice->total_price)-($invoice->cash_amount+$invoice->card_amount)}}" class="form-control visible">
+        <input style="margin-right: 0px" type="number" min="0,1" step="0.1" name="cashVal" id="cashVal" value="{{($invoice->total_price)-($invoice->cash_amount+$invoice->card_amount+$invoice->stc_amount)}}" class="form-control visible">
         </div>
         <div style="display: flex;flex-direction: column;">
           <div style="display: flex;">
@@ -173,6 +173,13 @@ input[type=number] {
           </div>
         <input style="margin-right: 0px" type="number" min="0.1" step="0.1" name="cardVal" id="cardVal" value="" class="form-control hidden">
         </div>
+        {{--<div style="display: flex;flex-direction: column;">
+          <div style="display: flex;">
+        <h4> &nbsp; STC-pay</h4>
+        <input style="margin: 7px 10px 0 0" type="checkbox" id="stc" name="stc">
+          </div>
+        <input style="margin-right: 0px" type="number" min="0.1" step="0.1" name="stcVal" id="stcVal" value="" class="form-control hidden">
+        </div>--}}
 </div>
         {{--<button onclick="window.print();" class="btn btn-success"> طباعة </button>--}}
         <button onclick="window.print();" type="submit" class="btn btn-danger">   {{__('buttons.complete_invoice_print')}} </button>

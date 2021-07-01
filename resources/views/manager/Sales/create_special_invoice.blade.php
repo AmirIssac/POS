@@ -684,7 +684,7 @@ select{
                         <input type="hidden" id="cost_price0"  name="cost_price[]" value="{{old('cost_price0')}}" class="form-control blank" readonly>
                       </td>
                       <td>
-                        <input type="number" id="price0"  name="price[]" value="{{old('price0')}}" class="form-control price blank" readonly>
+                        <input type="number" id="price0" min="0"  name="price[]" value="{{old('price0')}}" class="form-control price blank">
                       </td>
                       <td>
                         @if(old('quantity0'))
@@ -727,7 +727,7 @@ select{
                         <input type="hidden" id="cost_price{{$count}}"  name="cost_price[]" value="{{old('cost_price.'.$count)}}" class="form-control blank" readonly>
                       </td>
                       <td>
-                        <input type="number" id="price{{$count}}"  name="price[]" value="{{old('price.'.$count)}}" class="form-control price blank" readonly>
+                        <input type="number" id="price{{$count}}" min="0"  name="price[]" value="{{old('price.'.$count)}}" class="form-control price blank">
                       </td>
                       <td>
                         @if(old('quantity.'.$count))
@@ -815,6 +815,13 @@ select{
             </div>
           <input style="margin-right: 0px" type="number" min="0.1" step="0.01" name="cardVal" id="cardVal" value="" class="form-control hidden">
           </div>
+          <div style="display: flex;flex-direction: column;">
+            <div style="display: flex;">
+          <h4> &nbsp; STC pay</h4>
+          <input style="margin: 7px 10px 0 0" type="checkbox" id="stc" name="stc">
+            </div>
+          <input style="margin-right: 0px" type="number" min="0.1" step="0.01" name="stcVal" id="stcVal" value="" class="form-control hidden">
+          </div>
           </div>
           
           <div>
@@ -896,6 +903,7 @@ select{
               $('#cost_price'+gold+'').val(value.cost_price);
               //$('#details'+gold+'').addClass('ajaxSuccess');
               $('#price'+gold+'').val(value.price);
+              //$('#price'+gold+'').prop('max',value.price);  // for manuall discount
               //$('#price'+gold+'').addClass('ajaxSuccess');
               $('#d'+gold+'').removeClass('hidden').addClass('visible');
               $('#d'+gold+'').prop('checked',false); // because the default value is hanging
@@ -954,9 +962,10 @@ select{
                 // check min validation
                 var cash =  parseFloat($('#cashVal').val());
                 var card = parseFloat($('#cardVal').val());
+                var stc = parseFloat($('#stcVal').val());
                 // min payment
                 var min = parseFloat($('#inputmin').val());
-                  if(card+cash<min){
+                  if(card+cash+stc<min){
                   $('#submit').prop('disabled', true);
                   $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
                   } 
@@ -1047,9 +1056,10 @@ $('#sell-form').keypress(function(e) {
                 // check min validation
                 var cash =  parseFloat($('#cashVal').val());
                 var card = parseFloat($('#cardVal').val());
+                var stc = parseFloat($('#stcVal').val());
                 // min payment
                 var min = parseFloat($('#inputmin').val());
-                  if(card+cash<min){
+                  if(card+cash+stc<min){
                   $('#submit').prop('disabled', true);
                   $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
                   } 
@@ -1070,28 +1080,60 @@ $('#sell-form').keypress(function(e) {
 {{--  scripts from beforeprint blade --}}
 <script>
   $('input[type="checkbox"]').change(function(){
-if($('#cash').is(':checked') && $('#card').is(':checked')){
+if($('#cash').is(':checked') && $('#card').is(':checked') && $('#stc').is(':checked')){
     $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
     $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
 }
-if($('#cash').is(':checked') && $('#card').prop('checked') == false){
+if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){
   $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
   $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+  $('#cardVal').val(null);
+  $('#stcVal').val(null);
+}
+if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
+  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
   $('#cardVal').val(null);
 }
-if($('#cash').prop('checked') == false && $('#card').prop('checked') == true){
-  $('input[name="cardVal"]').removeClass('hidden').addClass('visibl');
+if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == true){
+  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
   $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
   $('#cashVal').val(null);
 }
-if($('#cash').prop('checked') == false && $('#card').prop('checked') == false){   // error
+if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
+  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+  $('#cashVal').val(null);
+  $('#stcVal').val(null);
+}
+if($('#cash').prop('checked') == true && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
+  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+  $('#stcVal').val(null);
+}
+if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
+  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+  $('#cashVal').val(null);
+  $('#cardVal').val(null);
+}
+if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){   // error
   //$('#cash').prop('checked',true);
   //$('input[name="cashVal"]').removeClass('hidden').addClass('visibl');
   $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
   $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
   //$('#cashVal').val( $('#total_price').val());
   $('#cashVal').val(null);
   $('#cardVal').val(null);
+  $('#stcVal').val(null);
   $('#submit').prop('disabled', true);
 }
 });
@@ -1173,9 +1215,10 @@ $('input[name="quantity[]"]').on("keyup",function(){
     // check min validation
     var cash =  parseFloat($('#cashVal').val());
     var card = parseFloat($('#cardVal').val());
+    var stc = parseFloat($('#stcVal').val());
      // min payment
      var min = parseFloat($('#inputmin').val());
-      if(card+cash<min){
+      if(card+cash+stc<min){
       $('#submit').prop('disabled', true);
       $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
       } 
@@ -1399,9 +1442,10 @@ window.onload=function(){
                 // check min validation
                 var cash =  parseFloat($('#cashVal').val());
                 var card = parseFloat($('#cardVal').val());
+                var stc = parseFloat($('#stcVal').val());
                 // min payment
                 var min = parseFloat($('#inputmin').val());
-                  if(card+cash<min){
+                  if(card+cash+stc<min){
                   $('#submit').prop('disabled', true);
                   $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
                   } 
@@ -1448,9 +1492,10 @@ window.onload=function(){
                 // check min validation
                 var cash =  parseFloat($('#cashVal').val());
                 var card = parseFloat($('#cardVal').val());
+                var stc = parseFloat($('#stcVal').val());
                 // min payment
                 var min = parseFloat($('#inputmin').val());
-                  if(card+cash<min){
+                  if(card+cash+stc<min){
                   $('#submit').prop('disabled', true);
                   $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
                   } 
@@ -1478,26 +1523,57 @@ window.onload=function(){
 </script>
 
 <script>    // cant submit if cash + card != total real price    //Except if we make invoice pending
-  $('input[name="quantity[]"],#cashVal,#cardVal,#cash,#card').on("keyup change",function(){
+  $('input[name="quantity[]"],#cashVal,#cardVal,#cash,#card,#stcVal,#stc').on("keyup change",function(){
      var sum;
      var cash =  parseFloat($('#cashVal').val());
      var card = parseFloat($('#cardVal').val());
+     var stc = parseFloat($('#stcVal').val());
     
       // min payment
       var min = parseFloat($('#inputmin').val());
-     if($('#cashVal').val()=="" && $('#cardVal').val()!=""){
+     if($('#cashVal').val()=="" && $('#cardVal').val()!="" && $('#stcVal').val()!=""){
      //if(!$('#cashVal').val() && $('#cardVal').val()){
        cash = 0 ;
-       sum = card + cash;
+       sum = card + cash + stc;
      }
-    if($('#cardVal').val()=="" && $('#cashVal').val()!=""){
+    if($('#cardVal').val()=="" && $('#cashVal').val()!="" && $('#stcVal').val()!=""){
      //if(!$('#cardVal').val() && $('#cashVal').val()){
        card = 0 ;
-       sum = cash + card;
+       sum = cash + card + stc;
      }
-     if($('#cashVal').val()!="" && $('#cardVal').val()!=""){
+     
+     if($('#cardVal').val()=="" && $('#cashVal').val()!="" && $('#stcVal').val()==""){
+     //if(!$('#cardVal').val() && $('#cashVal').val()){
+       card = 0 ;
+       stc = 0 ;
+       sum = cash + card + stc;
+     }
+     if($('#cardVal').val()=="" && $('#cashVal').val()=="" && $('#stcVal').val()!=""){
+     //if(!$('#cardVal').val() && $('#cashVal').val()){
+       card = 0 ;
+       cash = 0 ;
+       sum = cash + card + stc;
+     }
+     if($('#cardVal').val()!="" && $('#cashVal').val()!="" && $('#stcVal').val()==""){
+     //if(!$('#cardVal').val() && $('#cashVal').val()){
+       stc = 0 ;
+       sum = cash + card + stc;
+     }
+     if($('#cardVal').val()!="" && $('#cashVal').val()=="" && $('#stcVal').val()==""){
+     //if(!$('#cardVal').val() && $('#cashVal').val()){
+       cash = 0 ;
+       stc = 0 ;
+       sum = cash + card + stc;
+     }
+     if($('#cashVal').val()=="" && $('#cardVal').val()=="" && $('#stcVal').val()==""){
+      cash = 0 ;
+      card = 0 ;
+      stc = 0 ;
+     sum = cash + card + stc ;
+     }
+     if($('#cashVal').val()!="" && $('#cardVal').val()!="" && $('#stcVal').val()!=""){
      //if($('#cashVal').val() && $('#cardVal').val()){
-     sum = cash + card ;
+     sum = cash + card + stc ;
      }
      /*if(sum == $('#final_total_price').val()){
        $('#submit').prop('disabled', false);
@@ -1510,7 +1586,7 @@ window.onload=function(){
        if ($('.delivered:checked').length != $('.delivered').length){  // hanging
          $('#badgecolor').removeClass('hidden').addClass('visible');
        // min payment
-         if((cash+card)<min){
+         if(cash+card+stc<min){
          //if(sum<min)
          $('#submit').prop('disabled', true);
          $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
@@ -1527,12 +1603,12 @@ window.onload=function(){
          $('#submit').prop('disabled', true);
        }
        //if(cash <= 0 || card <= 0 )
-       if(parseFloat($('#cashVal').val()) <=0.00 || parseFloat($('#cardVal').val())<=0.00){ // dont accept values less or equal to zero
+       if(parseFloat($('#cashVal').val()) <=0.00 || parseFloat($('#cardVal').val())<=0.00 || parseFloat($('#stcVal').val())<=0.00){ // dont accept values less or equal to zero
            $('#submit').prop('disabled', true);
          }
        
      }
-     if($('#cardVal').val()=="" && $('#cashVal').val()==""){
+     if($('#cardVal').val()=="" && $('#cashVal').val()=="" && $('#stcVal').val()==""){
        $('#submit').prop('disabled', true);
      }
    });
@@ -1590,9 +1666,78 @@ window.onload=function(){
                 // check min validation
                 var cash =  parseFloat($('#cashVal').val());
                 var card = parseFloat($('#cardVal').val());
+                var stc = parseFloat($('#stcVal').val());
                 // min payment
                 var min = parseFloat($('#inputmin').val());
-                  if(card+cash<min){
+                  if(card+cash+stc<min){
+                  $('#submit').prop('disabled', true);
+                  $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
+                  } 
+                  else{
+                  $('#badgecolor').removeClass('badge-danger').addClass('badge-success');
+                  }
+                  
+  });
+ </script>
+ <script>  /* change product price dynamically */  /* discount by changing price */
+  $('.price').on('keyup',function(){
+    var s = 0 ;  
+                var s1 = 0 ; // sum for accept min value
+                var s2 = 0 ;   // sum for not accept min value
+                for(var i=0;i<=10;i++){   // number of records
+                  if(!$('#price'+i+'').val().length == 0){
+                    console.log('zero');
+                     s = s + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
+                  }
+                } // end for loop
+                $('#total_price').val(s);
+                for(var i=0;i<=10;i++){   // number of records
+                  if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==1){
+                    console.log('first');
+                     s1 = s1 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
+                  }
+                } // end for loop
+                $('#total_price_acc').val(s1);  // hidden
+                for(var i=0;i<=10;i++){   // number of records
+                  if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==0){
+                    console.log('second');
+                     s2 = s2 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
+                  }
+                } // end for loop
+                $('#total_price_notacc').val(s2);  // hidden
+                //tax
+                var tax =  parseFloat($('#tax').val());
+                var total_price =  parseFloat($('#total_price').val());
+                var total_price_acc =  parseFloat($('#total_price_acc').val());
+                var total_price_notacc =  parseFloat($('#total_price_notacc').val());
+                var increment = (tax * total_price) / 100;
+                var increment1 = (tax * total_price_acc) / 100;
+                var increment2 = (tax * total_price_notacc) / 100;
+                $('#taxfield').val(increment);
+                var discount_percent = parseFloat($('#max-field').val());
+                var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                $('#discountVal').val(discount);
+                var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discount);
+                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discount1);
+                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discount2);
+                
+                //min
+                $('#cashVal').val($('#final_total_price').val());     // cash value input
+                // update min value when total price change
+                //var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
+                var newMin = (parseFloat($('#percent').val()) * parseFloat($('#f_total_price_acc').val()))/100 + parseFloat($('#f_total_price_notacc').val());
+                //console.log(newMin);
+                $('#inputmin').val(newMin);
+                $('#minVal').text(newMin);
+                // check min validation
+                var cash =  parseFloat($('#cashVal').val());
+                var card = parseFloat($('#cardVal').val());
+                var stc = parseFloat($('#stcVal').val());
+                // min payment
+                var min = parseFloat($('#inputmin').val());
+                  if(card+cash+stc<min){
                   $('#submit').prop('disabled', true);
                   $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
                   } 

@@ -85,6 +85,7 @@ Route::group(['middleware'=>['permission:التقارير']], function () {
     Route::group(['middleware' => ['check_user']], function () {
         Route::get('/show/invoices/{repository_id}','Manager\ReportController@showInvoices')->name('show.invoices');
         Route::get('/show/today/invoices/{repository_id}','Manager\ReportController@showTodayInvoices')->name('show.today.invoices');
+        Route::get('/show/monthly/invoices/{repository_id}','Manager\ReportController@showMonthInvoices')->name('show.monthly.invoices');
         Route::get('/search/invoices/{repository_id}','Manager\ReportController@searchInvoicesByDate')->name('search.invoices');
         Route::get('/search/invoices/code/{repository_id}','Manager\ReportController@searchInvoicesByCode')->name('search.invoices.code');
         Route::get('/daily/reports/{repository_id}','Manager\ReportController@dailyReports')->name('daily.reports.index');

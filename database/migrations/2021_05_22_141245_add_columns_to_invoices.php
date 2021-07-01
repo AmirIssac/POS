@@ -14,7 +14,8 @@ class AddColumnsToInvoices extends Migration
     public function up()
     {
         Schema::table('invoices', function (Blueprint $table) {
-            $table->float('discount')->after('total_price')->default(0.00);   // discount value
+            $table->boolean('stc_check')->after('card_check')->default(0);
+            $table->float('stc_amount')->after('card_amount')->default(0);
         }); 
     }
 

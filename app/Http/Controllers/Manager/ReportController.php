@@ -22,7 +22,7 @@ class ReportController extends Controller
 
     public function showInvoices($id){
         $repository = Repository::find($id);
-        $invoices = $repository->invoicesDesc()->paginate(5);
+        $invoices = $repository->invoicesDesc()->paginate(10);
         /*$re = $invoices->first();
         $re = unserialize($re->details);
         return $re;*/
@@ -32,6 +32,12 @@ class ReportController extends Controller
     public function showTodayInvoices($id){
         $repository = Repository::find($id);
         $invoices = $repository->dailyInvoices()->orderBy('created_at','DESC')->paginate(5);
+        return view('manager.Reports.show_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
+    }
+
+    public function showMonthInvoices($id){  // show invoices of this month
+        $repository = Repository::find($id);
+        $invoices = $repository->monthlyInvoices()->orderBy('created_at','DESC')->paginate(10);
         return view('manager.Reports.show_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
     }
     

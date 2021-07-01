@@ -9,6 +9,7 @@ return [
     'card' => 'البطاقة',
     'cashier' => 'الدرج',
     'today_invoices' => 'فواتير اليوم',
+    'month_invoices' => 'فواتير الشهر',
     'delivered' => 'مستلمة',
     'hanging' => 'معلقة',
     'retrieved' => 'مسترجعة',

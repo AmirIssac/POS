@@ -14,7 +14,7 @@ class AddColumnToRepositories extends Migration
     public function up()
     {
         Schema::table('repositories', function (Blueprint $table) {
-            $table->float('max_discount')->after('min_payment')->default(0); // أعلى حد للخصم نسبة مئوية
+            $table->float('stc_balance')->after('card_balance')->default(0);
         });
     }
 

@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.withScrollBar')
 @section('links')
 <style>
   .container-fluid{

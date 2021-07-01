@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class DailyReport extends Model
 {
     protected $fillable = [
-        'repository_id','user_id','cash_balance', 'card_balance','cash_shortage','card_shortage','cash_plus','card_plus',
+        'repository_id','user_id','cash_balance', 'card_balance','stc_balance','cash_shortage','card_shortage','stc_shortage','cash_plus','card_plus','stc_plus',
     ];
     //
     public function repository(){

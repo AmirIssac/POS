@@ -33,20 +33,27 @@ class CashierController extends Controller
         $request->cashNeg = 0;
         if(!$request->cardNeg)
         $request->cardNeg = 0;
+        if(!$request->stcNeg)
+        $request->stcNeg = 0;
         if(!$request->cashPos)
         $request->cashPos = 0;
         if(!$request->cardPos)
         $request->cardPos = 0;
+        if(!$request->stcPos)
+        $request->stcPos = 0;
         $dailyReport = DailyReport::create(
             [
                 'repository_id' => $repository->id,
                 'user_id' => $user->id,
                 'cash_balance' => $request->cash_balance,
                 'card_balance' => $request->card_balance,
+                'stc_balance' => $request->stc_balance,
                 'cash_shortage' => $request->cashNeg,
                 'card_shortage' => $request->cardNeg,
+                'stc_shortage' => $request->stcNeg,
                 'cash_plus' => $request->cashPos,
                 'card_plus' => $request->cardPos,
+                'stc_plus' => $request->stcPos,
             ]
             );
             // all invoices not taked by DailyReport Yet..
@@ -64,6 +71,7 @@ class CashierController extends Controller
             [
                 'cash_balance' => 0,
                 'card_balance' => 0,
+                'stc_balance' => 0,
             ]
             );
 

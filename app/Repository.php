@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Repository extends Model
 {
     protected $fillable = [
-        'name', 'address','category_id','cash_balance','card_balance','min_payment','max_discount','tax','tax_code','logo',
+        'name', 'address','category_id','cash_balance','card_balance','stc_balance','min_payment','max_discount','tax','tax_code','logo',
     ];
     //
     public function users(){
@@ -100,11 +100,32 @@ class Repository extends Model
         return $this->hasMany(Invoice::class)->whereDate('created_at',now());
     }
 
+    public function monthlyInvoices(){
+        return $this->hasMany(Invoice::class)->whereYear('created_at', '=', now()->year)
+        ->whereMonth('created_at','=',now()->month);
+    }
+
     public function dailyInvoicesCount(){
         $del = 0;
         $hang = 0;
         $retrieved = 0;
         $invoices = $this->dailyInvoices;
+        foreach($invoices as $invoice){
+            if($invoice->status=='delivered')
+                $del+=1;
+            elseif($invoice->status=='pending')
+                $hang+=1;
+            else
+            $retrieved+=1;
+        }
+        $arr = array('delivered'=>$del,'hanging'=>$hang,'retrieved'=>$retrieved);
+        return $arr;
+    }
+    public function monthlyInvoicesCount(){
+        $del = 0;
+        $hang = 0;
+        $retrieved = 0;
+        $invoices = $this->monthlyInvoices;
         foreach($invoices as $invoice){
             if($invoice->status=='delivered')
                 $del+=1;

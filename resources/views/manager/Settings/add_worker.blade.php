@@ -58,16 +58,16 @@
 
                                  <tr>
                                    <td>
-                                       <input type="text" name="name" class="form-control" placeholder="{{__('settings.name')}} ">
+                                       <input type="text" name="name" class="form-control" placeholder="{{__('settings.name')}} " required>
                                    </td>
                                    <td>
-                                    <input type="email" name="email" class="form-control" placeholder="{{__('settings.email')}}">
+                                    <input type="email" name="email" class="form-control" placeholder="{{__('settings.email')}}" required>
                                   </td>
                                   <td>
-                                    <input type="password" name="password" class="form-control" placeholder="{{__('settings.password')}}">
+                                    <input type="password" name="password" class="form-control" placeholder="{{__('settings.password')}}" required>
                                   </td>
                                   <td>
-                                    <input type="text" name="phone" class="form-control" placeholder="{{__('settings.mobile')}}">
+                                    <input type="text" name="phone" class="form-control" placeholder="{{__('settings.mobile')}}" required>
                                      </td>
                                   </tr>
                                       

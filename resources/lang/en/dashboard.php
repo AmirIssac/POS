@@ -9,6 +9,7 @@ return [
     'card' => 'card',
     'cashier' => 'cashier',
     'today_invoices' => 'Today invoices',
+    'month_invoices' => 'Month invoices',
     'delivered' => 'Delivered',
     'hanging' => 'Hanging',
     'retrieved' => 'Retrieved',

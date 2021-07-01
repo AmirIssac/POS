@@ -572,6 +572,7 @@ class SellController extends Controller
             [
                 'cash_balance' => $repository->cash_balance + $request->cashVal,
                 'card_balance' => $repository->card_balance + $request->cardVal,
+                'stc_balance' => $repository->stc_balance + $request->stcVal,
             ]
             );
         // store invoice in DB
@@ -622,6 +623,12 @@ class SellController extends Controller
         else{
             $card = false;
         } 
+        if($request->stc){
+            $stc = true;
+        }
+        else{
+            $stc = false;
+        } 
         if(!$request->cashVal){
             $cashVal = 0;
         }
@@ -633,6 +640,12 @@ class SellController extends Controller
         }
         else{
             $cardVal = $request->cardVal;
+        }
+        if(!$request->stcVal){
+            $stcVal = 0;
+        }
+        else{
+            $stcVal = $request->stcVal;
         }
         
         $recipe = array('add_r'=>$request->add_r,'axis_r'=>$request->axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
@@ -670,8 +683,10 @@ class SellController extends Controller
                 'discount' => $request->discountVal,
                 'cash_check' => $cash,
                 'card_check' => $card,
+                'stc_check' => $stc,
                 'cash_amount' => $cashVal,
                 'card_amount' => $cardVal,
+                'stc_amount' => $stcVal,
                 'status' => $status,
                 'phone' => $request->customer_phone,
                 'created_at' => $request->date,

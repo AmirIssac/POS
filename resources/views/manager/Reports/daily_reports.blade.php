@@ -79,6 +79,9 @@ input[type=number] {
                       <th>
                         {{__('sales.card')}}    
                         </th>
+                        <th>
+                          STC-pay    
+                          </th>
                      <th>
                       {{__('sales.total_price')}}   
                       </th>
@@ -114,6 +117,9 @@ input[type=number] {
                         {{$invoice->card_amount}}
                       </td>
                       <td>
+                        {{$invoice->stc_amount}}
+                      </td>
+                      <td>
                         {{$invoice->total_price}}
                       </td>
                     </tr>
@@ -126,6 +132,9 @@ input[type=number] {
                       <td>
                         {{__('sales.card')}}&nbsp;{{$report->card_balance+($report->card_plus-$report->card_shortage)}}
                       </td>
+                      <td>
+                        STC-pay&nbsp;{{$report->stc_balance+($report->stc_plus-$report->stc_shortage)}}
+                      </td>
                     </tr>
                     <tr class="price">
                       <td>
@@ -134,6 +143,9 @@ input[type=number] {
                       <td>
                         {{__('reports.decrease_amount_in_card')}} &nbsp;{{$report->card_shortage}}
                       </td>
+                      <td>
+                        {{__('reports.decrease_amount_in_stc')}} &nbsp;{{$report->stc_shortage}}
+                      </td>
                     </tr>
                     <tr class="price">
                       <td>
@@ -141,6 +153,9 @@ input[type=number] {
                       </td>
                       <td>
                         {{__('reports.increase_amount_in_card')}} &nbsp;{{$report->card_plus}} 
+                      </td>
+                      <td>
+                        {{__('reports.increase_amount_in_stc')}} &nbsp;{{$report->stc_plus}} 
                       </td>
                     </tr>
                     <tr class="price">

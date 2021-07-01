@@ -23,6 +23,7 @@ class CreateRepositoriesTable extends Migration
             $table->float('cash_balance')->default(0);
             $table->float('card_balance')->default(0);
             $table->tinyInteger('min_payment')->default(25);
+            $table->float('max_discount')->default(0); // أعلى حد للخصم نسبة مئوية
             $table->smallInteger('tax')->default(0);
             $table->timestamps();
         });

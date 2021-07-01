@@ -48,6 +48,10 @@ input[type=number] {
                       {{__('cashier.must_have_in_card')}}    <span class="badge badge-success">{{$repository->card_balance}}</span>
                       <input type="hidden" name="card_balance" value="{{$repository->card_balance}}">  
                     </th>
+                    <th>
+                      {{__('cashier.must_have_in_stc')}}    <span class="badge badge-success">{{$repository->stc_balance}}</span>
+                      <input type="hidden" name="stc_balance" value="{{$repository->stc_balance}}">  
+                    </th>
                   </thead>
                   <tbody>
                     <tr>
@@ -59,6 +63,10 @@ input[type=number] {
                         {{__('cashier.The_amount_of_shortage_in_the_card')}}
                           <input type="number" name="cardNeg"  class="form-control" placeholder="{{__('cashier.Theamountoftheshortageinthecard_if_there_shortage')}}">
                       </td>
+                      <td>
+                        {{__('cashier.The_amount_of_shortage_in_the_stc')}}
+                          <input type="number" name="stcNeg"  class="form-control" placeholder="{{__('cashier.Theamountoftheshortageinthestc_if_there_shortage')}}">
+                      </td>
                     </tr>
                     <tr>
                         <td>
@@ -68,6 +76,10 @@ input[type=number] {
                         <td>
                           {{__('cashier.The_amount_of_increase_in_the_card')}}
                             <input type="number" name="cardPos"  class="form-control" placeholder="{{__('cashier.Theamountoftheincreaseinthecard_if_there_increase')}}">
+                        </td>
+                        <td>
+                          {{__('cashier.The_amount_of_increase_in_the_stc')}}
+                            <input type="number" name="stcPos"  class="form-control" placeholder="{{__('cashier.Theamountoftheincreaseinthestc_if_there_increase')}}">
                         </td>
                       </tr>
                       <tr>

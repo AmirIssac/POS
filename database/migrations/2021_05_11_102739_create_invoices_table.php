@@ -22,6 +22,7 @@ class CreateInvoicesTable extends Migration
             $table->string('details',10000);
             $table->string('recipe',500)->nullable()->default(null); //الوصفة الطبية
             $table->float('total_price');
+            $table->float('discount')->default(0.00);   // discount value
             $table->boolean('cash_check')->default(0);
             $table->boolean('card_check')->default(0);
             $table->float('cash_amount')->default(0);
