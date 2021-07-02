@@ -182,6 +182,14 @@
             </a>
           </li>
           @endcan
+          @can('المخزون')
+          <li class="nav-item {{ request()->is('purchases')? 'active' : ''}}">
+            <a class="nav-link" href="{{route('purchases.index')}}">
+              <i class="material-icons">local_shipping</i>
+              <p>المشتريات</p>
+            </a>
+          </li>
+          @endcan
           @can('الكاشير')
           <li class="nav-item {{ request()->is('cashier')? 'active' : ''}}">
             <a class="nav-link" href="{{route('cashier.index')}}">

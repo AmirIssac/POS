@@ -45,6 +45,15 @@ class Repository extends Model
         return $this->hasMany(SavedRecipe::class);
     }
 
+    public function purchases(){
+        return $this->hasMany(Purchase::class);
+    }
+
+    public function suppliers(){
+        return $this->belongsToMany(Supplier::class);
+    }
+
+
     /*public function types(){
         return $this->hasMany(Type::class);
     }*/

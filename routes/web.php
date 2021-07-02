@@ -80,6 +80,14 @@ Route::group(['middleware' => ['permission:المخزون']], function () {
         Route::get('/show/products/{repository_id}','Manager\RepositoryController@showProducts')->name('show.products');
     });
 });
+
+Route::get('/purchases','Manager\PurchaseController@index')->name('purchases.index');
+Route::get('/add/purchase/{repository_id}','Manager\PurchaseController@add')->name('purchase.add');
+Route::get('/add/supplier/form/{repository_id}','Manager\PurchaseController@addSupplier')->name('add.supplier');
+Route::post('/store/supplier/{repository_id}','Manager\PurchaseController@storeSupplier')->name('store.supplier');
+Route::get('/show/suppliers/{repository_id}','Manager\PurchaseController@showSuppliers')->name('show.suppliers');
+
+
 Route::group(['middleware'=>['permission:التقارير']], function () {
     Route::get('/reports','Manager\ReportController@index')->name('reports.index');
     Route::group(['middleware' => ['check_user']], function () {

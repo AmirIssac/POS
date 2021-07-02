@@ -190,6 +190,14 @@
             </a>
           </li>
           @endcan
+          @can('المخزون')
+          <li class="nav-item {{ request()->is('purchases')? 'active' : ''}}">
+            <a class="nav-link" href="{{route('purchases.index')}}">
+              <i class="material-icons">local_shipping</i>
+              <p>المشتريات</p>
+            </a>
+          </li>
+          @endcan
           @can('الكاشير')
           <li class="nav-item {{ request()->is('cashier')||request()->is('en/cashier')? 'active' : ''}}">
             <a class="nav-link" href="{{route('cashier.index')}}">
@@ -332,7 +340,7 @@
  @yield('body')
   <!--   Core JS Files   -->
   <script src="{{asset('public/js/core/jquery.min.js')}}" type="text/javascript"></script>
-  <script src="{{asset('public/js/core/popper.min.js')}}" type="text/javascript"></script>
+  <script src="{{asset('public//core/popper.min.js')}}" type="text/javascript"></script>
   <script src="{{asset('public/js/core/bootstrap-material-design.min.js')}}" type="text/javascript"></script>
   <script src="{{asset('public/js/plugins/perfect-scrollbar.jquery.min.js')}}"></script>
   <!--  Google Maps Plugin    -->
