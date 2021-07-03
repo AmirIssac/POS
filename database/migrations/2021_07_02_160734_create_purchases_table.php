@@ -19,9 +19,9 @@ class CreatePurchasesTable extends Migration
             $table->foreignId('user_id');   // the employee who recieve this purchase
             $table->foreignId('supplier_id');
             $table->string('code',8);
+            $table->string('supplier_invoice_num')->default(null)->nullable(); // رقم فاتورة المورد حقل اختياري
             $table->float('total_price');
-            $table->boolean('later_check');  // payment
-            $table->boolean('cash_check');  // payment
+            $table->enum('payment',['later','cashier','external']); // آجل او درج أو ميزانية خارجية
             $table->timestamps();
         });
     }

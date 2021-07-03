@@ -3,7 +3,7 @@
 return [
     'number_of_employees' => 'عدد الموظفين',
     'number_of_products' => 'عدد المنتجات',
-    'safe' => 'الخزينة',
+    'today_sales' => 'مبيعات اليوم',
     'today_revenue' => 'ارباح اليوم',
     'information' => 'معلومات',
     'card' => 'البطاقة',

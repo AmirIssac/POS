@@ -84,8 +84,8 @@
                    <div class="card-icon">
                      <i class="material-icons">account_balance_wallet</i>
                    </div>
-                   <p class="card-category">{{__('dashboard.safe')}}</p>
-                   <h3 class="card-title">{{$repository->cash_balance+$repository->card_balance}}</h3>
+                   <p class="card-category">{{__('dashboard.today_sales')}}</p>
+                   <h3 class="card-title">{{$repository->cash_balance+$repository->card_balance+$repository->stc_balance}}</h3>
                  </div>
                  <div class="card-footer">
                    <div class="stats">

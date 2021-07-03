@@ -78,4 +78,14 @@ class CashierController extends Controller
             //return redirect()->route('cashier.index', ['success' => 'تم إغلاق الكاشير اليومي بنجاح']);
             return redirect()->route('daily.reports.index',$repository->id)->with('success','تم اغلاق الكاشير بنجاح');
         }
+
+        public function warning($id){
+            $repository = Repository::find($id);
+            return view('manager.Cashier.warning')->with('repository',$repository);
+        }
+
+        public function dailyCashierWarningForm($id){
+            $repository = Repository::find($id);
+            return view('manager.Cashier.daily_cashier_warning')->with('repository',$repository);
+        }
 }

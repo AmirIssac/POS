@@ -1,85 +1,36 @@
-@extends('layouts.main')
+@extends('layouts.cashier_warning')
 @section('body')
-<style>
-  .card-header a{
-    color:white !important;
-  }
-  #modalicon:hover{
-    cursor: pointer;
-  }
-</style>
-     <div class="main-panel">
+<div class="main-panel">
       
-       <div class="content">
-       
-        @foreach($repositories as $repository)
-        <div class="col-md-4">
-         <div class="card card-chart">
-           <div class="card-header card-header-primary">
-             <div class="ct-chart" id="dailySalesChart"></div>
-           </div>
-           <div class="card-body">
-             <h4 class="card-title">{{__('repository.store')}} {{$repository->name}}</h4>
-           </div>
-           <div class="card-footer">
-             <div class="stats">
-               <i class="material-icons">access_time</i> معلومات  
-             </div>
+    <div class="content">
+     <div class="container-fluid">
+       <div class="row">
+     <div class="col-md-4">
+       <div class="card card-chart">
+         <div class="card-header card-header-primary">
+           <div class="ct-chart" id="dailySalesChart"></div>
+         </div>
+         <div class="card-body">
+           <h4 class="card-title">{{__('repository.store')}} {{$repository->name}}</h4>
+         </div>
+         <div class="card-footer">
+           <div class="stats">
+             <i class="material-icons">access_time</i> معلومات  
            </div>
          </div>
        </div>
-       {{$repository->isCashierWarning()}}
-         <div class="container-fluid">
-           <div class="row">
-             @can('ايداع في الكاشير')
-             <div class="col-lg-3 col-md-6 col-sm-6">
-                <a href="#">
-               <div class="card card-stats">
-                 <div class="card-header card-header-warning card-header-icon">
-                   <div class="card-icon">
-                   <i class="material-icons">input</i>
-                   </div>
-                   <p class="card-category"> {{__('cashier.deposit')}} </p>
-                   <h6 class="card-title"></h6>
-                 </div>
-                 <div class="card-footer">
-                   <div class="stats">
-                     <i class="material-icons">update</i>
-                   </div>
-                 </div>
-               </div>
-            </a>
-             </div>
-             @endcan
-
-            {{-- @can('سحب من الكاشير') --}}
-            @can('سحب من الكاشير')
-             <div class="col-lg-3 col-md-6 col-sm-6">
-                <a href="#">
-              <div class="card card-stats">
-                <div class="card-header card-header-warning card-header-icon">
-                  <div class="card-icon">
-                  <i class="material-icons">money_off</i>
-                  </div>
-                  <p class="card-category">{{__('cashier.withdraw')}}</p>
-                  <h6 class="card-title"></h6>
-                </div>
-                <div class="card-footer">
-                  <div class="stats">
-                    <i class="material-icons">update</i>
-                  </div>
-                </div>
-              </div>
-            </a>
-            </div>
-           {{-- @endcan --}}
-           @endcan
-
-
-           @can('اغلاق الكاشير')
+     </div>
+       </div>
+     </div>
+      <div class="container-fluid">
+        <div class="row">
+          
+          
+          @if(auth()->user()->can('اغلاق الكاشير'))
             @if($repository->dailyReportsDesc->count()>0)
            @if($repository->lastDailyReportDate()==now()->format('d'))
            <div class="col-lg-3 col-md-6 col-sm-6">
+            
           <div class="card card-stats" data-toggle="modal" data-target="#exampleModal" id="modalicon">
             <div class="card-header card-header-secondary card-header-icon">
               <div class="card-icon">
@@ -116,9 +67,11 @@
 </div>
            @else
             <div class="col-lg-3 col-md-6 col-sm-6">
-                <a href="{{route('daily.cashier.form',$repository->id)}}">
+                <i class="material-icons">report_problem</i>
+            <span class="badge badge-warning">لم يتم اغلاق الكاشير اليومي منذ أكثر من 30 ساعة يرجى اغلاقه لكي تستطيع متابعة عمليات اليوم بنجاح</span>
+                <a href="{{route('daily.cashier.warning.form',$repository->id)}}">
               <div class="card card-stats">
-                <div class="card-header card-header-success card-header-icon">
+                <div class="card-header card-header-danger card-header-icon">
                   <div class="card-icon">
                   <i class="material-icons">calculate</i>
                   </div>
@@ -136,9 +89,11 @@
             @endif
             @else  {{-- there is no dailyreports yet --}}
             <div class="col-lg-3 col-md-6 col-sm-6">
-              <a href="{{route('daily.cashier.form',$repository->id)}}">
+                <i class="material-icons">report_problem</i>
+            <span class="badge badge-warning">لم يتم اغلاق الكاشير اليومي منذ أكثر من 30 ساعة يرجى اغلاقه لكي تستطيع متابعة عمليات اليوم بنجاح</span>
+              <a href="{{route('daily.cashier.warning.form',$repository->id)}}">
             <div class="card card-stats">
-              <div class="card-header card-header-success card-header-icon">
+              <div class="card-header card-header-danger card-header-icon">
                 <div class="card-icon">
                 <i class="material-icons">calculate</i>
                 </div>
@@ -154,12 +109,12 @@
           </a>
           </div>
             @endif
-            @endcan
-
-
-           </div>
-         
-           </div>
-  @endforeach
- </body>
- @endsection
+            @else {{-- not can --}}
+            <i class="material-icons">report_problem</i>
+            <span class="badge badge-warning"> يرجى اغلاق الكاشير اليومي من موظف يملك الصلاحية حتى تتمكن من متابعة نشاطك في المتجر </span>
+          @endif {{-- end can --}}
+        </div>
+      </div>
+    </div>
+</div>
+@endsection

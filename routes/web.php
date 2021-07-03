@@ -21,7 +21,7 @@ Auth::routes();
 
 Route::group(['prefix' => LaravelLocalization::setLocale(),'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]], function()
 {
-Route::get('/',  'HomeController@main')->middleware('auth');
+Route::get('/',  'HomeController@main')->middleware('auth')->middleware('cashier_warning');
 Route::get('/home','HomeController@index')->middleware('auth');
 Route::get('/ltr',function () {
     return view('settings.ltr');
@@ -86,6 +86,10 @@ Route::get('/add/purchase/{repository_id}','Manager\PurchaseController@add')->na
 Route::get('/add/supplier/form/{repository_id}','Manager\PurchaseController@addSupplier')->name('add.supplier');
 Route::post('/store/supplier/{repository_id}','Manager\PurchaseController@storeSupplier')->name('store.supplier');
 Route::get('/show/suppliers/{repository_id}','Manager\PurchaseController@showSuppliers')->name('show.suppliers');
+Route::post('/store/purchase/{repository_id}','Manager\PurchaseController@storePurchase')->name('store.purchase');
+Route::post('edit/supplier','Manager\PurchaseController@editSupplierForm')->name('edit.supplier'); // we use form input hidden to use id and not passing it into url
+Route::post('update/supplier','Manager\PurchaseController@updateSupplier')->name('update.supplier'); // we use form input hidden to use id and not passing it into url
+Route::post('delete/supplier','Manager\PurchaseController@deleteSupplier')->name('delete.supplier'); // we use form input hidden to use id and not passing it into url
 
 
 Route::group(['middleware'=>['permission:التقارير']], function () {
@@ -124,6 +128,7 @@ Route::group(['middleware'=>['permission:الكاشير']], function () {
     Route::get('/cashier','Manager\CashierController@index')->name('cashier.index');
     Route::group(['middleware' => ['check_user']], function () {
         Route::get('/daily/cashier/{repository_id}','Manager\CashierController@dailyCashierForm')->name('daily.cashier.form')->middleware('permission:اغلاق الكاشير');
+        Route::get('/daily/cashier/warning/{repository_id}','Manager\CashierController@dailyCashierWarningForm')->name('daily.cashier.warning.form')->middleware('permission:اغلاق الكاشير');
         Route::post('/submit/cashier/{repository_id}','Manager\CashierController@submitCashier')->name('submit.cashier')->middleware('permission:اغلاق الكاشير');
     });
 });
@@ -140,6 +145,8 @@ Route::post('delete/product','Manager\RepositoryController@deleteProduct')->name
 
 //Route::get('/home', 'HomeController@index')->name('home');
 
+// cashier warning
+Route::get('cashier/warning/{repository_id}','Manager\CashierController@warning')->name('cashier.warning');
 }); // end of localization
 
 Route::get('/ajax/get/typeName/{type_id}','Manager\RepositoryController@getTypeNameAjax');

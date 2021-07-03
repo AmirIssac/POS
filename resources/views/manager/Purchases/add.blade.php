@@ -153,12 +153,62 @@ form #tooltip:hover{
                      </div>
                   </tbody>
                 </table>
-                <button  type="submit" class="btn btn-primary"> {{__('buttons.add')}} </button>
+                <label style="font-weight: bold; color: black"> المجموع </label>
+                <input type="number" name="sum" id="sum" class="form-control" readonly>
                 <i id="plus" class="material-icons">add_circle</i>
             </div>
         </div>
       </div>
     </div>
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <h4 class="card-title ">  عملية الدفع
+          </h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table id="myTable" class="table">
+              <thead class="text-primary">
+              </thead>
+              <tbody>
+                 <div>
+                  <tr>
+                    <td>آجل</td>
+                    <td>
+                      <input type="radio" name="pay" class="form-control" checked>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>كاش</td>
+                    <td>
+                      <input type="radio" class="form-control" id="cashradio" name="pay">
+                    </td>
+                  </tr>
+                  <tr id="cashoption1" class="displaynone">
+                    <td>كاش من درج الكاشير (رصيد الدرج {{$repository->cash_balance}})</td>
+                    <input type="hidden" id="cash_balance" value="{{$repository->cash_balance}}">
+                    <td>
+                      <input type="radio" id="cashrad" name="cash_option">
+                    </td>
+                  </tr>
+                  <tr id="cashoption2" class="displaynone">
+                    <td>كاش من ميزانية خارجية مخصصة</td>
+                    <td>
+                      <input type="radio" name="cash_option">
+                    </td>
+                  </tr>
+                 </div>
+              </tbody>
+
+            </table>
+            <button id="submit"  type="submit" class="btn btn-primary"> {{__('buttons.confirm')}} </button>
+
+        </div>
+    </div>
+  </div>
+</div>
+
 </form>
   </div>
 </div>
@@ -170,10 +220,13 @@ form #tooltip:hover{
 </script>
 <script>
   var intervalId = window.setInterval(function(){
+    var sum = 0 ;
   for(var i=0;i<count;i++){
       $('#total_price'+i+'').val($('#price'+i+'').val()*$('#quantity'+i+'').val());
+      sum = sum + parseFloat($('#total_price'+i+'').val());
   }
-}, 500);
+  $('#sum').val(sum);
+}, 3000);
 </script>
 
 <script>
@@ -197,5 +250,29 @@ form #tooltip:hover{
   });
   };
   </script>
-  
+  <script>
+    $('input[type="radio"]').on('change',function(){
+      if($('#cashradio').is(':checked')){
+          $('#cashoption1').removeClass('displaynone');
+          $('#cashoption2').removeClass('displaynone');
+      }
+      else{
+        $('#cashoption1').addClass('displaynone');
+        $('#cashoption2').addClass('displaynone');
+      }
+    });
+  </script>
+  <script>   // check the sum by the cashier balance
+    $('#sum').on('change',function(){
+      if($('#cashradio').is(':checked') && $('#cashrad').is(':checked'))
+      {
+          if(parseFloat($('#sum').val()) > parseFloat($('#cash_balance').val()))
+              $('#submit').prop('disabled',true);
+              else
+              $('#submit').prop('disabled',false);
+      }
+      else
+          $('#submit').prop('disabled',false);
+    });
+  </script>
 @endsection

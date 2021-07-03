@@ -72,5 +72,6 @@ class Kernel extends HttpKernel
         'localeSessionRedirect'   => \Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect::class,
         'localeCookieRedirect'    => \Mcamara\LaravelLocalization\Middleware\LocaleCookieRedirect::class,
         'localeViewPath'          => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationViewPath::class,
+        'cashier_warning' => \App\Http\Middleware\CashierWarning::class,
     ];
 }

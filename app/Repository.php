@@ -146,4 +146,19 @@ class Repository extends Model
         $arr = array('delivered'=>$del,'hanging'=>$hang,'retrieved'=>$retrieved);
         return $arr;
     }
+
+    public function isCashierWarning(){
+       $daily_report = $this->dailyReportsDesc()->first();
+       if($daily_report){
+        $now = now();
+        $created_at = $daily_report->created_at;
+        $hours = $now->diffInHours($created_at);   // the number of hours between last daily report and NOW
+        if($hours>30)
+        return true;
+        else
+        return false;
+       }
+       else
+       return false;
+    }
 }

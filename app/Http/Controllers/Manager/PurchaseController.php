@@ -61,4 +61,31 @@ class PurchaseController extends Controller
         $suppliers = $repository->suppliers()->paginate(20);
         return view('manager.Purchases.show_suppliers')->with(['repository'=>$repository,'suppliers'=>$suppliers]);
     }
+
+    public function editSupplierForm(Request $request){
+        $supplier = Supplier::find($request->supplier_id);
+        $repository = Repository::find($request->repository_id); // i need repo in next page
+        return view('manager.Purchases.edit_supplier')->with(['supplier'=>$supplier,'repository'=>$repository]);
+    }
+
+    public function updateSupplier(Request $request){
+        $supplier = Supplier::find($request->supplier_id);
+        $supplier->update([
+            'name' => $request->name,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'account_num' => $request->account_num,
+        ]);
+        return redirect(route('purchases.index'))->with('success','تم تعديل بيانات المورد بنجاح');
+    }
+
+    public function deleteSupplier(Request $request){
+        $supplier = Supplier::find($request->supplier_id);
+        $supplier->delete();
+        return redirect(route('purchases.index'))->with('success','تم حذف بيانات المورد بنجاح');
+    }
+
+    public function storePurchase(Request $request , $id){
+        $repository = Repository::find($id);
+    }
 }
