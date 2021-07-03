@@ -340,7 +340,7 @@
  @yield('body')
   <!--   Core JS Files   -->
   <script src="{{asset('public/js/core/jquery.min.js')}}" type="text/javascript"></script>
-  <script src="{{asset('public/core/popper.min.js')}}" type="text/javascript"></script>
+  <script src="{{asset('public/js/core/popper.min.js')}}" type="text/javascript"></script>
   <script src="{{asset('public/js/core/bootstrap-material-design.min.js')}}" type="text/javascript"></script>
   <script src="{{asset('public/js/plugins/perfect-scrollbar.jquery.min.js')}}"></script>
   <!--  Google Maps Plugin    -->
