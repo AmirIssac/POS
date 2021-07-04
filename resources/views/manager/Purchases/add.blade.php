@@ -36,7 +36,7 @@ form #tooltip:hover{
 @endif
     <div class="container-fluid">
       <div class="row">
-        <form method="POST" action="#">
+        <form method="POST" action="{{route('store.purchase',$repository->id)}}">
             @csrf
             <div class="col-md-12">
               <div class="card">
@@ -176,26 +176,26 @@ form #tooltip:hover{
                   <tr>
                     <td>آجل</td>
                     <td>
-                      <input type="radio" name="pay" class="form-control" checked>
+                      <input type="radio" name="pay" value="later" class="form-control" checked>
                     </td>
                   </tr>
                   <tr>
                     <td>كاش</td>
                     <td>
-                      <input type="radio" class="form-control" id="cashradio" name="pay">
+                      <input type="radio" class="form-control" value="cash" id="cashradio" name="pay">
                     </td>
                   </tr>
                   <tr id="cashoption1" class="displaynone">
                     <td>كاش من درج الكاشير (رصيد الدرج {{$repository->cash_balance}})</td>
                     <input type="hidden" id="cash_balance" value="{{$repository->cash_balance}}">
                     <td>
-                      <input type="radio" id="cashrad" name="cash_option">
+                      <input type="radio" id="cashrad" value="cashier" name="cash_option" checked>
                     </td>
                   </tr>
                   <tr id="cashoption2" class="displaynone">
                     <td>كاش من ميزانية خارجية مخصصة</td>
                     <td>
-                      <input type="radio" name="cash_option">
+                      <input type="radio" value="external" name="cash_option">
                     </td>
                   </tr>
                  </div>
@@ -264,6 +264,7 @@ form #tooltip:hover{
   </script>
   <script>   // check the sum by the cashier balance
     $('#sum').on('change',function(){
+      
       if($('#cashradio').is(':checked') && $('#cashrad').is(':checked'))
       {
           if(parseFloat($('#sum').val()) > parseFloat($('#cash_balance').val()))
@@ -273,6 +274,9 @@ form #tooltip:hover{
       }
       else
           $('#submit').prop('disabled',false);
+
+      if(parseFloat($('#sum').val())==0) // no records
+        $('#submit').prop('disabled',true);  
     });
   </script>
 @endsection

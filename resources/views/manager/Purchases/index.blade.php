@@ -93,7 +93,7 @@
             </div>
 
             <div class="col-lg-3 col-md-6 col-sm-6">
-                <a href="#">
+                <a href="{{route('show.purchases',$repository->id)}}">
               <div class="card card-stats">
                 <div class="card-header card-header-primary card-header-icon">
                   <div class="card-icon">

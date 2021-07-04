@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Purchase extends Model
 {
     //
+    protected $fillable = [
+        'repository_id','user_id','supplier_id','code','supplier_invoice_num','total_price','payment',
+    ];
     public function purchaseRecords(){
         return $this->hasMany(PurchaseRecord::class);
     }
@@ -15,5 +18,8 @@ class Purchase extends Model
     }
     public function repository(){ 
         return $this->belongsTo(Repository::class);
+    }
+    public function user(){ 
+        return $this->belongsTo(User::class);
     }
 }

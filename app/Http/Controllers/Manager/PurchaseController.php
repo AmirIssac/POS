@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
 use App\Purchase;
+use App\PurchaseRecord;
 use App\Repository;
 use App\Supplier;
 use App\User;
@@ -86,6 +87,52 @@ class PurchaseController extends Controller
     }
 
     public function storePurchase(Request $request , $id){
+
+        $validated = $request->validate([
+            'supplier_id' => 'required',
+        ]);
+
         $repository = Repository::find($id);
+        if($request->pay=='later')
+            $payment = 'later';
+        else // cash has two options
+            {
+                if($request->cash_option=='cashier'){
+                    $payment = 'cashier';
+                    $repository->update([
+                    'cash_balance' => $repository->cash_balance - $request->sum,
+                    ]);
+                }
+                else
+                    $payment = 'external';
+            }
+        $purchase = Purchase::create([
+            'repository_id' => $repository->id,
+            'user_id' => Auth::id(),
+            'supplier_id' => $request->supplier_id,
+            'code' => $request->code,
+            'supplier_invoice_num' => $request->supplier_invoice_num,
+            'total_price' => $request->sum,
+            'payment' =>  $payment,
+        ]);
+        $count = count($request->barcode);
+        for($i=0;$i<$count;$i++){
+            if($request->barcode[$i]){  // record exist (inserted)
+                 PurchaseRecord::create([
+                    'purchase_id' => $purchase->id,
+                    'barcode' => $request->barcode[$i],
+                    'name' => $request->name[$i],
+                    'quantity' => $request->quantity[$i],
+                    'price' => $request->price[$i],
+                ]);
+            }
+        }
+        return back()->with('success','تم انشاء فاتورة مشتريات بنجاح');
+    }
+
+    public function showPurchases($id){
+        $repository = Repository::find($id);
+        $purchases = $repository->purchases()->orderBy('created_at','DESC')->paginate(10);
+        return view('manager.Purchases.show_purchases')->with(['repository'=>$repository,'purchases'=>$purchases]);
     }
 }

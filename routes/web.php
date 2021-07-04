@@ -90,7 +90,7 @@ Route::post('/store/purchase/{repository_id}','Manager\PurchaseController@storeP
 Route::post('edit/supplier','Manager\PurchaseController@editSupplierForm')->name('edit.supplier'); // we use form input hidden to use id and not passing it into url
 Route::post('update/supplier','Manager\PurchaseController@updateSupplier')->name('update.supplier'); // we use form input hidden to use id and not passing it into url
 Route::post('delete/supplier','Manager\PurchaseController@deleteSupplier')->name('delete.supplier'); // we use form input hidden to use id and not passing it into url
-
+Route::get('/show/purchases/{repository_id}','Manager\PurchaseController@showPurchases')->name('show.purchases');
 
 Route::group(['middleware'=>['permission:التقارير']], function () {
     Route::get('/reports','Manager\ReportController@index')->name('reports.index');

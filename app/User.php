@@ -50,4 +50,7 @@ class User extends Authenticatable
     public function savedRecipes(){
         return $this->hasMany(SavedRecipe::class);
     }
+    public function purchases(){
+        return $this->hasMany(Purchase::class);
+    }
 }

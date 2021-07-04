@@ -18,6 +18,12 @@
    color: black;
    font-weight: bold;
   }
+  .displaynone{
+    display: none;
+  }
+  .eye:hover{
+    cursor: pointer;
+  }
 </style>
 @endsection
 @section('body')
@@ -50,6 +56,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
+          <?php $i = 0 ?>
           @if($invoices->count()>0)
          @foreach($invoices as $invoice)
           <div class="card">
@@ -58,11 +65,14 @@
                 
               <h4 class="card-title"> {{$invoice->created_at}}</h4>
               <h4>{{__('sales.invoice_code')}}  <span class="badge badge-success">{{$invoice->code}}</span></h4>
+              <i style="float: left" id="{{$i}}" class="material-icons eye">
+                visibility
+              </i>
             </div>
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table">
-                  <thead class=" text-primary">
+                  <thead id="th{{$i}}" class="text-primary displaynone">
                     <th>
                       {{__('sales.name')}}  
                     </th>
@@ -77,7 +87,7 @@
                       {{__('sales.delivered')}}   
                   </th>
                   </thead>
-                  <tbody>
+                  <tbody id="tb{{$i}}" class="displaynone">
                     @foreach(unserialize($invoice->details) as $detail)
                     @if($detail)
                     <tr>
@@ -268,6 +278,7 @@
               </div>
               </div>
             </div>
+            <?php ++$i ?>
             @endforeach
             @else
             <span id="warning" class="badge badge-warning">
@@ -282,4 +293,21 @@
      
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+  $('.eye').on('click',function(){
+    var id = $(this).attr('id');
+    if($('#th'+id).hasClass('displaynone')){  // show
+    $('#th'+id).removeClass('displaynone');
+    $('#tb'+id).removeClass('displaynone');
+    }
+    else
+    {  // hide
+      $('#th'+id).addClass('displaynone');
+      $('#tb'+id).addClass('displaynone');
+    }
+  });
+</script>
 @endsection
