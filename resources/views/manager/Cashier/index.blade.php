@@ -77,7 +77,7 @@
 
 
            @can('اغلاق الكاشير')
-            @if($repository->dailyReportsDesc->count()>0)
+            {{--@if($repository->dailyReportsDesc->count()>0)
            @if($repository->lastDailyReportDate()==now()->format('d'))
            <div class="col-lg-3 col-md-6 col-sm-6">
           <div class="card card-stats" data-toggle="modal" data-target="#exampleModal" id="modalicon">
@@ -134,7 +134,7 @@
             </a>
             </div>
             @endif
-            @else  {{-- there is no dailyreports yet --}}
+            @else  
             <div class="col-lg-3 col-md-6 col-sm-6">
               <a href="{{route('daily.cashier.form',$repository->id)}}">
             <div class="card card-stats">
@@ -153,7 +153,25 @@
             </div>
           </a>
           </div>
-            @endif
+            @endif--}}
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <a href="{{route('daily.cashier.form',$repository->id)}}">
+            <div class="card card-stats">
+              <div class="card-header card-header-success card-header-icon">
+                <div class="card-icon">
+                <i class="material-icons">calculate</i>
+                </div>
+                <p class="card-category">{{__('cashier.close_cashier')}}</p>
+                <h6 class="card-title">{{__('cashier.daily')}}</h6>
+              </div>
+              <div class="card-footer">
+                <div class="stats">
+                  {{__('cashier.available')}}
+                </div>
+              </div>
+            </div>
+          </a>
+          </div>
             @endcan
 
 
