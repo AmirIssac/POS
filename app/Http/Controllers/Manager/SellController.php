@@ -471,8 +471,8 @@ class SellController extends Controller
         if(!$request->customer_phone || !$request->customer_name)
             return back()->with('failCustomer','يرجى ادخال رقم الزبون');
          // cash and card must have at least one of them a value
-         if(!$request->cashVal && !$request->cardVal)
-            return back()->with('failPayment','عملية الدفع غير صحيحة');
+         /*if(!$request->cashVal && !$request->cardVal)
+            return back()->with('failPayment','عملية الدفع غير صحيحة');*/
         $repository = Repository::find($id);
         $count = count($request->barcode);
         $count2 = count( $request->del);
