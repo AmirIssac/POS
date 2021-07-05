@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
 use App\Purchase;
+use App\PurchaseProduct;
 use App\PurchaseRecord;
 use App\Repository;
 use App\Supplier;
@@ -134,5 +135,80 @@ class PurchaseController extends Controller
         $repository = Repository::find($id);
         $purchases = $repository->purchases()->orderBy('created_at','DESC')->paginate(10);
         return view('manager.Purchases.show_purchases')->with(['repository'=>$repository,'purchases'=>$purchases]);
+    }
+
+    public function productsForm($id){
+        $repository = Repository::find($id);
+        return view('manager.Purchases.products_form')->with(['repository'=>$repository]);
+    }
+
+    public function storeProducts(Request $request , $id){
+        $repository = Repository::find($id);
+        $totalPrice=0;
+        $count = count($request->barcode);    // number of records
+        for($i=0;$i<$count;$i++){
+            if($request->barcode[$i]){
+             // query to check if product exist so we update the quantity column or if not we create new record
+            $product = PurchaseProduct::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->first();
+            if($product)  // found it
+            {
+            $new_quantity = $product->quantity + $request->quantity[$i];
+            $new_price = $request->price[$i];
+            $product->update([
+                'quantity' => $new_quantity,
+                'price' => $new_price,
+            ]);
+            $totalPrice+=$request->total_price[$i];
+            }
+        else{
+            
+            PurchaseProduct::create(
+                [
+                    'repository_id'=>$repository->id,
+                    'barcode' => $request->barcode[$i],
+                    'name_ar'=>$request->name[$i],
+                    'name_en'=>$request->details[$i],
+                    'quantity'=>$request->quantity[$i],
+                    'price'=>$request->price[$i],
+                ]
+                );
+            $totalPrice+=$request->total_price[$i];
+        }
+    }
+        }
+        return back()->with('success','   تمت الإضافة بنجاح بمبلغ إجمالي   '.$totalPrice);
+    }
+
+    public function getProductAjax($repo_id,$barcode){
+        $product = PurchaseProduct::where('repository_id',$repo_id)->where('barcode',$barcode)->get(); // first record test
+        return response($product);
+    }
+
+    public function showLaterPurchases($id){
+        $repository = Repository::find($id);
+        $purchases = $repository->purchases()->where('payment','later')->orderBy('created_at','DESC')->paginate(10);
+        return view('manager.Purchases.later_purchases')->with(['repository'=>$repository,'purchases'=>$purchases]);
+    }
+
+    public function payLaterPurchase(Request $request , $id){
+        $purchase = Purchase::find($id);
+        $repository = $purchase->repository;
+        if($request->payment=='cashier'){
+            // check first if cashier has this amount of money
+            if($repository->cash_balance >= $purchase->total_price){
+                $payment = 'cashier';
+                $repository->update([
+                    'cash_balance' => $repository->cash_balance - $purchase->total_price,
+                ]);
+            }
+            else
+                return back()->with('fail','المبلغ المتوافر في الكاشير أقل من المبلغ الاجمالي');
+        }
+        else
+            $payment = 'external';
+        $purchase->update([
+            'payment' => $payment,
+        ]);
+        return redirect(route('purchases.index'))->with('success','تم تسديد الفاتورة بنجاح');
     }
 }

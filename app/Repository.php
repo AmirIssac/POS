@@ -52,7 +52,9 @@ class Repository extends Model
     public function suppliers(){
         return $this->belongsToMany(Supplier::class);
     }
-
+    public function purchaseProducts(){
+        return $this->hasMany(PurchaseProduct::class);
+    }
 
     /*public function types(){
         return $this->hasMany(Type::class);

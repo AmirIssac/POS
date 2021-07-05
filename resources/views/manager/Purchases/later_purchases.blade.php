@@ -33,7 +33,12 @@
 <div class="main-panel">
   
 <div class="content">
-  
+    @if ($message = Session::get('fail'))
+    <div class="alert alert-danger alert-block">
+        <button type="button" class="close" data-dismiss="alert">×</button>	
+            <strong>{{ $message }}</strong>
+    </div>
+    @endif
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
@@ -41,34 +46,34 @@
           @if($purchases->count()>0)
          @foreach($purchases as $purchase)
           <div class="card">
-            
+           
               <div class="card-header card-header-primary">
-                @if($purchase->created_at!=$purchase->updated_at)  {{-- it was later and then payed --}}
-                <h4 class="card-title"> {{$purchase->created_at}} ==> {{$purchase->updated_at}}</h4>
-                @else
+                
               <h4 class="card-title"> {{$purchase->created_at}}</h4>
-              @endif
               <h4>{{__('sales.invoice_code')}}  <span class="badge badge-success">{{$purchase->code}}</span></h4>
               <i style="float: left" id="{{$i}}" class="material-icons eye">
                 visibility
               </i>
             </div>
+            <form action="{{route('pay.later.purchase',$purchase->id)}}" method="POST">
+                @csrf
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table">
                   <thead id="th{{$i}}" class="text-primary displaynone">
                     <th>
-                      Barcode
-                  </th>
-                  <th>
-                      الاسم
-                  </th>
-                  <th>
-                      الكمية
-                  </th>
-                  <th>
-                      السعر
-                  </th>
+                        Barcode
+                    </th>
+                    <th>
+                        الاسم
+                    </th>
+                    <th>
+                        الكمية
+                    </th>
+                    <th>
+                        السعر
+                    </th>
+                    
                   </thead>
                   <tbody id="tb{{$i}}" class="displaynone">
                     @foreach($purchase->purchaseRecords as $record)
@@ -87,76 +92,85 @@
                         </td>
                     </tr>
                     @endforeach
-                    
+
                     <tr class="bold">
-                        
                         <td>
-                          المورد  
+                            المورد  
+                          </td>
+                         
+                          <td>
+                            موظف التسجيل  
+                          </td>
+                          <td>
+                           رقم فاتورة المورد  
+                          </td>
+                          <td>
+                            المبلغ الاجمالي
                         </td>
-                       
                         <td>
-                          موظف التسجيل  
-                        </td>
-                        <td>
-                         رقم فاتورة المورد  
-                        </td>
-                        <td>
-                          المبلغ الاجمالي
+                            طريقة الدفع
                       </td>
-                      <td>
-                          طريقة الدفع
-                    </td>
                     </tr>
                     <tr>
-                      <td>
-                        {{$purchase->supplier->name}}
-                      </td>
-                      <td>
-                          {{$purchase->user->name}}
-                      </td>
-                      <td>
-                          @if($purchase->supplier_invoice_num)
-                          {{$purchase->supplier_invoice_num}}
-                          @else
-                          لا يوجد
-                          @endif
-                      </td>
-                      <td>
-                          {{$purchase->total_price}}
-                      </td>
-                      
-                      <td>
-                        @if($purchase->created_at!=$purchase->updated_at)  {{-- it was later and then payed --}}
-                            @if($purchase->payment=='later')
-                            آجل => آجل
-                            @elseif($purchase->payment=='cashier')
-                            آجل => الدرج
+                        <td>
+                          {{$purchase->supplier->name}}
+                        </td>
+                        <td>
+                            {{$purchase->user->name}}
+                        </td>
+                        <td>
+                            @if($purchase->supplier_invoice_num)
+                            {{$purchase->supplier_invoice_num}}
                             @else
-                            آجل => ميزانية خارجية مخصصة  
+                            لا يوجد
                             @endif
-                        @else
-                            @if($purchase->payment=='later')
+                        </td>
+                        <td>
+                            {{$purchase->total_price}}
+                        </td>
+                        
+                        <td>
+                            
                             آجل
-                            @elseif($purchase->payment=='cashier')
-                            الدرج
-                            @else
-                            ميزانية خارجية مخصصة
-                            @endif
-                        @endif
-                      </td>
-                  </tr>
+                            
+                           
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            كاش <input type="radio" name="payment" value="cashier" checked>
+                        </td>
+                        <td>
+                            ميزانية خارجية <input type="radio" name="payment" value="external">
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                    <button type="submit" class="btn btn-danger"> دفع </button>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
                   </tbody>
                 </table>
            
 
               </div>
+            </form>
               </div>
+            
             </div>
             <?php ++$i ?>
             @endforeach
             @else
             <span id="warning" class="badge badge-warning">
-              لا يوجد فواتير مشتريات
+              لا يوجد فواتير آجلة الدفع
             </span>
             @endif
           </div>

@@ -111,7 +111,8 @@ form #tooltip:hover{
                      <div id="record">
                       <tr>
                         <td>
-                            <input type="text" name="barcode[]" class="form-control barcode" placeholder=" {{__('sales.scanner_input')}} " id="autofocus"  required>
+                          <input type="hidden" value="{{$repository->id}}" id="repo_id">
+                            <input type="text" name="barcode[]" class="form-control barcode" placeholder=" {{__('sales.scanner_input')}} " id="bar0"  required>
                         </td>
                         <td>
                           <input type="text" name="name[]" class="form-control" placeholder="اكتب الاسم هنا" id="ar0" required>
@@ -122,7 +123,7 @@ form #tooltip:hover{
                   </td>
                       
                         <td>
-                            <input id="price0"  type="number" name="price[]" step="0.01" class="form-control target" value="0" placeholder="{{__('sales.price')}}" required>
+                            <input id="price0"  type="number" name="price[]" step="0.01" class="form-control target" value="0" placeholder="{{__('sales.price')}}" id="price0" required>
                         </td>
                         <td>
                             <input id="total_price0" type="number" name="total_price[]" step="0.01" class="form-control" placeholder="{{__('sales.total_price')}}" required>
@@ -279,4 +280,24 @@ form #tooltip:hover{
         $('#submit').prop('disabled',true);  
     });
   </script>
+  <script>    // Ajax
+    $('.barcode').on('keyup',function(){
+     
+    var barcode = $(this).val();
+    var id = $(this).attr("id");  // extract id
+    var gold =  id.slice(3);   // remove bar from id to take just the number
+    var repo_id = $('#repo_id').val();
+    $.ajax({
+           type: "get",
+           url: '/ajax/get/purchase/product/'+repo_id+'/'+barcode,
+           //dataType: 'json',
+          success: function(data){    // data is the response come from controller
+            $.each(data,function(i,value){
+              $('#ar'+gold+'').val(value.name_ar);
+              $('#price'+gold+'').val(value.price);
+           });
+          }
+    }); // ajax close
+  });
+</script>
 @endsection

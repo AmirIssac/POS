@@ -91,6 +91,13 @@ Route::post('edit/supplier','Manager\PurchaseController@editSupplierForm')->name
 Route::post('update/supplier','Manager\PurchaseController@updateSupplier')->name('update.supplier'); // we use form input hidden to use id and not passing it into url
 Route::post('delete/supplier','Manager\PurchaseController@deleteSupplier')->name('delete.supplier'); // we use form input hidden to use id and not passing it into url
 Route::get('/show/purchases/{repository_id}','Manager\PurchaseController@showPurchases')->name('show.purchases');
+Route::get('/purchase/products/{repository_id}','Manager\PurchaseController@productsForm')->name('purchase.products');
+Route::post('/store/purchase/products/{repository_id}','Manager\PurchaseController@storeProducts')->name('store.purchase.products');
+Route::get('/ajax/get/purchase/product/{repository_id}/{barcode}','Manager\PurchaseController@getProductAjax');
+Route::get('/show/later/purchases/{repository_id}','Manager\PurchaseController@showLaterPurchases')->name('show.later.purchases');
+Route::post('/pay/later/purchase/{purchase_id}','Manager\PurchaseController@payLaterPurchase')->name('pay.later.purchase');
+
+
 
 Route::group(['middleware'=>['permission:التقارير']], function () {
     Route::get('/reports','Manager\ReportController@index')->name('reports.index');
