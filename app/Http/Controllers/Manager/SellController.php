@@ -26,11 +26,7 @@ class SellController extends Controller
         return view('manager.Sales.create_invoice')->with('repository',$repository);
     }
 
-    /*public function modalCustomer($id){
-        $repository = Repository::find($id);
-        return view('manager.Sales.modal_customer')->with('repository',$repository);
-    }*/
-
+    
     public function createSpecialInvoiceForm(Request $request,$id){
         $repository = Repository::find($id);
         // check if phone not inserted = make new invoice clicked in index
@@ -123,45 +119,7 @@ class SellController extends Controller
     }
 
     
-   /* public function invoiceDetails(Request $request , $id){
-        $repository = Repository::find($id);
-        $count = count($request->barcode);    // number of records
-        $products = collect(new Product());
-        $invoice_total_price = 0 ;
-        for($i=0;$i<$count;$i++){
-            $product = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->get();
-            // check if product not exist that mean one of the barcode inserted is wrong
-            if($product->isEmpty())
-            return back()->with('fail','هنالك خطأ بإدخال الباركود الرجاء التأكد من صحة الإدخال');
-            // check all the quantities if <= the stored quantity of stored products
-            if($product[0]->quantity<$request->quantity[$i])
-              return back()->with('fail','الكمية أكبر من المتوفر للقطعة'.'  '.$product[0]->name);
-            // check if product taked before so we dont craete new record to not make the invoice big we just add quantity
-            if($products->contains('barcode',$product[0]->barcode)){
-                $p = $request->quantity[$i];
-                $products->where('barcode', $product[0]->barcode)->map(function ($item, $key) use ($p){    // we use map to change value in collection
-                     $item->quantity = $item->quantity + $p;
-                }); 
-                $price = $product[0]->price * $request->quantity[$i];
-                $invoice_total_price += $price ;
-                continue;
-            }
-            $product[0]->quantity = $request->quantity[$i];
-            $products = $products->toBase()->merge($product);   // collections sum
-            foreach($product as $pro)    // we need to use foreach because we deal with collection
-            $price = $pro->price * $request->quantity[$i];
-            $invoice_total_price += $price ;
-        }
-        $date = now();  // invoice date
-        return view('manager.Sales.show_invoice_beforePrint')->with([
-            'repository'=>$repository,
-            'products'=>$products,
-            //'quantities' => $quantities,
-            'invoice_total_price' => $invoice_total_price,
-            'date' => $date,
-            ]);
-    } */
-
+   
     public function invoiceDetails(Request $request , $id){
         $repository = Repository::find($id);
         //return $request->barcode;
@@ -220,140 +178,7 @@ class SellController extends Controller
             ]);
     }
 
-   /* public function specialInvoiceDetails(Request $request , $id){
-            $repository = Repository::find($id);
-            //return $request->barcode;
-            $count = count($request->barcode);    // number of records
-            $products = collect(new Product());
-            $invoice_total_price = 0 ;
-            for($i=0;$i<$count;$i++){
-                if(!$request->barcode[$i])    // null record
-                continue;
-                $product = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->get();
-                // check if product not exist that mean one of the barcode inserted is wrong
-                if($product->isEmpty())
-                return back()->with('fail','هنالك خطأ بإدخال الباركود الرجاء التأكد من صحة الإدخال');
-                // check all the quantities if <= the stored quantity of stored products
-                if($product[0]->quantity<$request->quantity[$i])
-                return back()->with('fail','الكمية أكبر من المتوفر للقطعة'.'  '.$product[0]->name);
-                $product[0]->quantity = $request->quantity[$i];
-                $products = $products->toBase()->merge($product);   // collections sum
-                foreach($product as $pro)    // we need to use foreach because we deal with collection
-                $price = $pro->price * $request->quantity[$i];
-                $invoice_total_price += $price ;
-            }
-            // code generate
-            do{
-                $characters = '0123456789';
-                $charactersLength = strlen($characters);
-                $code = '';
-                for ($i = 0; $i < 8; $i++)
-                $code .= $characters[rand(0, $charactersLength - 1)];
-                // check if code exist in this repository before
-                $invoice = Invoice::where('repository_id',$repository->id)->where('code',$code)->first();
-                }
-                while($invoice);   // if the code exists before we generate new code
-            $date = now();  // invoice date
-            // tax
-            $increment =($repository->tax * $invoice_total_price) / 100;
-            $final_total_price = $invoice_total_price + $increment;
-            return view('manager.Sales.show_special_invo_BP')->with([
-                'repository'=>$repository,
-                'products'=>$products,
-                //'quantities' => $quantities,
-                'invoice_total_price' => $invoice_total_price,
-                'code' => $code,
-                'date' => $date,
-                'final_total_price' => $final_total_price,
-                'phone' => $request->phone,
-                'customer_name' => $request->customer_name,
-                ]);
-    }*/
-    
-
-   /* public function sell(Request $request , $id){
-        $repository = Repository::find($id);
-        $count = count($request->barcode);
-        for($i=0;$i<$count;$i++){   // check all the quantities before any sell process
-            $product = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->get();
-            // check all the quantities if <= the stored quantity of stored products
-            if($product[0]->quantity<$request->quantity[$i])
-              return back()->with('fail','الكمية أكبر من المتوفر للقطعة'.'  '.$product[0]->name);
-        }    
-        for($i=0;$i<$count;$i++){
-            $product = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->get();
-            foreach($product as $prod)
-            $new_quantity = $prod->quantity - $request->quantity[$i];
-            $prod->update(
-                [
-                    'quantity' => $new_quantity,
-                ]
-                );
-        }
-        // update repository balance
-        $repository->update(
-            [
-                'cash_balance' => $repository->cash_balance + $request->cashVal,
-                'card_balance' => $repository->card_balance + $request->cardVal,
-            ]
-            );
-        // store invoice in DB
-        // store details as array of arrays
-        $details = array(array());    // each array store details for on record (one product)
-        for($i=0;$i<$count;$i++){
-            $record = array("name"=>$request->name[$i],"detail"=>$request->details[$i],"price"=>$request->price[$i],"quantity"=>$request->quantity[$i]);
-            $details[]=$record;
-        }
-        $details = serialize($details);
-        if($request->delivered){
-            $status = "delivered";
-        }
-        else{
-            $status = "pending";
-        }
-        if($request->cash){
-            $cash = true;
-        }
-        else{
-            $cash = false;
-        }       
-        if($request->card){
-            $card = true;
-        }
-        else{
-            $card = false;
-        } 
-        if(!$request->cashVal){
-            $cashVal = 0;
-        }
-        else{
-            $cashVal = $request->cashVal;
-        }
-        if(!$request->cardVal){
-            $cardVal = 0;
-        }
-        else{
-            $cardVal = $request->cardVal;
-        }
-        Invoice::create(
-            [
-                'repository_id' => $repository->id,
-                'user_id' => Auth::user()->id,
-                'code' => $request->code,
-                'details' => $details,
-                'total_price' => $request->total_price,
-                'cash_check' => $cash,
-                'card_check' => $card,
-                'cash_amount' => $cashVal,
-                'card_amount' => $cardVal,
-                'status' => $status,
-                'phone' => $request->phone,
-                'created_at' => $request->date,
-            ]
-            );
-        return redirect(route('create.invoice',$repository->id))->with('sellSuccess','تمت عملية البيع بنجاح');
-    } */
-
+  
     public function sell(Request $request , $id){
         $repository = Repository::find($id);
         $count = count($request->barcode);
@@ -573,6 +398,7 @@ class SellController extends Controller
                 'cash_balance' => $repository->cash_balance + $request->cashVal,
                 'card_balance' => $repository->card_balance + $request->cardVal,
                 'stc_balance' => $repository->stc_balance + $request->stcVal,
+                'balance' => $repository->balance + $request->cashVal,
             ]
             );
         // store invoice in DB
@@ -790,6 +616,12 @@ class SellController extends Controller
         else{
             $card = false;
         } 
+        if($request->stc){
+            $stc = true;
+        }
+        else{
+            $stc = false;
+        } 
         if(!$request->cashVal){
             $cashVal = 0;
         }
@@ -802,13 +634,21 @@ class SellController extends Controller
         else{
             $cardVal = $request->cardVal;
         }
+        if(!$request->stcVal){
+            $stcVal = 0;
+        }
+        else{
+            $stcVal = $request->stcVal;
+        }
         $invoice->update(
             [
                 'user_id' => Auth::user()->id,
                 'cash_check' => $cash,
                 'card_check' => $card,
+                'stc_check' => $stc,
                 'cash_amount' => $invoice->cash_amount + $cashVal,
                 'card_amount' => $invoice->card_amount + $cardVal,
+                'stc_amount' => $invoice->stc_amount + $stcVal,
                 'status' => 'delivered',
                 'created_at' => $request->date,
                 'daily_report_check' => false,
@@ -819,6 +659,8 @@ class SellController extends Controller
                 [
                     'cash_balance' => $repository->cash_balance + $request->cashVal,
                     'card_balance' => $repository->card_balance + $request->cardVal,
+                    'stc_balance' => $repository->stc_balance + $request->stcVal,
+                    'balance' => $repository->balance + $request->cashVal,
                 ]
                 );
                 
@@ -918,6 +760,7 @@ class SellController extends Controller
         $cash_retrieved = $invoice->cash_amount + $invoice->card_amount;
         $repository->update([
             'cash_balance' => $repository->cash_balance - $cash_retrieved,
+            'balance' => $repository->balance - $cash_retrieved,
         ]);
         // change invoice status
         $invoice->update([

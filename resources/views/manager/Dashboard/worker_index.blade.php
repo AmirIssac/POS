@@ -34,21 +34,33 @@
                     <i class="material-icons">account_balance_wallet</i>
                   </div>
                   <p class="card-category">{{__('dashboard.today_sales')}}</p>
-                  <h3 class="card-title">{{$repository->cash_balance+$repository->card_balance+$repository->stc_balance}}</h3>
+                  <h3 class="card-title">{{$repository->todaySales()}}
+                 </h3>
+                  
                 </div>
                 <div class="card-footer">
+                  <div style="display: flex; flex-direction: column; width: 100%">
+                   <div style="display: flex; justify-content: space-between">
                   <div class="stats">
-                    <i class="material-icons">point_of_sale</i>
-                    {{__('dashboard.cashier')}} {{$repository->cash_balance}}
+                    <i style="color: #48a44c;" class="material-icons">point_of_sale</i>
+                    {{__('dashboard.cash')}} {{$repository->cash_balance}}
                   </div>
                   <div class="stats">
-                   <i class="material-icons">payment</i>
+                   <i style="color: #48a44c" class="material-icons">payment</i>
                    {{__('dashboard.card')}} {{$repository->card_balance}}
                  </div>
+                   </div>
+                   <div style="display: flex; justify-content: space-between">
                  <div class="stats">
-                   <i class="material-icons">payment</i>
+                   <i style="color: #48a44c" class="material-icons">payment</i>
                    STC {{$repository->stc_balance}}
                  </div>
+                 <div class="stats">
+                    <i style="color: #970662" class="material-icons">account_balance</i>
+                   {{__('dashboard.cashier')}} {{$repository->balance}} 
+                 </div>
+                   </div>
+                  </div>
                 </div>
               </div>
             </div>

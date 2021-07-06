@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Repository extends Model
 {
     protected $fillable = [
-        'name', 'address','category_id','cash_balance','card_balance','stc_balance','min_payment','max_discount','tax','tax_code','logo',
+        'name', 'address','category_id','cash_balance','card_balance','stc_balance','balance','today_sales','min_payment','max_discount','tax','tax_code','logo',
     ];
     //
     public function users(){
@@ -162,5 +162,14 @@ class Repository extends Model
        }
        else
        return false;
+    }
+
+    public function todaySales(){
+        $today_sales = 0;
+        $invoices = $this->invoices()->where('status','!=','retrieved')->where('daily_report_check',false)->get();
+        foreach($invoices as $invoice){
+            $today_sales += $invoice->total_price;
+        }
+        return $today_sales;
     }
 }

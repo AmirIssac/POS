@@ -173,13 +173,14 @@ input[type=number] {
           </div>
         <input style="margin-right: 0px" type="number" min="0.1" step="0.1" name="cardVal" id="cardVal" value="" class="form-control hidden">
         </div>
-        {{--<div style="display: flex;flex-direction: column;">
+        <div style="display: flex;flex-direction: column;">
           <div style="display: flex;">
         <h4> &nbsp; STC-pay</h4>
         <input style="margin: 7px 10px 0 0" type="checkbox" id="stc" name="stc">
           </div>
-        <input style="margin-right: 0px" type="number" min="0.1" step="0.1" name="stcVal" id="stcVal" value="" class="form-control hidden">
-        </div>--}}
+        <input style="margin-right: 0px" type="number" min="0.1" step="0.01" name="stcVal" id="stcVal" value="" class="form-control hidden">
+        </div>
+       
 </div>
         {{--<button onclick="window.print();" class="btn btn-success"> طباعة </button>--}}
         <button onclick="window.print();" type="submit" class="btn btn-danger">   {{__('buttons.complete_invoice_print')}} </button>
@@ -196,58 +197,127 @@ input[type=number] {
 @endsection
 @section('scripts')
 <script>
-  $('input[type="checkbox"]').change(function(){
-if($('#cash').is(':checked') && $('#card').is(':checked')){
+ $('input[type="checkbox"]').change(function(){
+if($('#cash').is(':checked') && $('#card').is(':checked') && $('#stc').is(':checked')){
     $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
     $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
 }
-if($('#cash').is(':checked') && $('#card').prop('checked') == false){
+if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){
   $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
-  //$('#cashVal').val( $('#total_price').val());
-  $('#cashVal').val($('#extra_price').val());
+  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+  $('#cardVal').val(null);
+  $('#stcVal').val(null);
+}
+if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
+  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
   $('#cardVal').val(null);
 }
-if($('#cash').prop('checked') == false && $('#card').prop('checked') == true){
-  $('input[name="cardVal"]').removeClass('hidden').addClass('visibl');
+if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == true){
+  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
   $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
-  $('#cardVal').val($('#extra_price').val());
+  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
   $('#cashVal').val(null);
 }
-if($('#cash').prop('checked') == false && $('#card').prop('checked') == false){   // error
-  //$('#cash').prop('checked',true);
-  $('input[name="cashVal"]').removeClass('hidden').addClass('visibl');
+if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
+  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+  $('#cashVal').val(null);
+  $('#stcVal').val(null);
+}
+if($('#cash').prop('checked') == true && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
+  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+  $('#stcVal').val(null);
+}
+if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
   $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
-  //$('#cashVal').val( $('#extra_price').val());
+  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
   $('#cashVal').val(null);
   $('#cardVal').val(null);
+}
+if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){   // error
+  //$('#cash').prop('checked',true);
+  //$('input[name="cashVal"]').removeClass('hidden').addClass('visibl');
+  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+  //$('#cashVal').val( $('#total_price').val());
+  $('#cashVal').val(null);
+  $('#cardVal').val(null);
+  $('#stcVal').val(null);
   $('#submit').prop('disabled', true);
 }
 });
 </script>
 
-<script>    // cant submit if cash + card != total real price    //Except if we make invoice pending
- $('input[name="quantity[]"],#cashVal,#cardVal,#cash,#card').on("keyup change",function(){
+<script>    
+ $('input[name="quantity[]"],#cashVal,#cardVal,#cash,#card,#stcVal,#stc').on("keyup change",function(){
   var sum;
-    var cash =  parseFloat($('#cashVal').val());
-    var card = parseFloat($('#cardVal').val());
-    if($('#cashVal').val()=="" && $('#cardVal').val()!=""){
-      sum = card + 0;
-    }
-   if($('#cardVal').val()=="" && $('#cashVal').val()!=""){
-      sum = cash + 0;
-    }
-    if($('#cashVal').val()!="" && $('#cardVal').val()!=""){
-    sum = cash + card ;
-    }
+     var cash =  parseFloat($('#cashVal').val());
+     var card = parseFloat($('#cardVal').val());
+     var stc = parseFloat($('#stcVal').val());
+    
+      
+     if($('#cashVal').val()=="" && $('#cardVal').val()!="" && $('#stcVal').val()!=""){
+     //if(!$('#cashVal').val() && $('#cardVal').val()){
+       cash = 0 ;
+       sum = card + cash + stc;
+     }
+    if($('#cardVal').val()=="" && $('#cashVal').val()!="" && $('#stcVal').val()!=""){
+     //if(!$('#cardVal').val() && $('#cashVal').val()){
+       card = 0 ;
+       sum = cash + card + stc;
+     }
+     
+     if($('#cardVal').val()=="" && $('#cashVal').val()!="" && $('#stcVal').val()==""){
+     //if(!$('#cardVal').val() && $('#cashVal').val()){
+       card = 0 ;
+       stc = 0 ;
+       sum = cash + card + stc;
+     }
+     if($('#cardVal').val()=="" && $('#cashVal').val()=="" && $('#stcVal').val()!=""){
+     //if(!$('#cardVal').val() && $('#cashVal').val()){
+       card = 0 ;
+       cash = 0 ;
+       sum = cash + card + stc;
+     }
+     if($('#cardVal').val()!="" && $('#cashVal').val()!="" && $('#stcVal').val()==""){
+     //if(!$('#cardVal').val() && $('#cashVal').val()){
+       stc = 0 ;
+       sum = cash + card + stc;
+     }
+     if($('#cardVal').val()!="" && $('#cashVal').val()=="" && $('#stcVal').val()==""){
+     //if(!$('#cardVal').val() && $('#cashVal').val()){
+       cash = 0 ;
+       stc = 0 ;
+       sum = cash + card + stc;
+     }
+     if($('#cashVal').val()=="" && $('#cardVal').val()=="" && $('#stcVal').val()==""){
+      cash = 0 ;
+      card = 0 ;
+      stc = 0 ;
+     sum = cash + card + stc ;
+     }
+     if($('#cashVal').val()!="" && $('#cardVal').val()!="" && $('#stcVal').val()!=""){
+     //if($('#cashVal').val() && $('#cardVal').val()){
+     sum = cash + card + stc ;
+     }
     if(sum == $('#extra_price').val()){
       $('button[type="submit"]').prop('disabled', false);
     }
     else if(sum != $('#extra_price').val()){
       $('button[type="submit"]').prop('disabled', true);   // cant submit if cash and card not equals the total
     }
-    if(cash <=0 || card<=0){ // dont accept values less or equal to zero
+    /*if(cash <=0 || card<=0 || stc<=0){ // dont accept values less or equal to zero
       $('button[type="submit"]').prop('disabled', true);
-    }
+    }*/
   });
 </script>
 

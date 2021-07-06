@@ -13,5 +13,6 @@ return [
     'delivered' => 'Delivered',
     'hanging' => 'Hanging',
     'retrieved' => 'Retrieved',
+    'cash' => 'cash',
 ];
 ?>

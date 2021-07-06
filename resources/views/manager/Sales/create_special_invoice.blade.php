@@ -1154,16 +1154,7 @@ window.onload=function(){
 };
   var c = $('input[name="barcode[]"]');
   var count = c.length;    // number of records
-  /*var intervalId = window.setInterval(function(){
-   // $('#total_price').val(0);
-   var sum = 0 ;
-  for(var i=0;i<count;i++){
-    sum = sum + $('.price').eq(i).val()*$('.quantity').eq(i).val();
-    //$('#total_price').val($('#total_price').val()+($('.price').eq(i).val()*$('.quantity').eq(i).val()));
-  }
-  $('#total_price').val(sum);
-  $('#cashVal').val(sum);     // cash value input
-}, 500);*/
+ 
 $('input[name="quantity[]"]').on("keyup",function(){
   var sum = 0 ;
   var s1 = 0;
@@ -1228,65 +1219,7 @@ $('input[name="quantity[]"]').on("keyup",function(){
      
 });
 </script>
-{{--<script>    // cant submit if cash + card != total real price    //Except if we make invoice pending
- $('input[name="quantity[]"],#cashVal,#cardVal,#cash,#card').on("keyup change",function(){
-    var sum;
-    var cash =  parseFloat($('#cashVal').val());
-    var card = parseFloat($('#cardVal').val());
-   
-     // min payment
-     var min = parseFloat($('#inputmin').val());
-    if($('#cashVal').val()=="" && $('#cardVal').val()!=""){
-    //if(!$('#cashVal').val() && $('#cardVal').val()){
-      cash = 0 ;
-      sum = card + cash;
-    }
-   if($('#cardVal').val()=="" && $('#cashVal').val()!=""){
-    //if(!$('#cardVal').val() && $('#cashVal').val()){
-      card = 0 ;
-      sum = cash + card;
-    }
-    if($('#cashVal').val()!="" && $('#cardVal').val()!=""){
-    //if($('#cashVal').val() && $('#cardVal').val()){
-    sum = cash + card ;
-    }
-    /*if(sum == $('#final_total_price').val()){
-      $('#submit').prop('disabled', false);
-    }*/
-   
-     if(sum > $('#final_total_price').val()){   
-      $('#submit').prop('disabled', true);
-    }
-    else{
-      if ($('.delivered:checked').length != $('.delivered').length){  // hanging
-        $('#badgecolor').removeClass('hidden').addClass('visible');
-      // min payment
-        if((cash+card)<min){
-        //if(sum<min)
-        $('#submit').prop('disabled', true);
-        $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
-      }
-      else{
-        $('#submit').prop('disabled', false);
-        $('#badgecolor').removeClass('badge-danger').addClass('badge-success');
-      }
-      }  // end hanging
-      if ($('.delivered:checked').length == $('.delivered').length){ //delivered
-        if(sum == $('#final_total_price').val())   // delivered
-        $('#submit').prop('disabled', false);   // cant submit if cash and card not equals the total
-        else
-        $('#submit').prop('disabled', true);
-      }
-      //if(cash <= 0 || card <= 0 )
-      if(parseFloat(('#cashVal').val()) <=0.00 || parseFloat(('#cardVal').val())<=0.00){ // dont accept values less or equal to zero
-          $('#submit').prop('disabled', true);
-        }
-      
-    }
-    if($('#cardVal').val()=="" && $('#cashVal').val()=="")
-      $('#submit').prop('disabled', true);
-  });
-</script>--}}
+
 </script>
 <script>   // stop submiting form when click enter
   $('#sell-form').keypress(function(e) {
@@ -1338,33 +1271,7 @@ window.onload=function(){
   </script>
   <script>  // save recipe
 
-    /*$('input[name="add_r"]').on('change',function(){
-      $('input[name="add_rs"]').val($('input[name="add_r"]').val());
-    });
-    $('input[name="axis_r"]').on('change',function(){
-      $('input[name="axis_rs"]').val($('input[name="axis_r"]').val());
-    })
-    $('input[name="cyl_r"]').on('change',function(){
-      $('input[name="cyl_rs"]').val($('input[name="cyl_r"]').val());
-    });
-    $('input[name="sph_r"]').on('change',function(){
-      $('input[name="sph_rs"]').val($('input[name="sph_r"]').val());
-    });
-    $('input[name="add_l"]').on('change',function(){
-      $('input[name="add_ls"]').val($('input[name="add_l"]').val());
-    });
-    $('input[name="axis_l"]').on('change',function(){
-      $('input[name="axis_ls"]').val($('input[name="axis_l"]').val());
-    });
-    $('input[name="cyl_l"]').on('change',function(){
-      $('input[name="cyl_ls"]').val($('input[name="cyl_l"]').val());
-    });
-    $('input[name="sph_l"]').on('change',function(){
-      $('input[name="sph_ls"]').val($('input[name="sph_l"]').val());
-    });
-    $('input[name="ipdval"]').on('change',function(){
-      $('input[name="ipdvals"]').val($('input[name="ipdval"]').val());
-    });*/
+   
     $('select[name="add_r"]').on('change',function(){
       $('input[name="add_rs"]').val($('select[name="add_r"]').val());
     });

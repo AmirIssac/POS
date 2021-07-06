@@ -13,5 +13,6 @@ return [
     'delivered' => 'مستلمة',
     'hanging' => 'معلقة',
     'retrieved' => 'مسترجعة',
+    'cash' => 'كاش',
 ];
 ?>
