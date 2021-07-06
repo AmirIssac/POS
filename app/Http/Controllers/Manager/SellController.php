@@ -759,7 +759,7 @@ class SellController extends Controller
         $repository = Repository::find($request->repo_id);
         $cash_retrieved = $invoice->cash_amount + $invoice->card_amount;
         $repository->update([
-            'cash_balance' => $repository->cash_balance - $cash_retrieved,
+            //'cash_balance' => $repository->cash_balance - $cash_retrieved,
             'balance' => $repository->balance - $cash_retrieved,
         ]);
         // change invoice status

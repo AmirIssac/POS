@@ -63,16 +63,6 @@ form #tooltip:hover{
                     <th>
                         سعر الوحدة 
                     </th>   
-                    <th>
-                      {{__('sales.quantity')}} 
-                    </th>
-                    
-                    <th>
-                      المجموع
-                    </th>  
-                      <td>
-                      <i id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title=" المجموع =" data-content=" سعر الوحدة X {{__('sales.quantity')}}">live_help</i>
-                      </td>
                     </th>
                   </thead>
                   <tbody>
@@ -92,11 +82,9 @@ form #tooltip:hover{
                             <input id="price0"  type="number" name="price[]" step="0.01" class="form-control target" value="0" placeholder="{{__('sales.price')}}" required>
                         </td>
                         
-                    <td>
-                        <input id="quantity0" type="number" name="quantity[]" min="0" class="form-control" value="1" placeholder="{{__('sales.quantity')}}" required>
-                    </td>
+                    
                         <td>
-                            <input id="total_price0" type="number" name="total_price[]" step="0.01" class="form-control" placeholder="{{__('sales.total_price')}}" required>
+                           
                             <input type="hidden" name="repo_id" value="{{$repository->id}}">
                         </td>
                         
@@ -120,12 +108,8 @@ form #tooltip:hover{
                     <td>
                         <input id="price{{$count}}"  type="number" name="price[]" step="0.01" class="form-control target" value="0" placeholder="{{__('sales.price')}}">
                     </td>
-                    <td>
-                        <input id="quantity{{$count}}" type="number" name="quantity[]" min="0" class="form-control" value="1" placeholder="{{__('sales.quantity')}}">
-                    </td>
-                    <td>
-                        <input id="total_price{{$count}}" type="number" name="total_price[]" step="0.01" class="form-control" placeholder="{{__('sales.total_price')}}">
-                    </td>
+                   
+                    
                   </tr>
                       @endfor
                      </div>
@@ -167,10 +151,7 @@ form #tooltip:hover{
       $('#bar'+count).focus();
       $('#bar'+count).prop('required',true);
       $('#ar'+count).prop('required',true);
-      $('#quantity'+count).prop('required',true);
-      $('#cost_price'+count).prop('required',true);
       $('#price'+count).prop('required',true);
-      $('#total_price'+count).prop('required',true);
       count = count + 1;
     });
 </script>

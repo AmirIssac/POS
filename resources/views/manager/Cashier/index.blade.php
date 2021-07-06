@@ -11,7 +11,19 @@
      <div class="main-panel">
       
        <div class="content">
-       
+        @if ($message = Session::get('success'))
+  <div class="alert alert-success alert-block">
+      <button type="button" class="close" data-dismiss="alert">×</button>	
+          <strong>{{ $message }}</strong>
+  </div>
+  @endif
+  @if ($message = Session::get('fail'))
+  <div class="alert alert-danger alert-block">
+      <button type="button" class="close" data-dismiss="alert">×</button>	
+          <strong>{{ $message }}</strong>
+  </div>
+  @endif
+
         @foreach($repositories as $repository)
         <div class="col-md-4">
          <div class="card card-chart">
@@ -55,8 +67,7 @@
             {{-- @can('سحب من الكاشير') --}}
             @can('سحب من الكاشير')
              <div class="col-lg-3 col-md-6 col-sm-6">
-                <a href="#">
-              <div class="card card-stats">
+              <div class="card card-stats" data-toggle="modal" data-target="#exampleModal{{$repository->id}}" id="modalicon{{$repository->id}}">
                 <div class="card-header card-header-warning card-header-icon">
                   <div class="card-icon">
                   <i class="material-icons">money_off</i>
@@ -70,8 +81,30 @@
                   </div>
                 </div>
               </div>
-            </a>
             </div>
+            <!-- Modal -->
+<div class="modal fade" id="exampleModal{{$repository->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel{{$repository->id}}" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form action="{{route('withdraw.cashier',$repository->id)}}" method="POST">
+      @csrf
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel{{$repository->id}}"> عملية السحب من الدرج </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        تحديد المبلغ المراد سحبه
+          <input type="number" step="0.01" name="money" value="{{$repository->balance}}" class="form-control">
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">موافق</button>
+      </div>
+    </div>
+  </form>
+
+  </div>
+</div>
            {{-- @endcan --}}
            @endcan
 

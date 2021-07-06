@@ -187,8 +187,8 @@ form #tooltip:hover{
                     </td>
                   </tr>
                   <tr id="cashoption1" class="displaynone">
-                    <td>كاش من درج الكاشير (رصيد الدرج {{$repository->cash_balance}})</td>
-                    <input type="hidden" id="cash_balance" value="{{$repository->cash_balance}}">
+                    <td>كاش من درج الكاشير (رصيد الدرج {{$repository->balance}})</td>
+                    <input type="hidden" id="cash_balance" value="{{$repository->balance}}">
                     <td>
                       <input type="radio" id="cashrad" value="cashier" name="cash_option" checked>
                     </td>

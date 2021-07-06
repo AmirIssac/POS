@@ -88,4 +88,14 @@ class CashierController extends Controller
             $repository = Repository::find($id);
             return view('manager.Cashier.daily_cashier_warning')->with('repository',$repository);
         }
+
+        public function withdraw(Request $request , $id){
+            $repository = Repository::find($id);
+            if($repository->balance<$request->money)
+                return back()->with('fail','المبلغ المراد سحبه أكبر من المتوفر في الدرج');
+            $repository->update([
+                'balance' => $repository->balance - $request->money,
+            ]);
+            return back()->with('success','تم السحب بنجاح بمبلغ قدره '.$request->money);
+        }
 }

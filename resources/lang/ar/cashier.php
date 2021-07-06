@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'deposit' => 'ايداع',
-    'withdraw' => 'سحب',
+    'deposit' => 'اضافة اموال الى الدرج',
+    'withdraw' => 'سحب اموال من الدرج',
     'close_cashier' => 'اغلاق الكاشير',
     'daily' => 'يومي',
     'available' => 'متاح',

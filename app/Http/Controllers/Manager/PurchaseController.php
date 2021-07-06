@@ -101,7 +101,7 @@ class PurchaseController extends Controller
                 if($request->cash_option=='cashier'){
                     $payment = 'cashier';
                     $repository->update([
-                    'cash_balance' => $repository->cash_balance - $request->sum,
+                    'balance' => $repository->balance - $request->sum,
                     ]);
                 }
                 else
@@ -152,13 +152,10 @@ class PurchaseController extends Controller
             $product = PurchaseProduct::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->first();
             if($product)  // found it
             {
-            $new_quantity = $product->quantity + $request->quantity[$i];
             $new_price = $request->price[$i];
             $product->update([
-                'quantity' => $new_quantity,
                 'price' => $new_price,
             ]);
-            $totalPrice+=$request->total_price[$i];
             }
         else{
             
@@ -168,15 +165,13 @@ class PurchaseController extends Controller
                     'barcode' => $request->barcode[$i],
                     'name_ar'=>$request->name[$i],
                     'name_en'=>$request->details[$i],
-                    'quantity'=>$request->quantity[$i],
                     'price'=>$request->price[$i],
                 ]
                 );
-            $totalPrice+=$request->total_price[$i];
         }
     }
         }
-        return back()->with('success','   تمت الإضافة بنجاح بمبلغ إجمالي   '.$totalPrice);
+        return back()->with('success','   تمت الإضافة بنجاح     ');
     }
 
     public function getProductAjax($repo_id,$barcode){
@@ -195,14 +190,14 @@ class PurchaseController extends Controller
         $repository = $purchase->repository;
         if($request->payment=='cashier'){
             // check first if cashier has this amount of money
-            if($repository->cash_balance >= $purchase->total_price){
+            if($repository->balance >= $purchase->total_price){
                 $payment = 'cashier';
                 $repository->update([
-                    'cash_balance' => $repository->cash_balance - $purchase->total_price,
+                    'balance' => $repository->balance - $purchase->total_price,
                 ]);
             }
             else
-                return back()->with('fail','المبلغ المتوافر في الكاشير أقل من المبلغ الاجمالي');
+                return back()->with('fail','المبلغ المتوافر في الدرج أقل من المبلغ الاجمالي');
         }
         else
             $payment = 'external';

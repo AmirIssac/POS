@@ -20,7 +20,7 @@ class CreatePurchaseProductsTable extends Migration
             $table->string('name_ar');
             $table->string('name_en')->nullable();
             $table->float('price');
-            $table->integer('quantity');
+            //$table->integer('quantity');
             $table->timestamps();
         });
     }

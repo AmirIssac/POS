@@ -84,10 +84,14 @@
                    <div class="card-icon">
                      <i class="material-icons">account_balance_wallet</i>
                    </div>
-                   <p class="card-category">{{__('dashboard.today_sales')}}</p>
-                   <h3 class="card-title">{{$repository->todaySales()}}
-                  </h3>
-                   
+                   <p style="color: #9229ac; font-weight: bold" class="card-category">{{__('dashboard.today_sales')}}</p>
+                   <h3 style="color: #9229ac" class="card-title">{{$repository->todaySales()}}</h3>
+                    <p style="color: #48a44c; font-weight: bold" class="card-category">أموال المبيعات</p>
+                    <h3 style="color:#48a44c " class="card-title">{{$repository->cash_balance+$repository->card_balance+$repository->stc_balance}}
+                    </h3>
+                    <p style="color: #f14000; font-weight: bold" class="card-category">الأموال المعلقة</p>
+                    <h3 style="color: #f14000" class="card-title">{{$repository->todaySales() - ($repository->cash_balance+$repository->card_balance+$repository->stc_balance)}}
+                    </h3>
                  </div>
                  <div class="card-footer">
                    <div style="display: flex; flex-direction: column; width: 100%">
@@ -107,7 +111,7 @@
                     STC {{$repository->stc_balance}}
                   </div>
                   <div class="stats">
-                     <i style="color: #970662" class="material-icons">account_balance</i>
+                     <i style="color: #9229ac" class="material-icons">account_balance</i>
                     {{__('dashboard.cashier')}} {{$repository->balance}} 
                   </div>
                     </div>
