@@ -8,6 +8,12 @@
 <<div class="main-panel">
   
     <div class="content">
+      @if ($message = Session::get('fail'))
+  <div class="alert alert-danger alert-block">
+      <button type="button" class="close" data-dismiss="alert">×</button>	
+          <strong>{{ $message }}</strong>
+  </div>
+  @endif
         <form action="{{route('retrieve.index',$repository->id)}}" method="GET">
           @csrf
           <div style="width: 300px; margin-right: 20px;" class="input-group no-border">
@@ -144,16 +150,16 @@
                               {{$invoice->user->name}}
                           </td>
                           <td>
-                            <button data-toggle="modal" data-target="#exampleModal" class="btn btn-danger"> {{__('sales.retrieve')}} </button> 
+                            <button data-toggle="modal" data-target="#exampleModal{{$invoice->id}}" class="btn btn-danger"> {{__('sales.retrieve')}} </button> 
                           </td>
                         </tr>
-                        <tr>
+                        <tr> 
                           <!-- Modal -->
-              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal fade" id="exampleModal{{$invoice->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel{{$invoice->id}}" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                     <div class="modal-header modal-header-danger">
-                      <h5 class="modal-title" id="exampleModalLabel">{{__('sales.warning')}}</h5>
+                      <h5 class="modal-title" id="exampleModalLabel{{$invoice->id}}">{{__('sales.warning')}}</h5>
                     </div>
                     <form action="{{route('retrieve.invoice',$invoice->id)}}" method="POST">
                       @csrf

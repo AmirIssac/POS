@@ -651,6 +651,7 @@ class SellController extends Controller
                 'stc_amount' => $invoice->stc_amount + $stcVal,
                 'status' => 'delivered',
                 'created_at' => $request->date,
+                'transform' => 'p-d',
                 'daily_report_check' => false,
             ]
             );
@@ -743,6 +744,10 @@ class SellController extends Controller
 
     public function retrieveInvoice(Request $request,$id){
         $invoice = Invoice::find($id);
+        $repository = Repository::find($request->repo_id);
+        $cash_retrieved = $invoice->cash_amount + $invoice->card_amount + $invoice->stc_amount;
+        if($cash_retrieved > $repository->balance)
+            return back()->with('fail','لا يمكن الاسترجاع المبلغ في الدرج غير كاف');
         $records = unserialize($invoice->details); // array of arrays
         //foreach($records as $record)
         for($i=1;$i<count($records);$i++)
@@ -755,17 +760,27 @@ class SellController extends Controller
             ]);
         }
         // give the money back to the customer
-        // !? for now we will do the back money just from cash for both cash and card !?
-        $repository = Repository::find($request->repo_id);
-        $cash_retrieved = $invoice->cash_amount + $invoice->card_amount;
+        // !? for now we will do the back money just from cash for all cash and card and stc !?
+        if($invoice->daily_report_check==true){  // the invoice from another day so cash not affected
         $repository->update([
-            //'cash_balance' => $repository->cash_balance - $cash_retrieved,
             'balance' => $repository->balance - $cash_retrieved,
         ]);
+        }
+        else{
+            $repository->update([
+                'cash_balance' => $repository->cash_balance - $cash_retrieved,
+                'balance' => $repository->balance - $cash_retrieved,
+            ]);
+        }
+        if($invoice->status=='delivered')
+            $transform = 'd-r';
+            else
+            $transform = 'p-r';
         // change invoice status
         $invoice->update([
             'status' => 'retrieved',
             'created_at' => now(),
+            'transform' => $transform,
             'daily_report_check' => false,
         ]);
         return redirect(route('sales.index'))->with('retrievedSuccess','تم استرجاع الفاتورة بنجاح');

@@ -166,10 +166,28 @@ class Repository extends Model
 
     public function todaySales(){
         $today_sales = 0;
-        $invoices = $this->invoices()->where('status','!=','retrieved')->where('daily_report_check',false)->get();
+       // $invoices = $this->invoices()->where('status','!=','retrieved')->where('transform','!=','p-d')->where('daily_report_check',false)->get();
+       $invoices = $this->invoices()->where('status','!=','retrieved')->where('daily_report_check',false)->get();
         foreach($invoices as $invoice){
             $today_sales += $invoice->total_price;
         }
         return $today_sales;
+    }
+
+    public function todayPendingMoney(){  // الأموال المعلقة
+        $invoices = $this->invoices()->where('status','pending')->where('daily_report_check',false)->get();
+        $total_price = 0 ;
+        foreach($invoices as $invoice){
+            $total_price = $total_price + ($invoice->total_price - ($invoice->cash_amount + $invoice->card_amount + $invoice->stc_amount)) ;
+        }
+        return $total_price;
+    }
+    public function totalPendingMoney(){  
+        $invoices = $this->invoices()->where('status','pending')->get();
+        $total_price = 0 ;
+        foreach($invoices as $invoice){
+            $total_price = $total_price + ($invoice->total_price - ($invoice->cash_amount + $invoice->card_amount + $invoice->stc_amount)) ;
+        }
+        return $total_price;
     }
 }

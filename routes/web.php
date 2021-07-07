@@ -138,6 +138,7 @@ Route::group(['middleware'=>['permission:الكاشير']], function () {
         Route::get('/daily/cashier/warning/{repository_id}','Manager\CashierController@dailyCashierWarningForm')->name('daily.cashier.warning.form')->middleware('permission:اغلاق الكاشير');
         Route::post('/submit/cashier/{repository_id}','Manager\CashierController@submitCashier')->name('submit.cashier')->middleware('permission:اغلاق الكاشير');
         Route::post('/withdraw/{repository_id}','Manager\CashierController@withdraw')->name('withdraw.cashier');
+        Route::post('/deposite/{repository_id}','Manager\CashierController@deposite')->name('deposite.cashier');
     });
 });
 

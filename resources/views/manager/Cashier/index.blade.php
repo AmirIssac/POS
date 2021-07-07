@@ -45,8 +45,7 @@
            <div class="row">
              @can('ايداع في الكاشير')
              <div class="col-lg-3 col-md-6 col-sm-6">
-                <a href="#">
-               <div class="card card-stats">
+               <div class="card card-stats" data-toggle="modal" data-target="#exampleModa{{$repository->id}}" id="modalicon{{$repository->id}}">
                  <div class="card-header card-header-warning card-header-icon">
                    <div class="card-icon">
                    <i class="material-icons">input</i>
@@ -60,8 +59,30 @@
                    </div>
                  </div>
                </div>
-            </a>
              </div>
+                   <!-- Modal -->
+<div class="modal fade" id="exampleModa{{$repository->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModaLabel{{$repository->id}}" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form action="{{route('deposite.cashier',$repository->id)}}" method="POST">
+      @csrf
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModaLabel{{$repository->id}}">  عملية الإيداع في الدرج </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        تحديد المبلغ المراد إيداعه
+          <input type="number" step="0.01" name="money" placeholder="قيمة المبلغ" class="form-control" required>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">موافق</button>
+      </div>
+    </div>
+  </form>
+
+  </div>
+</div>
              @endcan
 
             {{-- @can('سحب من الكاشير') --}}
@@ -95,7 +116,7 @@
       </div>
       <div class="modal-body">
         تحديد المبلغ المراد سحبه
-          <input type="number" step="0.01" name="money" value="{{$repository->balance}}" class="form-control">
+          <input type="number" step="0.01" name="money" value="{{$repository->balance}}" class="form-control" required>
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary">موافق</button>

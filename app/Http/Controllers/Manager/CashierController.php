@@ -98,4 +98,12 @@ class CashierController extends Controller
             ]);
             return back()->with('success','تم السحب بنجاح بمبلغ قدره '.$request->money);
         }
+
+        public function deposite(Request $request , $id){
+            $repository = Repository::find($id);
+            $repository->update([
+                'balance' => $repository->balance + $request->money,
+            ]);
+            return back()->with('success',' تم الايداع بنجاح بمبلغ وقدره  '.$request->money);
+        }
 }

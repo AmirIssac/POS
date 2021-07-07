@@ -102,7 +102,7 @@
 
             @if($repository->isSpecial())  {{-- محل خاص --}}
             <div class="col-lg-3 col-md-6 col-sm-6">
-              <a data-toggle="modal" data-target="#exampleModal" id="modaltrigger">
+              <a data-toggle="modal" data-target="#exampleModal{{$repository->id}}" id="modaltrigger">
               <div class="card card-stats">
                 <div class="card-header card-header-danger card-header-icon">
                   <div class="card-icon">
@@ -120,11 +120,11 @@
             </a>
             </div>
               <!-- Modal -->
-              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal fade" id="exampleModal{{$repository->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel{{$repository->id}}" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">{{__('sales.retrieve_invoice')}}</h5>
+                      <h5 class="modal-title" id="exampleModalLabel{{$repository->id}}">{{__('sales.retrieve_invoice')}}</h5>
                     </div>
                     <form action="{{route('retrieve.index',$repository->id)}}" method="GET">
                       @csrf
