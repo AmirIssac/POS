@@ -61,13 +61,13 @@
                       Barcode
                   </th>
                   <th>
-                      الاسم
+                    {{__('purchases.name')}}
                   </th>
                   <th>
-                      الكمية
+                    {{__('sales.quantity')}}
                   </th>
                   <th>
-                      السعر
+                    {{__('purchases.price')}}
                   </th>
                   </thead>
                   <tbody id="tb{{$i}}" class="displaynone">
@@ -91,20 +91,20 @@
                     <tr class="bold">
                         
                         <td>
-                          المورد  
+                          {{__('purchases.supplier')}}  
                         </td>
                        
                         <td>
-                          موظف التسجيل  
+                          {{__('purchases.employee')}}  
                         </td>
                         <td>
-                         رقم فاتورة المورد  
+                          {{__('purchases.supplier_invoice_num')}}  
                         </td>
                         <td>
-                          المبلغ الاجمالي
+                          {{__('purchases.total_price')}}
                       </td>
                       <td>
-                          طريقة الدفع
+                        {{__('purchases.payment_proccess')}}
                     </td>
                     </tr>
                     <tr>
@@ -118,7 +118,7 @@
                           @if($purchase->supplier_invoice_num)
                           {{$purchase->supplier_invoice_num}}
                           @else
-                          لا يوجد
+                          {{__('purchases.none')}} 
                           @endif
                       </td>
                       <td>
@@ -128,19 +128,19 @@
                       <td>
                         @if($purchase->created_at!=$purchase->updated_at)  {{-- it was later and then payed --}}
                             @if($purchase->payment=='later')
-                            آجل => آجل
+                            {{__('purchases.later')}} => {{__('purchases.later')}}
                             @elseif($purchase->payment=='cashier')
-                            آجل => الدرج
+                            {{__('purchases.later')}} => {{__('purchases.cashier')}}
                             @else
-                            آجل => ميزانية خارجية مخصصة  
+                            {{__('purchases.later')}} =>   {{__('purchases.cash_from_external_budget')}}  
                             @endif
                         @else
                             @if($purchase->payment=='later')
-                            آجل
+                            {{__('purchases.later')}}
                             @elseif($purchase->payment=='cashier')
-                            الدرج
+                            {{__('purchases.cashier')}}
                             @else
-                            ميزانية خارجية مخصصة
+                            {{__('purchases.cash_from_external_budget')}}  
                             @endif
                         @endif
                       </td>
@@ -156,7 +156,7 @@
             @endforeach
             @else
             <span id="warning" class="badge badge-warning">
-              لا يوجد فواتير مشتريات
+              {{__('purchases.no_purchases_invoices')}}
             </span>
             @endif
           </div>

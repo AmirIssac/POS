@@ -67,16 +67,16 @@
       @csrf
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModaLabel{{$repository->id}}">  عملية الإيداع في الدرج </h5>
+        <h5 class="modal-title" id="exampleModaLabel{{$repository->id}}">  {{__('cashier.deposite_in_cashier')}}    </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         </button>
       </div>
       <div class="modal-body">
-        تحديد المبلغ المراد إيداعه
-          <input type="number" step="0.01" name="money" placeholder="قيمة المبلغ" class="form-control" required>
+        {{__('cashier.determine_the_money_you_want_deposite')}}
+          <input type="number" step="0.01"  min="0.01" name="money" placeholder="{{__('cashier.amount_value')}}" class="form-control" required>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary">موافق</button>
+        <button type="submit" class="btn btn-primary">{{__('buttons.confirm')}}</button>
       </div>
     </div>
   </form>
@@ -110,16 +110,16 @@
       @csrf
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel{{$repository->id}}"> عملية السحب من الدرج </h5>
+        <h5 class="modal-title" id="exampleModalLabel{{$repository->id}}"> {{__('cashier.withdraw_from_cashier')}} </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         </button>
       </div>
       <div class="modal-body">
-        تحديد المبلغ المراد سحبه
-          <input type="number" step="0.01" name="money" value="{{$repository->balance}}" class="form-control" required>
+        {{__('cashier.determine_the_money_you_want_withdraw')}}
+          <input type="number" step="0.01" min="0.01" name="money" value="{{$repository->balance}}" class="form-control" required>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary">موافق</button>
+        <button type="submit" class="btn btn-primary">{{__('buttons.confirm')}}</button>
       </div>
     </div>
   </form>

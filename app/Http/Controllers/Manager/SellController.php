@@ -555,8 +555,13 @@ class SellController extends Controller
         }
       }
 
-      return view('manager.Sales.print_special_invoice')->with(['records'=>$records,'num'=>count($records),'sum'=>$request->sum,'tax'=>$request->taxprint,'total_price'=>$request->total_price,'cash'=>$cashVal,'card'=>$cardVal,'repo_id'=>$repository->id,'discount'=>$request->max_discount]);
-
+      $id = Auth::user()->id;
+      $employee = User::find($id);
+      return view('manager.Sales.print_special_invoice')->with([
+          'records'=>$records,'num'=>count($records),'sum'=>$request->sum,'tax'=>$request->taxprint,'total_price'=>$request->total_price,
+          'cash'=>$cashVal,'card'=>$cardVal,'repo_id'=>$repository->id,'discount'=>$request->max_discount,
+          'invoice_num'=>$request->code,'date'=>$request->date,'repository' => $repository,
+          'customer' => $customer,'employee'=>$employee]);   // to print the invoice
     }
 
     public function showPending($id){
@@ -728,7 +733,6 @@ class SellController extends Controller
                 'recipe' => $recipe,
             ]);
         }
-        //return back()->with('saveSuccess','تم حفظ الوصفة بنجاح');
         return redirect(route('create.special.invoice',$repository->id))->with('saveSuccess','تم حفظ الوصفة بنجاح');
     }
 

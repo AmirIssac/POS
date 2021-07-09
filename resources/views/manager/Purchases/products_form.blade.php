@@ -45,7 +45,7 @@ form #tooltip:hover{
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title ">اضافة منتج مشتريات</h4>
+              <h4 class="card-title ">{{__('purchases.add_purchases_product')}}</h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -61,7 +61,7 @@ form #tooltip:hover{
                       {{__('repository.english_name')}}
                     </th>
                     <th>
-                        سعر الوحدة 
+                      {{__('purchases.unit_price')}} 
                     </th>   
                     </th>
                   </thead>

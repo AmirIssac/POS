@@ -52,25 +52,25 @@ form #tooltip:hover{
                       <tbody>
                          <div>
                           <tr>
-                            <td>رقم الفاتورة</td>
+                            <td>{{__('purchases.invoice_num')}}</td>
                             <td><span style="font-size: 22px;" class="badge badge-primary">{{$code}}</span>
                               <input type="hidden" name="code" value="{{$code}}">
                             </td>
                           </tr>
                           <tr>
-                            <td>المورد</td>
+                            <td>{{__('purchases.supplier')}}</td>
                             <td>
                               <select name="supplier_id" class="form-control">
                                 @foreach($suppliers as $supplier)
-                                  <option value="" disabled selected hidden> اختيار المورد من هنا </option>
+                                  <option value="" disabled selected hidden>   {{__('purchases.choose_supplier')}}  </option>
                                   <option value="{{$supplier->id}}"> {{$supplier->name}} </option>
                                 @endforeach
                               </select>
                             </td>
                           </tr>
                           <tr>
-                            <td> رقم فاتورة المورد </td>
-                            <td><input type="text" name="supplier_invoice_num" class="form-control" placeholder="رقم فاتورة المورد"></td>
+                            <td>  {{__('purchases.supplier_invoice_num')}} </td>
+                            <td><input type="text" name="supplier_invoice_num" class="form-control" placeholder="{{__('purchases.supplier_invoice_num')}}"></td>
                           </tr>
                          </div>
                       </tbody>
@@ -82,7 +82,7 @@ form #tooltip:hover{
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title ">المشتريات</h4>
+              <h4 class="card-title ">{{__('purchases.purchases')}}</h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -92,18 +92,18 @@ form #tooltip:hover{
                       Barcode  
                     </th>
                     <th>
-                        الاسم
+                      {{__('purchases.name')}}
                     </th>
                     <th>
                       {{__('sales.quantity')}} 
                     </th>
                     <th>
-                        سعر الوحدة
+                      {{__('purchases.unit_price')}} 
                     </th>
                     <th>   {{-- for future use to save every input details in table of repository inputs --}}
-                      المجموع
+                      {{__('purchases.total')}}
                       <td>
-                      <i id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title=" المجموع =" data-content=" سعر الوحدة X {{__('sales.quantity')}}">live_help</i>
+                      <i id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title=" {{__('purchases.total')}} =" data-content="  {{__('purchases.unit_price')}} X {{__('sales.quantity')}}">live_help</i>
                       </td>
                     </th>
                   </thead>
@@ -115,7 +115,7 @@ form #tooltip:hover{
                             <input type="text" name="barcode[]" class="form-control barcode" placeholder=" {{__('sales.scanner_input')}} " id="bar0"  required>
                         </td>
                         <td>
-                          <input type="text" name="name[]" class="form-control" placeholder="اكتب الاسم هنا" id="ar0" required>
+                          <input type="text" name="name[]" class="form-control" placeholder="{{__('purchases.type_name_here')}}" id="ar0" required>
                       
                   
                     <td>
@@ -137,7 +137,7 @@ form #tooltip:hover{
                         <input type="text" name="barcode[]" class="form-control barcode" placeholder=" {{__('sales.scanner_input')}}"  id="bar{{$count}}">
                     </td>
                     <td>
-                      <input type="text" name="name[]" class="form-control" placeholder="اكتب الاسم هنا" id="ar{{$count}}">
+                      <input type="text" name="name[]" class="form-control" placeholder="{{__('purchases.type_name_here')}}" id="ar{{$count}}">
                   </td>
                 <td>
                   <input id="quantity{{$count}}" type="number" name="quantity[]" min="0" class="form-control" value="1" placeholder="{{__('sales.quantity')}}">
@@ -154,7 +154,7 @@ form #tooltip:hover{
                      </div>
                   </tbody>
                 </table>
-                <label style="font-weight: bold; color: black"> المجموع </label>
+                <label style="font-weight: bold; color: black"> {{__('purchases.total')}} </label>
                 <input type="number" name="sum" id="sum" class="form-control" readonly>
                 <i id="plus" class="material-icons">add_circle</i>
             </div>
@@ -164,7 +164,7 @@ form #tooltip:hover{
     <div class="col-md-12">
       <div class="card">
         <div class="card-header card-header-primary">
-          <h4 class="card-title ">  عملية الدفع
+          <h4 class="card-title ">  {{__('purchases.payment_proccess')}} 
           </h4>
         </div>
         <div class="card-body">
@@ -175,26 +175,26 @@ form #tooltip:hover{
               <tbody>
                  <div>
                   <tr>
-                    <td>آجل</td>
+                    <td>{{__('purchases.later')}}</td>
                     <td>
                       <input type="radio" name="pay" value="later" class="form-control" checked>
                     </td>
                   </tr>
                   <tr>
-                    <td>كاش</td>
+                    <td>{{__('purchases.cash')}}</td>
                     <td>
                       <input type="radio" class="form-control" value="cash" id="cashradio" name="pay">
                     </td>
                   </tr>
                   <tr id="cashoption1" class="displaynone">
-                    <td>كاش من درج الكاشير (رصيد الدرج {{$repository->balance}})</td>
+                    <td>   {{__('purchases.cash_from_cashier')}} ({{__('purchases.cashier_balance')}}  {{$repository->balance}})</td>
                     <input type="hidden" id="cash_balance" value="{{$repository->balance}}">
                     <td>
                       <input type="radio" id="cashrad" value="cashier" name="cash_option" checked>
                     </td>
                   </tr>
                   <tr id="cashoption2" class="displaynone">
-                    <td>كاش من ميزانية خارجية مخصصة</td>
+                    <td>{{__('purchases.cash_from_external_budget')}}</td>
                     <td>
                       <input type="radio" value="external" name="cash_option">
                     </td>

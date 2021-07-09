@@ -14,5 +14,8 @@ return [
     'hanging' => 'Hanging',
     'retrieved' => 'Retrieved',
     'cash' => 'cash',
+    'money_collected' => 'Collected money',
+    'today_money_pending' => 'Today money pending',
+    'total_pending_money' => 'Total money pending',
 ];
 ?>

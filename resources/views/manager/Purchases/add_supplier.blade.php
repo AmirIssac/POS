@@ -41,23 +41,23 @@ form #tooltip:hover{
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title ">اضافة مورد جديد</h4>
+              <h4 class="card-title ">{{__('purchases.add_supplier')}}</h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
                 <table id="myTable" class="table">
                   <thead class="text-primary">
                     <th>
-                      الاسم  
+                      {{__('purchases.name')}}  
                     </th>
                     <th>
-                        العنوان
+                      {{__('purchases.address')}}
                     </th>
                     <th>
-                        رقم الجوال
+                      {{__('purchases.phone')}}
                     </th>
                     <th>
-                        رقم الحساب 
+                      {{__('purchases.account_num')}}  
                     </th>
                    
                   </thead>
@@ -65,16 +65,16 @@ form #tooltip:hover{
                      <div id="record">
                       <tr>
                         <td>
-                            <input type="text" name="name" class="form-control" placeholder="اسم المورد" id="autofocus"  required>
+                            <input type="text" name="name" class="form-control" placeholder="{{__('purchases.name')}}" id="autofocus"  required>
                         </td>
                         <td>
-                          <input type="text" name="address" class="form-control" placeholder="عنوان المورد" required>
+                          <input type="text" name="address" class="form-control" placeholder="{{__('purchases.address')}}" required>
                         </td>
                         <td>
-                         <input type="text" name="phone"  class="form-control"  placeholder="رقم الجوال" required>
+                         <input type="text" name="phone"  class="form-control"  placeholder="{{__('purchases.phone')}}" required>
                         </td>
                         <td>
-                            <input type="text" name="account_num"  class="form-control"  placeholder="رقم الحساب" required>
+                            <input type="text" name="account_num"  class="form-control"  placeholder="{{__('purchases.account_num')}}" required>
                            </td>
                     
                         

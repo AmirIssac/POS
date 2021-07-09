@@ -42,7 +42,7 @@
                    <div class="card-icon">
                    <i class="material-icons">note_add</i>
                    </div>
-                   <p class="card-category"> انشاء فاتورة مشتريات </p>
+                   <p class="card-category"> {{__('purchases.create_purchase_invoice')}} </p>
                    <h6 class="card-title"></h6>
                  </div>
                  <div class="card-footer">
@@ -61,7 +61,7 @@
                   <div class="card-icon">
                   <i class="material-icons">request_quote</i>
                   </div>
-                  <p class="card-category">دفع فاتورة مورد</p>
+                  <p class="card-category">{{__('purchases.pay_supplier_invoice')}}</p>
                   <h6 class="card-title"></h6>
                 </div>
                 <div class="card-footer">
@@ -80,7 +80,7 @@
                   <div class="card-icon">
                   <i class="material-icons">add_box</i>
                   </div>
-                  <p class="card-category">اضافة منتج مشتريات</p>
+                  <p class="card-category">{{__('purchases.add_purchases_product')}}</p>
                   <h6 class="card-title"></h6>
                 </div>
                 <div class="card-footer">
@@ -99,7 +99,7 @@
                   <div class="card-icon">
                   <i class="material-icons">preview</i>
                   </div>
-                  <p class="card-category">عرض  فاتورة المشتريات</p>
+                  <p class="card-category">{{__('purchases.view_purchases_invoice')}}</p>
                   <h6 class="card-title"></h6>
                 </div>
                 <div class="card-footer">
@@ -118,7 +118,7 @@
                   <div class="card-icon">
                   <i class="material-icons">people</i>
                   </div>
-                  <p class="card-category">عرض الموردين</p>
+                  <p class="card-category">{{__('purchases.view_suppliers')}}</p>
                   <h6 class="card-title"></h6>
                 </div>
                 <div class="card-footer">
@@ -137,7 +137,7 @@
                   <div class="card-icon">
                   <i class="material-icons">person_add_alt</i>
                   </div>
-                  <p class="card-category">اضافة مورد</p>
+                  <p class="card-category">{{__('purchases.add_supplier')}}</p>
                   <h6 class="card-title"></h6>
                 </div>
                 <div class="card-footer">

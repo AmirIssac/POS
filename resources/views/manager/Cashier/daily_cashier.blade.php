@@ -41,8 +41,8 @@ input[type=number] {
                 <table class="table">
                   <thead class=" text-primary">
                     <th>
-                      {{__('cashier.must_have_in_cashier')}}   <span class="badge badge-success">{{$repository->cash_balance}}</span>  
-                      <input type="hidden" name="cash_balance" value="{{$repository->cash_balance}}">
+                      {{__('cashier.must_have_in_cashier')}}   <span class="badge badge-success">{{$repository->balance}}</span>  
+                      <input type="hidden" name="cash_balance" value="{{$repository->balance}}">
                     </th>
                     <th>
                       {{__('cashier.must_have_in_card')}}    <span class="badge badge-success">{{$repository->card_balance}}</span>

@@ -35,7 +35,7 @@
           
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title"> تعديل بيانات المورد {{$supplier->name}}  </h4>
+              <h4 class="card-title"> {{__('purchases.edit_supplier_data')}}   {{$supplier->name}}  </h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -44,37 +44,37 @@
                 <table class="table">
                   <thead class=" text-primary">
                     <th>
-                        الاسم  
+                      {{__('purchases.name')}}  
                       </th>
                       <th>
-                          العنوان
+                        {{__('purchases.address')}}
                       </th>
                       <th>
-                          رقم الجوال
+                        {{__('purchases.phone')}} 
                       </th>
                       <th>
-                          رقم الحساب 
+                        {{__('purchases.account_num')}}  
                       </th>
                   </thead>
                   <tbody>
                     <tr>
                         <td>
                             <input type="hidden" name="supplier_id" value="{{$supplier->id}}">
-                            <input type="text" name="name" class="form-control" placeholder="اسم المورد" id="autofocus" value="{{$supplier->name}}"  required>
+                            <input type="text" name="name" class="form-control" placeholder="{{__('purchases.name')}}" id="autofocus" value="{{$supplier->name}}"  required>
                         </td>
                         <td>
-                          <input type="text" name="address" class="form-control" placeholder="عنوان المورد" value="{{$supplier->address}}" required>
+                          <input type="text" name="address" class="form-control" placeholder="{{__('purchases.address')}}" value="{{$supplier->address}}" required>
                         </td>
                         <td>
-                         <input type="text" name="phone"  class="form-control"  placeholder="رقم الجوال" value="{{$supplier->phone}}" required>
+                         <input type="text" name="phone"  class="form-control"  placeholder="{{__('purchases.phone')}}" value="{{$supplier->phone}}" required>
                         </td>
                         <td>
-                            <input type="text" name="account_num"  class="form-control"  placeholder="رقم الحساب" value="{{$supplier->account_num}}" required>
+                            <input type="text" name="account_num"  class="form-control"  placeholder="{{__('purchases.account_num')}}" value="{{$supplier->account_num}}" required>
                            </td>
                       </tr>                      
                   </tbody>
                 </table>
-                <button type="submit" class="btn btn-primary">تأكيد</button>
+                <button type="submit" class="btn btn-primary">{{__('buttons.confirm')}}</button>
 
             </form>
 

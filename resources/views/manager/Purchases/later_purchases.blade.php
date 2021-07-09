@@ -65,13 +65,13 @@
                         Barcode
                     </th>
                     <th>
-                        الاسم
+                        {{__('purchases.name')}}
                     </th>
                     <th>
-                        الكمية
+                      {{__('sales.quantity')}}
                     </th>
                     <th>
-                        السعر
+                      {{__('purchases.price')}}
                     </th>
                     
                   </thead>
@@ -95,20 +95,20 @@
 
                     <tr class="bold">
                         <td>
-                            المورد  
+                          {{__('purchases.supplier')}}  
                           </td>
                          
                           <td>
-                            موظف التسجيل  
+                            {{__('purchases.employee')}}   
                           </td>
                           <td>
-                           رقم فاتورة المورد  
+                            {{__('purchases.supplier_invoice_num')}}    
                           </td>
                           <td>
-                            المبلغ الاجمالي
+                            {{__('purchases.total_price')}}
                         </td>
                         <td>
-                            طريقة الدفع
+                          {{__('purchases.payment_proccess')}} 
                       </td>
                     </tr>
                     <tr>
@@ -122,7 +122,7 @@
                             @if($purchase->supplier_invoice_num)
                             {{$purchase->supplier_invoice_num}}
                             @else
-                            لا يوجد
+                            {{__('purchases.none')}} 
                             @endif
                         </td>
                         <td>
@@ -131,17 +131,17 @@
                         
                         <td>
                             
-                            آجل
+                          {{__('purchases.later')}}
                             
                            
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            كاش <input type="radio" name="payment" value="cashier" checked>
+                          {{__('purchases.cash')}} <input type="radio" name="payment" value="cashier" checked>
                         </td>
                         <td>
-                            ميزانية خارجية <input type="radio" name="payment" value="external">
+                          {{__('purchases.cash_from_external_budget')}} <input type="radio" name="payment" value="external">
                         </td>
                         <td>
                         </td>
@@ -152,7 +152,7 @@
                     </tr>
                     <tr>
                         <td>
-                    <button type="submit" class="btn btn-danger"> دفع </button>
+                    <button type="submit" class="btn btn-danger"> {{__('purchases.pay')}} </button>
                         </td>
                         <td>
                         </td>
@@ -170,7 +170,7 @@
             @endforeach
             @else
             <span id="warning" class="badge badge-warning">
-              لا يوجد فواتير آجلة الدفع
+              {{__('purchases.no_later_invoices')}}
             </span>
             @endif
           </div>

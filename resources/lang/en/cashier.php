@@ -30,5 +30,11 @@ return [
     'in_date' => 'in date',
     'hour' => 'hour and ',
     'minute' => ' minute',
+    'deposite_in_cashier' => 'Deposite in the cashier',
+    'determine_the_money_you_want_deposite' => 'Determine the amount you want to deposite',
+    'amount_value' => 'Amount value',
+    'withdraw_from_cashier' => 'Withdraw from cashier',
+    'determine_the_money_you_want_withdraw' => 'Determine the amount you want to withdraw',
+    
 ];
 ?>

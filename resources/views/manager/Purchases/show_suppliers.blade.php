@@ -9,23 +9,23 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title"> الموردون </h4>
+              <h4 class="card-title"> {{__('purchases.suppliers')}} </h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table">
                   <thead class=" text-primary">
                     <th>
-                        الاسم
+                      {{__('purchases.name')}}
                     </th>
                     <th>
-                      العنوان
+                      {{__('purchases.address')}}
                     </th>
                     <th>
-                      رقم الجوال 
+                      {{__('purchases.phone')}} 
                      </th>
                      <th>
-                      رقم الحساب 
+                      {{__('purchases.account_num')}} 
                      </th>
                      
                   </thead>

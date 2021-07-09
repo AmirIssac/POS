@@ -27,11 +27,11 @@
   #print-content, #print-content * {
     visibility: visible;
   }
-  #print-content {
+  /*#print-content {
     position: absolute;
     left: 0;
     top: 0;
-  }
+  }*/
 }
 </style>
 @endsection
@@ -62,25 +62,17 @@
 
                 <div class="card">
                     <div class="card-header">
-                      {{--<h4 class="card-title ">الفاتورة <input type="text" name="date" value="{{isset($date)?$date:''}}" readonly>
-                        العميل<input type="text" name="customer_name" id="customer_name" value="{{isset($customer_name)?$customer_name:''}}" readonly>
-                        الجوال<input type="text" name="customer_phone" id="customer_phone" value="{{isset($phone)?$phone:''}}" readonly>
-                      </h4>--}}
+                     
                     </div>
                     <div class="card-body">
                       <div id="print-content" class="table-responsive">
+                        <div style="display: flex; justify-content: space-between">
+                          <h4>رقم الفاتورة {{$invoice_num}}</h4>
+                          <h4>التاريخ {{$date}}</h4>
+                          <h4>الرقم الضريبي {{$repository->tax_code}}</h4>
+                        </div>
                         <table class="table">
                           <thead class="text-primary">
-                               
-                            {{--@if($repository->logo)
-                                <img src="{{asset('storage/'.$repository->logo)}}" width="100px" height="100px" alt="logo" id="logo">
-                                @else
-                               <span id="warning" class="badge badge-warning"> يرجى تعيين شعار المتجر من الإعدادات </span>
-                                @endif
-                              
-                                رقم الفاتورة <input type="text" name="code" id="code" value="{{isset($code)?$code:''}}" readonly>
-                                الرقم الضريبي  <input type="text" name="tax_code" id="tax_code" value="{{$repository->tax_code}}" readonly>
-                                --}}
                             <th>
                               Barcode  
                             </th>
@@ -176,23 +168,24 @@
                       </div>
                     <input style="margin-right: 0px" type="number" min="0.1" step="0.01" name="cardVal" id="cardVal" value="{{$card}}" class="form-control" readonly>
                     </div>
-                    </div>
-                    
-                    <div>
-
-                        
-
-
-
-            </div>
+                    </div> 
         </div>
+        <div style="display: flex; justify-content: space-between">
+          <h4>العميل {{$customer->name}}</h4>
+          <h4>جوال العميل {{$customer->phone}}</h4>
+        </div>
+        <div style="display: flex; justify-content: space-between">
+          <h4>موظف البيع {{$employee->name}}</h4>
+        </div>
+        <div style="display: flex; justify-content: space-between">
+        <h4> متجر {{$repository->name}}</h4>
+        </div> 
     </div>
  </div>
 </div>
         </div>
     </div>
- </div>
-</div>
+ 
 @section('scripts')
 <script>
 $(document).ready(function() {

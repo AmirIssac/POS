@@ -702,7 +702,7 @@ select{
                 </td>
                 </tr>
             </div>
-                  @for ($count=1;$count<=10;$count++)
+                  @for ($count=1;$count<=25;$count++)
                    <div>
                     <tr id="record{{$count}}" class="displaynone">
                       <td>
@@ -912,21 +912,21 @@ select{
                 var s = 0 ;  
                 var s1 = 0 ; // sum for accept min value
                 var s2 = 0 ;   // sum for not accept min value
-                for(var i=0;i<=10;i++){   // number of records
+                for(var i=0;i<=25;i++){   // number of records
                   if(!$('#price'+i+'').val().length == 0){
                     console.log('zero');
                      s = s + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
                   }
                 } // end for loop
                 $('#total_price').val(s);
-                for(var i=0;i<=10;i++){   // number of records
+                for(var i=0;i<=25;i++){   // number of records
                   if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==1){
                     console.log('first');
                      s1 = s1 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
                   }
                 } // end for loop
                 $('#total_price_acc').val(s1);  // hidden
-                for(var i=0;i<=10;i++){   // number of records
+                for(var i=0;i<=25;i++){   // number of records
                   if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==0){
                     console.log('second');
                      s2 = s2 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
@@ -1008,20 +1008,20 @@ $('#sell-form').keypress(function(e) {
                 var s = 0 ;
                 var s1 = 0;
                 var s2 = 0 ;
-                for(var i=0;i<=10;i++){   // number of records
+                for(var i=0;i<=25;i++){   // number of records
                   if(!$('#price'+i+'').val().length == 0){
                      s = s + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
                   }
                 } // end for loop
                 $('#total_price').val(s);
-                for(var i=0;i<=10;i++){   // number of records
+                for(var i=0;i<=25;i++){   // number of records
                   if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==1){
                     console.log('first');
                      s1 = s1 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
                   }
                 } // end for loop
                 $('#total_price_acc').val(s1);  // hidden
-                for(var i=0;i<=10;i++){   // number of records
+                for(var i=0;i<=25;i++){   // number of records
                   if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==0){
                     console.log('second');
                      s2 = s2 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
@@ -1164,14 +1164,14 @@ $('input[name="quantity[]"]').on("keyup",function(){
     //$('#total_price').val($('#total_price').val()+($('.price').eq(i).val()*$('.quantity').eq(i).val()));
   }
   $('#total_price').val(sum);
-  for(var i=0;i<=10;i++){   // number of records
+  for(var i=0;i<=25;i++){   // number of records
                   if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==1){
                     console.log('first');
                      s1 = s1 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
                   }
                 } // end for loop
                 $('#total_price_acc').val(s1);  // hidden
-                for(var i=0;i<=10;i++){   // number of records
+                for(var i=0;i<=25;i++){   // number of records
                   if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==0){
                     console.log('second');
                      s2 = s2 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
@@ -1525,20 +1525,20 @@ window.onload=function(){
                 var s = 0 ;
                 var s1 = 0;
                 var s2 = 0 ;
-                for(var i=0;i<=10;i++){   // number of records
+                for(var i=0;i<=25;i++){   // number of records
                   if(!$('#price'+i+'').val().length == 0){
                      s = s + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
                   }
                 } // end for loop
                 $('#total_price').val(s);
-                for(var i=0;i<=10;i++){   // number of records
+                for(var i=0;i<=25;i++){   // number of records
                   if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==1){
                     console.log('first');
                      s1 = s1 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
                   }
                 } // end for loop
                 $('#total_price_acc').val(s1);  // hidden
-                for(var i=0;i<=10;i++){   // number of records
+                for(var i=0;i<=25;i++){   // number of records
                   if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==0){
                     console.log('second');
                      s2 = s2 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
@@ -1591,21 +1591,21 @@ window.onload=function(){
     var s = 0 ;  
                 var s1 = 0 ; // sum for accept min value
                 var s2 = 0 ;   // sum for not accept min value
-                for(var i=0;i<=10;i++){   // number of records
+                for(var i=0;i<=25;i++){   // number of records
                   if(!$('#price'+i+'').val().length == 0){
                     console.log('zero');
                      s = s + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
                   }
                 } // end for loop
                 $('#total_price').val(s);
-                for(var i=0;i<=10;i++){   // number of records
+                for(var i=0;i<=25;i++){   // number of records
                   if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==1){
                     console.log('first');
                      s1 = s1 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
                   }
                 } // end for loop
                 $('#total_price_acc').val(s1);  // hidden
-                for(var i=0;i<=10;i++){   // number of records
+                for(var i=0;i<=25;i++){   // number of records
                   if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==0){
                     console.log('second');
                      s2 = s2 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());

@@ -30,5 +30,10 @@ return [
     'in_date' => 'بتاريخ',
     'hour' => ' ساعة و',
     'minute' => ' دقيقة',
+    'deposite_in_cashier' => 'عملية الايداع في الدرج',
+    'determine_the_money_you_want_deposite' => 'حدد المبلغ الذي تريد ايداعه',
+    'amount_value' => 'قيمة المبلغ',
+    'withdraw_from_cashier' => 'عملية السحب من الدرج',
+    'determine_the_money_you_want_withdraw' => 'حدد المبلغ الذي تريد سحبه',
 ];
 ?>

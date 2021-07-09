@@ -14,5 +14,8 @@ return [
     'hanging' => 'معلقة',
     'retrieved' => 'مسترجعة',
     'cash' => 'كاش',
+    'money_collected' => 'الأموال المحصلة',
+    'today_money_pending' => 'أموال اليوم المعلقة',
+    'total_pending_money' => 'الأموال المعلقة الإجمالية',
 ];
 ?>
