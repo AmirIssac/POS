@@ -1,20 +1,22 @@
-@extends('layouts.withScrollBar')
+@extends('layouts.print')
 @section('links')
 <style>
-  .container-fluid{
-    visibility: hidden;
+  
+  .displaynone{
+    display: none;
   }
   @media print{
  /* body, html, #myform { 
           height: 100%;
       }*/
-      body * {
+     /* body * {
     visibility: hidden;
-  }
+  } */
   *{
     /*margin: 0;*/
-    font-size: 32px;
-    font-weight: bold;
+    font-size: 44px !important;
+    font-weight: 900 !important;
+    color: black !important;
   }
   .barcode,.quantity,.delivered,.blank{
     font-size: 32px;
@@ -26,6 +28,17 @@
   }
   #print-content, #print-content * {
     visibility: visible;
+  }
+  #logorep{
+    width: 150px !important;
+    height: 150px !important;
+    border-radius: 50%;
+  }
+  #mod{
+    display: none;
+  }
+  hr{
+    border: 1px solid black;
   }
   /*#print-content {
     position: absolute;
@@ -40,6 +53,7 @@
 <div class="main-panel">
  <div class="content" id="content">
    <!-- Modal -->
+   <div id="mod">
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -51,26 +65,26 @@
       </div>
       <div class="modal-footer">
         <a href="{{route('create.special.invoice',$repo_id)}}" class="btn btn-danger">لا</a>
-        <a onclick="window.print();" href="{{route('create.special.invoice',$repo_id)}}" class="btn btn-primary">نعم</a>
+        <a id="print" onclick="window.print();" href="{{route('create.special.invoice',$repo_id)}}" class="btn btn-primary">نعم</a>
       </div>
     </div>
   </div>
 </div>
-    <div  class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-
-                <div class="card">
-                    <div class="card-header">
-                     
-                    </div>
-                    <div class="card-body">
+   </div>
+    
                       <div id="print-content" class="table-responsive">
+                        <div style="display: flex; justify-content: space-between;">
+                          @if($repository->logo)
+                          <img src="{{asset('storage/'.$repository->logo)}}" width="50px" height="50px" id="logorep">
+                          @endif
+                          <h4> متجر {{$repository->name}}</h4>
+                          </div>
                         <div style="display: flex; justify-content: space-between">
                           <h4>رقم الفاتورة {{$invoice_num}}</h4>
                           <h4>التاريخ {{$date}}</h4>
                           <h4>الرقم الضريبي {{$repository->tax_code}}</h4>
                         </div>
+                        <hr>
                         <table class="table">
                           <thead class="text-primary">
                             <th>
@@ -117,8 +131,9 @@
                       @endfor
                    </tbody>
                  </table>
-                 
+                 <hr>
                  <div id="cash-info">
+                   <div style="display: flex; justify-content: space-between">
                   <div>
                     <h5>
                        المجموع 
@@ -144,32 +159,40 @@
                    </div>
                  </div>
                </div>
-
+                   </div>
                  <div>
-                   <h5>
+                   <h3>
                      المبلغ الإجمالي 
-                   </h5>
+                   </h3>
                    {{--<h1 id="total_price">{{$invoice_total_price}}</h1>--}}
                    <input type="number" name="total_price" id="final_total_price" class="form-control" value="{{$total_price}}" readonly>
                  </div>
                  </div>
+                 <hr>
                  {{--<i class="material-icons">add_circle</i>--}}
                  <div id="settings">
-                  <div>
+                  <div style="display: flex; justify-content: space-between;">
                     <div style="display: flex; flex-direction: column; margin-top: 10px">
                       <div style="display: flex;">
                     <h4> &nbsp;الدفع كاش</h4>
                       </div>
-                    <input style="margin-right: 0px" type="number" min="0.1" step="0.01" name="cashVal" id="cashVal" value="{{$cash}}" class="form-control" readonly>
+                    <input type="number" min="0.1" step="0.01" name="cashVal" id="cashVal" value="{{$cash}}" class="form-control" readonly>
                     </div>
                     <div style="display: flex;flex-direction: column;">
                       <div style="display: flex;">
                     <h4> &nbsp;الدفع بالبطاقة</h4>
                       </div>
-                    <input style="margin-right: 0px" type="number" min="0.1" step="0.01" name="cardVal" id="cardVal" value="{{$card}}" class="form-control" readonly>
+                    <input type="number" min="0.1" step="0.01" name="cardVal" id="cardVal" value="{{$card}}" class="form-control" readonly>
+                    </div>
+                    <div style="display: flex;flex-direction: column;">
+                      <div style="display: flex;">
+                    <h4> &nbsp; STC-pay </h4>
+                      </div>
+                    <input type="number" min="0.1" step="0.01" name="stcVal" id="stcVal" value="{{$stc}}" class="form-control" readonly>
                     </div>
                     </div> 
         </div>
+        <hr>
         <div style="display: flex; justify-content: space-between">
           <h4>العميل {{$customer->name}}</h4>
           <h4>جوال العميل {{$customer->phone}}</h4>
@@ -177,14 +200,9 @@
         <div style="display: flex; justify-content: space-between">
           <h4>موظف البيع {{$employee->name}}</h4>
         </div>
-        <div style="display: flex; justify-content: space-between">
-        <h4> متجر {{$repository->name}}</h4>
-        </div> 
+        
     </div>
- </div>
-</div>
-        </div>
-    </div>
+ 
  
 @section('scripts')
 <script>
@@ -192,4 +210,10 @@ $(document).ready(function() {
   $('#exampleModal').modal('show');
 });
 </script>
+<script>
+  $('#print').on('click',function(){
+    $('#mod').addClass('displaynone');
+  });
+</script>
+@endsection
 @endsection

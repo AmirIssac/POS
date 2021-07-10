@@ -92,7 +92,7 @@ class SettingsController extends Controller
         {
             // Store the File Now
             // read image from temporary file
-            $imagePath = $request->file('logo')->store('logo', 'public');
+            $imagePath = $request->file('logo')->store('logo/'.$repository->id, 'public');
             $repository->update(
                 [
                     'logo' => $imagePath,

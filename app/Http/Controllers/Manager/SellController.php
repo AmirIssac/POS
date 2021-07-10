@@ -559,10 +559,11 @@ class SellController extends Controller
       $employee = User::find($id);
       return view('manager.Sales.print_special_invoice')->with([
           'records'=>$records,'num'=>count($records),'sum'=>$request->sum,'tax'=>$request->taxprint,'total_price'=>$request->total_price,
-          'cash'=>$cashVal,'card'=>$cardVal,'repo_id'=>$repository->id,'discount'=>$request->max_discount,
+          'cash'=>$cashVal,'card'=>$cardVal,'stc'=>$stcVal,'repo_id'=>$repository->id,'discount'=>$request->max_discount,
           'invoice_num'=>$request->code,'date'=>$request->date,'repository' => $repository,
           'customer' => $customer,'employee'=>$employee]);   // to print the invoice
     }
+    
 
     public function showPending($id){
         $repository = Repository::find($id);

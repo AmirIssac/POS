@@ -69,6 +69,7 @@ Route::group(['middleware' => ['permission:المبيعات']], function () {
     // retrive invoice
     Route::get('/retrieve/{repository_id}','Manager\SellController@retrieveIndex')->name('retrieve.index');
     Route::post('/make/retrieve/{invoice_id}','Manager\SellController@retrieveInvoice')->name('retrieve.invoice');
+
 });
 Route::group(['middleware' => ['permission:المخزون']], function () {
     Route::get('/repository','Manager\RepositoryController@index')->name('repository.index');
