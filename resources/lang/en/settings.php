@@ -28,5 +28,11 @@
         'logout' => 'Logout',
         'arabic' => 'Arabic',
         'english' => 'English',
+        'general_settings' => 'General settings',
+        'store_name' => 'Store name',
+        'address' => 'Address',
+        'close_time' => 'Close time',
+        'note' => 'Note',
+        'note_content' => 'Please adhere as much as possible to closing the daily cashier according to the closing time that you specify here',
     ];
     ?>

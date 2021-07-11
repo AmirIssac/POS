@@ -20,8 +20,13 @@ class CashierWarning
         $user = Auth::user();
         $user = User::find($user->id);
         $repositories = $user->repositories;
-        foreach($repositories as $repository){
+        /*foreach($repositories as $repository){
             if($repository->isCashierWarning())
+                return redirect(route('cashier.warning',$repository->id));
+        }*/
+        foreach($repositories as $repository){
+            $warning = $repository->CashierWarningDetails();
+            if($warning['status']==true)
                 return redirect(route('cashier.warning',$repository->id));
         }
         return $next($request);

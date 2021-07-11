@@ -21,7 +21,7 @@ Auth::routes();
 
 Route::group(['prefix' => LaravelLocalization::setLocale(),'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]], function()
 {
-Route::get('/',  'HomeController@main')->middleware('auth'); //middleware('cashier_warning');
+Route::get('/',  'HomeController@main')->middleware('auth')->middleware('cashier_warning');
 Route::get('/home','HomeController@index')->middleware('auth');
 Route::get('/ltr',function () {
     return view('settings.ltr');
@@ -126,6 +126,7 @@ Route::group(['middleware'=>['permission:الاعدادات']], function () {
         Route::get('/worker/add/{repository_id}','Manager\SettingsController@addWorkerForm')->name('add.worker')->middleware('permission:اضافة موظف جديد');
         Route::post('/worker/store/{repository_id}','Manager\SettingsController@storeWorker')->name('store.worker')->middleware('permission:اضافة موظف جديد');
         Route::get('all/workers/{repository_id}','Manager\SettingsController@showWorkers')->name('show.workers');
+        Route::post('/general/settings/{repository_id}','Manager\SettingsController@generalSettings')->name('general.settings');
     });
     // need middleware for variable
     Route::get('show/worker/permissions/{user_id}','Manager\SettingsController@showWorkerPermissions')->name('show.worker.permissions')->middleware('permission:عرض الموظفين');

@@ -15,8 +15,7 @@ class AddColumnToRepositoriesTable extends Migration
     {
         Schema::table('repositories', function (Blueprint $table) {
             //
-            $table->float('balance')->after('stc_balance')->default(0);  //  رصيد الدرج الذي لا يتم تصفيره إلا بعملية ايداع
-            //$table->float('today_sales')->after('balance')->default(0); // مبيعات اليوم تحوي مجموع الفواتير لليوم سواء تم دفع مبلغها او لم يتم
+            $table->time('close_time')->default('00:00:00');
         });
     }
 

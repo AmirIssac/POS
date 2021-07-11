@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Repository extends Model
 {
     protected $fillable = [
-        'name', 'address','category_id','cash_balance','card_balance','stc_balance','balance','today_sales','min_payment','max_discount','tax','tax_code','logo',
+        'name', 'address','category_id','cash_balance','card_balance','stc_balance','balance','today_sales','min_payment','max_discount','tax','tax_code','logo','close_time',
     ];
     //
     public function users(){
@@ -149,7 +149,7 @@ class Repository extends Model
         return $arr;
     }
 
-    public function isCashierWarning(){
+    /*public function isCashierWarning(){
        $daily_report = $this->dailyReportsDesc()->first();
        if($daily_report){
         $now = now();
@@ -162,7 +162,72 @@ class Repository extends Model
        }
        else
        return false;
-    }
+    }*/
+
+    /*public function isCashierWarning(){
+        $daily_report = $this->dailyReportsDesc()->first();
+        if($daily_report){
+         $now = now();
+         $created_at = $daily_report->created_at;
+         $year = $created_at->year;
+         $month = $created_at->month;
+         $day = $created_at->day;
+         $time = $this->close_time;
+         $datetime = new Carbon($year.'-'.$month.'-'.$day.''.$time);  // the date we will compare with
+         $hours = $now->diffInHours($datetime);   // the number of hours between last daily report and NOW
+         if($hours>29)  // giving the cashier addition time by 5 hours
+            return true;
+        else
+            return false;
+        }
+        else
+        return false;
+     }*/
+
+     public function CashierWarningDetails(){
+        $warning = array('status'=>false,'hours'=>0);
+        $daily_report = $this->dailyReportsDesc()->first();
+        if($daily_report){
+         $now = now();
+         $created_at = $daily_report->created_at;
+         $hour_in_report = $created_at->hour; // important
+         $datetimeTemp = new Carbon('1994-07-10'.$this->close_time);  // make it random date to get hour
+         $hour_in_close_time = $datetimeTemp->hour;
+         $arr=array(0,1,2,3,4,5,6,7,8,9,10,11,12);
+            if($hour_in_report < $hour_in_close_time && in_array($hour_in_report,$arr) && $hour_in_close_time >12){ // that mean the cashier is extended to another day from close time ex: close_time : 10:00 pm and submitted at 01:00 am
+                $year = $created_at->year;
+                $month = $created_at->month;
+                $day = $created_at->day - 1;
+                $time = $this->close_time;
+                $datetime = new Carbon($year.'-'.$month.'-'.$day.''.$time);  // the date we will compare with
+                $hours = $now->diffInHours($datetime);   // the number of hours between last daily report and NOW
+                if($hours>30){  // giving the cashier addition time by 6 hours
+                    $warning['status']=true;
+                    $warning['hours']=$hours;
+                    return $warning;
+                }
+                else
+                return $warning;
+            }
+            else{   // the cashier submitted in same day of close_time ex: close_time : 10:00 pm and submitted at 11:00 pm
+            $year = $created_at->year;
+            $month = $created_at->month;
+            $day = $created_at->day;
+            $time = $this->close_time;
+            $datetime = new Carbon($year.'-'.$month.'-'.$day.''.$time);  // the date we will compare with
+            $hours = $now->diffInHours($datetime);   // the number of hours between last daily report and NOW
+            if($hours>30){  // giving the cashier addition time by 6 hours
+                    $warning['status']=true;
+                    $warning['hours']=$hours;
+                    return $warning;
+            }
+            else
+                return $warning;
+            }
+        }
+        else
+        return $warning;
+     }
 
     public function todaySales(){
         $today_sales = 0;

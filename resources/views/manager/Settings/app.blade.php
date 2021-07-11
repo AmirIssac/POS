@@ -35,9 +35,10 @@ input[type=number] {
     @endif
  
     <div class="container-fluid">
-      <form action="{{route('submit.settings.app',$repository->id)}}"  method="post" enctype="multipart/form-data">
-        @csrf
+      
       <div class="row">
+        <form action="{{route('submit.settings.app',$repository->id)}}"  method="post" enctype="multipart/form-data">
+          @csrf
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
@@ -57,6 +58,7 @@ input[type=number] {
                           <input type="file" name="logo" class="form-control">
                       </td>
                       <td>
+                        <button type="submit" class="btn btn-success"> {{__('buttons.confirm')}} </button>
                       </td>
                     </tr>
                   </tbody>
@@ -65,54 +67,54 @@ input[type=number] {
             </div>
           </div>
         </div>
-      </div>
-      
-
-
-     {{-- @if($repository->isSpecial())
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header card-header-primary">
-              <h4 class="card-title">{{__('settings.prod_types')}}</h4>
-            </div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table">
-                  <thead class=" text-primary">
-                    <th>
-                      {{__('settings.determine_types')}} 
-                    </th>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <select class="form-control">  
-                      @foreach($repository->types as $type)
-                      <option value="" disabled selected hidden> {{__('settings.click_here_to_see_types')}} </option>
-                      <option disabled> {{$type->name}} </option>
-                      @endforeach
-                      </select>
-                    </tr>
-                    <tr>
-                      <td>
-                        {{__('settings.add_new_type')}}
-                      </td>
-                      <td>
-                          <input type="text" name="type_name" class="form-control" placeholder=" {{__('settings.type_here_the_new_type')}} ">
-                      </td>
-                      <td>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      @endif --}}
-      <button type="submit" class="btn btn-success"> {{__('buttons.confirm')}} </button>
       </form>
+
+      <form action="{{route('general.settings',$repository->id)}}"  method="post">
+        @csrf
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-primary">
+            <h4 class="card-title">{{__('settings.general_settings')}}</h4>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead class=" text-primary">
+                  <th>
+                    {{__('settings.store_name')}}
+                 </th>
+                 <th>
+                  {{__('settings.address')}} 
+               </th>
+                  <th>
+                    {{__('settings.close_time')}}
+                   <i id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title="{{__('settings.note')}}" data-content="{{__('settings.note_content')}}">live_help</i>
+                  </th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <input type="text" name="repo_name" value="{{$repository->name}}" class="form-control">
+                    </td>
+                    <td>
+                      <input type="text" name="address" value="{{$repository->address}}" class="form-control">
+                  </td>
+                    <td>
+                      <input type="time" name="close_time" value="{{$repository->close_time}}" class="form-control">
+                  </td>
+                    <td>
+                      <button type="submit" class="btn btn-danger"> {{__('buttons.confirm')}} </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+      </div>
 
 
 
@@ -120,4 +122,13 @@ input[type=number] {
     
     </div>
 </div>
+@endsection
+@section('scripts')
+<script>
+  window.onload=function(){
+    $(function () {
+  $('[data-toggle="popover"]').popover()
+  });
+  };
+  </script>
 @endsection

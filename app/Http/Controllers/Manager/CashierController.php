@@ -81,7 +81,8 @@ class CashierController extends Controller
 
         public function warning($id){
             $repository = Repository::find($id);
-            return view('manager.Cashier.warning')->with('repository',$repository);
+            $warning = $repository->CashierWarningDetails(); 
+            return view('manager.Cashier.warning')->with(['repository'=>$repository,'warning'=>$warning]);
         }
 
         public function dailyCashierWarningForm($id){

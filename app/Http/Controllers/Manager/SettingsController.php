@@ -105,6 +105,16 @@ class SettingsController extends Controller
         
     }
 
+    public function generalSettings(Request $request , $id){
+        $repository = Repository::find($id);
+        $repository->update([
+            'name' => $request->repo_name,
+            'address' => $request->address,
+            'close_time' => $request->close_time,
+        ]);
+        return back()->with('success','تم تغيير الاعدادت العامة بنجاح');
+    }
+
     public function addWorkerForm($id){
         $repository = Repository::find($id);
         // all permissions that owner has because its impossible to give worker a permission that the owner dont have

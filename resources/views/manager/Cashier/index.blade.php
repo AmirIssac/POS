@@ -40,7 +40,7 @@
            </div>
          </div>
        </div>
-       {{$repository->isCashierWarning()}}
+       
          <div class="container-fluid">
            <div class="row">
              @can('ايداع في الكاشير')

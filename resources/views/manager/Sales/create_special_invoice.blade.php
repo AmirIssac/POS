@@ -1654,4 +1654,11 @@ window.onload=function(){
                   
   });
  </script>
+ <script>
+  window.onload=function(){
+    $(function () {
+  $('[data-toggle="popover"]').popover()
+  });
+  };
+  </script>
 @endsection

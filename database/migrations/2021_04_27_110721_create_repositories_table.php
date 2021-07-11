@@ -26,6 +26,7 @@ class CreateRepositoriesTable extends Migration
             $table->float('max_discount')->default(0); // أعلى حد للخصم نسبة مئوية
             $table->smallInteger('tax')->default(0);
             $table->timestamps();
+            $table->float('balance')->after('stc_balance')->default(0);  //  رصيد الدرج الذي لا يتم تصفيره إلا بعملية ايداع
         });
     }
 
