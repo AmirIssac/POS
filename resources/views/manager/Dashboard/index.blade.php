@@ -89,9 +89,11 @@
                     <p style="color: #48a44c; font-weight: bold" class="card-category">{{__('dashboard.money_collected')}}</p>
                     <h3 style="color:#48a44c " class="card-title">{{$repository->cash_balance+$repository->card_balance+$repository->stc_balance}}
                     </h3>
+                    {{--
                     <p style="color: #f14000; font-weight: bold" class="card-category">{{__('dashboard.today_money_pending')}}</p>
                     <h3 style="color: #f14000" class="card-title">{{$repository->todayPendingMoney()}}
                     </h3>
+                    --}}
                     <p style="color: #f14000; font-weight: bold" class="card-category">{{__('dashboard.total_pending_money')}}</p>
                     <h3 style="color: #f14000" class="card-title">{{$repository->totalPendingMoney()}}
                     </h3>
