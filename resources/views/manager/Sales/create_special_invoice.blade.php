@@ -684,7 +684,7 @@ select{
                         <input type="hidden" id="cost_price0"  name="cost_price[]" value="{{old('cost_price0')}}" class="form-control blank" readonly>
                       </td>
                       <td>
-                        <input type="number" id="price0" min="0"  name="price[]" value="{{old('price0')}}" class="form-control price blank">
+                        <input type="number" id="price0" min="0" step="0.01"  name="price[]" value="{{old('price0')}}" class="form-control price blank">
                       </td>
                       <td>
                         @if(old('quantity0'))
@@ -727,7 +727,7 @@ select{
                         <input type="hidden" id="cost_price{{$count}}"  name="cost_price[]" value="{{old('cost_price.'.$count)}}" class="form-control blank" readonly>
                       </td>
                       <td>
-                        <input type="number" id="price{{$count}}" min="0"  name="price[]" value="{{old('price.'.$count)}}" class="form-control price blank">
+                        <input type="number" id="price{{$count}}" min="0" step="0.01"  name="price[]" value="{{old('price.'.$count)}}" class="form-control price blank">
                       </td>
                       <td>
                         @if(old('quantity.'.$count))
@@ -1251,6 +1251,9 @@ window.onload=function(){
   $('input[name="sph_ls"]').val($('select[name="sph_l"]').val());
   $('input[name="ipdvals"]').val($('input[name="ipdval"]').val());
           $('#submit').prop('disabled', true);
+  $(function () {
+  $('[data-toggle="popover"]').popover()
+  });
 }
 </script>
 <script>   // stop submiting form when click enter
@@ -1654,11 +1657,5 @@ window.onload=function(){
                   
   });
  </script>
- <script>
-  window.onload=function(){
-    $(function () {
-  $('[data-toggle="popover"]').popover()
-  });
-  };
-  </script>
+ 
 @endsection
