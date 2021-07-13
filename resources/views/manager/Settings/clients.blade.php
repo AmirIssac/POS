@@ -63,7 +63,9 @@
                             {{$customer->points}}
                           </td>
                           <td>
+                            @can('تعديل عميل')
                             <a href="{{route('edit.client',$customer->id)}}" class="btn btn-info"> {{__('buttons.edit')}} </a>
+                            @endcan
                           </td>
                       </tr>
                       @endforeach

@@ -131,6 +131,8 @@ Route::group(['middleware'=>['permission:الاعدادات']], function () {
     // need middleware for variable
     Route::get('show/worker/permissions/{user_id}','Manager\SettingsController@showWorkerPermissions')->name('show.worker.permissions')->middleware('permission:عرض الموظفين');
     Route::post('edit/worker/permissions/{user_id}','Manager\SettingsController@editWorkerPermissions')->name('edit.worker.permissions')->middleware('permission:تعديل صلاحيات موظف'); 
+    Route::get('edit/worker/info/form/{user_id}','Manager\SettingsController@editWorkerInfo')->name('edit.worker.info');
+    Route::post('update/worker/info/{user_id}','Manager\SettingsController@updateWorkerInfo')->name('update.worker.info');
 });
 
 Route::group(['middleware'=>['permission:الكاشير']], function () {

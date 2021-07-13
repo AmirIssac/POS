@@ -182,7 +182,7 @@
             </a>
           </li>
           @endcan
-          @can('المخزون')
+          @can('المشتريات')
           <li class="nav-item {{ request()->is('purchases')? 'active' : ''}}">
             <a class="nav-link" href="{{route('purchases.index')}}">
               <i class="material-icons">local_shipping</i>

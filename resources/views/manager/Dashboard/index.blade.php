@@ -125,6 +125,24 @@
                </div>
              </div>
              <div class="col-lg-3 col-md-6 col-sm-6">
+               <div class="card card-stats">
+                 <div class="card-header card-header-danger card-header-icon">
+                   <div class="card-icon">
+                     <i class="material-icons">local_shipping</i>
+                   </div>
+                   <p style="color: #9229ac; font-weight: bold" class="card-category">{{__('dashboard.today_purchases')}}</p>
+                   <h3 class="card-title">{{$repository->todayPurchases()}}</h3>
+                   <p style="color: #48a44c; font-weight: bold" class="card-category">{{__('dashboard.today_paid_money')}}</p>
+                   <h3 class="card-title">{{$repository->todayPayedMoney()}}</h3>
+                   <p style="color: #f14000; font-weight: bold" class="card-category"> {{__('dashboard.pending_paid_money')}} </p>
+                   <h3 class="card-title">{{$repository->pendingPayedMoney()}}</h3>
+                 </div>
+                 <div class="card-footer">
+                   
+                 </div>
+               </div>
+             </div>
+             <div class="col-lg-3 col-md-6 col-sm-6">
               <a href="{{route('show.products',$repository->id)}}">
                <div class="card card-stats">
                  <div class="card-header card-header-danger card-header-icon">

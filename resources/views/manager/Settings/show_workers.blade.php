@@ -25,7 +25,10 @@
                       {{__('settings.mobile')}} 
                      </th>
                      <th>
-                      {{__('settings.customize')}} 
+                      {{__('settings.info')}} 
+                     </th>
+                     <th>
+                      {{__('settings.permissions')}} 
                      </th>
                   </thead>
                   <tbody>
@@ -35,7 +38,10 @@
                      <td>{{$worker->email}}</td>
                      <td>{{$worker->phone}}</td>
                      <td>
-                         <a style="color: white" href="{{route('show.worker.permissions',$worker->id)}}" role="button" class="btn btn-info"> {{__('buttons.edit')}} </a>
+                      <a style="color: white" href="{{route('edit.worker.info',$worker->id)}}" role="button" class="btn btn-info"> {{__('buttons.edit')}} </a>
+                    </td>
+                     <td>
+                         <a style="color: white" href="{{route('show.worker.permissions',$worker->id)}}" role="button" class="btn btn-info"> {{__('settings.customize')}} </a>
                      </td>
                     </tr>
                     @endforeach

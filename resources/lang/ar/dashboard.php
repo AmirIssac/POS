@@ -17,5 +17,8 @@ return [
     'money_collected' => 'الأموال المحصلة',
     'today_money_pending' => 'أموال اليوم المعلقة',
     'total_pending_money' => 'الأموال المعلقة الإجمالية',
+    'today_purchases' => 'مشتريات اليوم',
+    'today_paid_money' => 'الاموال المدفوعة اليوم',
+    'pending_paid_money' => 'الاموال المعلقة الواجب دفعها',
 ];
 ?>

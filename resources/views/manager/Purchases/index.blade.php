@@ -35,6 +35,7 @@
        </div>
          <div class="container-fluid">
            <div class="row">
+             @can('انشاء فاتورة مشتريات')
              <div class="col-lg-3 col-md-6 col-sm-6">
                 <a href="{{route('purchase.add',$repository->id)}}">
                <div class="card card-stats">
@@ -53,7 +54,9 @@
                </div>
             </a>
              </div>
+             @endcan
 
+             @can('دفع فاتورة مورد')
              <div class="col-lg-3 col-md-6 col-sm-6">
                 <a href="{{route('show.later.purchases',$repository->id)}}">
               <div class="card card-stats">
@@ -72,7 +75,9 @@
               </div>
             </a>
             </div>
+            @endcan
 
+            @can('اضافة منتج مشتريات')
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <a href="{{route('purchase.products',$repository->id)}}">
               <div class="card card-stats">
@@ -91,7 +96,8 @@
               </div>
             </a>
             </div>
-
+            @endcan
+            @can('عرض فاتورة المشتريات')
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <a href="{{route('show.purchases',$repository->id)}}">
               <div class="card card-stats">
@@ -110,7 +116,8 @@
               </div>
             </a>
             </div>
-
+            @endcan
+            @can('عرض الموردين')
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <a href="{{route('show.suppliers',$repository->id)}}">
               <div class="card card-stats">
@@ -129,7 +136,8 @@
               </div>
             </a>
             </div>
-
+            @endcan
+            @can('اضافة مورد')
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <a href="{{route('add.supplier',$repository->id)}}">
               <div class="card card-stats">
@@ -148,7 +156,7 @@
               </div>
             </a>
             </div>
-
+            @endcan
 
 
 

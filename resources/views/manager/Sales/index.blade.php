@@ -101,6 +101,7 @@
             @endcan
 
             @if($repository->isSpecial())  {{-- محل خاص --}}
+            @can('استرجاع فاتورة')
             <div class="col-lg-3 col-md-6 col-sm-6">
               <a data-toggle="modal" data-target="#exampleModal{{$repository->id}}" id="modaltrigger">
               <div class="card card-stats">
@@ -140,7 +141,8 @@
                   </div>
                 </div>
               </div>
-
+              @endcan
+              @can('عرض العملاء')
             <div class="col-lg-3 col-md-6 col-sm-6">
               <a href="{{route('clients',$repository->id)}}">
               <div class="card card-stats">
@@ -159,6 +161,7 @@
               </div>
             </a>
             </div>
+            @endcan
             @endif
            </div>
          

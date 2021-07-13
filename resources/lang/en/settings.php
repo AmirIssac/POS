@@ -34,5 +34,9 @@
         'close_time' => 'Close time',
         'note' => 'Note',
         'note_content' => 'Please adhere as much as possible to closing the daily cashier according to the closing time that you specify here',
+        'info' => 'Information',
+        'permissions' => 'Permissions',
+        'customize' => 'customize',
+        
     ];
     ?>

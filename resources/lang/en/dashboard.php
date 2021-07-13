@@ -17,5 +17,8 @@ return [
     'money_collected' => 'Collected money',
     'today_money_pending' => 'Today money pending',
     'total_pending_money' => 'Total money pending',
+    'today_purchases' => 'Today purchases',
+    'today_paid_money' => 'Today paid money',
+    'pending_paid_money' => 'Pending paid money',
 ];
 ?>

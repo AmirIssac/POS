@@ -184,5 +184,19 @@ class SettingsController extends Controller
         ]);
         return back()->with('success','تم التعديل بنجاح');
     }
+
+    public function editWorkerInfo($id){
+        $user = User::find($id);
+        return view('manager.Settings.edit_worker_info')->with('user',$user);
+    }
+    public function updateWorkerInfo(Request $request , $id){
+        $user = User::find($id);
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+        ]);
+        return back()->with('success','تم التعديل بنجاح');
+    }
     
 }
