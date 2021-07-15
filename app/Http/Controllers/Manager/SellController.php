@@ -795,7 +795,8 @@ class SellController extends Controller
 
     public function retrieveInvoice(Request $request,$id){
         $invoice = Invoice::find($id);
-        $repository = Repository::find($request->repo_id);
+        //$repository = Repository::find($request->repo_id);
+        $repository = $invoice->repository;
         $cash_retrieved = $invoice->cash_amount + $invoice->card_amount + $invoice->stc_amount;
         if($cash_retrieved > $repository->balance)
             return back()->with('fail','لا يمكن الاسترجاع المبلغ في الدرج غير كاف');
@@ -804,9 +805,9 @@ class SellController extends Controller
         for($i=1;$i<count($records);$i++)
         {
             //return $records[$i];
-            $product = Product::where('repository_id',$request->repo_id)->where('barcode',$records[$i]['barcode'])->first();
-            $new_quantity = $product[0]->quantity + floatval($records[$i]['delivered']);
-            $product[0]->update([   // retrieve the products to stock
+            $product = Product::where('repository_id',$repository->id)->where('barcode',$records[$i]['barcode'])->first();
+            $new_quantity = $product->quantity + floatval($records[$i]['delivered']);
+            $product->update([   // retrieve the products to stock
                 'quantity' => $new_quantity,
             ]);
         }
