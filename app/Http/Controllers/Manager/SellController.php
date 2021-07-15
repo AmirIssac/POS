@@ -806,7 +806,6 @@ class SellController extends Controller
         {
             //return $records[$i];
             $product = Product::where('repository_id',$repository->id)->where('barcode',$records[$i]['barcode'])->first();
-            return $product;
             $new_quantity = $product->quantity + floatval($records[$i]['delivered']);
             $product->update([   // retrieve the products to stock
                 'quantity' => $new_quantity,
