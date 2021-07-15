@@ -110,6 +110,9 @@ Route::group(['middleware'=>['permission:التقارير']], function () {
         Route::get('/search/invoices/code/{repository_id}','Manager\ReportController@searchInvoicesByCode')->name('search.invoices.code');
         Route::get('/daily/reports/{repository_id}','Manager\ReportController@dailyReports')->name('daily.reports.index');
     });
+    Route::get('/invoice/details/{invoice_id}','Manager\ReportController@invoiceDetails')->name('invoice.details');
+    Route::get('/print/invoice/{invoice_id}','Manager\ReportController@printInvoice')->name('print.invoice');
+    Route::get('/filter/pending/invoices/{repository_id}','Manager\ReportController@filterPending')->name('filter.pending.invoices');
 });
 
 

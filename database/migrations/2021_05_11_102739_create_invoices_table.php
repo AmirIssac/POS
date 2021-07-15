@@ -31,6 +31,7 @@ class CreateInvoicesTable extends Migration
             $table->string('phone')->nullable();  // client number
             $table->timestamp('created_at');   // custom timestamp
             $table->boolean('daily_report_check')->default(0);
+            $table->enum('transform',['no','p-d','p-r','d-r'])->after('created_at')->default('no');
             //$table->timestamp('updated_at')->nullable();   // custom timestamp for update from pending to delivered
             //$table->timestamps();
         });

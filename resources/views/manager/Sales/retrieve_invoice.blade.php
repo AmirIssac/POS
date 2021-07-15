@@ -93,6 +93,9 @@
                               {{__('sales.card')}}
                             </td>
                             <td>
+                              stc-pay
+                            </td>
+                            <td>
                               {{__('sales.invoice_status')}} 
                             </td>
                             <td>
@@ -125,6 +128,17 @@
                               @else
                               <span class="badge badge-danger">
                                 {{$invoice->card_amount}}
+                                </span>
+                              @endif
+                            </td>
+                            <td>
+                              @if($invoice->stc_amount>0)
+                              <span class="badge badge-success">
+                              {{$invoice->stc_amount}}
+                              </span>
+                              @else
+                              <span class="badge badge-danger">
+                                {{$invoice->stc_amount}}
                                 </span>
                               @endif
                             </td>

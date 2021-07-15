@@ -19,15 +19,31 @@
           <strong>{{ session('completeSuccess') }}</strong>
   </div>
   @endif
+  <div style="display: flex">
   <form action="{{route('search.pending',$repository->id)}}" method="GET">
     @csrf
     <div style="width: 300px; margin-right: 20px;" class="input-group no-border">
-      <input type="text" name="phoneSearch" class="form-control" placeholder="ابحث برقم الزبون">
+      <input type="text" name="search" class="form-control" placeholder="ابحث برقم العميل | رقم الفاتورة">
       <button type="submit" class="btn btn-success btn-round btn-just-icon">
         <i class="material-icons">search</i>
       </button>
     </div>
   </form>
+  {{-- filter --}}
+  <form action="{{route('filter.pending.invoices',$repository->id)}}" method="GET">
+    @csrf
+    <div style="display: flex; margin-right: 10px;">
+  <select name="filter" class="form-control">
+    {{--<option value="" disabled selected hidden>الفلتر</option>--}}
+    <option value="payed">مدفوعة</option>
+    <option value="notpayed">غير مدفوعة</option>
+  </select>
+  <button type="submit" class="btn btn-success btn-round btn-just-icon">
+    <i class="material-icons">search</i>
+  </button>
+    </div>
+  </form>
+  </div>
   @if($invoices->count()>0)
     @foreach($invoices as $invoice)
     <div class="container-fluid">
@@ -180,6 +196,11 @@
       </span>
       @endif
     </div>
+    {{ $invoices->links() }}
 </div>
-{{ $invoices->links() }}
+@endsection
+@section('scripts')
+<script> 
+  
+</script>
 @endsection

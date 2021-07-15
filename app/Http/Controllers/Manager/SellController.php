@@ -513,6 +513,8 @@ class SellController extends Controller
                 'cash_amount' => $cashVal,
                 'card_amount' => $cardVal,
                 'stc_amount' => $stcVal,
+                'tax' => $request->taxprint,
+                'tax_code' => $repository->tax_code,
                 'status' => $status,
                 'phone' => $request->customer_phone,
                 'created_at' => $request->date,
@@ -747,7 +749,7 @@ class SellController extends Controller
         return view('manager.Sales.retrieve_invoice')->with(['invoices'=>$invoices,'repository'=>$repository]);
     }
 
-    public function retrieveInvoice(Request $request,$id){
+       /* public function retrieveInvoice(Request $request,$id){
         $invoice = Invoice::find($id);
         $repository = Repository::find($request->repo_id);
         $cash_retrieved = $invoice->cash_amount + $invoice->card_amount + $invoice->stc_amount;
@@ -757,7 +759,7 @@ class SellController extends Controller
         //foreach($records as $record)
         for($i=1;$i<count($records);$i++)
         {
-           // return $records[$i];
+            //return $records[$i];
             $product = Product::where('repository_id',$request->repo_id)->where('barcode',$records[$i]['barcode'])->get(); // collection because we use get()
             $new_quantity = $product[0]->quantity + floatval($records[$i]['delivered']);
             $product[0]->update([   // retrieve the products to stock
@@ -789,5 +791,49 @@ class SellController extends Controller
             'daily_report_check' => false,
         ]);
         return redirect(route('sales.index'))->with('retrievedSuccess','تم استرجاع الفاتورة بنجاح');
-    }
+    } */
+
+    public function retrieveInvoice(Request $request,$id){
+        $invoice = Invoice::find($id);
+        $repository = Repository::find($request->repo_id);
+        $cash_retrieved = $invoice->cash_amount + $invoice->card_amount + $invoice->stc_amount;
+        if($cash_retrieved > $repository->balance)
+            return back()->with('fail','لا يمكن الاسترجاع المبلغ في الدرج غير كاف');
+        $records = unserialize($invoice->details); // array of arrays
+        //foreach($records as $record)
+        for($i=1;$i<count($records);$i++)
+        {
+            //return $records[$i];
+            $product = Product::where('repository_id',$request->repo_id)->where('barcode',$records[$i]['barcode'])->first();
+            $new_quantity = $product->quantity + floatval($records[$i]['delivered']);
+            $product->update([   // retrieve the products to stock
+                'quantity' => $new_quantity,
+            ]);
+        }
+        // give the money back to the customer
+        // !? for now we will do the back money just from cash for all cash and card and stc !?
+        if($invoice->daily_report_check==true){  // the invoice from another day so cash not affected
+        $repository->update([
+            'balance' => $repository->balance - $cash_retrieved,
+        ]);
+        }
+        else{
+            $repository->update([
+                'cash_balance' => $repository->cash_balance - $cash_retrieved,
+                'balance' => $repository->balance - $cash_retrieved,
+            ]);
+        }
+        if($invoice->status=='delivered')
+            $transform = 'd-r';
+            else
+            $transform = 'p-r';
+        // change invoice status
+        $invoice->update([
+            'status' => 'retrieved',
+            'created_at' => now(),
+            'transform' => $transform,
+            'daily_report_check' => false,
+        ]);
+        return redirect(route('sales.index'))->with('retrievedSuccess','تم استرجاع الفاتورة بنجاح');
+    } 
 }

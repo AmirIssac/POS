@@ -22,11 +22,38 @@ class ReportController extends Controller
 
     public function showInvoices($id){
         $repository = Repository::find($id);
-        $invoices = $repository->invoicesDesc()->paginate(10);
+        $invoices = $repository->invoicesDesc()->paginate(20);
         /*$re = $invoices->first();
         $re = unserialize($re->details);
         return $re;*/
         return view('manager.Reports.show_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
+    }
+
+    public function invoiceDetails($id){
+        $invoice = Invoice::find($id);
+        $repository = $invoice->repository;
+        return view('manager.Reports.invoice_details')->with(['repository'=>$repository,'invoice'=>$invoice]);
+    }
+
+    public function printInvoice($id){
+        $invoice = Invoice::find($id);
+        $repository = $invoice->repository;
+        return view('manager.Reports.print_invoice')->with(['repository'=>$repository,'invoice'=>$invoice]);
+    }
+
+    public function filterPending(Request $request,$id){
+        $repository = Repository::find($id);
+        if(!$request->filter)
+            return back();
+        if($request->filter == 'payed'){
+        $invoices = $repository->invoices()->where('status','pending')
+        ->whereRaw('total_price','cash_amount+card_amount+stc_amount')->paginate(10);
+        }
+        elseif($request->filter == 'notpayed'){
+            $invoices = $repository->invoices()->where('status','pending')
+            ->whereRaw('total_price > cash_amount+card_amount+stc_amount')->paginate(10);
+        }
+        return view('manager.Sales.show_pending_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
     }
 
     public function showTodayInvoices($id){
@@ -55,7 +82,11 @@ class ReportController extends Controller
 
     public function searchPending(Request $request , $id){
         $repository = Repository::find($id);
-        $invoices = Invoice::where('repository_id',$repository->id)->where('status','pending')->where('phone','like', '%' . $request->phoneSearch . '%')->paginate(5);
+        $invoices = Invoice::where('repository_id',$repository->id)->where('status','pending')
+        ->where(function($query) use ($request) {
+            $query->where('phone','like', '%' . $request->search . '%')
+                  ->orWhere('code', $request->search); })
+        ->paginate(5);
         return view('manager.Sales.show_pending_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
     }
 
