@@ -813,7 +813,8 @@ class SellController extends Controller
         }
         // give the money back to the customer
         // !? for now we will do the back money just from cash for all cash and card and stc !?
-        if($invoice->daily_report_check==true){  // the invoice from another day so cash not affected
+        //if($invoice->daily_report_check==true){  // the invoice from another day so cash not affected
+        if($invoice->dailyReports->count()>0){
         $repository->update([
             'balance' => $repository->balance - $cash_retrieved,
         ]);
