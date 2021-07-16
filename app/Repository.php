@@ -232,7 +232,9 @@ class Repository extends Model
     public function todaySales(){
         $today_sales = 0;
        // $invoices = $this->invoices()->where('status','!=','retrieved')->where('transform','!=','p-d')->where('daily_report_check',false)->get();
-       $invoices = $this->invoices()->where('status','!=','retrieved')->where('daily_report_check',false)->get();
+       //$invoices = $this->invoices()->where('status','!=','retrieved')->where('daily_report_check',false)->get();
+       $invoices = $this->invoices()->where('status','!=','retrieved')->where('daily_report_check',false)
+       ->doesntHave('dailyReports')->get();
         foreach($invoices as $invoice){
             $today_sales += $invoice->total_price;
         }

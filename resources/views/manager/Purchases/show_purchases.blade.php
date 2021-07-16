@@ -24,9 +24,6 @@
   .eye:hover{
     cursor: pointer;
   }
-  .bold{
-      font-weight: bold;
-  }
 </style>
 @endsection
 @section('body')
@@ -37,128 +34,80 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
-          <?php $i = 0 ?>
-          @if($purchases->count()>0)
-         @foreach($purchases as $purchase)
+          
           <div class="card">
             
               <div class="card-header card-header-primary">
-                @if($purchase->created_at!=$purchase->updated_at)  {{-- it was later and then payed --}}
-                <h4 class="card-title"> {{$purchase->created_at}} ==> {{$purchase->updated_at}}</h4>
-                @else
-              <h4 class="card-title"> {{$purchase->created_at}}</h4>
-              @endif
-              <h4>{{__('sales.invoice_code')}}  <span class="badge badge-success">{{$purchase->code}}</span></h4>
-              <i style="float: left" id="{{$i}}" class="material-icons eye">
+                
+              <h4 class="card-title"> </h4>
+              <h4> {{__('reports.invoices')}} <span class="badge badge-success"></span></h4>
+              {{--<i style="float: left" id="{{$i}}" class="material-icons eye">
                 visibility
-              </i>
+              </i>--}}
             </div>
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table">
-                  <thead id="th{{$i}}" class="text-primary displaynone">
+                 {{-- <thead id="th{{$i}}" class="text-primary displaynone"> --}}
                     <th>
-                      Barcode
+                      {{__('reports.invoice_num')}}  
+                    </th>
+                    <th>
+                      {{__('reports.date')}}    
                   </th>
+                    <th>
+                      {{__('purchases.supplier')}}   
+                    </th>
+                    <th>
+                      {{__('purchases.total_price')}}   
+                    </th> 
                   <th>
-                    {{__('purchases.name')}}
-                  </th>
-                  <th>
-                    {{__('sales.quantity')}}
-                  </th>
-                  <th>
-                    {{__('purchases.price')}}
-                  </th>
+                    {{__('reports.actions')}}
+                </th>
                   </thead>
-                  <tbody id="tb{{$i}}" class="displaynone">
-                    @foreach($purchase->purchaseRecords as $record)
+                  <tbody>
+                     @if($purchases->count()>0)
+                    @foreach($purchases as $purchase)
                     <tr>
                         <td>
-                            {{$record->barcode}}
+                            {{$purchase->code}}
                         </td>
                         <td>
-                            {{$record->name}}
+                          {{$purchase->created_at}}
                         </td>
-                        <td>
-                            {{$record->quantity}}
-                        </td>
-                        <td>
-                            {{$record->price}}
-                        </td>
-                    </tr>
-                    @endforeach
-                    
-                    <tr class="bold">
                         
+                       
                         <td>
-                          {{__('purchases.supplier')}}  
+                            {{$purchase->supplier->name}}
                         </td>
                        
                         <td>
-                          {{__('purchases.employee')}}  
+                            {{$purchase->total_price}}
                         </td>
-                        <td>
-                          {{__('purchases.supplier_invoice_num')}}  
-                        </td>
-                        <td>
-                          {{__('purchases.total_price')}}
-                      </td>
+                        
                       <td>
-                        {{__('purchases.payment_proccess')}}
-                    </td>
+                     <a style="color: #03a4ec" href="{{route('show.purchase.details',$purchase->id)}}"> <i class="material-icons eye">
+                            visibility
+                          </i> </a>
+                         
+                      </td>
                     </tr>
+                    
+                    @endforeach
+                    @else
                     <tr>
                       <td>
-                        {{$purchase->supplier->name}}
+                    <span id="warning" class="badge badge-warning">
+                      {{__('reports.no_invoices')}}
+                    </span>
                       </td>
-                      <td>
-                          {{$purchase->user->name}}
-                      </td>
-                      <td>
-                          @if($purchase->supplier_invoice_num)
-                          {{$purchase->supplier_invoice_num}}
-                          @else
-                          {{__('purchases.none')}} 
-                          @endif
-                      </td>
-                      <td>
-                          {{$purchase->total_price}}
-                      </td>
-                      
-                      <td>
-                        @if($purchase->created_at!=$purchase->updated_at)  {{-- it was later and then payed --}}
-                            @if($purchase->payment=='later')
-                            {{__('purchases.later')}} => {{__('purchases.later')}}
-                            @elseif($purchase->payment=='cashier')
-                            {{__('purchases.later')}} => {{__('purchases.cashier')}}
-                            @else
-                            {{__('purchases.later')}} =>   {{__('purchases.cash_from_external_budget')}}  
-                            @endif
-                        @else
-                            @if($purchase->payment=='later')
-                            {{__('purchases.later')}}
-                            @elseif($purchase->payment=='cashier')
-                            {{__('purchases.cashier')}}
-                            @else
-                            {{__('purchases.cash_from_external_budget')}}  
-                            @endif
-                        @endif
-                      </td>
-                  </tr>
+                    </tr>
+                    @endif
                   </tbody>
                 </table>
-           
-
               </div>
               </div>
             </div>
-            <?php ++$i ?>
-            @endforeach
-            @else
-            <span id="warning" class="badge badge-warning">
-              {{__('purchases.no_purchases_invoices')}}
-            </span>
-            @endif
           </div>
         </div>
         {{ $purchases->links() }}
@@ -169,19 +118,3 @@
 </div>
 @endsection
 
-@section('scripts')
-<script>
-  $('.eye').on('click',function(){
-    var id = $(this).attr('id');
-    if($('#th'+id).hasClass('displaynone')){  // show
-    $('#th'+id).removeClass('displaynone');
-    $('#tb'+id).removeClass('displaynone');
-    }
-    else
-    {  // hide
-      $('#th'+id).addClass('displaynone');
-      $('#tb'+id).addClass('displaynone');
-    }
-  });
-</script>
-@endsection

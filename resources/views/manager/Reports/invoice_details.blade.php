@@ -39,7 +39,7 @@
               <div class="card-header card-header-primary">
                 
               <h4 class="card-title"> </h4>
-              <h4> الفاتورة {{$invoice->created_at}}   <span class="badge badge-success">{{$invoice->code}}</span></h4>
+              <h4> {{__('sales.invoice_details')}} {{$invoice->created_at}}   <span class="badge badge-success">{{$invoice->code}}</span></h4>
               {{--<i style="float: left" id="{{$i}}" class="material-icons eye">
                 visibility
               </i>--}}
@@ -52,16 +52,16 @@
                       Barcode  
                     </th>
                     <th>
-                      الاسم    
+                      {{__('sales.name')}}    
                   </th>
                     <th>
-                      السعر   
+                      {{__('sales.price')}}   
                     </th>
                     <th>
-                      الكمية  
+                      {{__('sales.quantity')}}  
                     </th> 
                   <th>
-                    تم تسليمها   
+                    {{__('sales.delivered')}}   
                   </th>
                   </thead>
                   <tbody>
@@ -87,28 +87,28 @@
                     @endfor
                     <tr style="font-weight: 900">
                         <td>
-                            المبلغ الاجمالي
+                          {{__('sales.total_price')}}
                         </td>
                         <td>
-                             كاش
+                          {{__('sales.cash')}}
                         </td>
                         <td>
-                             بطاقة
+                          {{__('sales.card')}}
                         </td>
                         <td>
                              stc-pay
                         </td>
                         <td>
-                            حالة الفاتورة 
+                          {{__('sales.invoice_status')}}  
                         </td>
                         <td>
-                             العميل 
+                          {{__('reports.customer')}} 
                         </td>
                         <td>
-                            جوال العميل 
+                          {{__('sales.customer_mobile')}}  
                         </td>
                         <td>
-                             موظف البيع 
+                          {{__('sales.sales_employee')}}  
                         </td>
                     </tr>
                     <tr>
@@ -127,19 +127,19 @@
                        <td>
                         @if($invoice->transform == 'no')
                           @if($invoice->status == 'delivered')
-                          تم التسليم
+                          {{__('sales.del_badge')}} 
                           @elseif($invoice->status == 'pending')
-                          معلقة
+                          {{__('sales.hang_badge')}}
                           @elseif($invoice->status == 'retrieved')
-                          مسترجعة
+                          {{__('sales.retrieved_badge')}}
                           @endif
                         @else {{-- there is a transform --}}
                             @if($invoice->transform == 'p-d')
-                            معلقة => تم التسليم
+                            {{__('sales.hang_badge')}} => {{__('sales.del_badge')}} 
                             @elseif($invoice->transform == 'p-r')
-                            معلقة => مسترجعة
+                            {{__('sales.hang_badge')}} => {{__('sales.retrieved_badge')}}
                             @elseif($invoice->transform == 'd-r')
-                            تم التسليم => مسترجعة
+                            {{__('sales.del_badge')}}  => {{__('sales.retrieved_badge')}}
                             @endif
                         @endif
                        </td>

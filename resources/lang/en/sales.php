@@ -60,5 +60,7 @@ return [
     'sure_you_want_retrieve_invoice_for_customer' => 'Are you sure you want to refund the invoice for customer',
     'discount' => 'Discount',
     'max_is' => 'Max is ',
+    'payed' => 'Payed',
+    'not_payed' => 'Not payed',
 ];
 ?>

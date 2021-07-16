@@ -60,5 +60,7 @@ return [
     'sure_you_want_retrieve_invoice_for_customer' => 'هل أنت متأكد أنك تريد استرجاع الفاتورة للعميل ',
     'discount' => 'الخصم',
     'max_is' => 'أعلى حد',
+    'payed' => 'مدفوعة',
+    'not_payed' => 'غير مدفوعة',
 ];
 ?>

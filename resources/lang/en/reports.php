@@ -19,5 +19,11 @@ return [
     'no_invoices' => 'there is no invoices',
     'search_by_inv_num' => 'search by invoice number..',
     'click_calendar_to_search_by_date' => 'Click on the calendar to search by date',
+    'invoice_num' => 'Invoice number',
+    'date' => 'Date',
+    'status' => 'Status',
+    'customer' => 'Customer',
+    'total_price' => 'Total price',
+    'actions' => 'Actions',
 ];
 ?>

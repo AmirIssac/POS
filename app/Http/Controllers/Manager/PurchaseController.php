@@ -137,6 +137,11 @@ class PurchaseController extends Controller
         return view('manager.Purchases.show_purchases')->with(['repository'=>$repository,'purchases'=>$purchases]);
     }
 
+    public function showPurchaseDetails($id){
+        $purchase = Purchase::find($id);
+        return view('manager.Purchases.purchase_details')->with(['purchase'=>$purchase]);
+    }
+
     public function productsForm($id){
         $repository = Repository::find($id);
         return view('manager.Purchases.products_form')->with(['repository'=>$repository]);

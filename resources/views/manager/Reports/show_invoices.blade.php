@@ -30,7 +30,7 @@
 <div class="main-panel">
   
 <div class="content">
-  @if(request()->is('show/invoices/*'))
+  @if(request()->is('show/invoices/*') || request()->is('en/show/invoices/*'))
   <span style="margin-right: 10px" class="badge badge-warning">
     {{__('reports.click_calendar_to_search_by_date')}}
   </span>
@@ -64,7 +64,7 @@
               <div class="card-header card-header-primary">
                 
               <h4 class="card-title"> </h4>
-              <h4> الفواتير <span class="badge badge-success"></span></h4>
+              <h4> {{__('reports.invoices')}} <span class="badge badge-success"></span></h4>
               {{--<i style="float: left" id="{{$i}}" class="material-icons eye">
                 visibility
               </i>--}}
@@ -74,22 +74,22 @@
                 <table class="table">
                  {{-- <thead id="th{{$i}}" class="text-primary displaynone"> --}}
                     <th>
-                      رقم الفاتورة 
+                      {{__('reports.invoice_num')}}  
                     </th>
                     <th>
-                      التاريخ    
+                      {{__('reports.date')}}    
                   </th>
                     <th>
-                      الحالة   
+                      {{__('reports.status')}}   
                     </th>
                     <th>
-                      العميل  
+                      {{__('reports.customer')}}  
                     </th> 
                   <th>
-                    المبلغ الاجمالي  
+                    {{__('reports.total_price')}}  
                   </th>
                   <th>
-                    عمليات
+                    {{__('reports.actions')}}
                 </th>
                   </thead>
                   <tbody>
@@ -105,11 +105,11 @@
                         </td>
                         <td>
                           @if($invoice->status == 'delivered')
-                          تم التسليم
+                          {{__('sales.del_badge')}} 
                           @elseif($invoice->status == 'pending')
-                          معلقة
+                          {{__('sales.hang_badge')}}
                           @elseif($invoice->status == 'retrieved')
-                          مسترجعة
+                          {{__('sales.retrieve')}}
                           @endif
                         </td>
                        

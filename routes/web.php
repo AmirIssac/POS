@@ -92,6 +92,7 @@ Route::post('edit/supplier','Manager\PurchaseController@editSupplierForm')->name
 Route::post('update/supplier','Manager\PurchaseController@updateSupplier')->name('update.supplier'); // we use form input hidden to use id and not passing it into url
 Route::post('delete/supplier','Manager\PurchaseController@deleteSupplier')->name('delete.supplier'); // we use form input hidden to use id and not passing it into url
 Route::get('/show/purchases/{repository_id}','Manager\PurchaseController@showPurchases')->name('show.purchases');
+Route::get('/show/purchase/details/{purchase_id}','Manager\PurchaseController@showPurchaseDetails')->name('show.purchase.details');
 Route::get('/purchase/products/{repository_id}','Manager\PurchaseController@productsForm')->name('purchase.products');
 Route::post('/store/purchase/products/{repository_id}','Manager\PurchaseController@storeProducts')->name('store.purchase.products');
 Route::get('/ajax/get/purchase/product/{repository_id}/{barcode}','Manager\PurchaseController@getProductAjax');

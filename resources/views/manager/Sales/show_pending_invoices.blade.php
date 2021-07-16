@@ -23,7 +23,7 @@
   <form action="{{route('search.pending',$repository->id)}}" method="GET">
     @csrf
     <div style="width: 300px; margin-right: 20px;" class="input-group no-border">
-      <input type="text" name="search" class="form-control" placeholder="ابحث برقم العميل | رقم الفاتورة">
+      <input type="text" name="search" class="form-control" placeholder="{{__('sales.mobile_invnum')}}">
       <button type="submit" class="btn btn-success btn-round btn-just-icon">
         <i class="material-icons">search</i>
       </button>
@@ -35,8 +35,16 @@
     <div style="display: flex; margin-right: 10px;">
   <select name="filter" class="form-control">
     {{--<option value="" disabled selected hidden>الفلتر</option>--}}
-    <option value="payed">مدفوعة</option>
-    <option value="notpayed">غير مدفوعة</option>
+    @if(request()->query('filter')=='payed')
+    <option value="payed" selected>{{__('sales.payed')}}</option>
+    <option value="notpayed">{{__('sales.not_payed')}}</option>
+    @elseif(request()->query('filter')=='notpayed')
+    <option value="payed">{{__('sales.payed')}}</option>
+    <option value="notpayed" selected>{{__('sales.not_payed')}}</option>
+    @else
+    <option value="payed" selected>{{__('sales.payed')}}</option>
+    <option value="notpayed">{{__('sales.not_payed')}}</option>
+    @endif
   </select>
   <button type="submit" class="btn btn-success btn-round btn-just-icon">
     <i class="material-icons">search</i>
