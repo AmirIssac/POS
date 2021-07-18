@@ -62,5 +62,6 @@ return [
     'max_is' => 'Max is ',
     'payed' => 'Payed',
     'not_payed' => 'Not payed',
+    'branch' => 'Branch',
 ];
 ?>

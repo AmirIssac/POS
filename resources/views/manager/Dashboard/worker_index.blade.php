@@ -137,6 +137,8 @@
                   <div class="card-icon">
                     <i class="material-icons">local_shipping</i>
                   </div>
+                  <p style="color: #9229ac; font-weight: bold" class="card-category">{{__('dashboard.month_purchases')}}</p>
+                   <h3 style="color: #9229ac" class="card-title">{{$repository->monthPurchases()}}</h3>
                   <p style="color: #9229ac; font-weight: bold" class="card-category">{{__('dashboard.today_purchases')}}</p>
                   <h3 class="card-title">{{$repository->todayPurchases()}}</h3>
                   <p style="color: #48a44c; font-weight: bold" class="card-category">{{__('dashboard.today_paid_money')}}</p>

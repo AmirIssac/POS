@@ -27,7 +27,7 @@ class SellController extends Controller
     }
 
     
-    public function createSpecialInvoiceForm(Request $request,$id){
+    /*public function createSpecialInvoiceForm(Request $request,$id){
         $repository = Repository::find($id);
         // check if phone not inserted = make new invoice clicked in index
         if(!$request->phone){
@@ -105,6 +105,111 @@ class SellController extends Controller
             }
             while($invoice);   // if the code exists before we generate new code
             $date = now();  // invoice date
+            return view('manager.Sales.create_special_invoice')->with([
+                'repository'=>$repository,'customer_name'=>$customer_name,'phone'=>$request->phone,
+                'code' => $code,
+                'date' => $date,
+                'new' => $new,
+                'name_generated' => $name_generated,
+                ]);
+    } // end customer not exists
+
+
+       
+    } */
+
+    public function createSpecialInvoiceForm(Request $request,$id){
+        $repository = Repository::find($id);
+        // check if phone not inserted = make new invoice clicked in index
+        if(!$request->phone){
+            return view('manager.Sales.create_special_invoice')->with(['repository'=>$repository]);
+        }
+        $new = true;
+        $name_generated = false;
+        // get the owner of this repository to get customer archive from other sub repositories
+        $users = $repository->users;
+        foreach($users as $user)
+            if($user->hasRole('مالك-مخزن'))
+                $owner = $user;
+        $sub_repositories = $owner->repositories()->where('category_id',2)->get();  // كل الافرع من النوع محل خاص
+
+        // search for customer if exists before or create new one
+        foreach($sub_repositories as $repository){
+            $customer = Customer::whereHas("repositories", function($q) use ($repository){ $q->where("repositories.id",$repository->id ); })->where('phone',$request->phone)->first();
+            if($customer)
+                break;
+        }
+        
+        if($customer) // customer exists before
+            {
+                $new = false;
+                $customer_name = $customer->name;
+                $prev_invoices = $customer->invoices;
+                // check if customer has saved recipe
+                $saved_recipe = $customer->savedRecipes()->get();
+                //return $saved_recipe;
+                if($saved_recipe && $saved_recipe->count()>0){
+                    $saved_recipe = $saved_recipe->pluck('recipe');
+                    $saved_recipe = unserialize($saved_recipe[0]);
+                    //return $saved_recipe;
+                }
+                 // code generate
+                do{
+                    $characters = '0123456789';
+                    $charactersLength = strlen($characters);
+                    $code = '';
+                    for ($i = 0; $i < 8; $i++)
+                    $code .= $characters[rand(0, $charactersLength - 1)];
+                    // check if code exist in this repository before
+                    $invoice = Invoice::where('repository_id',$repository->id)->where('code',$code)->first();
+                    }
+                    while($invoice);   // if the code exists before we generate new code
+                $date = now();  // invoice date
+                $repository = Repository::find($id);
+                return view('manager.Sales.create_special_invoice')->with([
+                    'repository'=>$repository,'customer_name'=>$customer_name,'phone'=>$request->phone,
+                    'code' => $code,
+                    'date' => $date,
+                    'invoices' => $prev_invoices,
+                    'saved_recipe' => $saved_recipe,
+                    'new' => $new,
+                    'name_generated' => $name_generated,
+                    ]);
+                    } // end customer exists before
+        else{ // not exists before
+        // check if customer name inserted
+        if($request->name){
+            $customer_name = $request->name;
+        }
+        else{ 
+        // customer name generate
+        $customer_name = 'customer-';
+        do{
+            $name_generated = true;
+            $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $charactersLength = strlen($characters);
+            $code = '';
+            for ($i = 0; $i < 5; $i++)
+            $code .= $characters[rand(0, $charactersLength - 1)];
+            $customer_name .= $code;
+            // check if name exist in this repository before
+            $customer = Customer::whereHas("repositories", function($q) use ($repository){ $q->where("repositories.id",$repository->id ); })->where('name',$customer_name)->first();
+            }
+            while($customer);   // if the name exists before we generate new name
+        } // end else
+        // code generate
+        do{
+            $characters = '0123456789';
+            $charactersLength = strlen($characters);
+            $code = '';
+            for ($i = 0; $i < 8; $i++)
+            $code .= $characters[rand(0, $charactersLength - 1)];
+            // check if code exist in this repository before
+            $invoice = Invoice::where('repository_id',$repository->id)->where('code',$code)->first();
+            }
+            while($invoice);   // if the code exists before we generate new code
+            $date = now();  // invoice date
+            $repository = Repository::find($id);
             return view('manager.Sales.create_special_invoice')->with([
                 'repository'=>$repository,'customer_name'=>$customer_name,'phone'=>$request->phone,
                 'code' => $code,
@@ -291,13 +396,12 @@ class SellController extends Controller
         return redirect(route('create.invoice',$repository->id))->with('sellSuccess','تمت عملية البيع بنجاح');
     }
 
-    public function sellSpecialInvoice(Request $request , $id){
+    /*public function sellSpecialInvoice(Request $request , $id){
         // make sure we determine customer
         if(!$request->customer_phone || !$request->customer_name)
             return back()->with('failCustomer','يرجى ادخال رقم الزبون');
          // cash and card must have at least one of them a value
-         /*if(!$request->cashVal && !$request->cardVal)
-            return back()->with('failPayment','عملية الدفع غير صحيحة');*/
+         
         $repository = Repository::find($id);
         $count = count($request->barcode);
         $count2 = count( $request->del);
@@ -520,10 +624,7 @@ class SellController extends Controller
                 'created_at' => $request->date,
             ]
             );
-             /* // check if there was any saved_recipe so we delete it after sell proccess
-            $saved = $customer->savedRecipes()->first();
-            if($saved)
-                $saved->delete();*/
+             
             
             // archive the recipe after sell proccess
             $saved = $customer->savedRecipes;
@@ -536,6 +637,307 @@ class SellController extends Controller
             else{
                 SavedRecipe::create([
                     'repository_id' => $repository->id,
+                    'customer_id' => $customer->id,
+                    'user_id' => Auth::user()->id,
+                    'recipe' => $recipe,
+                ]);
+            }
+       // return redirect(route('create.special.invoice',$repository->id))->with('sellSuccess','تمت عملية البيع بنجاح');
+
+       // prepare to send data to print page
+       $records = array(array());
+       $temp=0;
+       for($i=0;$i<$count;$i++){   
+        if($request->barcode[$i] && $request->price[$i]){
+            //return $request->del;
+            if(in_array($i,$request->del))
+                $del = 'نعم';
+                else
+                $del = 'لا';
+        $records[]=array('barcode'=>$request->barcode[$i],'name_ar'=>$request->name[$i],'name_en'=>$request->details[$i],'cost_price'=>$request->cost_price[$i],'price'=>$request->price[$i],'quantity'=>$request->quantity[$i],'del'=>$del);
+        }
+      }
+
+      $id = Auth::user()->id;
+      $employee = User::find($id);
+      return view('manager.Sales.print_special_invoice')->with([
+          'records'=>$records,'num'=>count($records),'sum'=>$request->sum,'tax'=>$request->taxprint,'total_price'=>$request->total_price,
+          'cash'=>$cashVal,'card'=>$cardVal,'stc'=>$stcVal,'repo_id'=>$repository->id,'discount'=>$request->max_discount,
+          'invoice_num'=>$request->code,'date'=>$request->date,'repository' => $repository,
+          'customer' => $customer,'employee'=>$employee]);   // to print the invoice
+    } */
+
+    public function sellSpecialInvoice(Request $request , $id){
+        // make sure we determine customer
+        if(!$request->customer_phone || !$request->customer_name)
+            return back()->with('failCustomer','يرجى ادخال رقم الزبون');
+         // cash and card must have at least one of them a value
+         /*if(!$request->cashVal && !$request->cardVal)
+            return back()->with('failPayment','عملية الدفع غير صحيحة');*/
+        $repository = Repository::find($id);
+        $count = count($request->barcode);
+        $count2 = count( $request->del);
+        $delivered = true;
+        // check if hanging or delivered
+        if($count == $count2) // delivered
+        {
+                for($i=0;$i<$count;$i++){   // check all the quantities before any sell process
+                    if($request->barcode[$i]){
+                        $product = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->get();
+                        // check all the quantities if <= the stored quantity of stored products
+                        if($product){
+                            // check all records for this barcode for quantity because the repeated values is available
+                            $sum_quantity = 0;
+                        for($j=0;$j<$count;$j++){
+                            if($request->barcode[$j]){
+                                if(strcmp($request->barcode[$j],$request->barcode[$i])==0)
+                                    $sum_quantity = $sum_quantity + $request->quantity[$j];
+                            }
+                            if($product[0]->quantity<$sum_quantity){
+                                //return 'كمية غير متوفرة فواتير مستلمة';
+                                return back()->with('fail','الكمية أكبر من المتوفر للقطعة'.'  '.$product[0]->name);
+                                }
+                        }
+                        if($product[0]->quantity<$request->quantity[$i]){
+                        //return 'كمية غير متوفرة فواتير مستلمة';
+                        return back()->with('fail','الكمية أكبر من المتوفر للقطعة'.'  '.$product[0]->name);
+                        }
+
+                        }
+                    }    
+                    
+                } 
+                for($i=0;$i<$count;$i++){
+                    if($request->barcode[$i]){
+                        $product = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->get();
+                        if($product){
+                        foreach($product as $prod)
+                        $new_quantity = $prod->quantity - $request->quantity[$i];
+                        $prod->update(
+                            [
+                                'quantity' => $new_quantity,
+                            ]
+                            );
+                        }
+                    }
+                }   
+        }  
+        else // hanging
+        {
+            $delivered = false;
+            for($i=0;$i<$count;$i++){   // check all the quantities before any sell process
+                if($request->barcode[$i]){
+                $product = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->get();
+                // check if del this item
+                if(in_array($i,$request->del)) // delivered
+                if($product){
+                    // check all records for this barcode for quantity because the repeated values is available
+                    $sum_quantity = 0;
+                for($j=0;$j<$count;$j++){
+                    if($request->barcode[$j]){
+                        if(strcmp($request->barcode[$j],$request->barcode[$i])==0 && in_array($j,$request->del)) // is this item delivered for quantity 
+                            $sum_quantity = $sum_quantity + $request->quantity[$j];
+                    }
+                    if($product[0]->quantity<$sum_quantity){
+                        //return 'كمية غير متوفرة فواتير معلقة';
+                        return back()->with('fail','الكمية أكبر من المتوفر للقطعة'.'  '.$product[0]->name);
+                        }
+                }
+                if($product[0]->quantity<$request->quantity[$i]){
+                //return 'كمية غير متوفرة فواتير معلقة';
+                return back()->with('fail','الكمية أكبر من المتوفر للقطعة'.'  '.$product[0]->name);
+                }
+                }
+                }
+            }    
+            for($i=0;$i<$count;$i++){
+                if($request->barcode[$i]){
+                $product = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->get();
+                if($product){
+                if(in_array($i,$request->del)){ // delivered this item
+                foreach($product as $prod)
+                $new_quantity = $prod->quantity - $request->quantity[$i];
+                $prod->update(
+                    [
+                        'quantity' => $new_quantity,
+                    ]
+                    );
+                }
+                }
+                }
+            }
+            
+        }
+        // update repository balance
+        $repository->update(
+            [
+                'cash_balance' => $repository->cash_balance + $request->cashVal,
+                'card_balance' => $repository->card_balance + $request->cardVal,
+                'stc_balance' => $repository->stc_balance + $request->stcVal,
+                'balance' => $repository->balance + $request->cashVal,
+            ]
+            );
+        // store invoice in DB
+        // store details as array of arrays
+        $details = array(array());    // each array store details for one record (one product)
+        if($delivered){  // delivered
+        for($i=0;$i<$count;$i++){
+            if($request->barcode[$i]){
+            $record = array("barcode"=>$request->barcode[$i],"name_ar"=>$request->name[$i],"name_en"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"quantity"=>$request->quantity[$i],"delivered"=>$request->quantity[$i]);
+            $details[]=$record;
+            }
+        }
+        $details = serialize($details);
+        }
+        else{  // hanging
+            for($i=0;$i<$count;$i++){
+                if(in_array($i,$request->del)) // delivered Item
+                {
+                if($request->barcode[$i]){
+                $record = array("barcode"=>$request->barcode[$i],"name_ar"=>$request->name[$i],"name_en"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"quantity"=>$request->quantity[$i],"delivered"=>$request->quantity[$i]);
+                $details[]=$record;
+                }
+                }
+                else{  // hanging Item
+                    if($request->barcode[$i]){
+                    $record = array("barcode"=>$request->barcode[$i],"name_ar"=>$request->name[$i],"name_en"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"quantity"=>$request->quantity[$i],"delivered"=>0);
+                    $details[]=$record;
+                    }
+                }
+            }
+            $details = serialize($details);
+        }
+        if($delivered){
+            $status = "delivered";
+        }
+        else{
+            $status = "pending";
+        }
+        if($request->cash){
+            $cash = true;
+        }
+        else{
+            $cash = false;
+        }       
+        if($request->card){
+            $card = true;
+        }
+        else{
+            $card = false;
+        } 
+        if($request->stc){
+            $stc = true;
+        }
+        else{
+            $stc = false;
+        } 
+        if(!$request->cashVal){
+            $cashVal = 0;
+        }
+        else{
+            $cashVal = $request->cashVal;
+        }
+        if(!$request->cardVal){
+            $cardVal = 0;
+        }
+        else{
+            $cardVal = $request->cardVal;
+        }
+        if(!$request->stcVal){
+            $stcVal = 0;
+        }
+        else{
+            $stcVal = $request->stcVal;
+        }
+        
+        $recipe = array('add_r'=>$request->add_r,'axis_r'=>$request->axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
+                        'add_l'=>$request->add_l,'axis_l'=>$request->axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
+                        'ipd'=>$request->ipdval,);
+        $recipe = serialize($recipe);
+
+        // get the owner of this repository to get customer archive from other sub repositories
+        $users = $repository->users;
+        foreach($users as $user)
+            if($user->hasRole('مالك-مخزن'))
+                $owner = $user;
+        $sub_repositories = $owner->repositories()->where('category_id',2)->get();  // كل الافرع من النوع محل خاص
+
+        // search for customer if exists before or create new one
+        foreach($sub_repositories as $repository){
+            $customer = Customer::whereHas("repositories", function($q) use ($repository){ $q->where("repositories.id",$repository->id ); })->where('phone',$request->customer_phone)->first();
+            if($customer)
+                break;
+        }
+        $repository = Repository::find($id); // this repo
+        if($customer){ // exists
+            // check if this customer exist (in this sub repo)
+            $c = $customer->whereHas("repositories", function($q) use ($repository){ $q->where("repositories.id",$repository->id ); })->get();
+            if($c->count()>0){
+                $customer->update(
+                    [
+                        'points' => $customer->points + 1,
+                    ]
+                    );
+            }
+            else{
+                $repository->customers()->attach($customer->id);  // pivot table
+                $customer->update(
+                    [
+                        'points' => $customer->points + 1,
+                    ]
+                    );
+            }
+        } 
+        else{ // not exists before
+        $customer = Customer::create(
+            [
+                'name' => $request->customer_name,
+                'phone' => $request->customer_phone,
+                'points' => 1,
+            ]
+            );
+        $repository->customers()->attach($customer->id);  // pivot table
+        }
+        Invoice::create(
+            [
+                'repository_id' => $id,
+                'user_id' => Auth::user()->id,
+                'customer_id' => $customer->id,
+                'code' => $request->code,
+                'details' => $details,
+                'recipe' => $recipe,
+                'total_price' => $request->total_price,
+                'discount' => $request->discountVal,
+                'cash_check' => $cash,
+                'card_check' => $card,
+                'stc_check' => $stc,
+                'cash_amount' => $cashVal,
+                'card_amount' => $cardVal,
+                'stc_amount' => $stcVal,
+                'tax' => $request->taxprint,
+                'tax_code' => $repository->tax_code,
+                'status' => $status,
+                'phone' => $request->customer_phone,
+                'created_at' => $request->date,
+            ]
+            );
+             /* // check if there was any saved_recipe so we delete it after sell proccess
+            $saved = $customer->savedRecipes()->first();
+            if($saved)
+                $saved->delete();*/
+            
+            // archive the recipe after sell proccess
+            $saved = $customer->savedRecipes;
+            if($saved->count()>0){
+                $saved[0]->update([
+                    'repository_id' => $repository->id,  // update recipe to newest sub repo
+                    'user_id' => Auth::user()->id,
+                    'recipe' => $recipe,
+                ]);
+            }
+            else{
+                SavedRecipe::create([
+                    'repository_id' => $id,
                     'customer_id' => $customer->id,
                     'user_id' => Auth::user()->id,
                     'recipe' => $recipe,
@@ -749,49 +1151,7 @@ class SellController extends Controller
         return view('manager.Sales.retrieve_invoice')->with(['invoices'=>$invoices,'repository'=>$repository]);
     }
 
-       /* public function retrieveInvoice(Request $request,$id){
-        $invoice = Invoice::find($id);
-        $repository = Repository::find($request->repo_id);
-        $cash_retrieved = $invoice->cash_amount + $invoice->card_amount + $invoice->stc_amount;
-        if($cash_retrieved > $repository->balance)
-            return back()->with('fail','لا يمكن الاسترجاع المبلغ في الدرج غير كاف');
-        $records = unserialize($invoice->details); // array of arrays
-        //foreach($records as $record)
-        for($i=1;$i<count($records);$i++)
-        {
-            //return $records[$i];
-            $product = Product::where('repository_id',$request->repo_id)->where('barcode',$records[$i]['barcode'])->get(); // collection because we use get()
-            $new_quantity = $product[0]->quantity + floatval($records[$i]['delivered']);
-            $product[0]->update([   // retrieve the products to stock
-                'quantity' => $new_quantity,
-            ]);
-        }
-        // give the money back to the customer
-        // !? for now we will do the back money just from cash for all cash and card and stc !?
-        if($invoice->daily_report_check==true){  // the invoice from another day so cash not affected
-        $repository->update([
-            'balance' => $repository->balance - $cash_retrieved,
-        ]);
-        }
-        else{
-            $repository->update([
-                'cash_balance' => $repository->cash_balance - $cash_retrieved,
-                'balance' => $repository->balance - $cash_retrieved,
-            ]);
-        }
-        if($invoice->status=='delivered')
-            $transform = 'd-r';
-            else
-            $transform = 'p-r';
-        // change invoice status
-        $invoice->update([
-            'status' => 'retrieved',
-            'created_at' => now(),
-            'transform' => $transform,
-            'daily_report_check' => false,
-        ]);
-        return redirect(route('sales.index'))->with('retrievedSuccess','تم استرجاع الفاتورة بنجاح');
-    } */
+      
 
     public function retrieveInvoice(Request $request,$id){
         $invoice = Invoice::find($id);

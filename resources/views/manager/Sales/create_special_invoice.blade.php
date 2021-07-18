@@ -238,6 +238,12 @@ select{
           <table  class="table">
             <thead class="text-primary">
               <th>
+                {{__('sales.branch')}} 
+              </th>
+              <th>
+                {{__('settings.address')}} 
+              </th>
+              <th>
                 {{__('sales.invoice_code')}} 
               </th>
               <th>
@@ -257,10 +263,22 @@ select{
               @foreach ($invoices as $invoice)
            <tr>
             <td>
+              {{$invoice->repository->name}}
+            </td>
+            <td>
+              {{$invoice->repository->address}}
+            </td>
+            <td>
               {{$invoice->code}}
             </td>
             <td>
-              {{$invoice->status}}
+              @if($invoice->status == 'delivered')
+              {{__('sales.del_badge')}} 
+              @elseif($invoice->status == 'pending')
+              {{__('sales.hang_badge')}}
+              @elseif($invoice->status == 'retrieved')
+              {{__('sales.retrieve')}}
+              @endif
             </td>
             <td>
               {{$invoice->total_price}}

@@ -20,5 +20,6 @@ return [
     'today_purchases' => 'Today purchases',
     'today_paid_money' => 'Today paid money',
     'pending_paid_money' => 'Pending paid money',
+    'month_purchases' => 'Month purchases',
 ];
 ?>

@@ -267,6 +267,16 @@ class Repository extends Model
         return $purchases;
     }
 
+    public function monthPurchases(){
+        $purchases = 0 ;
+        $purchases_invoices = $this->purchases()->whereYear('created_at', Carbon::now()->year)
+        ->whereMonth('created_at', Carbon::now()->month)->get();
+        foreach($purchases_invoices as $inv){
+            $purchases += $inv->total_price;
+        }
+        return $purchases;
+    }
+
     public function todayPayedMoney(){ // الاموال المدفوعة اليوم
         $payed = 0 ;
         $purchases_invoices = $this->purchases()->where('payment','!=','later')->whereDate('created_at', Carbon::today())->get();
