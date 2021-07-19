@@ -871,8 +871,10 @@ class SellController extends Controller
         $repository = Repository::find($id); // this repo
         if($customer){ // exists
             // check if this customer exist (in this sub repo)
-            $c = $customer->whereHas("repositories", function($q) use ($repository){ $q->where("repositories.id",$repository->id ); })->get();
-            if($c->count()>0){
+            //$c = $customer->whereHas("repositories", function($q) use ($repository){ $q->where("repositories.id",$repository->id ); })->get();
+            //if($c->count()>0){
+                $customers = $repository->customers;  // customers of this sub repo
+                if($customers->contains('id',$customer->id)){  // the customer exist in this sub repo before
                 $customer->update(
                     [
                         'points' => $customer->points + 1,
@@ -898,6 +900,8 @@ class SellController extends Controller
             );
         $repository->customers()->attach($customer->id);  // pivot table
         }
+
+        $remaining_amount = $request->total_price - ($cashVal + $cardVal + $stcVal); // for printing
         Invoice::create(
             [
                 'repository_id' => $id,
@@ -919,12 +923,10 @@ class SellController extends Controller
                 'status' => $status,
                 'phone' => $request->customer_phone,
                 'created_at' => $request->date,
+                'note' => $request->note,
             ]
             );
-             /* // check if there was any saved_recipe so we delete it after sell proccess
-            $saved = $customer->savedRecipes()->first();
-            if($saved)
-                $saved->delete();*/
+            
             
             // archive the recipe after sell proccess
             $saved = $customer->savedRecipes;
@@ -965,7 +967,7 @@ class SellController extends Controller
           'records'=>$records,'num'=>count($records),'sum'=>$request->sum,'tax'=>$request->taxprint,'total_price'=>$request->total_price,
           'cash'=>$cashVal,'card'=>$cardVal,'stc'=>$stcVal,'repo_id'=>$repository->id,'discount'=>$request->max_discount,
           'invoice_num'=>$request->code,'date'=>$request->date,'repository' => $repository,
-          'customer' => $customer,'employee'=>$employee]);   // to print the invoice
+          'customer' => $customer,'employee'=>$employee,'note'=>$request->note,'remaining_amount'=>$remaining_amount]);   // to print the invoice
     }
     
 

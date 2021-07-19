@@ -26,8 +26,7 @@ class AddColumnToInvoicesTable extends Migration
     public function down()
     {
         Schema::table('invoices', function (Blueprint $table) {
-            $table->float('tax')->after('stc_amount')->default(0);   // real value
-            $table->string('tax_code')->after('tax')->default('0000');
+            $table->string('note')->default(null)->nullable();
         });
     }
 }

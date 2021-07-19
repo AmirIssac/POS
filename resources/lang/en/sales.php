@@ -63,5 +63,7 @@ return [
     'payed' => 'Payed',
     'not_payed' => 'Not payed',
     'branch' => 'Branch',
+    'note' => 'Note',
+    'type_note' => 'Type here any note'
 ];
 ?>

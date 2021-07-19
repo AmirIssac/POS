@@ -190,6 +190,14 @@
                       </div>
                     <input type="number" min="0.1" step="0.01" name="stcVal" id="stcVal" value="{{$stc}}" class="form-control" readonly>
                     </div>
+                    @if($remaining_amount > 0)
+                    <div style="display: flex;flex-direction: column;">
+                      <div style="display: flex;">
+                    <h4> &nbsp; المبلغ المتبقي للدفع </h4>
+                      </div>
+                    <input type="number" step="0.01"  value="{{$remaining_amount}}" class="form-control" readonly>
+                    </div>
+                    @endif
                     </div> 
         </div>
         <hr>
@@ -200,6 +208,12 @@
         <div style="display: flex; justify-content: space-between">
           <h4>موظف البيع {{$employee->name}}</h4>
         </div>
+        @if($note)
+        <div>
+          <h4>{{$note}}</h4>
+        </div>
+        @endif
+
         
     </div>
  

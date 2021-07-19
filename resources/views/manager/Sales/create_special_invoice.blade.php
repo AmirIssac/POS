@@ -841,7 +841,8 @@ select{
           <input style="margin-right: 0px" type="number" min="0.1" step="0.01" name="stcVal" id="stcVal" value="" class="form-control hidden">
           </div>
           </div>
-          
+          <h4>{{__('sales.note')}}</h4>
+          <input type="text" name="note" placeholder="{{__('sales.type_note')}}" class="form-control">
           <div>
 
 
