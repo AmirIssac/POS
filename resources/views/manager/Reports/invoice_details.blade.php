@@ -110,6 +110,9 @@
                         <td>
                           {{__('sales.sales_employee')}}  
                         </td>
+                        <td>
+                          {{__('sales.note')}}  
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -151,6 +154,13 @@
                        </td>
                        <td>
                         {{$invoice->user->name}}
+                       </td>
+                       <td>
+                         @if($invoice->note)
+                        {{$invoice->note}}
+                        @else
+                        {{__('sales.none')}}
+                        @endif
                        </td>
                     </tr>
                   </tbody>

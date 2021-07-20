@@ -37,6 +37,8 @@
         'info' => 'Information',
         'permissions' => 'Permissions',
         'customize' => 'customize',
+        'repo_note' => 'Store note',
+        'appear_in_invoice' => 'Appear at the end of cutomer invoice'
         
     ];
     ?>

@@ -27,6 +27,8 @@ class CreateRepositoriesTable extends Migration
             $table->smallInteger('tax')->default(0);
             $table->timestamps();
             $table->float('balance')->after('stc_balance')->default(0);  //  رصيد الدرج الذي لا يتم تصفيره إلا بعملية ايداع
+            $table->time('close_time')->default('00:00:00');
+
         });
     }
 

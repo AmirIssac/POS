@@ -111,6 +111,7 @@ class SettingsController extends Controller
             'name' => $request->repo_name,
             'address' => $request->address,
             'close_time' => $request->close_time,
+            'note' => $request->note,
         ]);
         return back()->with('success','تم تغيير الاعدادت العامة بنجاح');
     }

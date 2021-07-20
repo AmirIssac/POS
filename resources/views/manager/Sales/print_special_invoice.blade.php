@@ -213,6 +213,11 @@
           <h4>{{$note}}</h4>
         </div>
         @endif
+        @if($repository->note)
+        <div>
+          <h4>{{$repository->note}}</h4>
+        </div>
+        @endif
 
         
     </div>

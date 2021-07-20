@@ -90,6 +90,10 @@ input[type=number] {
                     {{__('settings.close_time')}}
                    <i id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title="{{__('settings.note')}}" data-content="{{__('settings.note_content')}}">live_help</i>
                   </th>
+                  <th>
+                     {{__('settings.repo_note')}} <i id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title="{{__('settings.appear_in_invoice')}}">live_help</i>
+
+                 </th>
                 </thead>
                 <tbody>
                   <tr>
@@ -102,6 +106,9 @@ input[type=number] {
                     <td>
                       <input type="time" name="close_time" value="{{$repository->close_time}}" class="form-control">
                   </td>
+                  <td>
+                    <input type="text" name="note" value="{{$repository->note}}" class="form-control">
+                </td>
                     <td>
                       <button type="submit" class="btn btn-danger"> {{__('buttons.confirm')}} </button>
                     </td>

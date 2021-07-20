@@ -15,7 +15,7 @@ class AddColumnToRepositoriesTable extends Migration
     {
         Schema::table('repositories', function (Blueprint $table) {
             //
-            $table->time('close_time')->default('00:00:00');
+            $table->string('note')->default(null)->nullable();
         });
     }
 
