@@ -101,7 +101,12 @@ input[type=number] {
                   <h4>
                   <span class="badge badge-success">
                     {{__('sales.invoice_details')}}   </span> <input type="text" name="date" value="{{$date}}" readonly></h4>
-                      <h4>{{__('sales.invoice_code')}}  {{$invoice->code}}</h4>
+                      <h4>{{__('sales.invoice_code')}}  {{$invoice->code}}
+                      <input type="hidden" name="code" value="{{$invoice->code}}">
+                      </h4>
+                  <th>
+                     Barcode
+                  </th>
                   <th>
                     {{__('sales.name')}}  
                   </th>
@@ -124,18 +129,26 @@ input[type=number] {
                      {{-- <input type="hidden" name="barcode[]" value="{{$product->barcode}}"> --}}
                       
                      <tr>
+                      <td>
+                        {{$detail['barcode']}}
+                        <input type="hidden" name="barcode[]" value="{{$detail['barcode']}}">
+                      </td>
                         <td>
-                          <input type="hidden" name="barcode[]" value="{{$detail['barcode']}}">
                             {{$detail['name_'.LaravelLocalization::getCurrentLocale()]}}
+                            <input type="hidden" name="name_ar[]" value="{{$detail['name_ar']}}"> {{-- we print always in arabic --}}
                         </td>
+                        
                         <td>
                           {{$detail['price']}}
+                          <input type="hidden" name="price[]" value="{{$detail['price']}}">
                         </td>
+                        
                         <td>
                           {{$detail['quantity']}}
+                          <input type="hidden" name="quan[]" value="{{$detail['quantity']}}">
                         </td>
                         <td>
-                          <input type="hidden" name="quantity[]" value="{{$detail['quantity']-$detail['delivered']}}">
+                          <input type="hidden" name="quantity[]" value="{{$detail['quantity']-$detail['delivered']}}"> {{-- must deliver --}}
                           {{$detail['quantity']-$detail['delivered']}}
                         </td>
                     </tr>
@@ -164,7 +177,7 @@ input[type=number] {
         <h4> &nbsp; {{__('sales.cash')}}</h4>
         <input style="margin: 7px 10px 0 0" type="checkbox" name="cash" id="cash" checked>
           </div>
-        <input style="margin-right: 0px" type="number" min="0,1" step="0.1" name="cashVal" id="cashVal" value="{{($invoice->total_price)-($invoice->cash_amount+$invoice->card_amount+$invoice->stc_amount)}}" class="form-control visible">
+        <input style="margin-right: 0px" type="number" min="0" step="0.1" name="cashVal" id="cashVal" value="{{($invoice->total_price)-($invoice->cash_amount+$invoice->card_amount+$invoice->stc_amount)}}" class="form-control visible">
         </div>
         <div style="display: flex;flex-direction: column;">
           <div style="display: flex;">
@@ -183,7 +196,7 @@ input[type=number] {
        
 </div>
         {{--<button onclick="window.print();" class="btn btn-success"> طباعة </button>--}}
-        <button onclick="window.print();" type="submit" class="btn btn-danger">   {{__('buttons.complete_invoice_print')}} </button>
+        <button type="submit" class="btn btn-danger">   {{__('buttons.complete')}} </button>
         <a href="javascript:history.back()" class="btn btn-warning" id="back"> {{__('buttons.back')}} </a>
    </div>
 </div>

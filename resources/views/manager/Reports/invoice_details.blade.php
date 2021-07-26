@@ -99,6 +99,9 @@
                              stc-pay
                         </td>
                         <td>
+                          {{__('sales.discount')}}
+                        </td>
+                        <td>
                           {{__('sales.invoice_status')}}  
                         </td>
                         <td>
@@ -126,6 +129,13 @@
                        </td>
                        <td>
                         {{$invoice->stc_amount}}
+                       </td>
+                       <td>
+                          @if($invoice->discount==0)
+                          {{__('sales.none')}}
+                          @else
+                          {{$invoice->discount}}
+                          @endif
                        </td>
                        <td>
                         @if($invoice->transform == 'no')

@@ -64,8 +64,13 @@
         هل تريد طباعة الفاتورة ؟
       </div>
       <div class="modal-footer">
+        @if(isset($complete_invoice)) {{-- completing invoice --}}
+        <a href="{{route('show.pending',$repo_id)}}" class="btn btn-danger">لا</a>
+        <a id="print" onclick="window.print();" href="{{route('show.pending',$repo_id)}}" class="btn btn-primary">نعم</a>
+        @else {{-- sell invoice for first time --}}
         <a href="{{route('create.special.invoice',$repo_id)}}" class="btn btn-danger">لا</a>
         <a id="print" onclick="window.print();" href="{{route('create.special.invoice',$repo_id)}}" class="btn btn-primary">نعم</a>
+        @endif
       </div>
     </div>
   </div>
@@ -73,16 +78,18 @@
    </div>
     
                       <div id="print-content" class="table-responsive">
-                        <div style="display: flex; justify-content: space-between;">
+                        <div style="display: flex;">
                           @if($repository->logo)
-                          <img src="{{asset('storage/'.$repository->logo)}}" width="50px" height="50px" id="logorep">
+                          <img src="{{asset('public/storage/'.$repository->logo)}}" width="50px" height="50px" id="logorep">
                           @endif
+                          <div style="display: flex; justify-content: center;align-items: center; margin-right: 10px;">
                           <h4> متجر {{$repository->name}}</h4>
                           </div>
+                          </div>
                         <div style="display: flex; justify-content: space-between">
-                          <h4>رقم الفاتورة {{$invoice_num}}</h4>
+                          <h4>رقم الفاتورة {{$invoice->code}}</h4>
                           <h4>التاريخ {{$date}}</h4>
-                          <h4>الرقم الضريبي {{$repository->tax_code}}</h4>
+                          <h4>الرقم الضريبي {{$invoice->tax_code}}</h4>
                         </div>
                         <hr>
                         <table class="table">
@@ -99,7 +106,12 @@
                             <th>
                               الكمية 
                             </th>
-                            <th id="del" class="">
+                            @if(isset($complete_invoice))
+                            <th>
+                              الواجب تسليمها 
+                            </th>
+                            @endif
+                            <th id="del">
                               تم تسليمها  
                             </th>
                           </thead>
@@ -114,15 +126,22 @@
                                 <td>  {{-- في الطباعة تم الطلب بعرض الاسم بالعربية فقط دوما --}}
                                   <input type="text"   name="name[]" value="{{$records[$i]['name_ar']}}" class="form-control name blank" readonly>
                                 </td>
+                                {{--
                                 <td style="display: none;">
                                   <input type="hidden"  name="cost_price[]" value="{{$records[$i]['cost_price']}}" class="form-control blank" readonly>
                                 </td>
+                                --}}
                                 <td>
                                   <input type="number"   name="price[]" value="{{$records[$i]['price']}}" class="form-control price blank" readonly>
                                 </td>
                                 <td>
                                   <input type="number" name="quantity[]" value="{{$records[$i]['quantity']}}" class="form-control quantity" readonly>
                               </td>
+                              @if(isset($complete_invoice))
+                              <td>
+                                <input type="number" value="{{$records[$i]['must_del']}}" class="form-control" readonly>
+                            </td>
+                              @endif
                               <td>
                                   <input type="text" name="del[]" value="{{$records[$i]['del']}}" class="form-control delivered" readonly>
                               </td>
@@ -133,6 +152,7 @@
                  </table>
                  <hr>
                  <div id="cash-info">
+                   @if(isset($sum))
                    <div style="display: flex; justify-content: space-between">
                   <div>
                     <h5>
@@ -160,13 +180,37 @@
                  </div>
                </div>
                    </div>
+                   @endif
+                   @if(!isset($complete_invoice))
                  <div>
                    <h3>
                      المبلغ الإجمالي 
-                   </h3>
-                   {{--<h1 id="total_price">{{$invoice_total_price}}</h1>--}}
+                   </h3>  
                    <input type="number" name="total_price" id="final_total_price" class="form-control" value="{{$total_price}}" readonly>
                  </div>
+                 @else {{-- complete invoice --}}
+                 <div style="display: flex; justify-content: space-between">
+                   <div>
+                  <h3>
+                    المبلغ الإجمالي 
+                  </h3>  
+                  {{--<h1 id="total_price">{{$invoice_total_price}}</h1>--}}
+                  <input type="number" name="total_price" id="final_total_price" class="form-control" value="{{$total_price}}" readonly>
+                   </div>
+                   <div>
+                    <h3>
+                       المدفوع سابقا 
+                    </h3>  
+                    <input type="number" class="form-control" value="{{$total_price-$extra_price}}" readonly>
+                   </div>
+                   <div>
+                    <h3>
+                       المدفوع الآن 
+                    </h3>  
+                    <input type="number" value="{{$extra_price}}" class="form-control" readonly>
+                   </div>
+                </div>
+                 @endif
                  </div>
                  <hr>
                  {{--<i class="material-icons">add_circle</i>--}}
@@ -190,7 +234,7 @@
                       </div>
                     <input type="number" min="0.1" step="0.01" name="stcVal" id="stcVal" value="{{$stc}}" class="form-control" readonly>
                     </div>
-                    @if($remaining_amount > 0)
+                    @if(isset($remaining_amount) && $remaining_amount > 0)
                     <div style="display: flex;flex-direction: column;">
                       <div style="display: flex;">
                     <h4> &nbsp; المبلغ المتبقي للدفع </h4>
@@ -208,10 +252,12 @@
         <div style="display: flex; justify-content: space-between">
           <h4>موظف البيع {{$employee->name}}</h4>
         </div>
+        @if(!isset($complete_invoice))
         @if($note)
         <div>
           <h4>{{$note}}</h4>
         </div>
+        @endif
         @endif
         @if($repository->note)
         <div>

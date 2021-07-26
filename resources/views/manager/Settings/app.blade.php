@@ -15,6 +15,10 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+textarea{
+  border:2px solid #9229ac;
+  border-radius: 10px;
+}
 </style>
 @endsection
 @section('body')
@@ -59,6 +63,15 @@ input[type=number] {
                       </td>
                       <td>
                         <button type="submit" class="btn btn-success"> {{__('buttons.confirm')}} </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                      @if($repository->logo)
+                      <img style="border-radius: 50%;" src="{{asset('public/storage/'.$repository->logo)}}" width="100px;" height="100px">
+                      @else
+                        {{__('settings.no_logo_please_upload_one')}}
+                      @endif
                       </td>
                     </tr>
                   </tbody>
@@ -107,7 +120,10 @@ input[type=number] {
                       <input type="time" name="close_time" value="{{$repository->close_time}}" class="form-control">
                   </td>
                   <td>
-                    <input type="text" name="note" value="{{$repository->note}}" class="form-control">
+                    <textarea rows="5" cols="60" name="note">
+                      {{$repository->note}}
+                    </textarea>
+                    {{--<input type="text" name="note" value="{{$repository->note}}" class="form-control">--}}
                 </td>
                     <td>
                       <button type="submit" class="btn btn-danger"> {{__('buttons.confirm')}} </button>

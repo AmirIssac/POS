@@ -58,9 +58,14 @@
     
                       <div id="print-content" class="table-responsive">
                           <button id="back" onclick="history.back()" class="btn btn-warning">رجوع</button>
-                        <div style="display: flex; justify-content: space-between;">
+                        <div style="display: flex;">
+                          @if($repository->logo)
+                          <img src="{{asset('public/storage/'.$repository->logo)}}" width="50px" height="50px" id="logorep">
+                          @endif
+                          <div style="display: flex; justify-content: center;align-items: center; margin-right: 10px;">
                           <h4> متجر {{$repository->name}}</h4>
                           </div>
+                          </div> 
                         <div style="display: flex; justify-content: space-between">
                           <h4>رقم الفاتورة {{$invoice->code}}</h4>
                           <h4>التاريخ {{$invoice->created_at}}</h4>

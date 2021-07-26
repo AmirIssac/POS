@@ -38,6 +38,7 @@
         'permissions' => 'صلاحيات',
         'customize' => 'تخصيص',
         'repo_note' => 'ملاحظة المتجر',
-        'appear_in_invoice' => 'تظهر في نهاية فاتورة العميل'
+        'appear_in_invoice' => 'تظهر في نهاية فاتورة العميل',
+        'no_logo_please_upload_one' => 'لا يوجد شعار للمتجر يرجى تحميل شعار جديد',
     ];
     ?>
