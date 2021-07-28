@@ -35,4 +35,11 @@ return [
     'phone' => 'الهاتف',
     'account_num' => 'رقم الحساب',
     'edit_supplier_data' => 'تعديل بيانات المورد',
+    'invoice_num_or_supplier_name' => 'رقم الفاتورة | اسم المورد',
+    'retrieve_inv' => 'استرجاع فاتورة',
+    'sure_you_want_refund_invoice' => 'هل أنت متأكد أنك تريد استرجاع الفاتورة',
+    'status' => 'الحالة',
+    'done' => 'تمت',
+    'sure_you_want_to_make_this_proccess' => 'هل أنت متأكد أنك تريد اكمال هذه الاجرائية',
+    'confirm_prodcedure' => 'تأكيد الإجرائية',
 ];

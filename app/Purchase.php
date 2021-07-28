@@ -8,7 +8,7 @@ class Purchase extends Model
 {
     //
     protected $fillable = [
-        'repository_id','user_id','supplier_id','code','supplier_invoice_num','total_price','payment',
+        'repository_id','user_id','supplier_id','code','supplier_invoice_num','total_price','payment','status',
     ];
     public function purchaseRecords(){
         return $this->hasMany(PurchaseRecord::class);

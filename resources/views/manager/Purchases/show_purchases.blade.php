@@ -24,13 +24,38 @@
   .eye:hover{
     cursor: pointer;
   }
+  .active-a:hover{
+    cursor: pointer;
+  }
+  .disabled-a:hover{
+    cursor: default;
+  }
 </style>
 @endsection
 @section('body')
 <div class="main-panel">
   
 <div class="content">
-  
+  <div style="display: flex">
+    <form action="{{route('search.purchases.by.date',$repository->id)}}" method="GET">
+      @csrf
+      <div style="width: 300px; margin-right: 20px;" class="input-group no-border">
+        <input type="date" name="dateSearch" class="form-control">
+        <button type="submit" class="btn btn-success btn-round btn-just-icon">
+          <i class="material-icons">search</i>
+        </button>
+      </div>
+    </form>
+      <form action="{{route('search.purchases',$repository->id)}}" method="GET">
+        @csrf
+        <div style="width: 300px; margin-right: 20px;" class="input-group no-border">
+          <input type="text" name="search" class="form-control" placeholder="رقم الفاتورة | اسم المورد">
+          <button type="submit" class="btn btn-success btn-round btn-just-icon">
+            <i class="material-icons">search</i>
+          </button>
+        </div>
+      </form>
+    </div>
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
@@ -73,10 +98,12 @@
                             {{$purchase->code}}
                         </td>
                         <td>
-                          {{$purchase->created_at}}
+                          @if($purchase->created_at!=$purchase->updated_at)  {{-- it was later and then payed --}}
+                            <span class="badge-secondary"> {{$purchase->created_at}} </span>   <span class="badge-success"> {{$purchase->updated_at}} </span>
+                            @else
+                            <span class="badge-success"> {{$purchase->created_at}} </span>
+                            @endif
                         </td>
-                        
-                       
                         <td>
                             {{$purchase->supplier->name}}
                         </td>
@@ -86,10 +113,48 @@
                         </td>
                         
                       <td>
+                       
                      <a style="color: #03a4ec" href="{{route('show.purchase.details',$purchase->id)}}"> <i class="material-icons eye">
                             visibility
                           </i> </a>
-                         
+                          @can('استرجاع فاتورة مشتريات')
+                          |
+                          @if($purchase->status != 'retrieved')
+                          
+                          <a style="color: #f14000" data-toggle="modal" data-target="#exampleModal{{$purchase->id}}" id="modalicon" class="active-a">  <i class="material-icons">
+                            swap_horizontal_circle
+                          </i> </a>
+                          @else
+                          
+                          <a style="color: #344b5e" class="disabled-a">  <i class="material-icons">
+                            swap_horizontal_circle
+                          </i> </a>
+                          @endif
+                          @endcan
+                                        <!-- Modal for confirming -->
+                        <div class="modal fade" id="exampleModal{{$purchase->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel{{$purchase->id}}" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel{{$purchase->id}}">{{__('purchases.retrieve_inv')}}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true"></span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                {{__('purchases.sure_you_want_refund_invoice')}}
+                              </div>
+                              <div class="modal-footer">
+                                <a class="btn btn-danger" data-dismiss="modal">{{__('buttons.cancel')}}</a>
+                                <form action="{{route('purchase.retrieve',$purchase->id)}}" method="POST">
+                                  @csrf
+                                <button type="submit" class="btn btn-primary">{{__('buttons.confirm')}}</button>
+                              </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                          
                       </td>
                     </tr>
                     

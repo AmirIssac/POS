@@ -96,6 +96,9 @@
                           {{__('purchases.payment_proccess')}}
                         </td>
                         <td>
+                          {{__('purchases.status')}}
+                        </td>
+                        <td>
                           {{__('purchases.employee')}}   
                         </td>
                     </tr>
@@ -133,12 +136,46 @@
                         @endif
                        </td>
                        <td>
+                        @if($purchase->status=='done')
+                          {{__('purchases.done')}}
+                        @elseif($purchase->status=='retrieved')
+                          {{__('sales.retrieved_badge')}}
+                        @endif
+                       </td>
+                       <td>
                            {{$purchase->user->name}}
                        </td>
-                       
                     </tr>
                   </tbody>
                 </table>
+                @can('استرجاع فاتورة مشتريات')
+                @if($purchase->status != 'retrieved')
+                <a class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" id="modalicon">  {{__('sales.retrieve')}} </a>
+                @endif
+                @endcan
+                              <!-- Modal for confirming -->
+              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">{{__('purchases.retrieve_inv')}}</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      {{__('purchases.sure_you_want_refund_invoice')}}
+                    </div>
+                    <div class="modal-footer">
+                      <a class="btn btn-danger" data-dismiss="modal">{{__('buttons.cancel')}}</a>
+                      <form action="{{route('purchase.retrieve',$purchase->id)}}" method="POST">
+                        @csrf
+                      <button type="submit" class="btn btn-primary">{{__('buttons.confirm')}}</button>
+                    </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
               </div>
               </div>
             </div>

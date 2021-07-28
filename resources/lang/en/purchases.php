@@ -35,4 +35,11 @@ return [
     'phone' => 'Phone',
     'account_num' => 'Account number',
     'edit_supplier_data' => 'Edit supplier data',
+    'invoice_num_or_supplier_name' => 'Invoice number | Supplier name',
+    'retrieve_inv' => 'Refund invoice',
+    'sure_you_want_refund_invoice' => 'Are you sure you want to refund the invoice',
+    'status' => 'Status',
+    'done' => 'Done',
+    'sure_you_want_to_make_this_proccess' => 'Are you sure you want to make this proccess',
+    'confirm_prodcedure' => 'Confirm procedure',
 ];

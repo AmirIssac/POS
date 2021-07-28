@@ -142,6 +142,12 @@ class PurchaseController extends Controller
         return view('manager.Purchases.purchase_details')->with(['purchase'=>$purchase]);
     }
 
+    /*public function showPurchaseRetrieveDetails($id){
+        $purchase = Purchase::find($id);
+        $retrieve = true;
+        return view('manager.Purchases.purchase_details')->with(['purchase'=>$purchase,'retrieve'=>$retrieve]);
+    }*/
+
     public function productsForm($id){
         $repository = Repository::find($id);
         return view('manager.Purchases.products_form')->with(['repository'=>$repository]);
@@ -210,5 +216,60 @@ class PurchaseController extends Controller
             'payment' => $payment,
         ]);
         return redirect(route('purchases.index'))->with('success','تم تسديد الفاتورة بنجاح');
+    }
+
+   /* public function retrieveIndex(Request $request,$id){
+        $repository = Repository::find($id);
+        $supplier = $repository->suppliers()->where('name',$request->search)->first();
+        if($supplier){
+        $purchases = Purchase::where('repository_id',$repository->id)
+        ->where('status','!=','retrieved')
+                  ->where('supplier_id',$supplier->id)->orderBy('created_at','DESC')->paginate(10);
+        }
+        else{
+        $purchases = Purchase::where('repository_id',$repository->id)
+        ->where('status','!=','retrieved')
+        ->where(function($query) use ($request) {
+            $query->where('code', $request->search)
+                  ->orWhere('supplier_invoice_num', $request->search)
+                  ; })->orderBy('created_at','DESC')->paginate(10);
+        }
+        $retrieve = true; // to check in blade and display retrieve button
+        return view('manager.Purchases.show_purchases')->with(['purchases'=>$purchases,'retrieve'=>$retrieve]);
+    } */
+
+    public function retrieve($id){
+        $purchase = Purchase::find($id);
+        $repository = $purchase->repository;
+        $purchase->update([
+            'user_id' => Auth::user()->id,
+            'status' => 'retrieved',
+        ]);
+        //retrieve money if payment was by cashier
+        if($purchase->payment == 'cashier')
+        $repository->update([
+            'balance' => $repository->balance + $purchase->total_price,
+        ]);
+        return back()->with('success','تم استرجاع الفاتورة بنجاح');
+    }
+
+    public function searchByDate(Request $request , $id){
+        $repository = Repository::find($id);
+        $purchases = $repository->purchases()->whereDate('created_at',$request->dateSearch)->orWhereDate('updated_at',$request->dateSearch)->paginate(10);
+        return view('manager.Purchases.show_purchases')->with(['purchases'=>$purchases,'repository'=>$repository]);
+    }
+
+    public function search(Request $request , $id){
+        $repository = Repository::find($id);
+        $supplier = $repository->suppliers()->where('name',$request->search)->first();
+        if($supplier){
+        $purchases = Purchase::where('repository_id',$repository->id)
+                  ->where('supplier_id',$supplier->id)->orderBy('updated_at','DESC')->paginate(10);
+        }
+        else{
+        $purchases = Purchase::where('repository_id',$repository->id)
+        ->where('code',$request->search)->orderBy('updated_at','DESC')->paginate(10);
+        }
+        return view('manager.Purchases.show_purchases')->with(['purchases'=>$purchases,'repository'=>$repository]);
     }
 }

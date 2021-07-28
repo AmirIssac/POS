@@ -76,7 +76,47 @@
             </a>
             </div>
             @endcan
-
+            {{--@can('انشاء فاتورة مشتريات')
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <a data-toggle="modal" data-target="#exampleModal{{$repository->id}}" id="modaltrigger">
+              <div class="card card-stats">
+                <div class="card-header card-header-danger card-header-icon">
+                  <div class="card-icon">
+                  <i class="material-icons">compare_arrows</i>
+                  </div>
+                  <p class="card-category">استرجاع فاتورة مشتريات</p>
+                  <h6 class="card-title"></h6>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">update</i>
+                  </div>
+                </div>
+              </div>
+            </a>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal{{$repository->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel{{$repository->id}}" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel{{$repository->id}}">استرجاع فاتورة مشتريات</h5>
+                  </div>
+                  <form action="{{route('retrieve.purchase.index',$repository->id)}}" method="GET">
+                    @csrf
+                  <div class="modal-body">
+                    ابحث
+                    <input type="search" name="search" class="form-control" placeholder="رقم الفاتورة | رقم فاتورة المورد | اسم المورد">
+                  </div>
+                  <div class="modal-footer">
+                    <a data-dismiss="modal" class="btn btn-danger">{{__('buttons.cancel')}}</a>
+                    <button type="submit" class="btn btn-primary">{{__('sales.search')}}</button>
+                  </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            @endcan--}}
             @can('اضافة منتج مشتريات')
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <a href="{{route('purchase.products',$repository->id)}}">

@@ -98,8 +98,11 @@ Route::post('/store/purchase/products/{repository_id}','Manager\PurchaseControll
 Route::get('/ajax/get/purchase/product/{repository_id}/{barcode}','Manager\PurchaseController@getProductAjax');
 Route::get('/show/later/purchases/{repository_id}','Manager\PurchaseController@showLaterPurchases')->name('show.later.purchases');
 Route::post('/pay/later/purchase/{purchase_id}','Manager\PurchaseController@payLaterPurchase')->name('pay.later.purchase');
-
-
+//Route::get('/retrieve/purchase/{repository_id}','Manager\PurchaseController@retrieveIndex')->name('retrieve.purchase.index');
+//Route::get('/show/purchase/retrieve/details/{purchase_id}','Manager\PurchaseController@showPurchaseRetrieveDetails')->name('show.purchase.retrieve.details');
+Route::post('/retrieve/purchase/{purchase_id}','Manager\PurchaseController@retrieve')->name('purchase.retrieve');
+Route::get('/search/purchases/byDate/{repository_id}','Manager\PurchaseController@searchByDate')->name('search.purchases.by.date');
+Route::get('/search/purchases/{repository_id}','Manager\PurchaseController@search')->name('search.purchases');
 
 Route::group(['middleware'=>['permission:التقارير']], function () {
     Route::get('/reports','Manager\ReportController@index')->name('reports.index');

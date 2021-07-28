@@ -24,6 +24,12 @@
   .eye:hover{
     cursor: pointer;
   }
+  .active-a:hover{
+    cursor: pointer;
+  }
+  .disabled-a:hover{
+    cursor: default;
+  }
 </style>
 @endsection
 @section('body')
@@ -129,6 +135,18 @@
                           <a style="color: #93cb52" href="{{route('print.invoice',$invoice->id)}}"> <i id="{{$i}}" class="material-icons eye">
                             print
                           </i> </a>
+                          @can('استكمل فاتورة معلقة')
+                          |
+                          @if($invoice->status=='pending')
+                            <a style="color: #f4c721" href="{{route('complete.invoice.form',$invoice->id)}}" class="active-a"> <i id="{{$i}}" class="material-icons">
+                              incomplete_circle
+                            </i> </a>
+                          @else
+                          <a style="color: #344b5e" class="disabled-a">  <i class="material-icons">
+                            incomplete_circle
+                          </i> </a>
+                          @endif
+                          @endcan
                       </td>
                     </tr>
                     
