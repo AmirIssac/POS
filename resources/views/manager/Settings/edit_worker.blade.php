@@ -56,6 +56,9 @@
                           @foreach($category->permissions as $permission)
                           {{-- condition to check if this permission containing in the owner permission --}}
                           @if($permissionsOwner->contains('id',$permission->id))
+                          {{-- condition to check if the user has this permission because you cant as worker give permission you don't have to another worker --}}
+                          <?php $user = Auth::user(); ?>
+                          @if($user->can($permission->name))
                       <tr>
                         
                         <td>
@@ -71,6 +74,7 @@
                             @endif
                         </td>
                       </tr>
+                      @endif
                       @endif
                       @endforeach
                       

@@ -66,6 +66,67 @@
               </a>
              </div>
              @endcan
+             @can('عرض التقارير اليومية')
+             <div class="col-lg-3 col-md-6 col-sm-6">
+              <a href="{{route('view.monthly.reports',$repository->id)}}">
+               <div class="card card-stats">
+                 <div class="card-header card-header-primary card-header-icon">
+                   <div class="card-icon">
+                   <i class="material-icons">description</i>
+                   </div>
+                   <p class="card-category">{{__('reports.monthly_reports')}}</p>
+                   <h6 class="card-title">{{__('reports.view')}}</h6>
+                 </div>
+                 <div class="card-footer">
+                   <div class="stats">
+                     <i class="material-icons">description</i>
+                   </div>
+                 </div>
+               </div>
+              </a>
+             </div>
+             @endcan
+             @can('عرض التقارير اليومية')
+             <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats" data-toggle="modal" data-target="#exampleModal{{$repository->id}}" id="modalicon{{$repository->id}}">
+                  <div class="card-header card-header-success card-header-icon">
+                   <div class="card-icon">
+                   <i class="material-icons">note_add</i>
+                   </div>
+                   <p class="card-category">{{__('reports.create_monthly_report')}}</p>
+                   <h6 class="card-title">{{__('reports.create')}}</h6>
+                 </div>
+                 <div class="card-footer">
+                   <div class="stats">
+                     <i class="material-icons">note_add</i>
+                   </div>
+                 </div>
+               </div>
+             </div>
+                                        <!-- Modal for making monthly report -->
+                                        <div class="modal fade" id="exampleModal{{$repository->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel{{$repository->id}}" aria-hidden="true">
+                                          <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel{{$repository->id}}">{{__('reports.monthly_report')}}</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                  <span aria-hidden="true"></span>
+                                                </button>
+                                              </div>
+                                              <div class="modal-body">
+                                                {{__('reports.are_you_sure_you_want_to_make_monthly_report')}} {{now()->month}}
+                                              </div>
+                                              <div class="modal-footer">
+                                                <form action="{{route('make.monthly.report',$repository->id)}}" method="POST">
+                                                  @csrf
+                                                  <a class="btn btn-danger" data-dismiss="modal">{{__('buttons.cancel')}}</a>
+                                                <button type="submit" class="btn btn-primary">{{__('buttons.confirm')}}</button>
+                                              </form>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+             @endcan
            </div>
          
            </div>

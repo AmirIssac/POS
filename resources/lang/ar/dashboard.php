@@ -21,5 +21,7 @@ return [
     'today_paid_money' => 'الاموال المدفوعة اليوم',
     'pending_paid_money' => 'الاموال المعلقة الواجب دفعها',
     'month_purchases' => 'مشتريات الشهر',
+    'none' => 'لا يوجد',
+    'highest_five_suppliers' => 'أعلى خمسة موردين يجب الدفع لهم',
 ];
 ?>

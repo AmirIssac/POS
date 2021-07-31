@@ -1302,6 +1302,7 @@ class SellController extends Controller
                             'created_at' => $request->date,
                             'transform' => 'p-d',
                             'daily_report_check' => false,
+                            'monthly_report_check' => false,
                         ]
                         );
                         $employee = $invoice->user;
@@ -1448,6 +1449,7 @@ class SellController extends Controller
             'created_at' => now(),
             'transform' => $transform,
             'daily_report_check' => false,
+            'monthly_report_check' => false,
         ]);
         return redirect(route('sales.index'))->with('retrievedSuccess','تم استرجاع الفاتورة بنجاح');
     } 

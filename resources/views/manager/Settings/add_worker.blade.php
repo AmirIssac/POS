@@ -25,6 +25,15 @@
                 <strong>{{ $message }}</strong>
         </div>
         @endif
+        @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
     <div class="container-fluid">
         <form action="{{route('store.worker',$repository->id)}}" method="POST">
             @csrf
@@ -105,6 +114,9 @@
                                          <tbody>
                                             @foreach($category->permissions as $permission)
                                             @if($permissionsOwner->contains('id',$permission->id))  {{-- display the permissions the just owner has --}}
+                                            {{-- condition to check if the user has this permission because you cant as worker give permission you don't have to another worker --}}
+                                            <?php $user = Auth::user(); ?>
+                                            @if($user->can($permission->name))
                                             <tr>
                                                 <td>
                                                     {{$permission->name}}
@@ -114,6 +126,7 @@
                                                     <label class="off" for="btn-check-{{$permission->id}}"></label>
                                                 </td>
                                               </tr>
+                                              @endif
                                               @endif
                                               @endforeach
                                              

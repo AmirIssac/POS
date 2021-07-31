@@ -103,6 +103,10 @@ Route::post('/pay/later/purchase/{purchase_id}','Manager\PurchaseController@payL
 Route::post('/retrieve/purchase/{purchase_id}','Manager\PurchaseController@retrieve')->name('purchase.retrieve');
 Route::get('/search/purchases/byDate/{repository_id}','Manager\PurchaseController@searchByDate')->name('search.purchases.by.date');
 Route::get('/search/purchases/{repository_id}','Manager\PurchaseController@search')->name('search.purchases');
+Route::get('/search/purchases/bySupplier/{repository_id}','Manager\PurchaseController@searchBySupplier')->name('search.by.supplier');
+
+
+
 
 Route::group(['middleware'=>['permission:التقارير']], function () {
     Route::get('/reports','Manager\ReportController@index')->name('reports.index');
@@ -117,6 +121,9 @@ Route::group(['middleware'=>['permission:التقارير']], function () {
     Route::get('/invoice/details/{invoice_id}','Manager\ReportController@invoiceDetails')->name('invoice.details');
     Route::get('/print/invoice/{invoice_id}','Manager\ReportController@printInvoice')->name('print.invoice');
     Route::get('/filter/pending/invoices/{repository_id}','Manager\ReportController@filterPending')->name('filter.pending.invoices');
+    // monthly reports
+Route::post('/make/monthly/report/{repository_id}','Manager\ReportController@makeMonthlyReport')->name('make.monthly.report');
+Route::get('/view/monthly/reports/{repository_id}','Manager\ReportController@viewMonthlyReports')->name('view.monthly.reports');
 });
 
 
@@ -170,3 +177,5 @@ Route::get('cashier/warning/{repository_id}','Manager\CashierController@warning'
 }); // end of localization
 
 Route::get('/ajax/get/typeName/{type_id}','Manager\RepositoryController@getTypeNameAjax');
+
+

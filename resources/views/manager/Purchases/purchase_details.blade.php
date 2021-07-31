@@ -30,6 +30,12 @@
 <div class="main-panel">
   
 <div class="content">
+  @if ($message = Session::get('fail'))
+  <div class="alert alert-danger alert-block">
+      <button type="button" class="close" data-dismiss="alert">×</button>	
+          <strong>{{ $message }}</strong>
+  </div>
+  @endif
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
@@ -148,6 +154,23 @@
                     </tr>
                   </tbody>
                 </table>
+                @can('دفع فاتورة مورد')
+                @if($purchase->payment == 'later' && $purchase->status != 'retrieved')
+                <form action="{{route('pay.later.purchase',$purchase->id)}}" method="POST">
+                  @csrf
+                  <div style="display: flex; flex-direction: column">
+                    <div>
+                  {{__('purchases.cash')}} <input type="radio" name="payment" value="cashier" checked> &nbsp; &nbsp;
+                  {{__('purchases.cash_from_external_budget')}} <input type="radio" name="payment" value="external">
+                    </div>
+                    <div>
+                  <button type="submit" class="btn btn-primary"> {{__('purchases.pay')}} </button>
+                    </div> 
+                  </div>
+                </form>
+                <hr>
+                 @endif
+                 @endcan
                 @can('استرجاع فاتورة مشتريات')
                 @if($purchase->status != 'retrieved')
                 <a class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" id="modalicon">  {{__('sales.retrieve')}} </a>
@@ -176,6 +199,7 @@
                   </div>
                 </div>
               </div>
+               
               </div>
               </div>
             </div>

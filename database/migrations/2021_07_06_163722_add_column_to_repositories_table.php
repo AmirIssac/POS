@@ -15,7 +15,7 @@ class AddColumnToRepositoriesTable extends Migration
     {
         Schema::table('repositories', function (Blueprint $table) {
             //
-            $table->string('note')->default(null)->nullable();
+            $table->foreignId('branch_id')->after('address')->default(null);
         });
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
 use App\Invoice;
+use App\MonthlyReport;
 use App\Repository;
 use App\User;
 use Illuminate\Http\Request;
@@ -94,5 +95,42 @@ class ReportController extends Controller
         $repository = Repository::find($id);
         $reports = $repository->dailyReportsDesc()->paginate(1);
         return view('manager.Reports.daily_reports')->with('repository',$repository)->with('reports',$reports);
+    }
+
+    public function makeMonthlyReport($id){
+        $repository = Repository::find($id);
+        $user = User::find(Auth::user()->id);   // worker
+        $invoices = $repository->invoices()->where('monthly_report_check',false)->whereYear('created_at','=', now()->year)
+        ->whereMonth('created_at','=',now()->month)->get();  // the invoices that will taken in monthly report
+        $cash_amount = $repository->invoices()->where('status','!=','retrieved')->where('monthly_report_check',false)->whereYear('created_at','=', now()->year)
+        ->whereMonth('created_at','=',now()->month)->sum('cash_amount');
+        $card_amount = $repository->invoices()->where('status','!=','retrieved')->where('monthly_report_check',false)->whereYear('created_at','=', now()->year)
+        ->whereMonth('created_at','=',now()->month)->sum('card_amount');
+        $stc_amount = $repository->invoices()->where('status','!=','retrieved')->where('monthly_report_check',false)->whereYear('created_at','=', now()->year)
+        ->whereMonth('created_at','=',now()->month)->sum('stc_amount');
+        
+        $monthly_report = MonthlyReport::create([
+            'repository_id' => $repository->id,
+            'user_id' => $user->id,
+            'cash_balance' => $cash_amount,
+            'card_balance' => $card_amount,
+            'stc_balance' => $stc_amount,
+        ]);
+
+        foreach($invoices as $invoice){
+            $monthly_report->invoices()->attach($invoice->id);
+            $invoice->update(
+                [
+                    'monthly_report_check' => true,
+                ]
+                );
+        }
+        return redirect()->route('view.monthly.reports',$repository->id)->with('success','تم انشاء تقرير شهري بنجاح'); 
+    }
+
+    public function viewMonthlyReports($id){
+        $repository = Repository::find($id);
+        $reports = $repository->monthlyReports()->orderBy('created_at','DESC')->paginate(1);
+        return view('manager.Reports.monthly_reports')->with(['repository'=>$repository,'reports'=>$reports]);
     }
 }

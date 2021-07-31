@@ -1,4 +1,12 @@
 @extends('layouts.main')
+<style>
+  .form-icon:hover{
+    cursor: pointer;
+  }
+  .form-icon{
+    color: #9229ac;
+  }
+</style>
 @section('body')
 
      <div class="main-panel">
@@ -138,9 +146,29 @@
                    <h3 style="color: #48a44c;" class="card-title">{{$repository->todayPayedMoney()}}</h3>
                    <p style="color: #f14000; font-weight: bold" class="card-category"> {{__('dashboard.pending_paid_money')}}</p>
                    <h3 style="color: #f14000; class="card-title">{{$repository->pendingPayedMoney()}}</h3>
-                 </div>
-                 <div class="card-footer">
+                   <p style="color: #f14000; font-weight: bold" class="card-category"> {{__('dashboard.highest_five_suppliers')}}  </p>
                    
+                 </div>
+                 <div style="display: flex; flex-direction: column; margin:10px 14px 0 0;">
+                  @if($repository->mostFiveSupplierShouldPay()->count()>0)
+                   @foreach($repository->mostFiveSupplierShouldPay() as $info)
+                   <form action="{{route('search.by.supplier',$repository->id)}}" method="GET">
+                    @csrf
+                    <input type="hidden" name="later" value="later">
+                    <input type="hidden" name="supplier" value="{{$info->supplier_id}}">
+                   <div style="display: flex; justify-content: space-between; font-weight: bold;font-size: 14px; color:#f14000">
+                      {{$info->supplier->name}} {{$info->sum}}
+                    <button style="background: none; padding: 0px; border: none"><i class="material-icons form-icon">
+                      preview
+                    </i></button>
+                   </div>
+                  </form>
+                   @endforeach
+                   @else
+                   <div style="font-weight: bold; font-size: 14px; color:#48a44c;">
+                    {{__('dashboard.none')}} 
+                   </div>
+                   @endif
                  </div>
                </div>
              </div>

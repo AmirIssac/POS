@@ -32,6 +32,7 @@
                      </th>
                   </thead>
                   <tbody>
+                    <?php $user = Auth::user(); ?>
                     @foreach($workers as $worker)
                     <tr>
                      <td>{{$worker->name}}</td>
@@ -40,9 +41,15 @@
                      <td>
                       <a style="color: white" href="{{route('edit.worker.info',$worker->id)}}" role="button" class="btn btn-info"> {{__('buttons.edit')}} </a>
                     </td>
+                    @if($user->email == $worker->email)
+                    <td>
+                      /
+                    </td>
+                     @else
                      <td>
                          <a style="color: white" href="{{route('show.worker.permissions',$worker->id)}}" role="button" class="btn btn-info"> {{__('settings.customize')}} </a>
                      </td>
+                     @endif
                     </tr>
                     @endforeach
                     

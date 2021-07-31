@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnToInvoicesTable extends Migration
+class CreateInvoiceMonthlyReportTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddColumnToInvoicesTable extends Migration
      */
     public function up()
     {
-        Schema::table('invoices', function (Blueprint $table) {
-            //
+        Schema::create('invoice_monthly_report', function (Blueprint $table) {  // pivot table
+            $table->id();
+            $table->foreignId('monthly_report_id');
+            $table->foreignId('invoice_id');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddColumnToInvoicesTable extends Migration
      */
     public function down()
     {
-        Schema::table('invoices', function (Blueprint $table) {
-            $table->boolean('monthly_report_check')->after('daily_report_check')->default(0);
-        });
+        Schema::dropIfExists('invoice_monthly_report');
     }
 }

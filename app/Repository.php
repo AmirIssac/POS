@@ -32,6 +32,9 @@ class Repository extends Model
     public function dailyReports(){
         return $this->hasMany(DailyReport::class);
     }
+    public function monthlyReports(){
+        return $this->hasMany(MonthlyReport::class);
+    }
 
     public function dailyReportsDesc(){
         return $this->hasMany(DailyReport::class)->orderBy('created_at','DESC');
@@ -293,5 +296,33 @@ class Repository extends Model
             $payed += $inv->total_price;
         }
         return $payed;
+    }
+
+    public function mostFiveSupplierShouldPay(){  // أكثر 5 موردين يجب الدفع لهم
+        $purchases = Purchase::query()
+        ->join('suppliers', 'suppliers.id', '=', 'purchases.supplier_id')  // relationship
+        ->selectRaw('sum(purchases.total_price) as sum , supplier_id , suppliers.name')
+        ->where('repository_id',$this->id)
+        ->where('purchases.payment','later')
+        ->where('purchases.status','!=','retrieved')
+        ->groupBy('supplier_id','suppliers.name')
+        ->orderBy('sum','DESC')
+        ->take(5)
+        ->get();  // get the total_price and supplier_id and suppliers.name grouped by supplier_id && suppliers.name
+        /*
+        // we have to get the names of suppliers
+        $suppliers = collect(new Supplier);
+        foreach($purchases as $purchase){
+        $supplier = Supplier::find($purchase->supplier_id);
+        $suppliers = $suppliers->merge($supplier);
+        }
+        return $suppliers;
+        $i=0;
+        $result = $purchases->map(function($object) use ($suppliers,$i){
+            $object->merge($suppliers[$i]);
+            $i++;
+        });
+        return $result;*/
+        return $purchases;
     }
 }

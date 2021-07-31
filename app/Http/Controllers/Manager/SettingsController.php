@@ -126,6 +126,9 @@ class SettingsController extends Controller
 
     public function storeWorker(Request $request , $id){
         $repository = Repository::find($id);
+        $validated = $request->validate([
+            'email' => 'unique:users|email',
+        ]);
        $user = User::create(
             [
                 'name' => $request->name,

@@ -36,6 +36,13 @@
 <div class="main-panel">
   
 <div class="content">
+  @if ($message = Session::get('fail'))
+  <div class="alert alert-danger alert-block">
+      <button type="button" class="close" data-dismiss="alert">×</button>	
+          <strong>{{ $message }}</strong>
+  </div>
+  @endif
+  @if(request()->is('show/purchases/*') || request()->is('en/show/purchases/*'))
   <div style="display: flex">
     <form action="{{route('search.purchases.by.date',$repository->id)}}" method="GET">
       @csrf
@@ -49,13 +56,28 @@
       <form action="{{route('search.purchases',$repository->id)}}" method="GET">
         @csrf
         <div style="width: 300px; margin-right: 20px;" class="input-group no-border">
-          <input type="text" name="search" class="form-control" placeholder="رقم الفاتورة | اسم المورد">
+          <input type="text" name="search" class="form-control" placeholder="{{__('purchases.invoice_num')}}">
           <button type="submit" class="btn btn-success btn-round btn-just-icon">
             <i class="material-icons">search</i>
           </button>
         </div>
       </form>
+      @if(isset($suppliers))
+      {{-- filter --}}
+      <form action="{{route('search.by.supplier',$repository->id)}}" method="GET">
+      @csrf
+      <select name="supplier">
+        @foreach($suppliers as $supplier)
+        <option value="{{$supplier->id}}">{{$supplier->name}}</option>
+        @endforeach
+      </select>
+      <button type="submit" class="btn btn-success btn-round btn-just-icon">
+        <i class="material-icons">search</i>
+      </button>
+      </form>
+      @endif
     </div>
+    @endif {{--  request check --}}
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
@@ -131,7 +153,7 @@
                           </i> </a>
                           @endif
                           @endcan
-                                        <!-- Modal for confirming -->
+                                        <!-- Modal for confirming retrieve proccess -->
                         <div class="modal fade" id="exampleModal{{$purchase->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel{{$purchase->id}}" aria-hidden="true">
                           <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -154,7 +176,43 @@
                             </div>
                           </div>
                         </div>
-                          
+                          @can('دفع فاتورة مورد')
+                          |
+                          @if($purchase->status != 'retrieved' && $purchase->payment == 'later')
+                          <a style="color: #1ec92f" data-toggle="modal" data-target="#exampleModale{{$purchase->id}}" id="modalicon" class="active-a"">  <i class="material-icons">
+                            payment
+                          </i> </a>
+                          @else
+                          <a style="color: #344b5e" class="disabled-a">  <i class="material-icons">
+                            payment
+                          </i> </a>
+                          @endif
+                          @endcan
+                                                                  <!-- Modal for confirming pay proccess -->
+                        <div class="modal fade" id="exampleModale{{$purchase->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabele{{$purchase->id}}" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <form action="{{route('pay.later.purchase',$purchase->id)}}" method="POST">
+                                @csrf
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabele{{$purchase->id}}">{{__('purchases.pay_supplier_invoice')}}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true"></span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                {{__('purchases.cash')}} <input type="radio" name="payment" value="cashier" checked> &nbsp; &nbsp;
+                                {{__('purchases.cash_from_external_budget')}} <input type="radio" name="payment" value="external">
+                              </div>
+                              <div class="modal-footer">
+                                <a class="btn btn-danger" data-dismiss="modal">{{__('buttons.cancel')}}</a>
+                                <button type="submit" class="btn btn-primary">{{__('buttons.confirm')}}</button>
+                              </form>
+                            </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </td>
                     </tr>
                     

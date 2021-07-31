@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Invoice extends Model
 {
     protected $fillable = [
-        'repository_id','user_id','customer_id','code', 'details','recipe','total_price','discount','cash_check','card_check','stc_check','cash_amount','card_amount','stc_amount','tax','tax_code','status','phone','created_at','transform','daily_report_check','note',
+        'repository_id','user_id','customer_id','code', 'details','recipe','total_price','discount','cash_check','card_check','stc_check','cash_amount','card_amount','stc_amount','tax','tax_code','status','phone','created_at','transform','daily_report_check','monthly_report_check','note',
     ];
 
 
@@ -23,6 +23,10 @@ class Invoice extends Model
 
     public function dailyReports(){
         return $this->belongsToMany(DailyReport::class,'daily_report_invoice');
+    }
+
+    public function monthlyReports(){
+        return $this->belongsToMany(MonthlyReport::class,'invoice_monthly_report');
     }
 
     public function customer(){

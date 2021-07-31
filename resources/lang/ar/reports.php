@@ -25,5 +25,14 @@ return [
     'customer' => 'العميل',
     'total_price' => 'المبلغ الاجمالي',
     'actions' => 'عمليات',
+    'monthly_reports' => 'التقارير الشهرية',
+    'create_monthly_report' => 'انشاء تقرير شهري',
+    'create' => 'انشاء',
+    'are_you_sure_you_want_to_make_monthly_report' => 'هل أنت متأكد أنك تريد انشاء تقرير شهري لشهر',
+    'monthly_report' => 'تقرير شهري',
+    'cash_income' => 'الوارد الى الكاش',
+    'card_income' => 'الوارد الى البطاقة',
+    'stc_income' => 'الوارد الى stc-pay',
+    'invoice' => 'فاتورة',
 ];
 ?>

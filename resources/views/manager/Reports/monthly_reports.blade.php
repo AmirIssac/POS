@@ -57,7 +57,10 @@ input[type=number] {
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title">  {{__('reports.daily_report')}} {{$report->created_at->format('d/m/Y')}}<span class="button"><button onclick="window.print();" class="btn btn-danger"> {{__('buttons.print')}} </button> </span>
+              <h4 class="card-title">   {{__('reports.monthly_report')}} {{$report->created_at->format('m/Y')}}<span class="button"><button onclick="window.print();" class="btn btn-danger"> {{__('buttons.print')}} </button> </span>
+              </h4>
+              <h4>
+                  {{$report->invoices()->count()}}  {{__('reports.invoice')}}
               </h4>
             </div>
             <div class="card-body">
@@ -127,50 +130,18 @@ input[type=number] {
                     @endforeach
                     <tr class="price">
                       <td>
-                        {{__('reports.cashier')}}&nbsp;{{$report->cash_balance+($report->cash_plus-$report->cash_shortage)}}
+                        {{__('reports.cash_income')}} {{$report->cash_balance}}
                       </td>
                       <td>
-                        {{__('sales.card')}}&nbsp;{{$report->card_balance+($report->card_plus-$report->card_shortage)}}
+                        {{__('reports.card_income')}} {{$report->card_balance}}
                       </td>
                       <td>
-                        STC-pay&nbsp;{{$report->stc_balance+($report->stc_plus-$report->stc_shortage)}}
-                      </td>
-                    </tr>
-                    <tr class="price">
-                      <td>
-                        {{__('reports.decrease_amount_in_cashier')}}   &nbsp;{{$report->cash_shortage}}
-                      </td>
-                      <td>
-                        {{__('reports.decrease_amount_in_card')}} &nbsp;{{$report->card_shortage}}
-                      </td>
-                      <td>
-                        {{__('reports.decrease_amount_in_stc')}} &nbsp;{{$report->stc_shortage}}
+                        {{__('reports.stc_income')}} {{$report->stc_balance}}
                       </td>
                     </tr>
                     <tr class="price">
                       <td>
-                        {{__('reports.increase_amount_in_cashier')}}   &nbsp;{{$report->cash_plus}} 
-                      </td>
-                      <td>
-                        {{__('reports.increase_amount_in_card')}} &nbsp;{{$report->card_plus}} 
-                      </td>
-                      <td>
-                        {{__('reports.increase_amount_in_stc')}} &nbsp;{{$report->stc_plus}} 
-                      </td>
-                    </tr>
-                    <tr class="price">
-                     {{--  <td>
-                       {{__('reports.sum_invoices')}} &nbsp;&nbsp;{{$total_sum_invoices}}
-                      </td> --}}
-                    </tr>
-                    <tr class="price">
-                      <td>
-                        {{__('reports.total_balance')}} &nbsp;&nbsp;{{$report->cash_balance+($report->cash_plus-$report->cash_shortage) + $report->card_balance+($report->card_plus-$report->card_shortage)}}
-                      </td>
-                    </tr>
-                    <tr class="price">
-                      <td>
-                        {{__('reports.close_employee')}}  &nbsp;  : &nbsp;{{$report->user->name}}
+                        {{__('purchases.employee')}}  &nbsp;  : &nbsp;{{$report->user->name}}
                       </td>
                       <td>
                       </td>

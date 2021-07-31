@@ -134,7 +134,8 @@ class PurchaseController extends Controller
     public function showPurchases($id){
         $repository = Repository::find($id);
         $purchases = $repository->purchases()->orderBy('created_at','DESC')->paginate(10);
-        return view('manager.Purchases.show_purchases')->with(['repository'=>$repository,'purchases'=>$purchases]);
+        $suppliers = $repository->suppliers;
+        return view('manager.Purchases.show_purchases')->with(['repository'=>$repository,'purchases'=>$purchases,'suppliers'=>$suppliers]);
     }
 
     public function showPurchaseDetails($id){
@@ -190,10 +191,15 @@ class PurchaseController extends Controller
         return response($product);
     }
 
-    public function showLaterPurchases($id){
+    /*public function showLaterPurchases($id){
         $repository = Repository::find($id);
         $purchases = $repository->purchases()->where('payment','later')->orderBy('created_at','DESC')->paginate(10);
         return view('manager.Purchases.later_purchases')->with(['repository'=>$repository,'purchases'=>$purchases]);
+    }*/
+    public function showLaterPurchases($id){
+        $repository = Repository::find($id);
+        $purchases = $repository->purchases()->where('status', '!=' , 'retrieved')->where('payment','later')->orderBy('created_at','DESC')->paginate(10);
+        return view('manager.Purchases.show_purchases')->with(['repository'=>$repository,'purchases'=>$purchases]);
     }
 
     public function payLaterPurchase(Request $request , $id){
@@ -261,15 +267,30 @@ class PurchaseController extends Controller
 
     public function search(Request $request , $id){
         $repository = Repository::find($id);
-        $supplier = $repository->suppliers()->where('name',$request->search)->first();
+        /*$supplier = $repository->suppliers()->where('name',$request->search)->first();
         if($supplier){
         $purchases = Purchase::where('repository_id',$repository->id)
                   ->where('supplier_id',$supplier->id)->orderBy('updated_at','DESC')->paginate(10);
         }
-        else{
+        else{*/
         $purchases = Purchase::where('repository_id',$repository->id)
         ->where('code',$request->search)->orderBy('updated_at','DESC')->paginate(10);
-        }
         return view('manager.Purchases.show_purchases')->with(['purchases'=>$purchases,'repository'=>$repository]);
+    }
+
+    public function searchBySupplier(Request $request , $id){
+        $repository = Repository::find($id);
+        $suppliers = $repository->suppliers; // to send to blade filter
+        $supplier = $repository->suppliers()->where('supplier_id',$request->supplier)->first();
+        if($request->later){  // for search by highest suppliers we should pay in the dashboard and should not be retrieved
+            $purchases = Purchase::where('repository_id',$repository->id)
+            ->where('supplier_id',$supplier->id)->where('payment','later')->where('status','!=','retrieved')->orderBy('updated_at','DESC')->paginate(10);
+        }
+        else{
+        $purchases = Purchase::where('repository_id',$repository->id)
+                  ->where('supplier_id',$supplier->id)->orderBy('updated_at','DESC')->paginate(10);
+        }
+        return view('manager.Purchases.show_purchases')->with(['purchases'=>$purchases,'repository'=>$repository,'suppliers'=>$suppliers]);
+
     }
 }

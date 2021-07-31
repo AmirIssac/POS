@@ -25,5 +25,14 @@ return [
     'customer' => 'Customer',
     'total_price' => 'Total price',
     'actions' => 'Actions',
+    'monthly_reports' => 'Monthly reports',
+    'create_monthly_report' => 'Create monthly report',
+    'create' => 'Create',
+    'are_you_sure_you_want_to_make_monthly_report' => 'Are you sure you want to create monthly report for month',
+    'monthly_report' => 'Monthly report',
+    'cash_income' => 'Income to cash',
+    'card_income' => 'Income to card',
+    'stc_income' => 'Income to stc-pay',
+    'invoice' => 'Invoice',
 ];
 ?>

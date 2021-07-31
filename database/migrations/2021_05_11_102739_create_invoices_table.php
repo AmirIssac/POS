@@ -34,6 +34,7 @@ class CreateInvoicesTable extends Migration
             $table->enum('transform',['no','p-d','p-r','d-r'])->after('created_at')->default('no');
             $table->float('tax')->after('stc_amount')->default(0);   // real value
             $table->string('tax_code')->after('tax')->default('0000');
+            $table->string('note')->default(null)->nullable();
             //$table->timestamp('updated_at')->nullable();   // custom timestamp for update from pending to delivered
             //$table->timestamps();
         });

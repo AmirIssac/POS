@@ -21,5 +21,8 @@ return [
     'today_paid_money' => 'Today paid money',
     'pending_paid_money' => 'Pending paid money',
     'month_purchases' => 'Month purchases',
+    'none' => 'None',
+    'highest_five_suppliers' => 'Top five suppliers you should pay',
+    
 ];
 ?>
