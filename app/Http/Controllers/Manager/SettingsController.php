@@ -126,9 +126,14 @@ class SettingsController extends Controller
 
     public function storeWorker(Request $request , $id){
         $repository = Repository::find($id);
-        $validated = $request->validate([
+        /*$validated = $request->validate([
             'email' => 'unique:users|email',
-        ]);
+        ]);*/
+        $user = User::where('email',$request->email)->first();
+        if($user && $user->hasRole('عامل-مخزن')){   // this worker exist in another repo
+            $repository->users()->attach($user->id); //pivot table insert
+        }
+        else{
        $user = User::create(
             [
                 'name' => $request->name,
@@ -139,6 +144,7 @@ class SettingsController extends Controller
             );
             $repository->users()->attach($user->id); //pivot table insert
             $user->assignRole('عامل-مخزن');  // this role will not contain any permission by default but we use role for dashboard
+        }
             $user->givePermissionTo($request->permissions);
             return redirect()->route('manager.settings.index')->with('successWorker','تم اضافة موظف جديد للمتجر بنجاح');
   
