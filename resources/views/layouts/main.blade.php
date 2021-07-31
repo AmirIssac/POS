@@ -339,9 +339,11 @@
  <!-- End Navbar -->
  @yield('body')
   <!--   Core JS Files   -->
+  
   <script src="{{asset('public/js/core/jquery.min.js')}}" type="text/javascript"></script>
   <script src="{{asset('public/js/core/popper.min.js')}}" type="text/javascript"></script>
   <script src="{{asset('public/js/core/bootstrap-material-design.min.js')}}" type="text/javascript"></script>
+  
   <script src="{{asset('public/js/plugins/perfect-scrollbar.jquery.min.js')}}"></script>
   <!--  Google Maps Plugin    -->
   {{--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2Yno10-YTnLjjn_Vtk0V8cdcY5lC4plU"></script>--}}
@@ -353,8 +355,9 @@
   <script src="{{asset('public/js/plugins/bootstrap-notify.js')}}"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="{{asset('public/js/material-dashboard.min.js?v=2.1.2')}}" type="text/javascript"></script>
-  
-    
+  <script>
+    $('.main-panel').perfectScrollbar('destroy');
+  </script>
  @yield('scripts')
     </body>
  </html>
