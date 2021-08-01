@@ -21,7 +21,7 @@ Auth::routes();
 
 Route::group(['prefix' => LaravelLocalization::setLocale(),'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]], function()
 {
-Route::get('/',  'HomeController@main')->middleware('auth')->middleware('cashier_warning');
+Route::get('/',  'HomeController@main')->middleware('auth');//->middleware('cashier_warning');
 Route::get('/home','HomeController@index')->middleware('auth');
 Route::get('/ltr',function () {
     return view('settings.ltr');
