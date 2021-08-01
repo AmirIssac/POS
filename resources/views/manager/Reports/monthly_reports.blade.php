@@ -66,6 +66,41 @@ input[type=number] {
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table">
+                  
+                  <thead class=" text-primary">
+                    <th>
+                      {{__('reports.cash_income')}}   
+                    </th>
+                    <th>
+                      {{__('reports.card_income')}}    
+                     </th>
+                     <th>
+                      {{__('reports.stc_income')}}    
+                      </th>
+                      <th>
+                        {{__('purchases.employee')}}
+                      </th>
+                  </thead>
+                      <tbody>
+                      <tr>
+                        <td>
+                          {{$report->cash_balance}}
+                        </td>
+                        <td>
+                          {{$report->card_balance}}
+                        </td>
+                        <td>
+                          {{$report->stc_balance}}
+                        </td>
+                        <td>
+                          {{$report->user->name}}
+                        </td>
+                      </tr>
+                  </tbody>
+                </table>
+              <div class="table-responsive">
+                <table class="table">
+                  
                   <thead class=" text-primary">
                     <th>
                       {{__('sales.invoice_code')}}   
@@ -128,29 +163,21 @@ input[type=number] {
                     </tr>
                     <?php $total_sum_invoices += $invoice->total_price ?>
                     @endforeach
-                    <tr class="price">
-                      <td>
-                        {{__('reports.cash_income')}} {{$report->cash_balance}}
-                      </td>
-                      <td>
-                        {{__('reports.card_income')}} {{$report->card_balance}}
-                      </td>
-                      <td>
-                        {{__('reports.stc_income')}} {{$report->stc_balance}}
-                      </td>
-                    </tr>
-                    <tr class="price">
-                      <td>
-                        {{__('purchases.employee')}}  &nbsp;  : &nbsp;{{$report->user->name}}
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
+                      <tr>
                       <td class="button">
                         <button onclick="window.print();" class="btn btn-danger"> {{__('buttons.print')}} </button>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
                       </td>
                     </tr>
                   </tbody>

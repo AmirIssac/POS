@@ -14,6 +14,12 @@
                 <strong>{{ session('successWorker') }}</strong>
         </div>
         @endif
+        @if ($message = Session::get('fail'))
+        <div class="alert alert-danger alert-block">
+            <button type="button" class="close" data-dismiss="alert">×</button>	
+                <strong>{{ $message }}</strong>
+        </div>
+        @endif
         @foreach($repositories as $repository)
         <div class="col-md-4">
          <div class="card card-chart">

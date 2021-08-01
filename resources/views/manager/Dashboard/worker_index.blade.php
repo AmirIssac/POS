@@ -138,6 +138,45 @@
                </div>
              </div>
              @endcan
+             <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-success card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">trending_up</i>
+                  </div>
+                  <p style="color: #9229ac; font-weight: bold" class="card-category">مبيعات الشهر</p>
+                  <h3 style="color: #9229ac" class="card-title">{{$repository->monthSales()}}</h3>
+                  {{-- <p style="color: #48a44c; font-weight: bold" class="card-category">الأموال المحصلة</p>
+                   <h3 style="color:#48a44c " class="card-title">{{$repository->cash_balance+$repository->card_balance+$repository->stc_balance}}
+                   </h3>--}}
+                  
+                   <p style="color: #f14000; font-weight: bold" class="card-category">الأموال المعلقة لهذا الشهر</p>
+                   <h3 style="color: #f14000" class="card-title">{{$repository->thisMonthPendingMoney()}}
+                   </h3>
+                </div>
+                {{--<div class="card-footer">
+                  <div style="display: flex; flex-direction: column; width: 100%">
+                   <div style="display: flex; justify-content: space-between">
+                  <div class="stats">
+                    <i style="color: #48a44c;" class="material-icons">point_of_sale</i>
+                    {{__('dashboard.cash')}} {{$repository->cash_balance}}
+                  </div>
+                  <div class="stats">
+                   <i style="color: #48a44c" class="material-icons">payment</i>
+                   {{__('dashboard.card')}} {{$repository->card_balance}}
+                 </div>
+                   </div>
+                   <div style="display: flex; justify-content: space-between">
+                 <div class="stats">
+                   <i style="color: #48a44c" class="material-icons">payment</i>
+                   STC {{$repository->stc_balance}}
+                 </div>
+                 
+                   </div>
+                  </div>
+                </div>--}}
+              </div>
+            </div>
              @can('لوحة نظام الاموال للمشتريات')
              <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">

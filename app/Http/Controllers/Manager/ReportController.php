@@ -48,13 +48,14 @@ class ReportController extends Controller
             return back();
         if($request->filter == 'payed'){
         $invoices = $repository->invoices()->where('status','pending')
-        ->whereRaw('total_price','cash_amount+card_amount+stc_amount')->paginate(10);
+        ->whereRaw('total_price','cash_amount+card_amount+stc_amount')->paginate(20);
         }
         elseif($request->filter == 'notpayed'){
             $invoices = $repository->invoices()->where('status','pending')
-            ->whereRaw('total_price > cash_amount+card_amount+stc_amount')->paginate(10);
+            ->whereRaw('total_price > cash_amount+card_amount+stc_amount')->paginate(20);
         }
-        return view('manager.Sales.show_pending_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
+       // return view('manager.Sales.show_pending_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
+       return view('manager.Reports.show_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
     }
 
     public function showTodayInvoices($id){
@@ -87,8 +88,9 @@ class ReportController extends Controller
         ->where(function($query) use ($request) {
             $query->where('phone','like', '%' . $request->search . '%')
                   ->orWhere('code', $request->search); })
-        ->paginate(5);
-        return view('manager.Sales.show_pending_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
+        ->paginate(20);
+        //return view('manager.Sales.show_pending_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
+        return view('manager.Reports.show_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
     }
 
     public function dailyReports($id){

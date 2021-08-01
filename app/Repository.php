@@ -244,6 +244,17 @@ class Repository extends Model
         return $today_sales;
     }
 
+    public function monthSales(){
+       $month_sales = 0;
+       $invoices = $this->invoices()->where('status','!=','retrieved')->where('monthly_report_check',false)
+       ->whereYear('created_at',now()->year)->whereMonth('created_at',now()->month)
+       ->get();
+        foreach($invoices as $invoice){
+            $month_sales += $invoice->total_price;
+        }
+        return $month_sales;
+    }
+
     public function todayPendingMoney(){  // الأموال المعلقة
         $invoices = $this->invoices()->where('status','pending')->where('daily_report_check',false)->get();
         $total_price = 0 ;
@@ -259,6 +270,17 @@ class Repository extends Model
             $total_price = $total_price + ($invoice->total_price - ($invoice->cash_amount + $invoice->card_amount + $invoice->stc_amount)) ;
         }
         return $total_price;
+    }
+
+    public function thisMonthPendingMoney(){
+        $money = 0;
+        $invoices = $this->invoices()->where('status','!=','retrieved')->where('status','pending')->where('monthly_report_check',false)
+        ->whereYear('created_at',now()->year)->whereMonth('created_at',now()->month)
+        ->get();
+        foreach($invoices as $invoice){
+            $money = $money + ($invoice->total_price - ($invoice->cash_amount + $invoice->card_amount + $invoice->stc_amount)) ;
+        }
+        return $money;
     }
 
     public function todayPurchases(){

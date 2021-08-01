@@ -973,8 +973,9 @@ class SellController extends Controller
 
     public function showPending($id){
         $repository = Repository::find($id);
-        $invoices = $repository->invoices()->where('status','pending')->orderBy('created_at','DESC')->paginate(5);
-        return view('manager.Sales.show_pending_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
+        $invoices = $repository->invoices()->where('status','pending')->orderBy('created_at','DESC')->paginate(20);
+        //return view('manager.Sales.show_pending_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
+        return view('manager.Reports.show_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
     }
 
     public function completeInvoiceForm($id){
@@ -1302,7 +1303,7 @@ class SellController extends Controller
                             'created_at' => $request->date,
                             'transform' => 'p-d',
                             'daily_report_check' => false,
-                            'monthly_report_check' => false,
+                            //'monthly_report_check' => false,
                         ]
                         );
                         $employee = $invoice->user;
@@ -1449,7 +1450,7 @@ class SellController extends Controller
             'created_at' => now(),
             'transform' => $transform,
             'daily_report_check' => false,
-            'monthly_report_check' => false,
+            //'monthly_report_check' => false,
         ]);
         return redirect(route('sales.index'))->with('retrievedSuccess','تم استرجاع الفاتورة بنجاح');
     } 

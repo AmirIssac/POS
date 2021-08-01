@@ -131,7 +131,12 @@ class SettingsController extends Controller
         ]);*/
         $user = User::where('email',$request->email)->first();
         if($user && $user->hasRole('عامل-مخزن')){   // this worker exist in another repo
+            // check if this user exist in the same repo to not added twice at same repo
+            $worker = User::whereHas("repositories", function($q) use ($repository){ $q->where("repositories.id",$repository->id ); })->where('email',$request->email)->first();
+            if(!$worker)
             $repository->users()->attach($user->id); //pivot table insert
+            else
+            return redirect()->route('manager.settings.index')->with('fail','هذا الموظف موجود في هذا الفرع');
         }
         else{
        $user = User::create(
