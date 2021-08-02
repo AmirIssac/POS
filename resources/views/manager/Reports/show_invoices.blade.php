@@ -130,6 +130,11 @@
                   <th>
                     {{__('reports.total_price')}}  
                   </th>
+                  @if(request()->is('show/pending/invoices/*') || request()->is('en/show/pending/invoices/*') || request()->is('filter/pending/invoices/*') || request()->is('en/filter/pending/invoices/*') || request()->is('search/pending/*') || request()->is('en/search/pending/*'))
+                  <th>
+                    {{__('sales.remaining_price_complete')}}
+                  </th>
+                  @endif
                   <th>
                     {{__('reports.actions')}}
                 </th>
@@ -162,7 +167,11 @@
                         <td>
                             {{$invoice->total_price}}
                         </td>
-                        
+                        @if(request()->is('show/pending/invoices/*') || request()->is('en/show/pending/invoices/*') || request()->is('filter/pending/invoices/*') || request()->is('en/filter/pending/invoices/*') || request()->is('search/pending/*') || request()->is('en/search/pending/*'))
+                        <td>
+                          {{$invoice->total_price - ($invoice->cash_amount + $invoice->card_amount + $invoice->stc_amount)}}
+                        </td>
+                        @endif
                       <td>
                      <a style="color: #03a4ec" href="{{route('invoice.details',$invoice->id)}}"> <i id="{{$i}}" class="material-icons eye">
                             visibility

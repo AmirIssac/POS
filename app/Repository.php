@@ -59,6 +59,11 @@ class Repository extends Model
         return $this->hasMany(PurchaseProduct::class);
     }
 
+    public function statistic()
+    {
+        return $this->hasOne(Statistics::class);
+    }
+
     /*public function types(){
         return $this->hasMany(Type::class);
     }*/
@@ -116,7 +121,7 @@ class Repository extends Model
 
     public function monthlyInvoices(){
         return $this->hasMany(Invoice::class)->whereYear('created_at', '=', now()->year)
-        ->whereMonth('created_at','=',now()->month);
+        ->whereMonth('created_at','=',now()->month)->where('monthly_report_check','false');
     }
 
     public function dailyInvoicesCount(){
@@ -270,6 +275,15 @@ class Repository extends Model
             $total_price = $total_price + ($invoice->total_price - ($invoice->cash_amount + $invoice->card_amount + $invoice->stc_amount)) ;
         }
         return $total_price;
+    }
+
+    public function thisMonthGainedMoney(){
+        $statistic = $this->statistic;
+        if($statistic){
+        $money = $statistic->m_in_cash_balance + $statistic->m_in_card_balance + $statistic->m_in_stc_balance;
+        return $money;
+        }
+        return 'null';
     }
 
     public function thisMonthPendingMoney(){

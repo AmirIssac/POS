@@ -93,7 +93,7 @@ class ReportController extends Controller
         return view('manager.Reports.show_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
     }
 
-    public function dailyReports($id){
+   /* public function dailyReports($id){
         $repository = Repository::find($id);
         $reports = $repository->dailyReportsDesc()->paginate(1);
         return view('manager.Reports.daily_reports')->with('repository',$repository)->with('reports',$reports);
@@ -119,6 +119,46 @@ class ReportController extends Controller
             'stc_balance' => $stc_amount,
         ]);
 
+        foreach($invoices as $invoice){
+            $monthly_report->invoices()->attach($invoice->id);
+            $invoice->update(
+                [
+                    'monthly_report_check' => true,
+                ]
+                );
+        }
+        return redirect()->route('view.monthly.reports',$repository->id)->with('success','تم انشاء تقرير شهري بنجاح'); 
+    } */
+
+    public function makeMonthlyReport($id){
+        $repository = Repository::find($id);
+        $user = User::find(Auth::user()->id);   // worker
+        $invoices = $repository->invoices()->where('monthly_report_check',false)->whereYear('created_at','=', now()->year)
+        ->whereMonth('created_at','=',now()->month)->get();  // the invoices that will taken in monthly report
+        /*$cash_amount = $repository->invoices()->where('status','!=','retrieved')->where('monthly_report_check',false)->whereYear('created_at','=', now()->year)
+        ->whereMonth('created_at','=',now()->month)->sum('cash_amount');
+        $card_amount = $repository->invoices()->where('status','!=','retrieved')->where('monthly_report_check',false)->whereYear('created_at','=', now()->year)
+        ->whereMonth('created_at','=',now()->month)->sum('card_amount');
+        $stc_amount = $repository->invoices()->where('status','!=','retrieved')->where('monthly_report_check',false)->whereYear('created_at','=', now()->year)
+        ->whereMonth('created_at','=',now()->month)->sum('stc_amount');*/
+        $cash_amount = $repository->statistic->m_in_cash_balance;
+        $card_amount = $repository->statistic->m_in_card_balance;
+        $stc_amount = $repository->statistic->m_in_stc_balance;
+        $monthly_report = MonthlyReport::create([
+            'repository_id' => $repository->id,
+            'user_id' => $user->id,
+            'cash_balance' => $cash_amount,
+            'card_balance' => $card_amount,
+            'stc_balance' => $stc_amount,
+        ]);
+
+        // make statistic for month is Zero because we start new month
+        $statistic = $repository->statistic;
+        $statistic->update([
+            'm_in_cash_balance' => 0,
+            'm_in_card_balance' => 0,
+            'm_in_stc_balance' => 0,
+        ]);
         foreach($invoices as $invoice){
             $monthly_report->invoices()->attach($invoice->id);
             $invoice->update(

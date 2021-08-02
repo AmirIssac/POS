@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repository;
 use App\RepositoryCategory;
+use App\Statistics;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -44,6 +45,10 @@ class RepositoryController extends Controller
             'name' => $request->repositoryName,
             'address' => $request->address,
             'category_id'=>$request->category_id,
+        ]);
+        // open statistic record for this repository  (one-to-one relatioship)
+        Statistics::create([
+            'repository_id' => $repository->id,
         ]);
         if(!$request->exist){      // owner not exist before
        $user = User::create([
