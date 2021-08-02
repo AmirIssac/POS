@@ -93,13 +93,13 @@ class ReportController extends Controller
         return view('manager.Reports.show_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
     }
 
-   /* public function dailyReports($id){
+    public function dailyReports($id){
         $repository = Repository::find($id);
         $reports = $repository->dailyReportsDesc()->paginate(1);
         return view('manager.Reports.daily_reports')->with('repository',$repository)->with('reports',$reports);
     }
 
-    public function makeMonthlyReport($id){
+    /*public function makeMonthlyReport($id){
         $repository = Repository::find($id);
         $user = User::find(Auth::user()->id);   // worker
         $invoices = $repository->invoices()->where('monthly_report_check',false)->whereYear('created_at','=', now()->year)
