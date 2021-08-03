@@ -124,6 +124,8 @@ Route::group(['middleware'=>['permission:التقارير']], function () {
     // monthly reports
 Route::post('/make/monthly/report/{repository_id}','Manager\ReportController@makeMonthlyReport')->name('make.monthly.report');
 Route::get('/view/monthly/reports/{repository_id}','Manager\ReportController@viewMonthlyReports')->name('view.monthly.reports');
+Route::get('/view/monthly/report/details/{report_id}','Manager\ReportController@monthlyReportDetails')->name('view.monthly.report.details');
+Route::get('/view/current/monthly/report/details/{repository_id}','Manager\ReportController@reportDetailsCurrentMonth')->name('view.current.monthly.report.details');
 });
 
 

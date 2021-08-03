@@ -34,5 +34,8 @@ return [
     'card_income' => 'الوارد الى البطاقة',
     'stc_income' => 'الوارد الى stc-pay',
     'invoice' => 'فاتورة',
+    'sales' => 'المبيعات',
+    'current_month' => 'الشهر الحالي',
+    'monthly_reports_for_sales' => 'التقارير الشهرية للمبيعات',
 ];
 ?>

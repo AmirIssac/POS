@@ -1,197 +1,133 @@
-@extends('layouts.withScrollBar')
+@extends('layouts.main')
 @section('links')
 <style>
   table span{
     width: 50px;
   }
-   /* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type=number] {
-  -moz-appearance: textfield;
-}
-.price{
-  font-size: 16px;
-}
-.button{
-  float: left;
-}
-@media print{
- /* body, html, #myform { 
-          height: 100%;
-      }*/
-      
-  *{
-    /*margin: 0;*/
-    font-size: 32px;
+  #warning{
+    font-size: 38px;
+  }
+  #code{
+    float: left;
+  }
+  #myTable th{
+   color: black;
+   font-weight: bold;
+  }
+  #myTable td{
+   color: black;
+   font-weight: bold;
+  }
+  .displaynone{
+    display: none;
+  }
+  .eye:hover{
+    cursor: pointer;
+  }
+  .active-a:hover{
+    cursor: pointer;
+  }
+  .disabled-a:hover{
+    cursor: default;
+  }
+  #current-month-tr{
+    background-color: #93cb52;
+    color: #2d3e4f;
     font-weight: bold;
   }
-  .card-title{
-    font-weight: bold;
-    color: black !important;
-  }
-  #pagination,.button{
-    visibility: hidden;
-  }
-}
 </style>
 @endsection
 @section('body')
 <div class="main-panel">
-   
+  
 <div class="content">
-  @if (session('success'))
-        <div class="alert alert-success alert-block">
-            <button type="button" class="close" data-dismiss="alert">×</button>	
-                <strong>{{ session('success') }}</strong>
-        </div>
-        @endif
+  
     <div class="container-fluid">
-        @foreach($reports as $report)
       <div class="row">
         <div class="col-md-12">
+          
           <div class="card">
-            <div class="card-header card-header-primary">
-              <h4 class="card-title">   {{__('reports.monthly_report')}} {{$report->created_at->format('m/Y')}}<span class="button"><button onclick="window.print();" class="btn btn-danger"> {{__('buttons.print')}} </button> </span>
-              </h4>
-              <h4>
-                  {{$report->invoices()->count()}}  {{__('reports.invoice')}}
-              </h4>
+            
+              <div class="card-header card-header-primary">
+                
+              <h4 class="card-title"> </h4>
+              <h4> {{__('reports.monthly_reports')}} <span class="badge badge-success"></span></h4>
+            
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table">
-                  
-                  <thead class=" text-primary">
+                <table class="table">                    
                     <th>
-                      {{__('reports.cash_income')}}   
-                    </th>
-                    <th>
-                      {{__('reports.card_income')}}    
-                     </th>
-                     <th>
-                      {{__('reports.stc_income')}}    
-                      </th>
-                      <th>
-                        {{__('purchases.employee')}}
-                      </th>
-                  </thead>
-                      <tbody>
-                      <tr>
-                        <td>
-                          {{$report->cash_balance}}
-                        </td>
-                        <td>
-                          {{$report->card_balance}}
-                        </td>
-                        <td>
-                          {{$report->stc_balance}}
-                        </td>
-                        <td>
-                          {{$report->user->name}}
-                        </td>
-                      </tr>
-                  </tbody>
-                </table>
-              <div class="table-responsive">
-                <table class="table">
-                  
-                  <thead class=" text-primary">
-                    <th>
-                      {{__('sales.invoice_code')}}   
-                    </th>
-                    <th>
-                      {{__('sales.invoice_status')}}    
-                     </th>
-                     <th>
-                      {{__('sales.sales_employee')}}    
-                      </th>
-                     <th>
-                      {{__('sales.cash')}}    
-                      </th>
-                      <th>
-                        {{__('sales.card')}}    
-                        </th>
-                        <th>
-                          STC-pay    
-                          </th>
-                     <th>
-                      {{__('sales.total_price')}}   
-                      </th>
+                      {{__('reports.date')}}    
+                  </th>
+                  <th>
+                    {{__('reports.actions')}}
+                </th>
                   </thead>
                   <tbody>
-                    <?php $total_sum_invoices = 0 ?>
-                      @foreach($report->invoices as $invoice)
+                    <tr id="current-month-tr"> {{-- current month ((not making report in DB yet)) --}}
+                      <td>
+                        {{__('reports.current_month')}}
+                      </td>
+                      <td>
+                        <a style="color: #03a4ec" href="{{route('view.current.monthly.report.details',$repository->id)}}"> <i class="material-icons eye">
+                          visibility
+                        </i> </a>
+                        {{--
+                        |
+                        <a style="color: #93cb52" href=""> <i class="material-icons eye">
+                          print
+                        </i> </a> --}}
+                      </td>
+                    </tr>
+                    @foreach($reports as $report)
                     <tr>
-                      <td>
-                          {{$invoice->code}}
-                      </td>
-
-                        @if($invoice->status=='delivered')
                         <td>
-                          {{__('sales.del_badge')}} 
+                            {{$report->created_at->format('m/y')}}
                         </td>
-                        @elseif($invoice->status=="pending")
-                        <td>
-                          {{__('sales.hang_badge')}}
-                        </td>
-                        @else
-                        <td>
-                          {{__('sales.retrieved_badge')}}
-                        </td>
-                        @endif
+                        
                       <td>
-                        {{$invoice->user->name}}
-                      </td>
-                      <td>
-                        {{$invoice->cash_amount}}
-                      </td>
-                      <td>
-                        {{$invoice->card_amount}}
-                      </td>
-                      <td>
-                        {{$invoice->stc_amount}}
-                      </td>
-                      <td>
-                        {{$invoice->total_price}}
+                     <a style="color: #03a4ec" href="{{route('view.monthly.report.details',$report->id)}}"> <i class="material-icons eye">
+                            visibility
+                          </i> </a>
+                          {{--
+                          |
+                          <a style="color: #93cb52" href=""> <i class="material-icons eye">
+                            print
+                          </i> </a> --}}
+                          
                       </td>
                     </tr>
-                    <?php $total_sum_invoices += $invoice->total_price ?>
                     @endforeach
-                      <tr>
-                      <td class="button">
-                        <button onclick="window.print();" class="btn btn-danger"> {{__('buttons.print')}} </button>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                    </tr>
+                    
                   </tbody>
                 </table>
-                <div id="pagination">
-                {{ $reports->links() }}
-                </div>
+              </div>
               </div>
             </div>
           </div>
         </div>
-        
+        {{ $reports->links() }}
+
       </div>
-      @endforeach
+     
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+  $('.eye').on('click',function(){
+    var id = $(this).attr('id');
+    if($('#th'+id).hasClass('displaynone')){  // show
+    $('#th'+id).removeClass('displaynone');
+    $('#tb'+id).removeClass('displaynone');
+    }
+    else
+    {  // hide
+      $('#th'+id).addClass('displaynone');
+      $('#tb'+id).addClass('displaynone');
+    }
+  });
+</script>
 @endsection

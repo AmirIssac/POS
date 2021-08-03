@@ -74,7 +74,7 @@
                    <div class="card-icon">
                    <i class="material-icons">description</i>
                    </div>
-                   <p class="card-category">{{__('reports.monthly_reports')}}</p>
+                   <p class="card-category">{{__('reports.monthly_reports_for_sales')}}</p>
                    <h6 class="card-title">{{__('reports.view')}}</h6>
                  </div>
                  <div class="card-footer">

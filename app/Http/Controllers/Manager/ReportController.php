@@ -170,9 +170,28 @@ class ReportController extends Controller
         return redirect()->route('view.monthly.reports',$repository->id)->with('success','تم انشاء تقرير شهري بنجاح'); 
     }
 
-    public function viewMonthlyReports($id){
+   /* public function viewMonthlyReports($id){
         $repository = Repository::find($id);
         $reports = $repository->monthlyReports()->orderBy('created_at','DESC')->paginate(1);
         return view('manager.Reports.monthly_reports')->with(['repository'=>$repository,'reports'=>$reports]);
+    } */
+
+    public function viewMonthlyReports($id){
+        $repository = Repository::find($id);
+        $reports = $repository->monthlyReports()->orderBy('created_at','DESC')->paginate(30);
+        return view('manager.Reports.monthly_reports')->with(['repository'=>$repository,'reports'=>$reports]);
+    }
+
+    public function monthlyReportDetails($id){
+        $report = MonthlyReport::find($id);
+        return view('manager.Reports.monthly_report_details')->with(['report' => $report]);
+    }
+
+    public function reportDetailsCurrentMonth($id){   // for current dynamic month (( not created report yet))
+        $repository = Repository::find($id);
+        $invoices = $repository->invoices()->whereYear('created_at', '=', now()->year)
+        ->whereMonth('created_at','=',now()->month)->where('monthly_report_check',false)->get();
+        $statistics = $repository->statistic;
+        return view('manager.Reports.current_month_details')->with(['invoices'=>$invoices,'statistics'=>$statistics]);
     }
 }

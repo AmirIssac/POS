@@ -34,5 +34,8 @@ return [
     'card_income' => 'Income to card',
     'stc_income' => 'Income to stc-pay',
     'invoice' => 'Invoice',
+    'sales' => 'Sales',
+    'current_month' => 'Current month',
+    'monthly_reports_for_sales' => 'Monthly reports for Sales',
 ];
 ?>

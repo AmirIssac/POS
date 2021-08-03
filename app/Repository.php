@@ -121,7 +121,7 @@ class Repository extends Model
 
     public function monthlyInvoices(){
         return $this->hasMany(Invoice::class)->whereYear('created_at', '=', now()->year)
-        ->whereMonth('created_at','=',now()->month)->where('monthly_report_check','false');
+        ->whereMonth('created_at','=',now()->month)->where('monthly_report_check',false);
     }
 
     public function dailyInvoicesCount(){
