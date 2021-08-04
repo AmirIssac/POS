@@ -126,6 +126,8 @@ Route::post('/make/monthly/report/{repository_id}','Manager\ReportController@mak
 Route::get('/view/monthly/reports/{repository_id}','Manager\ReportController@viewMonthlyReports')->name('view.monthly.reports');
 Route::get('/view/monthly/report/details/{report_id}','Manager\ReportController@monthlyReportDetails')->name('view.monthly.report.details');
 Route::get('/view/current/monthly/report/details/{repository_id}','Manager\ReportController@reportDetailsCurrentMonth')->name('view.current.monthly.report.details');
+Route::get('/print/current/monthly/report/details/{repository_id}','Manager\ReportController@reportDetailsCurrentMonth')->name('print.current.monthly.report.details');
+Route::get('/print/monthly/report/details/{report_id}','Manager\ReportController@monthlyReportDetails')->name('print.monthly.report.details');
 });
 
 

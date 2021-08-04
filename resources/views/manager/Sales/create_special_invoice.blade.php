@@ -1153,6 +1153,10 @@ if($('#cash').prop('checked') == false && $('#card').prop('checked') == false &&
   $('#cashVal').val(null);
   $('#cardVal').val(null);
   $('#stcVal').val(null);
+  //$('#submit').prop('disabled', true);
+  if($('.delivered:checked').length != $('.delivered').length && $('#name0').val()!='')   // we put name0 to prevent confirm empty invoice
+  $('#submit').prop('disabled', false);
+  else
   $('#submit').prop('disabled', true);
 }
 });
@@ -1538,6 +1542,10 @@ window.onload=function(){
        
      }
      if($('#cardVal').val()=="" && $('#cashVal').val()=="" && $('#stcVal').val()==""){
+       //$('#submit').prop('disabled', true);
+       if($('.delivered:checked').length != $('.delivered').length && $('#name0').val()!='')
+       $('#submit').prop('disabled', false);
+       else
        $('#submit').prop('disabled', true);
      }
    });

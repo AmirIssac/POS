@@ -61,6 +61,9 @@
                       {{__('reports.date')}}    
                   </th>
                   <th>
+                    {{__('reports.sales')}}    
+                </th>
+                  <th>
                     {{__('reports.actions')}}
                 </th>
                   </thead>
@@ -70,14 +73,23 @@
                         {{__('reports.current_month')}}
                       </td>
                       <td>
-                        <a style="color: #03a4ec" href="{{route('view.current.monthly.report.details',$repository->id)}}"> <i class="material-icons eye">
+                        <?php $total_sum_invoices = 0 ?>
+                            @foreach($invoices as $invoice)
+                            @if($invoice->status != 'retrieved')
+                            <?php $total_sum_invoices += $invoice->total_price ?>
+                            @endif
+                            @endforeach
+                            {{$total_sum_invoices}}
+                      </td>
+                      <td>
+                        <a style="color: #9229ac" href="{{route('view.current.monthly.report.details',$repository->id)}}"> <i class="material-icons eye">
                           visibility
                         </i> </a>
-                        {{--
+                        
                         |
-                        <a style="color: #93cb52" href=""> <i class="material-icons eye">
+                        <a style="color: #9229ac" href="{{route('print.current.monthly.report.details',$repository->id)}}"> <i class="material-icons eye">
                           print
-                        </i> </a> --}}
+                        </i> </a>
                       </td>
                     </tr>
                     @foreach($reports as $report)
@@ -85,16 +97,24 @@
                         <td>
                             {{$report->created_at->format('m/y')}}
                         </td>
-                        
+                        <td>
+                            <?php $total_sum_invoices = 0 ?>
+                            @foreach($report->invoices as $invoice)
+                            @if($invoice->status != 'retrieved')
+                            <?php $total_sum_invoices += $invoice->total_price ?>
+                            @endif
+                            @endforeach
+                            {{$total_sum_invoices}}
+                        </td>
                       <td>
                      <a style="color: #03a4ec" href="{{route('view.monthly.report.details',$report->id)}}"> <i class="material-icons eye">
                             visibility
                           </i> </a>
-                          {{--
+                          
                           |
-                          <a style="color: #93cb52" href=""> <i class="material-icons eye">
+                          <a style="color: #93cb52" href="{{route('print.monthly.report.details',$report->id)}}"> <i class="material-icons eye">
                             print
-                          </i> </a> --}}
+                          </i> </a>
                           
                       </td>
                     </tr>

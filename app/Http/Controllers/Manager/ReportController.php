@@ -179,7 +179,10 @@ class ReportController extends Controller
     public function viewMonthlyReports($id){
         $repository = Repository::find($id);
         $reports = $repository->monthlyReports()->orderBy('created_at','DESC')->paginate(30);
-        return view('manager.Reports.monthly_reports')->with(['repository'=>$repository,'reports'=>$reports]);
+        // retrieve current month invoices to display sales for current month in main page table
+        $invoices = $repository->invoices()->whereYear('created_at', '=', now()->year)
+        ->whereMonth('created_at','=',now()->month)->where('monthly_report_check',false)->get();
+        return view('manager.Reports.monthly_reports')->with(['repository'=>$repository,'reports'=>$reports,'invoices' => $invoices]);
     }
 
     public function monthlyReportDetails($id){

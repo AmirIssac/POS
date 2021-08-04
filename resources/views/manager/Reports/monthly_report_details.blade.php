@@ -38,6 +38,9 @@ input[type=number] {
   #pagination,.button{
     visibility: hidden;
   }
+  #back{
+    display: none;
+  }
 }
 </style>
 @endsection
@@ -64,6 +67,9 @@ input[type=number] {
             </div>
             <div class="card-body">
               <div class="table-responsive">
+                @if(request()->is('print/monthly/report/details/*') || request()->is('en/print/monthly/report/details/*'))
+                <button id="back" onclick="history.back()" class="btn btn-warning">رجوع</button>
+                @endif
                 <table class="table">
                   
                   <thead class=" text-primary">
@@ -202,4 +208,13 @@ input[type=number] {
       </div>
     </div>
 </div>
+@if(request()->is('print/monthly/report/details/*') || request()->is('en/print/monthly/report/details/*'))
+@section('scripts')
+<script>
+  window.onload = (event) => {
+    window.print();
+  };
+  </script>
+@endsection
+@endif
 @endsection

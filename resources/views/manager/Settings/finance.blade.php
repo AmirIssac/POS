@@ -48,7 +48,7 @@ input[type=number] {
                   <tbody>
                     <tr>
                       <td>
-                          <input type="number" name="min" min="1" max="100" value="{{$repository->min_payment}}" class="form-control" placeholder="  اكتب هنا النسبة المئوية مثال 30 تعني 30% " required>
+                          <input type="number" name="min" min="0" max="100" value="{{$repository->min_payment}}" class="form-control" placeholder="  اكتب هنا النسبة المئوية مثال 30 تعني 30% " required>
                       </td>
                       <td>
                           <button type="submit" class="btn btn-success"> {{__('buttons.confirm')}} </button>
