@@ -118,6 +118,10 @@ Route::group(['middleware'=>['permission:التقارير']], function () {
         Route::get('/search/invoices/code/{repository_id}','Manager\ReportController@searchInvoicesByCode')->name('search.invoices.code');
         Route::get('/daily/reports/{repository_id}','Manager\ReportController@dailyReports')->name('daily.reports.index');
     });
+    Route::get('view/daily/report/details/{report_id}','Manager\ReportController@dailyReportDetails')->name('view.daily.report.details');
+    Route::get('/view/current/daily/report/details/{repository_id}','Manager\ReportController@reportDetailsCurrentDay')->name('view.current.daily.report.details');
+    Route::get('/print/current/daily/report/details/{repository_id}','Manager\ReportController@reportDetailsCurrentDay')->name('print.current.daily.report.details');
+    Route::get('print/daily/report/details/{report_id}','Manager\ReportController@dailyReportDetails')->name('print.daily.report.details');
     Route::get('/invoice/details/{invoice_id}','Manager\ReportController@invoiceDetails')->name('invoice.details');
     Route::get('/print/invoice/{invoice_id}','Manager\ReportController@printInvoice')->name('print.invoice');
     Route::get('/filter/pending/invoices/{repository_id}','Manager\ReportController@filterPending')->name('filter.pending.invoices');

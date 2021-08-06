@@ -21,6 +21,13 @@ input[type=number] {
 .button{
   float: left;
 }
+.retrieved{
+  background-color: #adadad;
+}
+.retrieved-td{
+  color: #f14000;
+  font-weight: bold
+}
 @media print{
  /* body, html, #myform { 
           height: 100%;
@@ -137,7 +144,11 @@ input[type=number] {
                   </thead>
                   <tbody>
                       @foreach($invoices as $invoice)
-                    <tr>
+                      @if($invoice->status == 'retrieved')
+                      <tr class="retrieved">
+                      @else
+                      <tr>
+                      @endif
                       <td>
                           {{$invoice->code}}
                       </td>
@@ -167,9 +178,15 @@ input[type=number] {
                       <td>
                         {{$invoice->stc_amount}}
                       </td>
+                      @if($invoice->status == 'retrieved')
+                      <td class="retrieved-td">
+                        {{$invoice->total_price}}-
+                      </td>
+                      @else
                       <td>
                         {{$invoice->total_price}}
                       </td>
+                      @endif
                     </tr>
                     @endforeach
                       <tr>

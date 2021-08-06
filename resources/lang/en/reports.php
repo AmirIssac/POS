@@ -37,5 +37,7 @@ return [
     'sales' => 'Sales',
     'current_month' => 'Current month',
     'monthly_reports_for_sales' => 'Monthly reports for Sales',
+    'current_day' => 'Current day',
+    'previous_inv_edited_today' => 'Previous invoices delivered/funded in this report',
 ];
 ?>

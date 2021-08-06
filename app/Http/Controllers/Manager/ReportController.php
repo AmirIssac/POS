@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\DailyReport;
 use App\Http\Controllers\Controller;
 use App\Invoice;
 use App\MonthlyReport;
@@ -93,12 +94,27 @@ class ReportController extends Controller
         return view('manager.Reports.show_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
     }
 
-    public function dailyReports($id){
+    /*public function dailyReports($id){
         $repository = Repository::find($id);
         $reports = $repository->dailyReportsDesc()->paginate(1);
         return view('manager.Reports.daily_reports')->with('repository',$repository)->with('reports',$reports);
+    }*/
+    public function dailyReports($id){
+        $repository = Repository::find($id);
+        $reports = $repository->dailyReportsDesc()->paginate(30);
+        // retrieve current day invoices to display sales for current day in main page table
+        $invoices = $repository->invoices()->where('daily_report_check',false)->doesntHave('dailyReports')->get();
+        return view('manager.Reports.daily_reports')->with(['repository'=>$repository,'reports'=>$reports,'invoices'=>$invoices]);
     }
-
+    public function dailyReportDetails($id){
+        $report = DailyReport::find($id);
+        return view('manager.Reports.daily_report_details')->with(['report' => $report]);
+    }
+    public function reportDetailsCurrentDay($id){   // for current dynamic month (( not created report yet))
+        $repository = Repository::find($id);
+        $invoices = $repository->invoices()->where('daily_report_check',false)->get();
+        return view('manager.Reports.current_day_details')->with(['invoices'=>$invoices]);
+    }
     /*public function makeMonthlyReport($id){
         $repository = Repository::find($id);
         $user = User::find(Auth::user()->id);   // worker
