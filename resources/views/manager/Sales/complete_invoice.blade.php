@@ -177,14 +177,14 @@ input[type=number] {
         <h4> &nbsp; {{__('sales.cash')}}</h4>
         <input style="margin: 7px 10px 0 0" type="checkbox" name="cash" id="cash" checked>
           </div>
-        <input style="margin-right: 0px" type="number" min="0" step="0.1" name="cashVal" id="cashVal" value="{{($invoice->total_price)-($invoice->cash_amount+$invoice->card_amount+$invoice->stc_amount)}}" class="form-control visible">
+        <input style="margin-right: 0px" type="number" min="0" step="0.01" name="cashVal" id="cashVal" value="{{($invoice->total_price)-($invoice->cash_amount+$invoice->card_amount+$invoice->stc_amount)}}" class="form-control visible">
         </div>
         <div style="display: flex;flex-direction: column;">
           <div style="display: flex;">
         <h4> &nbsp; {{__('sales.card')}}</h4>
         <input style="margin: 7px 10px 0 0" type="checkbox" id="card" name="card">
           </div>
-        <input style="margin-right: 0px" type="number" min="0.1" step="0.1" name="cardVal" id="cardVal" value="" class="form-control hidden">
+        <input style="margin-right: 0px" type="number" min="0.1" step="0.01" name="cardVal" id="cardVal" value="" class="form-control hidden">
         </div>
         <div style="display: flex;flex-direction: column;">
           <div style="display: flex;">

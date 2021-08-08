@@ -63,9 +63,15 @@
                   <th>
                     {{__('reports.sales')}}    
                 </th>
-                  <th>
-                    {{__('reports.actions')}}
-                </th>
+                <th>
+                  {{__('reports.actions')}}
+              </th>
+                <th>
+                  {{__('purchases.purchases')}}    
+              </th>
+              <th>
+                {{__('reports.actions')}}
+            </th>
                   </thead>
                   <tbody>
                     <tr id="current-month-tr"> {{-- current month ((not making report in DB yet)) --}}
@@ -91,6 +97,25 @@
                           print
                         </i> </a>
                       </td>
+                      <td>
+                        <?php $purchasesVal = 0 ?>
+                          @foreach($purchases as $purchase)
+                          @if($purchase->status == 'done')
+                          <?php $purchasesVal += $purchase->total_price ?>
+                          @endif
+                          @endforeach
+                          {{$purchasesVal}}
+                      </td>
+                      <td>
+                        <a style="color: #9229ac" href="{{route('view.current.daily.purchase.report.details',$repository->id)}}"> <i class="material-icons eye">
+                          visibility
+                        </i> </a>
+                        
+                        {{--|
+                        <a style="color: #9229ac" href="{{route('print.current.daily.report.details',$repository->id)}}"> <i class="material-icons eye">
+                          print
+                        </i> </a> --}}
+                      </td>
                     </tr>
                     @foreach($reports as $report)
                     <tr>
@@ -110,17 +135,44 @@
                             @endforeach
                             {{$total_sum_invoices}}
                         </td>
-                      <td>
-                     <a style="color: #03a4ec" href="{{route('view.daily.report.details',$report->id)}}"> <i class="material-icons eye">
-                            visibility
-                          </i> </a>
-                          
-                          |
-                          <a style="color: #93cb52" href="{{route('print.daily.report.details',$report->id)}}"> <i class="material-icons eye">
-                            print
-                          </i> </a>
-                          
-                      </td>
+                        <td>
+                          <a style="color: #03a4ec" href="{{route('view.daily.report.details',$report->id)}}"> <i class="material-icons eye">
+                                 visibility
+                               </i> </a>
+                               
+                               |
+                               <a style="color: #93cb52" href="{{route('print.daily.report.details',$report->id)}}"> <i class="material-icons eye">
+                                 print
+                               </i> </a>
+                               
+                           </td>
+                        <td>
+                          <?php $purchasesVal = 0 ?>
+                            @foreach($report->purchases as $purchase)
+                            @if($purchase->status == 'done')
+                            @if($purchase->dailyReports()->count()==1)
+                            <?php $purchasesVal += $purchase->total_price; ?>
+                            @elseif($purchase->dailyReports()->count()>1)
+                            <?php $rep = $purchase->dailyReports->first(); ?>
+                            @if($report->id == $rep->id)
+                            <?php $purchasesVal += $purchase->total_price; ?>
+                            @endif
+                            @endif
+                            @endif
+                            @endforeach
+                            {{$purchasesVal}}
+                        </td>
+                        <td>
+                          <a style="color: #03a4ec" href="{{route('view.daily.purchase.report.details',$report->id)}}"> <i class="material-icons eye">
+                                 visibility
+                               </i> </a>
+                               
+                               {{--|
+                               <a style="color: #93cb52" href="{{route('print.daily.report.details',$report->id)}}"> <i class="material-icons eye">
+                                 print
+                               </i> </a>--}}
+                               
+                           </td>
                     </tr>
                     @endforeach
                     

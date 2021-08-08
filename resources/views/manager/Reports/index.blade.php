@@ -50,7 +50,7 @@
              <div class="col-lg-3 col-md-6 col-sm-6">
               <a href="{{route('daily.reports.index',$repository->id)}}">
                <div class="card card-stats">
-                 <div class="card-header card-header-primary card-header-icon">
+                 <div class="card-header card-header-info card-header-icon">
                    <div class="card-icon">
                    <i class="material-icons">auto_stories</i>
                    </div>
@@ -66,11 +66,12 @@
               </a>
              </div>
              @endcan
+            
              @can('عرض التقارير اليومية')
              <div class="col-lg-3 col-md-6 col-sm-6">
               <a href="{{route('view.monthly.reports',$repository->id)}}">
                <div class="card card-stats">
-                 <div class="card-header card-header-primary card-header-icon">
+                 <div class="card-header card-header-info card-header-icon">
                    <div class="card-icon">
                    <i class="material-icons">description</i>
                    </div>

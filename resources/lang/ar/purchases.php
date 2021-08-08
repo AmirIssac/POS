@@ -42,4 +42,7 @@ return [
     'done' => 'تمت',
     'sure_you_want_to_make_this_proccess' => 'هل أنت متأكد أنك تريد اكمال هذه الاجرائية',
     'confirm_prodcedure' => 'تأكيد الإجرائية',
+    'cash_from_cashier' => 'كاش من الدرج',
+    'payed_from_cashier' => 'المدفوع من الدرج',
+    'payed_from_external_money' => 'المدفوع من ميزانية خارجية',
 ];

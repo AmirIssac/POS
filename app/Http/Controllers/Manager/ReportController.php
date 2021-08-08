@@ -104,16 +104,26 @@ class ReportController extends Controller
         $reports = $repository->dailyReportsDesc()->paginate(30);
         // retrieve current day invoices to display sales for current day in main page table
         $invoices = $repository->invoices()->where('daily_report_check',false)->doesntHave('dailyReports')->get();
-        return view('manager.Reports.daily_reports')->with(['repository'=>$repository,'reports'=>$reports,'invoices'=>$invoices]);
+        $purchases =  $repository->purchases()->where('daily_report_check',false)->doesntHave('dailyReports')->get(); // for current day
+        return view('manager.Reports.daily_reports')->with(['repository'=>$repository,'reports'=>$reports,'invoices'=>$invoices,'purchases'=>$purchases]);
     }
     public function dailyReportDetails($id){
         $report = DailyReport::find($id);
         return view('manager.Reports.daily_report_details')->with(['report' => $report]);
     }
-    public function reportDetailsCurrentDay($id){   // for current dynamic month (( not created report yet))
+    public function dailyPurchaseReportDetails($id){
+        $report = DailyReport::find($id);
+        return view('manager.Reports.daily_purchase_report_details')->with(['report' => $report]);
+    }
+    public function reportDetailsCurrentDay($id){   // for current dynamic day (( not created report yet))
         $repository = Repository::find($id);
         $invoices = $repository->invoices()->where('daily_report_check',false)->get();
         return view('manager.Reports.current_day_details')->with(['invoices'=>$invoices]);
+    }
+    public function reportPurchaseDetailsCurrentDay($id){   // for current dynamic day (( not created report yet))
+        $repository = Repository::find($id);
+        $purchases = $repository->purchases()->where('daily_report_check',false)->get();
+        return view('manager.Reports.current_purchase_day')->with(['purchases'=>$purchases]);
     }
     /*public function makeMonthlyReport($id){
         $repository = Repository::find($id);

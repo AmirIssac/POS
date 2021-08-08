@@ -120,6 +120,8 @@ Route::group(['middleware'=>['permission:التقارير']], function () {
     });
     Route::get('view/daily/report/details/{report_id}','Manager\ReportController@dailyReportDetails')->name('view.daily.report.details');
     Route::get('/view/current/daily/report/details/{repository_id}','Manager\ReportController@reportDetailsCurrentDay')->name('view.current.daily.report.details');
+    Route::get('view/daily/purchase/report/details/{report_id}','Manager\ReportController@dailyPurchaseReportDetails')->name('view.daily.purchase.report.details');
+    Route::get('/view/current/daily/purchase/report/details/{repository_id}','Manager\ReportController@reportPurchaseDetailsCurrentDay')->name('view.current.daily.purchase.report.details');
     Route::get('/print/current/daily/report/details/{repository_id}','Manager\ReportController@reportDetailsCurrentDay')->name('print.current.daily.report.details');
     Route::get('print/daily/report/details/{report_id}','Manager\ReportController@dailyReportDetails')->name('print.daily.report.details');
     Route::get('/invoice/details/{invoice_id}','Manager\ReportController@invoiceDetails')->name('invoice.details');

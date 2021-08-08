@@ -94,6 +94,7 @@ class PurchaseController extends Controller
         ]);
 
         $repository = Repository::find($id);
+        $statistic = $repository->statistic;
         if($request->pay=='later')
             $payment = 'later';
         else // cash has two options
@@ -103,9 +104,16 @@ class PurchaseController extends Controller
                     $repository->update([
                     'balance' => $repository->balance - $request->sum,
                     ]);
+                    $statistic->update([
+                        'd_out_cashier' => $statistic->d_out_cashier + $request->sum,
+                    ]);
                 }
-                else
+                else{
                     $payment = 'external';
+                    $statistic->update([
+                        'd_out_external' => $statistic->d_out_external + $request->sum,
+                    ]);
+                    }
             }
         $purchase = Purchase::create([
             'repository_id' => $repository->id,
@@ -115,6 +123,7 @@ class PurchaseController extends Controller
             'supplier_invoice_num' => $request->supplier_invoice_num,
             'total_price' => $request->sum,
             'payment' =>  $payment,
+            'daily_report_check' => false,
         ]);
         $count = count($request->barcode);
         for($i=0;$i<$count;$i++){
@@ -205,6 +214,7 @@ class PurchaseController extends Controller
     public function payLaterPurchase(Request $request , $id){
         $purchase = Purchase::find($id);
         $repository = $purchase->repository;
+        $statistic = $repository->statistic;
         if($request->payment=='cashier'){
             // check first if cashier has this amount of money
             if($repository->balance >= $purchase->total_price){
@@ -212,14 +222,22 @@ class PurchaseController extends Controller
                 $repository->update([
                     'balance' => $repository->balance - $purchase->total_price,
                 ]);
+            $statistic->update([
+                'd_out_cashier' => $statistic->d_out_cashier + $purchase->total_price,
+            ]);
             }
             else
                 return back()->with('fail','المبلغ المتوافر في الدرج أقل من المبلغ الاجمالي');
         }
-        else
+        else{
             $payment = 'external';
+            $statistic->update([
+                'd_out_external' => $statistic->d_out_external + $purchase->total_price,
+            ]);
+        }
         $purchase->update([
             'payment' => $payment,
+            'daily_report_check' => false,
         ]);
         return redirect(route('purchases.index'))->with('success','تم تسديد الفاتورة بنجاح');
     }
@@ -250,6 +268,7 @@ class PurchaseController extends Controller
         $purchase->update([
             'user_id' => Auth::user()->id,
             'status' => 'retrieved',
+            'daily_report_check' => false,
         ]);
         //retrieve money if payment was by cashier
         if($purchase->payment == 'cashier')

@@ -160,7 +160,7 @@
                   @csrf
                   <div style="display: flex; flex-direction: column">
                     <div>
-                  {{__('purchases.cash')}} <input type="radio" name="payment" value="cashier" checked> &nbsp; &nbsp;
+                      {{__('purchases.cash_from_cashier')}} <input type="radio" name="payment" value="cashier" checked> &nbsp; &nbsp;
                   {{__('purchases.cash_from_external_budget')}} <input type="radio" name="payment" value="external">
                     </div>
                     <div>

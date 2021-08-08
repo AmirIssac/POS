@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Manager;
 use App\DailyReport;
 use App\Http\Controllers\Controller;
 use App\Invoice;
+use App\Purchase;
 use App\Repository;
 use App\User;
 use Illuminate\Http\Request;
@@ -41,6 +42,9 @@ class CashierController extends Controller
         $request->cardPos = 0;
         if(!$request->stcPos)
         $request->stcPos = 0;
+        // money out taken by statistics table
+        $out_cashier = $repository->statistic->d_out_cashier;
+        $out_external = $repository->statistic->d_out_external;
         $dailyReport = DailyReport::create(
             [
                 'repository_id' => $repository->id,
@@ -54,6 +58,8 @@ class CashierController extends Controller
                 'cash_plus' => $request->cashPos,
                 'card_plus' => $request->cardPos,
                 'stc_plus' => $request->stcPos,
+                'out_cashier' => $out_cashier,
+                'out_external' => $out_external,
             ]
             );
             // all invoices not taked by DailyReport Yet..
@@ -75,6 +81,22 @@ class CashierController extends Controller
             ]
             );
 
+        // make the daily_report for the Purchases ((attach))
+        $purchases = Purchase::where('repository_id',$repository->id)->where('daily_report_check',false)->get();
+        foreach($purchases as $purchase){
+            $dailyReport->purchases()->attach($purchase->id);
+            $purchase->update(
+                [
+                    'daily_report_check' => true,
+                ]
+                );
+            }
+        // withdraw the daily out money from statistics
+        $statistic = $repository->statistic;
+        $statistic->update([
+            'd_out_cashier' => 0,
+            'd_out_external' => 0,
+        ]);
             //return redirect()->route('cashier.index', ['success' => 'تم إغلاق الكاشير اليومي بنجاح']);
             return redirect()->route('daily.reports.index',$repository->id)->with('success','تم اغلاق الكاشير بنجاح');
         }

@@ -42,4 +42,8 @@ return [
     'done' => 'Done',
     'sure_you_want_to_make_this_proccess' => 'Are you sure you want to make this proccess',
     'confirm_prodcedure' => 'Confirm procedure',
+    'cash_from_cashier' => 'Cash from cashier',
+    'payed_from_cashier' => 'Payed from cashier',
+    'payed_from_external_money' => 'Payed from external money',
+    
 ];

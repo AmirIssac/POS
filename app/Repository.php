@@ -297,9 +297,18 @@ class Repository extends Model
         return $money;
     }
 
-    public function todayPurchases(){
+    /*public function todayPurchases(){
         $purchases = 0 ;
         $purchases_invoices = $this->purchases()->where('status','!=','retrieved')->whereDate('created_at', Carbon::today())->get();
+        foreach($purchases_invoices as $inv){
+            $purchases += $inv->total_price;
+        }
+        return $purchases;
+    }*/
+
+    public function todayPurchases(){
+        $purchases = 0 ;
+        $purchases_invoices = $this->purchases()->where('status','!=','retrieved')->where('daily_report_check',false)->doesntHave('dailyReports')->get();
         foreach($purchases_invoices as $inv){
             $purchases += $inv->total_price;
         }
@@ -316,9 +325,18 @@ class Repository extends Model
         return $purchases;
     }
 
-    public function todayPayedMoney(){ // الاموال المدفوعة اليوم
+    /*public function todayPayedMoney(){ // الاموال المدفوعة اليوم
         $payed = 0 ;
         $purchases_invoices = $this->purchases()->where('status','!=','retrieved')->where('payment','!=','later')->whereDate('created_at', Carbon::today())->get();
+        foreach($purchases_invoices as $inv){
+            $payed += $inv->total_price;
+        }
+        return $payed;
+    }*/
+
+    public function todayPayedMoney(){ // الاموال المدفوعة اليوم
+        $payed = 0 ;
+        $purchases_invoices = $this->purchases()->where('status','!=','retrieved')->where('payment','!=','later')->where('daily_report_check',false)->get();
         foreach($purchases_invoices as $inv){
             $payed += $inv->total_price;
         }
