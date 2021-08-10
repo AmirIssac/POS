@@ -29,7 +29,7 @@
             <div class="col-md-12">
               @if($invoices->count()>0)
              @foreach($invoices as $invoice)
-             
+            
               <div class="card">
                 <div class="card-header card-header-primary">
                   <h4 class="card-title"> {{$invoice->created_at}}</h4>
@@ -37,6 +37,8 @@
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
+                    <form action="{{route('retrieve.invoice',$invoice->id)}}" method="POST">
+                      @csrf
                     <table class="table">
                       <thead class=" text-primary">
                         <th>
@@ -164,37 +166,51 @@
                               {{$invoice->user->name}}
                           </td>
                           <td>
-                            <button data-toggle="modal" data-target="#exampleModal{{$invoice->id}}" class="btn btn-danger"> {{__('sales.retrieve')}} </button> 
+                            <button type="button" data-toggle="modal" data-target="#exampleModal{{$invoice->id}}" class="btn btn-danger"> {{__('sales.retrieve')}} </button> 
                           </td>
                         </tr>
                         <tr> 
                           <!-- Modal -->
+                          
               <div class="modal fade" id="exampleModal{{$invoice->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel{{$invoice->id}}" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                     <div class="modal-header modal-header-danger">
                       <h5 class="modal-title" id="exampleModalLabel{{$invoice->id}}">{{__('sales.warning')}}</h5>
                     </div>
-                    <form action="{{route('retrieve.invoice',$invoice->id)}}" method="POST">
-                      @csrf
+                    
+
                       <input type="hidden" name="repo_id" value="{{$repository->id}}">
                     <div class="modal-body">
                       {{__('sales.sure_you_want_retrieve_invoice_for_customer')}} {{$invoice->customer->name}}
+                      <div>
+                      @if($invoice->note)
+                      <h5>{{__('sales.edit_note')}}</h5>
+                      @else
+                      <h5>{{__('sales.add_note')}}</h5>
+                      @endif
+                      </div>
+                      <input type="text" name="note" value="{{$invoice->note}}" class="form-control">
                     </div>
                     <div class="modal-footer">
                       <a data-dismiss="modal" class="btn btn-danger">{{__('buttons.cancel')}}</a>
                       <button type="submit" class="btn btn-primary">{{__('buttons.confirm')}}</button>
-                    </form>
+
+
                     </div>
                   </div>
                 </div>
               </div>
+
                         </tr>
                       </tbody>
                     </table>
+                  </form>
+
                   </div>
                   </div>
                 </div>
+
                 @endforeach
                 @else
                 <span id="warning" class="badge badge-warning">

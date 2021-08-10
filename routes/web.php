@@ -124,6 +124,8 @@ Route::group(['middleware'=>['permission:التقارير']], function () {
     Route::get('/view/current/daily/purchase/report/details/{repository_id}','Manager\ReportController@reportPurchaseDetailsCurrentDay')->name('view.current.daily.purchase.report.details');
     Route::get('/print/current/daily/report/details/{repository_id}','Manager\ReportController@reportDetailsCurrentDay')->name('print.current.daily.report.details');
     Route::get('print/daily/report/details/{report_id}','Manager\ReportController@dailyReportDetails')->name('print.daily.report.details');
+    Route::get('/print/purchase/current/daily/report/details/{repository_id}','Manager\ReportController@reportPurchaseDetailsCurrentDay')->name('print.purchase.current.daily.report.details');
+    Route::get('print/purchase/daily/report/details/{report_id}','Manager\ReportController@dailyPurchaseReportDetails')->name('print.purchase.daily.report.details');
     Route::get('/invoice/details/{invoice_id}','Manager\ReportController@invoiceDetails')->name('invoice.details');
     Route::get('/print/invoice/{invoice_id}','Manager\ReportController@printInvoice')->name('print.invoice');
     Route::get('/filter/pending/invoices/{repository_id}','Manager\ReportController@filterPending')->name('filter.pending.invoices');
@@ -132,8 +134,12 @@ Route::post('/make/monthly/report/{repository_id}','Manager\ReportController@mak
 Route::get('/view/monthly/reports/{repository_id}','Manager\ReportController@viewMonthlyReports')->name('view.monthly.reports');
 Route::get('/view/monthly/report/details/{report_id}','Manager\ReportController@monthlyReportDetails')->name('view.monthly.report.details');
 Route::get('/view/current/monthly/report/details/{repository_id}','Manager\ReportController@reportDetailsCurrentMonth')->name('view.current.monthly.report.details');
+Route::get('/view/purchase/monthly/report/details/{report_id}','Manager\ReportController@monthlyPurchaseReportDetails')->name('view.purchase.monthly.report.details');
+Route::get('/view/current/purchase/monthly/report/details/{repository_id}','Manager\ReportController@purchaseReportDetailsCurrentMonth')->name('view.purchase.current.monthly.report.details');
 Route::get('/print/current/monthly/report/details/{repository_id}','Manager\ReportController@reportDetailsCurrentMonth')->name('print.current.monthly.report.details');
 Route::get('/print/monthly/report/details/{report_id}','Manager\ReportController@monthlyReportDetails')->name('print.monthly.report.details');
+Route::get('/print/purchase/current/monthly/report/details/{repository_id}','Manager\ReportController@purchaseReportDetailsCurrentMonth')->name('print.purchase.current.monthly.report.details');
+Route::get('/print/purchase/monthly/report/details/{report_id}','Manager\ReportController@monthlyPurchaseReportDetails')->name('print.purchase.monthly.report.details');
 });
 
 

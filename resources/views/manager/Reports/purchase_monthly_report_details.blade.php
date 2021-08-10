@@ -72,7 +72,7 @@ input[type=number] {
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                @if(request()->is('print/purchase/daily/report/details/*') || request()->is('en/print/purchase/daily/report/details/*'))
+                @if(request()->is('print/purchase/monthly/report/details/*') || request()->is('en/print/purchase/monthly/report/details/*'))
                 <button id="back" onclick="history.back()" class="btn btn-warning">رجوع</button>
                 @endif
                 <table class="table">
@@ -97,10 +97,10 @@ input[type=number] {
                       
                             @foreach($report->purchases as $purchase)
                             @if($purchase->status == 'done')
-                            @if($purchase->dailyReports()->count()==1)
+                            @if($purchase->monthlyReports()->count()==1)
                             <?php $total_sum_invoices += $purchase->total_price; ?>
-                            @elseif($purchase->dailyReports()->count()>1)
-                            <?php $rep = $purchase->dailyReports->first(); ?>
+                            @elseif($purchase->monthlyReports()->count()>1)
+                            <?php $rep = $purchase->monthlyReports->first(); ?>
                             @if($report->id == $rep->id)
                             <?php $total_sum_invoices += $purchase->total_price; ?>
                             @endif
@@ -151,7 +151,7 @@ input[type=number] {
                   </thead>
                   <tbody>
                       @foreach($report->purchases as $purchase)
-                      @if($purchase->dailyReports->first()->id == $report->id)
+                      @if($purchase->monthlyReports->first()->id == $report->id)
                       @if($purchase->status == 'retrieved')
                       <tr class="retrieved">
                       @else
@@ -234,7 +234,7 @@ input[type=number] {
                 </thead>
                 <tbody>
                   @foreach($report->purchases as $purchase)
-                  @if($purchase->dailyReports()->count()>1 && $purchase->dailyReports->first()->id != $report->id)
+                  @if($purchase->monthlyReports()->count()>1 && $purchase->monthlyReports->first()->id != $report->id)
                   <tr>
                     <td>
                       {{$purchase->code}}
@@ -274,7 +274,7 @@ input[type=number] {
           </div>
       </div>
   
-@if(request()->is('print/purchase/daily/report/details/*') || request()->is('en/print/purchase/daily/report/details/*'))
+@if(request()->is('print/purchase/monthly/report/details/*') || request()->is('en/print/purchase/monthly/report/details/*'))
 @section('scripts')
 <script>
   window.onload = (event) => {

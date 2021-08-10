@@ -724,7 +724,8 @@ class SellController extends Controller
                             'created_at' => $request->date,
                             'transform' => 'p-d',
                             'daily_report_check' => false,
-                            //'monthly_report_check' => false,
+                            'monthly_report_check' => false,
+                            'note' => $request->note,
                         ]
                         );
                         $employee = $invoice->user;
@@ -768,7 +769,7 @@ class SellController extends Controller
                             'records'=>$records,'num'=>count($records),'total_price'=>$request->total_price,
                             'extra_price'=>$request->extra_price,'cash'=>$cashVal,'card'=>$cardVal,'stc'=>$stcVal,'repo_id'=>$repository->id
                             ,'date'=>$request->date,'repository' => $repository,
-                            'customer' => $customer,'employee'=>$employee,'complete_invoice'=>$complete_invoice,'invoice'=>$invoice]);   // to print the invoice
+                            'customer' => $customer,'employee'=>$employee,'complete_invoice'=>$complete_invoice,'invoice'=>$invoice,'note'=>$request->note]);   // to print the invoice
                             } 
 
     public function saveSpecialInvoice(Request $request , $id){
@@ -882,7 +883,8 @@ class SellController extends Controller
             'created_at' => now(),
             'transform' => $transform,
             'daily_report_check' => false,
-            //'monthly_report_check' => false,
+            'monthly_report_check' => false,
+            'note' => $request->note,
         ]);
         return redirect(route('sales.index'))->with('retrievedSuccess','تم استرجاع الفاتورة بنجاح');
     } 

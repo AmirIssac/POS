@@ -318,7 +318,7 @@ class Repository extends Model
     public function monthPurchases(){
         $purchases = 0 ;
         $purchases_invoices = $this->purchases()->where('status','!=','retrieved')->whereYear('created_at', Carbon::now()->year)
-        ->whereMonth('created_at', Carbon::now()->month)->get();
+        ->whereMonth('created_at', Carbon::now()->month)->where('monthly_report_check',false)->get();
         foreach($purchases_invoices as $inv){
             $purchases += $inv->total_price;
         }

@@ -75,7 +75,7 @@
                    <div class="card-icon">
                    <i class="material-icons">description</i>
                    </div>
-                   <p class="card-category">{{__('reports.monthly_reports_for_sales')}}</p>
+                   <p class="card-category">{{__('reports.monthly_reports')}}</p>
                    <h6 class="card-title">{{__('reports.view')}}</h6>
                  </div>
                  <div class="card-footer">
@@ -87,7 +87,7 @@
               </a>
              </div>
              @endcan
-             @can('عرض التقارير اليومية')
+             {{--@can('عرض التقارير اليومية')
              <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card card-stats" data-toggle="modal" data-target="#exampleModal{{$repository->id}}" id="modalicon{{$repository->id}}">
                   <div class="card-header card-header-success card-header-icon">
@@ -127,7 +127,7 @@
                                             </div>
                                           </div>
                                         </div>
-             @endcan
+             @endcan--}}
            </div>
          
            </div>

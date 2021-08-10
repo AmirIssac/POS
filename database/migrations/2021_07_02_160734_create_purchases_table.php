@@ -22,6 +22,7 @@ class CreatePurchasesTable extends Migration
             $table->string('supplier_invoice_num')->default(null)->nullable(); // رقم فاتورة المورد حقل اختياري
             $table->float('total_price');
             $table->enum('payment',['later','cashier','external']); // آجل او درج أو ميزانية خارجية
+            $table->boolean('daily_report_check')->after('status')->default(true);
             $table->timestamps();
         });
     }

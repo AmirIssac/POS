@@ -111,10 +111,10 @@
                           visibility
                         </i> </a>
                         
-                        {{--|
-                        <a style="color: #9229ac" href="{{route('print.current.daily.report.details',$repository->id)}}"> <i class="material-icons eye">
+                        |
+                        <a style="color: #9229ac" href="{{route('print.purchase.current.daily.report.details',$repository->id)}}"> <i class="material-icons eye">
                           print
-                        </i> </a> --}}
+                        </i> </a>
                       </td>
                     </tr>
                     @foreach($reports as $report)
@@ -167,10 +167,10 @@
                                  visibility
                                </i> </a>
                                
-                               {{--|
-                               <a style="color: #93cb52" href="{{route('print.daily.report.details',$report->id)}}"> <i class="material-icons eye">
+                               |
+                               <a style="color: #93cb52" href="{{route('print.purchase.daily.report.details',$report->id)}}"> <i class="material-icons eye">
                                  print
-                               </i> </a>--}}
+                               </i> </a>
                                
                            </td>
                     </tr>

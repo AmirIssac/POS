@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnToPurchaseTable extends Migration
+class CreateMonthlyReportPurchaseTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class AddColumnToPurchaseTable extends Migration
      */
     public function up()
     {
-        Schema::table('purchases', function (Blueprint $table) {
-            //
-            $table->boolean('monthly_report_check')->after('daily_report_check')->default(false);
+        Schema::create('monthly_report_purchase', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('monthly_report_id');
+            $table->foreignId('purchase_id');
+            $table->timestamps();
         });
     }
 
@@ -26,8 +28,6 @@ class AddColumnToPurchaseTable extends Migration
      */
     public function down()
     {
-        Schema::table('purchases', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('monthly_report_purchase');
     }
 }

@@ -73,7 +73,7 @@ input[type=number] {
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                @if(request()->is('print/purchase/current/daily/report/details/*') || request()->is('en/print/purchase/current/daily/report/details/*'))
+                @if(request()->is('print/purchase/current/monthly/report/details/*') || request()->is('en/print/purchase/current/monthly/report/details/*'))
                 <button id="back" onclick="history.back()" class="btn btn-warning">رجوع</button>
                 @endif
                 <table class="table">
@@ -90,8 +90,8 @@ input[type=number] {
                   <tbody>
                     <tr class="price">
                       @foreach($purchases as $purchase)
-                      @if($purchase->status != 'retrieved' && $purchase->dailyReports()->count()==0)
-                      <?php $total_sum_invoices += $invoice->total_price ?>
+                      @if($purchase->status != 'retrieved' && $purchase->monthlyReports()->count()==0)
+                      <?php $total_sum_invoices += $purchase->total_price ?>
                       @endif
                       @endforeach
                       <td>
@@ -134,7 +134,7 @@ input[type=number] {
                   </thead>
                   <tbody>
                       @foreach($purchases as $purchase)
-                      @if($purchase->dailyReports()->count()==0)
+                      @if($purchase->monthlyReports()->count()==0)
 
                       @if($purchase->status == 'retrieved')
                       <tr class="retrieved">
@@ -223,7 +223,7 @@ input[type=number] {
                 </thead>
                 <tbody>
                   @foreach($purchases as $purchase)
-                      @if($purchase->dailyReports()->count()>0)
+                      @if($purchase->monthlyReports()->count()>0)
 
                       @if($purchase->status == 'retrieved')
                       <tr class="retrieved">
@@ -269,7 +269,7 @@ input[type=number] {
 
     </div>
 </div>
-@if(request()->is('print/purchase/current/daily/report/details/*') || request()->is('en/print/purchase/current/daily/report/details/*'))
+@if(request()->is('print/purchase/current/monthly/report/details/*') || request()->is('en/print/purchase/current/monthly/report/details/*'))
 @section('scripts')
 <script>
   window.onload = (event) => {

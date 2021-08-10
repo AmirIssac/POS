@@ -107,7 +107,7 @@ input[type=number] {
                         <td>
                             <?php $total_sum_invoices = 0 ?>
                             @foreach($invoices as $invoice)
-                            @if($invoice->status != 'retrieved')
+                            @if($invoice->status != 'retrieved' && $invoice->monthlyReports()->count()==0) 
                             <?php $total_sum_invoices += $invoice->total_price ?>
                             @endif
                             @endforeach
@@ -144,6 +144,7 @@ input[type=number] {
                   </thead>
                   <tbody>
                       @foreach($invoices as $invoice)
+                      @if($invoice->monthlyReports()->count()==0)
                       @if($invoice->status == 'retrieved')
                       <tr class="retrieved">
                       @else
@@ -188,6 +189,7 @@ input[type=number] {
                       </td>
                       @endif
                     </tr>
+                    @endif
                     @endforeach
                       <tr>
                       <td class="button">
@@ -208,13 +210,99 @@ input[type=number] {
                     </tr>
                   </tbody>
                 </table>
-               
+                
               </div>
             </div>
           </div>
         </div>
         
       </div>
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-warning">
+            <h4 class="card-title"> {{__('reports.previous_inv_edited_today')}}
+            </h4>
+          </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead class=" text-primary">
+              <th>
+                {{__('sales.invoice_code')}}   
+              </th>
+              <th>
+                {{__('sales.invoice_status')}}    
+               </th>
+               <th>
+                {{__('sales.sales_employee')}}    
+                </th>
+               <th>
+                {{__('sales.cash')}}    
+                </th>
+                <th>
+                  {{__('sales.card')}}    
+                  </th>
+                  <th>
+                    STC-pay    
+                    </th>
+               <th>
+                {{__('sales.total_price')}}   
+                </th>
+            </thead>
+            <tbody>
+              
+              @foreach($invoices as $invoice)
+             {{-- @if($invoice->transform != 'no' && $invoice->dailyReports()->count()>1 && $invoice->created_at < $report->created_at)--}}
+             @if($invoice->monthlyReports()->count()>0)
+              <tr>
+                <td>
+                  {{$invoice->code}}
+              </td>
+
+                @if($invoice->status=='delivered')
+                <td>
+                  {{__('sales.del_badge')}} 
+                </td>
+                @elseif($invoice->status=="pending")
+                <td>
+                  {{__('sales.hang_badge')}}
+                </td>
+                @else
+                <td>
+                  {{__('sales.retrieved_badge')}}
+                </td>
+                @endif
+              <td>
+                {{$invoice->user->name}}
+              </td>
+              <td>
+                {{$invoice->cash_amount}}
+              </td>
+              <td>
+                {{$invoice->card_amount}}
+              </td>
+              <td>
+                {{$invoice->stc_amount}}
+              </td>
+              @if($invoice->status == 'retrieved')
+              <td class="retrieved-td">
+                {{$invoice->total_price}}-
+              </td>
+              @else
+              <td>
+                {{$invoice->total_price}}
+              </td>
+              @endif
+              </tr>
+              @endif
+              @endforeach
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+        </div>
+    </div>
     </div>
 </div>
 @if(request()->is('print/current/monthly/report/details/*') || request()->is('en/print/current/monthly/report/details/*'))

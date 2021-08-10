@@ -111,7 +111,14 @@ input[type=number] {
                             <?php $total_sum_invoices = 0 ?>
                             @foreach($report->invoices as $invoice)
                             @if($invoice->status != 'retrieved')
-                            <?php $total_sum_invoices += $invoice->total_price ?>
+                            @if($invoice->monthlyReports()->count()==1)
+                            <?php $total_sum_invoices += $invoice->total_price; ?>
+                            @elseif($invoice->monthlyReports()->count()>1)
+                            <?php $rep = $invoice->monthlyReports->first(); ?>
+                            @if($report->id == $rep->id)
+                            <?php $total_sum_invoices += $invoice->total_price; ?>
+                            @endif
+                            @endif
                             @endif
                             @endforeach
                             {{$total_sum_invoices}}
@@ -151,6 +158,7 @@ input[type=number] {
                   <tbody>
                     <?php $total_sum_invoices = 0 ?>
                       @foreach($report->invoices as $invoice)
+                      @if($invoice->monthlyReports->first()->id == $report->id)
                       @if($invoice->status == 'retrieved')
                       <tr class="retrieved">
                       @else
@@ -196,6 +204,7 @@ input[type=number] {
                       @endif
                     </tr>
                     <?php $total_sum_invoices += $invoice->total_price ?>
+                    @endif
                     @endforeach
                       <tr>
                       <td class="button">
@@ -223,6 +232,91 @@ input[type=number] {
         </div>
         
       </div>
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-warning">
+            <h4 class="card-title"> {{__('reports.previous_inv_edited_today')}}
+            </h4>
+          </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead class=" text-primary">
+              <th>
+                {{__('sales.invoice_code')}}   
+              </th>
+              <th>
+                {{__('sales.invoice_status')}}    
+               </th>
+               <th>
+                {{__('sales.sales_employee')}}    
+                </th>
+               <th>
+                {{__('sales.cash')}}    
+                </th>
+                <th>
+                  {{__('sales.card')}}    
+                  </th>
+                  <th>
+                    STC-pay    
+                    </th>
+               <th>
+                {{__('sales.total_price')}}   
+                </th>
+            </thead>
+            <tbody>
+              
+              @foreach($report->invoices as $invoice)
+              @if($invoice->monthlyReports()->count()>1 && $invoice->monthlyReports->first()->id != $report->id)
+              <tr>
+                <td>
+                  {{$invoice->code}}
+              </td>
+
+                @if($invoice->status=='delivered')
+                <td>
+                  {{__('sales.del_badge')}} 
+                </td>
+                @elseif($invoice->status=="pending")
+                <td>
+                  {{__('sales.hang_badge')}}
+                </td>
+                @else
+                <td>
+                  {{__('sales.retrieved_badge')}}
+                </td>
+                @endif
+              <td>
+                {{$invoice->user->name}}
+              </td>
+              <td>
+                {{$invoice->cash_amount}}
+              </td>
+              <td>
+                {{$invoice->card_amount}}
+              </td>
+              <td>
+                {{$invoice->stc_amount}}
+              </td>
+              @if($invoice->status == 'retrieved')
+              <td class="retrieved-td">
+                {{$invoice->total_price}}-
+              </td>
+              @else
+              <td>
+                {{$invoice->total_price}}
+              </td>
+              @endif
+              </tr>
+              @endif
+              @endforeach
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+        </div>
+    </div>
     </div>
 </div>
 @if(request()->is('print/monthly/report/details/*') || request()->is('en/print/monthly/report/details/*'))

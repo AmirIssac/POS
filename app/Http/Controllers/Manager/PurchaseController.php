@@ -124,6 +124,7 @@ class PurchaseController extends Controller
             'total_price' => $request->sum,
             'payment' =>  $payment,
             'daily_report_check' => false,
+            'monthly_report_check' => false,
         ]);
         $count = count($request->barcode);
         for($i=0;$i<$count;$i++){
@@ -238,6 +239,7 @@ class PurchaseController extends Controller
         $purchase->update([
             'payment' => $payment,
             'daily_report_check' => false,
+            'monthly_report_check' => false,
         ]);
         return redirect(route('purchases.index'))->with('success','تم تسديد الفاتورة بنجاح');
     }
@@ -269,6 +271,7 @@ class PurchaseController extends Controller
             'user_id' => Auth::user()->id,
             'status' => 'retrieved',
             'daily_report_check' => false,
+            'monthly_report_check' => false,
         ]);
         //retrieve money if payment was by cashier
         if($purchase->payment == 'cashier')
@@ -280,7 +283,10 @@ class PurchaseController extends Controller
 
     public function searchByDate(Request $request , $id){
         $repository = Repository::find($id);
-        $purchases = $repository->purchases()->whereDate('created_at',$request->dateSearch)->orWhereDate('updated_at',$request->dateSearch)->paginate(10);
+        //$purchases = $repository->purchases()->whereDate('created_at',$request->dateSearch)->orWhereDate('updated_at',$request->dateSearch)->paginate(10);
+        $purchases = $repository->purchases()->where(function ($query) use ($request){
+            $query->whereDate('created_at',$request->dateSearch)
+                  ->orWhereDate('updated_at',$request->dateSearch); })->paginate(10);
         return view('manager.Purchases.show_purchases')->with(['purchases'=>$purchases,'repository'=>$repository]);
     }
 

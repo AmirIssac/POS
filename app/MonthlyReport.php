@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class MonthlyReport extends Model
 {
     protected $fillable = [
-        'repository_id','user_id','cash_balance','card_balance','stc_balance',
+        'repository_id','user_id','cash_balance','card_balance','stc_balance','out_cashier','out_external',
     ];
     //
     public function repository(){
@@ -20,5 +20,8 @@ class MonthlyReport extends Model
 
     public function invoices(){
         return $this->belongsToMany(Invoice::class,'invoice_monthly_report');
+    }
+    public function purchases(){
+        return $this->belongsToMany(Purchase::class,'monthly_report_purchase');
     }
 }

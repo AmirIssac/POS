@@ -45,6 +45,29 @@ class CashierController extends Controller
         // money out taken by statistics table
         $out_cashier = $repository->statistic->d_out_cashier;
         $out_external = $repository->statistic->d_out_external;
+
+        // we will check if the last daily report submitted by less than two hours so we add this report details to the latest report and dont make new daily report
+        $dailyReport = $repository->dailyReports->last();
+        $now = now();
+        $created_at = $dailyReport->created_at;
+        $hours = $now->diffInHours($created_at);   // the number of hours between last daily report and NOW
+        if($hours < 2){
+             $dailyReport->update([
+                'user_id' => $user->id,
+                'cash_balance' => $dailyReport->cash_balance + $request->cash_balance,
+                'card_balance' => $dailyReport->card_balance + $request->card_balance,
+                'stc_balance' => $dailyReport->stc_balance + $request->stc_balance,
+                'cash_shortage' => $dailyReport->cash_shortage + $request->cashNeg,
+                'card_shortage' => $dailyReport->card_shortage + $request->cardNeg,
+                'stc_shortage' => $dailyReport->stc_shortage + $request->stcNeg,
+                'cash_plus' => $dailyReport->cash_plus + $request->cashPos,
+                'card_plus' => $dailyReport->card_plus + $request->cardPos,
+                'stc_plus' => $dailyReport->stc_plus + $request->stcPos,
+                'out_cashier' => $dailyReport->out_cashier + $out_cashier,
+                'out_external' => $dailyReport->out_external + $out_external,
+            ]);
+        }
+        else{
         $dailyReport = DailyReport::create(
             [
                 'repository_id' => $repository->id,
@@ -62,6 +85,7 @@ class CashierController extends Controller
                 'out_external' => $out_external,
             ]
             );
+        }
             // all invoices not taked by DailyReport Yet..
         $invoices = Invoice::where('repository_id',$repository->id)->where('daily_report_check',false)->get();
         foreach($invoices as $invoice){

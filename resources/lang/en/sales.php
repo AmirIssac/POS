@@ -66,5 +66,7 @@ return [
     'note' => 'Special note',
     'type_note' => 'Type here any note',
     'none' => 'None',
+    'add_note' => 'Add note',
+    'edit_note' => 'Edit note', 
 ];
 ?>

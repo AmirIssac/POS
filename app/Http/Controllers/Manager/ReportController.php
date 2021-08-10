@@ -208,12 +208,21 @@ class ReportController extends Controller
         // retrieve current month invoices to display sales for current month in main page table
         $invoices = $repository->invoices()->whereYear('created_at', '=', now()->year)
         ->whereMonth('created_at','=',now()->month)->where('monthly_report_check',false)->get();
-        return view('manager.Reports.monthly_reports')->with(['repository'=>$repository,'reports'=>$reports,'invoices' => $invoices]);
+        // retrieve current month purchases to display purchases for current month in main page table
+        $purchases = $repository->purchases()->whereYear('created_at', '=', now()->year)
+        ->whereMonth('created_at','=',now()->month)->where('monthly_report_check',false)->get();
+        return view('manager.Reports.monthly_reports')->with(['repository'=>$repository,'reports'=>$reports,'invoices' => $invoices,'purchases'=>$purchases]);
     }
 
     public function monthlyReportDetails($id){
         $report = MonthlyReport::find($id);
         return view('manager.Reports.monthly_report_details')->with(['report' => $report]);
+    }
+
+
+    public function monthlyPurchaseReportDetails($id){
+        $report = MonthlyReport::find($id);
+        return view('manager.Reports.purchase_monthly_report_details')->with(['report' => $report]);
     }
 
     public function reportDetailsCurrentMonth($id){   // for current dynamic month (( not created report yet))
@@ -222,5 +231,14 @@ class ReportController extends Controller
         ->whereMonth('created_at','=',now()->month)->where('monthly_report_check',false)->get();
         $statistics = $repository->statistic;
         return view('manager.Reports.current_month_details')->with(['invoices'=>$invoices,'statistics'=>$statistics]);
+    }
+
+    public function purchaseReportDetailsCurrentMonth($id){
+        //
+        $repository = Repository::find($id);
+        $purchases = $repository->purchases()->whereYear('created_at', '=', now()->year)
+        ->whereMonth('created_at','=',now()->month)->where('monthly_report_check',false)->get();
+        //$statistics = $repository->statistic;
+        return view('manager.Reports.purchase_current_month')->with(['purchases'=>$purchases]);
     }
 }

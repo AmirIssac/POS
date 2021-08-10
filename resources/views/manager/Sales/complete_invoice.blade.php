@@ -192,7 +192,9 @@ input[type=number] {
         <input style="margin: 7px 10px 0 0" type="checkbox" id="stc" name="stc">
           </div>
         <input style="margin-right: 0px" type="number" min="0.1" step="0.01" name="stcVal" id="stcVal" value="" class="form-control hidden">
-        </div>
+        <h4>{{__('sales.note')}}</h4>
+          <input type="text" name="note" value="{{$invoice->note}}" class="form-control">
+        </div> 
        
 </div>
         {{--<button onclick="window.print();" class="btn btn-success"> طباعة </button>--}}

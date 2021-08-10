@@ -252,13 +252,13 @@
         <div style="display: flex; justify-content: space-between">
           <h4>موظف البيع {{$employee->name}}</h4>
         </div>
-        @if(!isset($complete_invoice))
+        {{--@if(!isset($complete_invoice))--}}
         @if($note)
         <div>
           <h4>{{$note}}</h4>
         </div>
         @endif
-        @endif
+        {{--@endif--}}
         @if($repository->note)
         <div>
           <h4>{{$repository->note}}</h4>
