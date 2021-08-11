@@ -36,7 +36,7 @@
           <div class="card">
             <div class="card-header card-header-primary">
               <h4 class="card-title"> {{__('reports.sales')}} {{$user->name}} </h4>
-              <span class="badge badge-success">{{$invoices->count()}} {{__('reports.invoice')}}</span>
+              <span class="badge badge-success">{{$user->invoices()->count()}} {{__('reports.invoice')}}</span>
             </div>
             <div class="card-body">
               <div class="table-responsive">
