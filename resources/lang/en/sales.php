@@ -67,6 +67,7 @@ return [
     'type_note' => 'Type here any note',
     'none' => 'None',
     'add_note' => 'Add note',
-    'edit_note' => 'Edit note', 
+    'edit_note' => 'Edit note',
+    'edit_payment_values_invoice' => 'Edit payment values for this invoice',
 ];
 ?>

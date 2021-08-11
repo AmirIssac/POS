@@ -192,6 +192,16 @@
                           </i> </a>
                           @endif
                           @endcan
+                          |
+                          @if($invoice->daily_report_check==false && $invoice->transform=='no') {{-- change the payment values for today invoices and not edited ones --}}
+                          <a style="color: #fc8f04" href="{{route('change.invoice.payment',$invoice->id)}}" class="active-a"> <i id="{{$i}}" class="material-icons">
+                            price_change
+                          </i> </a>
+                          @else
+                          <a style="color: #344b5e" class="disabled-a">  <i class="material-icons">
+                            price_change
+                          </i> </a>
+                          @endif
                       </td>
                     </tr>
                     

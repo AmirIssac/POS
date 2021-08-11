@@ -16,5 +16,6 @@
         'add' => 'Add',
         'delete' => 'delete',
         'close_cashier' => 'close cashier',
+        'view' => 'View',
     ];
     ?>

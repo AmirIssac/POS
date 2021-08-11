@@ -69,7 +69,8 @@ Route::group(['middleware' => ['permission:المبيعات']], function () {
     // retrive invoice
     Route::get('/retrieve/{repository_id}','Manager\SellController@retrieveIndex')->name('retrieve.index');
     Route::post('/make/retrieve/{invoice_id}','Manager\SellController@retrieveInvoice')->name('retrieve.invoice');
-
+    Route::get('change/invoice/payment/{invoice_id}','Manager\SellController@changePayment')->name('change.invoice.payment');
+    Route::post('make/change/invoice/payment/{invoice_id}','Manager\SellController@makeChangePayment')->name('make.change.invoice.payment');
 });
 Route::group(['middleware' => ['permission:المخزون']], function () {
     Route::get('/repository','Manager\RepositoryController@index')->name('repository.index');
@@ -163,6 +164,7 @@ Route::group(['middleware'=>['permission:الاعدادات']], function () {
     Route::post('edit/worker/permissions/{user_id}','Manager\SettingsController@editWorkerPermissions')->name('edit.worker.permissions')->middleware('permission:تعديل صلاحيات موظف'); 
     Route::get('edit/worker/info/form/{user_id}','Manager\SettingsController@editWorkerInfo')->name('edit.worker.info');
     Route::post('update/worker/info/{user_id}','Manager\SettingsController@updateWorkerInfo')->name('update.worker.info');
+    Route::get('show/worker/sales/{user_id}','Manager\SettingsController@showWorkerSales')->name('show.worker.sales');
 });
 
 Route::group(['middleware'=>['permission:الكاشير']], function () {

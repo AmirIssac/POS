@@ -30,6 +30,9 @@
                      <th>
                       {{__('settings.permissions')}} 
                      </th>
+                     <th>
+                       {{__('reports.sales')}}
+                     </th>
                   </thead>
                   <tbody>
                     <?php $user = Auth::user(); ?>
@@ -50,6 +53,9 @@
                          <a style="color: white" href="{{route('show.worker.permissions',$worker->id)}}" role="button" class="btn btn-info"> {{__('settings.customize')}} </a>
                      </td>
                      @endif
+                     <td>
+                      <a style="color: white" href="{{route('show.worker.sales',$worker->id)}}" role="button" class="btn btn-info"> {{__('buttons.view')}} </a>
+                     </td>
                     </tr>
                     @endforeach
                     

@@ -888,4 +888,46 @@ class SellController extends Controller
         ]);
         return redirect(route('sales.index'))->with('retrievedSuccess','تم استرجاع الفاتورة بنجاح');
     } 
+
+    public function changePayment($id){   // form
+        $invoice = Invoice::find($id);
+        $repository = $invoice->repository;
+        return view('manager.Sales.change_invoice_payment')->with(['invoice'=>$invoice,'repository'=>$repository]);
+    }
+
+    public function makeChangePayment(Request $request , $id){
+        $invoice = Invoice::find($id);
+        if($invoice->status == 'pending'){
+            if($request->cash + $request->card + $request->stc > $invoice->total_price)
+            return back()->with('fail','المبلغ المدفوع أكبر من قيمة الفاتورة');
+        }
+        elseif($invoice->status == 'delivered'){
+            if($request->cash + $request->card + $request->stc != $invoice->total_price)
+                return back()->with('fail','المبلغ المدفوع يجب أن يساوي القيمة الاجمالية للفاتورة');
+        }
+        $repository = $invoice->repository;
+        $invoice->update([
+            'cash_amount' => $request->cash,
+            'card_amount' => $request->card,
+            'stc_amount' => $request->stc,
+        ]);
+        // update repository balance
+        $repository->update(
+            [
+                'cash_balance' => $repository->cash_balance + ($request->cash - $request->old_cash),
+                'card_balance' => $repository->card_balance + ($request->card - $request->old_card),
+                'stc_balance' => $repository->stc_balance + ($request->stc - $request->old_stc),
+                'balance' => $repository->balance + ($request->cash - $request->old_cash),
+            ]
+            );
+        // update month statistics
+        $statistic = $repository->statistic;
+        $statistic->update([
+            'm_in_cash_balance' => $statistic->m_in_cash_balance + ($request->cash - $request->old_cash),
+            'm_in_card_balance' => $statistic->m_in_card_balance + ($request->card - $request->old_card),
+            'm_in_stc_balance' => $statistic->m_in_stc_balance + ($request->stc - $request->old_stc),
+        ]);
+
+        return back()->with('success')->with('success','تم التعديل بنجاح');
+    }
 }

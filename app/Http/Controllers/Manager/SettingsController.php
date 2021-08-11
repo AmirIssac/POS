@@ -213,5 +213,11 @@ class SettingsController extends Controller
         ]);
         return back()->with('success','تم التعديل بنجاح');
     }
+
+    public function showWorkerSales($id){
+        $user = User::find($id);
+        $invoices = $user->invoices()->paginate(30);
+        return view('manager.Settings.worker_sales')->with(['user'=>$user,'invoices'=>$invoices]);
+    }
     
 }

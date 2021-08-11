@@ -68,5 +68,6 @@ return [
     'none' => 'لا يوجد',
     'add_note' => 'أضف ملاحظة',
     'edit_note' => 'عدل الملاحظة', 
+    'edit_payment_values_invoice' => 'تعديل قيم الدفع لهذه الفاتورة',
 ];
 ?>
