@@ -40,5 +40,7 @@
         'repo_note' => 'Store note',
         'appear_in_invoice' => 'Appear at the end of cutomer invoice',
         'no_logo_please_upload_one' => 'There is no logo please upload new one',
+        'english_name' => 'English name',
+        'owner' => 'Owner',
     ];
     ?>

@@ -109,6 +109,7 @@ class SettingsController extends Controller
         $repository = Repository::find($id);
         $repository->update([
             'name' => $request->repo_name,
+            'name_en' =>$request->repo_name_en,
             'address' => $request->address,
             'close_time' => $request->close_time,
             'note' => $request->note,
@@ -161,7 +162,8 @@ class SettingsController extends Controller
         // important closure
         // get all users with worker role and work in this repository
         $workers = User::whereHas("roles", function($q){ $q->where("name", "عامل-مخزن"); })->whereHas("repositories", function($p) use ($repository){ $p->where("repositories.id", $repository->id); })->get();
-        return view('manager.Settings.show_workers')->with(['repository'=>$repository,'workers'=>$workers]);
+        $owners = User::whereHas("roles", function($q){ $q->where("name", "مالك-مخزن"); })->whereHas("repositories", function($p) use ($repository){ $p->where("repositories.id", $repository->id); })->get();
+        return view('manager.Settings.show_workers')->with(['repository'=>$repository,'workers'=>$workers,'owners'=>$owners]);
     }
 
     public function showWorkerPermissions($id){
@@ -214,9 +216,11 @@ class SettingsController extends Controller
         return back()->with('success','تم التعديل بنجاح');
     }
 
-    public function showWorkerSales($id){
+    public function showWorkerSales($id){   // this month sales
         $user = User::find($id);
-        $invoices = $user->invoices()->paginate(30);
+        //$invoices = $user->invoices()->paginate(30);
+        $invoices = $user->invoices()->whereYear('created_at', '=', now()->year)
+        ->whereMonth('created_at','=',now()->month)->where('monthly_report_check',false)->get();
         return view('manager.Settings.worker_sales')->with(['user'=>$user,'invoices'=>$invoices]);
     }
     

@@ -36,6 +36,9 @@
                                 اسم المخزن 
                                 </th>
                                 <th>
+                                  اسم المخزن بالانجليزية  
+                                </th>
+                                <th>
                                 العنوان 
                                 </th>
                                 <th>
@@ -47,6 +50,9 @@
                                 <td>
                                     <input type="text" name="repositoryName" class="form-control" placeholder="اكتب الاسم هنا">
                                 </td>
+                                <td>
+                                  <input type="text" name="repositoryName_en" class="form-control" placeholder="اكتب الاسم بالانجليزية هنا">
+                              </td>
                                 <td>
                                     <input type="text" name="address" class="form-control" placeholder="اكتب العنوان هنا">
                                 </td>

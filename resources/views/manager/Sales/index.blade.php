@@ -24,7 +24,15 @@
              <div class="ct-chart" id="dailySalesChart"></div>
            </div>
            <div class="card-body">
-             <h4 class="card-title">{{__('repository.store')}} {{$repository->name}}</h4>
+             <h4 class="card-title">{{__('repository.store')}}
+              @if(LaravelLocalization::getCurrentLocale() == 'ar')
+              {{$repository->name}}
+             @elseif(LaravelLocalization::getCurrentLocale() == 'en')
+              {{$repository->name_en}}
+              @else
+              {{$repository->name}}
+              @endif
+              </h4>
            </div>
            <div class="card-footer">
              <div class="stats">

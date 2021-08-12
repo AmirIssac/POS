@@ -895,7 +895,7 @@ class SellController extends Controller
         return view('manager.Sales.change_invoice_payment')->with(['invoice'=>$invoice,'repository'=>$repository]);
     }
 
-    public function makeChangePayment(Request $request , $id){
+    /*public function makeChangePayment(Request $request , $id){
         $invoice = Invoice::find($id);
         if($invoice->status == 'pending'){
             if($request->cash + $request->card + $request->stc > $invoice->total_price)
@@ -905,6 +905,35 @@ class SellController extends Controller
             if($request->cash + $request->card + $request->stc != $invoice->total_price)
                 return back()->with('fail','المبلغ المدفوع يجب أن يساوي القيمة الاجمالية للفاتورة');
         }
+        $repository = $invoice->repository;
+        $invoice->update([
+            'cash_amount' => $request->cash,
+            'card_amount' => $request->card,
+            'stc_amount' => $request->stc,
+        ]);
+        // update repository balance
+        $repository->update(
+            [
+                'cash_balance' => $repository->cash_balance + ($request->cash - $request->old_cash),
+                'card_balance' => $repository->card_balance + ($request->card - $request->old_card),
+                'stc_balance' => $repository->stc_balance + ($request->stc - $request->old_stc),
+                'balance' => $repository->balance + ($request->cash - $request->old_cash),
+            ]
+            );
+        // update month statistics
+        $statistic = $repository->statistic;
+        $statistic->update([
+            'm_in_cash_balance' => $statistic->m_in_cash_balance + ($request->cash - $request->old_cash),
+            'm_in_card_balance' => $statistic->m_in_card_balance + ($request->card - $request->old_card),
+            'm_in_stc_balance' => $statistic->m_in_stc_balance + ($request->stc - $request->old_stc),
+        ]);
+
+        return back()->with('success')->with('success','تم التعديل بنجاح');
+    }*/
+    public function makeChangePayment(Request $request , $id){   // we must pay the same money value of the old payment but we change the methods of pay as we want
+        $invoice = Invoice::find($id);
+        if($request->cash + $request->card + $request->stc != $request->old_cash + $request->old_card + $request->old_stc)
+            return back()->with('fail','المبلغ المدفوع لا يتطابق مع المبلغ المدفوع سابقا');
         $repository = $invoice->repository;
         $invoice->update([
             'cash_amount' => $request->cash,

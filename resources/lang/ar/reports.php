@@ -39,5 +39,7 @@ return [
     'monthly_reports_for_sales' => 'التقارير الشهرية للمبيعات',
     'current_day' => 'اليوم الحالي',
     'previous_inv_edited_today' => 'فواتير سابقة تم استكمالها\استرجاعها في هذا التقرير',
+    'monthly_sales' => 'مبيعات الشهر',
+    'invoices_num' => 'عدد الفواتير',
 ];
 ?>

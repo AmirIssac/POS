@@ -36,7 +36,6 @@
           <div class="card">
             <div class="card-header card-header-primary">
               <h4 class="card-title"> {{__('reports.sales')}} {{$user->name}} </h4>
-              <span class="badge badge-success">{{$user->invoices()->count()}} {{__('reports.invoice')}}</span>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -44,42 +43,28 @@
                 <table class="table">
                   <thead class=" text-primary">
                     <th>
-                        {{__('sales.invoice_code')}} 
+                        {{__('reports.invoices_num')}} 
                       </th>
                       <th>
-                        {{__('sales.invoice_status')}} 
+                        {{__('reports.sales')}} 
                       </th>
-                      <th>
-                        {{__('sales.total_price')}}
-                      </th>
-                      <th>
-                        {{__('sales.date')}}
-                      </th>
-                     
                   </thead>
                   <tbody>
-                    @foreach($invoices as $invoice)
+                    <?php $sales = 0 ; ?>
+                   @foreach($invoices as $invoice)
+                   @if($invoice->status != 'retrieved' && $invoice->monthlyReports()->count()==0) 
+                    <?php $sales+=$invoice->total_price ?>
+                    @endif
+                   @endforeach
                    <tr>
                       <td>
-                          {{$invoice->code}}
+                        {{$invoices->count()}}
                       </td>
-                      <td>
-                        @if($invoice->status == 'delivered')
-                        {{__('sales.del_badge')}} 
-                        @elseif($invoice->status == 'pending')
-                        {{__('sales.hang_badge')}}
-                        @elseif($invoice->status == 'retrieved')
-                        {{__('sales.retrieve')}}
-                        @endif
-                    </td>
                     <td>
-                        {{$invoice->total_price}}
+                      {{$sales}}
                     </td>
-                    <td>
-                        {{$invoice->created_at}}
-                    </td>
+                   
                    </tr>
-                   @endforeach
                   </tbody>
                 </table>
 
@@ -92,7 +77,6 @@
        
 
       </div>
-     {{ $invoices->links() }}
     </div>
 </div>
 @endsection

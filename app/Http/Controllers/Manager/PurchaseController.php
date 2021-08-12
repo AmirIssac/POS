@@ -318,4 +318,25 @@ class PurchaseController extends Controller
         return view('manager.Purchases.show_purchases')->with(['purchases'=>$purchases,'repository'=>$repository,'suppliers'=>$suppliers]);
 
     }
+
+    public function showProducts($id){
+        $repository = Repository::find($id);
+        $products = $repository->purchaseProducts()->orderBy('created_at','DESC')->paginate(15);
+        return view('manager.Purchases.show_products')->with(['products'=>$products,'repository'=>$repository]);
+    }
+
+    public function editProductForm($id){
+        $product = PurchaseProduct::find($id);
+        return view('manager.Purchases.edit_product')->with(['product'=>$product]);
+    }
+    public function updateProduct(Request $request,$id){
+        $product = PurchaseProduct::find($id);
+        $product->update([
+            'barcode' => $request->barcode,
+            'name_ar' => $request->name,
+            'name_en' => $request->details,
+            'price' => $request->price,
+        ]);
+        return back()->with('success','تم التعديل بنجاح');
+    }
 }

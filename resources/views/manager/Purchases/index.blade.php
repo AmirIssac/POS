@@ -24,7 +24,15 @@
              <div class="ct-chart" id="dailySalesChart"></div>
            </div>
            <div class="card-body">
-             <h4 class="card-title">{{__('repository.store')}} {{$repository->name}}</h4>
+             <h4 class="card-title">{{__('repository.store')}}
+              @if(LaravelLocalization::getCurrentLocale() == 'ar')
+              {{$repository->name}}
+             @elseif(LaravelLocalization::getCurrentLocale() == 'en')
+              {{$repository->name_en}}
+              @else
+              {{$repository->name}}
+              @endif
+              </h4>
            </div>
            <div class="card-footer">
              <div class="stats">
@@ -197,7 +205,24 @@
             </a>
             </div>
             @endcan
-
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <a href="{{route('show.purchase.products',$repository->id)}}">
+            <div class="card card-stats">
+              <div class="card-header card-header-primary card-header-icon">
+                <div class="card-icon">
+                <i class="material-icons">category</i>
+                </div>
+                <p class="card-category">{{__('repository.view_products')}}</p>
+                <h6 class="card-title"></h6>
+              </div>
+              <div class="card-footer">
+                <div class="stats">
+                  <i class="material-icons">add</i>
+                </div>
+              </div>
+            </div>
+          </a>
+          </div>
 
 
            </div>

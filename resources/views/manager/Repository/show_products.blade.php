@@ -113,13 +113,13 @@
                         <button type="submit" class="btn btn-info"> {{__('buttons.edit')}} </button>
                       </form>
                     </td>
-                    <td>
+                    {{--<td>
                       <form action="{{route('delete.product')}}" method="POST">
                         @csrf
                         <input type="hidden" name="product_id" value="{{$product->id}}">
                         <button type="submit" class="btn btn-danger"> {{__('buttons.delete')}} </button>
                       </form>
-                    </td>
+                    </td>--}}
                     </tr>
                     @endforeach
                     @else

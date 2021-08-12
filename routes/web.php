@@ -105,7 +105,9 @@ Route::post('/retrieve/purchase/{purchase_id}','Manager\PurchaseController@retri
 Route::get('/search/purchases/byDate/{repository_id}','Manager\PurchaseController@searchByDate')->name('search.purchases.by.date');
 Route::get('/search/purchases/{repository_id}','Manager\PurchaseController@search')->name('search.purchases');
 Route::get('/search/purchases/bySupplier/{repository_id}','Manager\PurchaseController@searchBySupplier')->name('search.by.supplier');
-
+Route::get('/show/purchase/products/{repository_id}','Manager\PurchaseController@showProducts')->name('show.purchase.products');
+Route::get('edit/purchase/product/{product_id}','Manager\PurchaseController@editProductForm')->name('edit.purchase.product');
+Route::post('update/purchase/product/{product_id}','Manager\PurchaseController@updateProduct')->name('update.purchase.product');
 
 
 

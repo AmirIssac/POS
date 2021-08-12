@@ -97,6 +97,9 @@ textarea{
                     {{__('settings.store_name')}}
                  </th>
                  <th>
+                  {{__('settings.english_name')}}
+               </th>
+                 <th>
                   {{__('settings.address')}} 
                </th>
                   <th>
@@ -111,13 +114,16 @@ textarea{
                 <tbody>
                   <tr>
                     <td>
-                      <input type="text" name="repo_name" value="{{$repository->name}}" class="form-control">
+                      <input type="text" name="repo_name" value="{{$repository->name}}" class="form-control" required>
                     </td>
                     <td>
-                      <input type="text" name="address" value="{{$repository->address}}" class="form-control">
+                      <input type="text" name="repo_name_en" value="{{$repository->name_en}}" class="form-control">
+                    </td>
+                    <td>
+                      <input type="text" name="address" value="{{$repository->address}}" class="form-control" required>
                   </td>
                     <td>
-                      <input type="time" name="close_time" value="{{$repository->close_time}}" class="form-control">
+                      <input type="time" name="close_time" value="{{$repository->close_time}}" class="form-control" required>
                   </td>
                   <td>
                     <textarea rows="5" cols="60" name="note">

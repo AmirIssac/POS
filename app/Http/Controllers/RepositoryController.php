@@ -43,6 +43,7 @@ class RepositoryController extends Controller
     {
        $repository = Repository::create([
             'name' => $request->repositoryName,
+            'name_en' => $request->repositoryName_en,
             'address' => $request->address,
             'category_id'=>$request->category_id,
         ]);
