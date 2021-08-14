@@ -45,4 +45,5 @@ return [
     'cash_from_cashier' => 'كاش من الدرج',
     'payed_from_cashier' => 'المدفوع من الدرج',
     'payed_from_external_money' => 'المدفوع من ميزانية خارجية',
+    'all_suppliers' => 'كل الموردين',
 ];

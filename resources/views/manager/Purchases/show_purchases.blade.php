@@ -30,6 +30,12 @@
   .disabled-a:hover{
     cursor: default;
   }
+  .select-suppliers{
+    border-radius: 10px;
+    border:1px solid black;
+    background-color: #9229ac;
+    color: white
+  }
 </style>
 @endsection
 @section('body')
@@ -66,7 +72,8 @@
       {{-- filter --}}
       <form action="{{route('search.by.supplier',$repository->id)}}" method="GET">
       @csrf
-      <select name="supplier">
+      <select class="select-suppliers" name="supplier">
+        <option value="all">{{__('purchases.all_suppliers')}}</option>
         @foreach($suppliers as $supplier)
         <option value="{{$supplier->id}}">{{$supplier->name}}</option>
         @endforeach

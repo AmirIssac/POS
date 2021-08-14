@@ -87,7 +87,7 @@ class RepositoryController extends Controller
         }
     }
         }
-        return back()->with('success','   تمت الإضافة بنجاح بمبلغ إجمالي   '.$totalPrice);
+        return back()->with('success',__('alerts.add_success_by_total_price').$totalPrice);
     }
     
     /*public function showProducts($id){
@@ -116,7 +116,7 @@ class RepositoryController extends Controller
         (new ProductsImportSpecial($id))->import($file);
         else
         (new ProductsImport($id))->import($file);
-        return back()->with('success','تم استيراد الملف بنجاح');
+        return back()->with('success',__('alerts.file_import_success'));
     }
 
     public function getProductAjax($repo_id,$barcode){
@@ -163,12 +163,12 @@ class RepositoryController extends Controller
             'price' => $request->price,
             'quantity' => $request->quantity,
         ]);
-        return redirect(route('repository.index'))->with('editProductSuccess',' تم تعديل المنتج '.$product->name.' بنجاح ');
+        return redirect(route('repository.index'))->with('editProductSuccess',__('alerts.product_edit_success').$product->name);
     }
 
     public function deleteProduct(Request $request){
         $product = Product::find($request->product_id);
         $product->delete();
-        return redirect(route('repository.index'))->with('deleteProductSuccess','تم حذف المنتج بنجاح');
+        return redirect(route('repository.index'))->with('deleteProductSuccess',__('alerts.product_delete_success'));
     }
 }

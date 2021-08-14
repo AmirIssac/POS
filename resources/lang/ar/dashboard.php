@@ -23,5 +23,9 @@ return [
     'month_purchases' => 'مشتريات الشهر',
     'none' => 'لا يوجد',
     'highest_five_suppliers' => 'أعلى خمسة موردين يجب الدفع لهم',
+    'Month_sales' => 'مبيعات الشهر',
+    'collected_money_month' => 'الأموال المحصلة هذا الشهر',
+    'year_sales' => 'مبيعات السنة',
+    'collected_money_year' => 'الأموال المحصلة هذه السنة',
 ];
 ?>

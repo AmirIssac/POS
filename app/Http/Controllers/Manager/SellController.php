@@ -312,7 +312,7 @@ class SellController extends Controller
     public function sellSpecialInvoice(Request $request , $id){
         // make sure we determine customer
         if(!$request->customer_phone || !$request->customer_name)
-            return back()->with('failCustomer','يرجى ادخال رقم الزبون');
+            return back()->with('failCustomer',__('alerts.input_customer_num'));
          // cash and card must have at least one of them a value
          /*if(!$request->cashVal && !$request->cardVal)
             return back()->with('failPayment','عملية الدفع غير صحيحة');*/
@@ -337,12 +337,12 @@ class SellController extends Controller
                             }
                             if($product[0]->quantity<$sum_quantity){
                                 //return 'كمية غير متوفرة فواتير مستلمة';
-                                return back()->with('fail','الكمية أكبر من المتوفر للقطعة'.'  '.$product[0]->name);
+                                return back()->with('fail',__('alerts.amount_bigger_than_available').'  '.$product[0]->name);
                                 }
                         }
                         if($product[0]->quantity<$request->quantity[$i]){
                         //return 'كمية غير متوفرة فواتير مستلمة';
-                        return back()->with('fail','الكمية أكبر من المتوفر للقطعة'.'  '.$product[0]->name);
+                        return back()->with('fail',__('alerts.amount_bigger_than_available').'  '.$product[0]->name);
                         }
 
                         }
@@ -382,12 +382,12 @@ class SellController extends Controller
                     }
                     if($product[0]->quantity<$sum_quantity){
                         //return 'كمية غير متوفرة فواتير معلقة';
-                        return back()->with('fail','الكمية أكبر من المتوفر للقطعة'.'  '.$product[0]->name);
+                        return back()->with('fail',__('alerts.amount_bigger_than_available').'  '.$product[0]->name);
                         }
                 }
                 if($product[0]->quantity<$request->quantity[$i]){
                 //return 'كمية غير متوفرة فواتير معلقة';
-                return back()->with('fail','الكمية أكبر من المتوفر للقطعة'.'  '.$product[0]->name);
+                return back()->with('fail',__('alerts.amount_bigger_than_available').'  '.$product[0]->name);
                 }
                 }
                 }
@@ -656,11 +656,11 @@ class SellController extends Controller
                                         //return $sum_quantity;
                                 }
                                 if($product[0]->quantity<$sum_quantity){
-                                    return back()->with('fail','الكمية أكبر من المتوفر للقطعة'.'  '.$product[0]->name);
+                                    return back()->with('fail',__('alerts.amount_bigger_than_available').'  '.$product[0]->name);
                                     }
                             }
                             if($product[0]->quantity<$request->quantity[$i]){
-                            return back()->with('fail','الكمية أكبر من المتوفر للقطعة'.'  '.$product[0]->name);
+                            return back()->with('fail',__('alerts.amount_bigger_than_available').'  '.$product[0]->name);
                             }
             
                             }
@@ -775,7 +775,7 @@ class SellController extends Controller
     public function saveSpecialInvoice(Request $request , $id){
         // make sure we determine customer
         if(!$request->customer_phone_s || !$request->customer_name_s)
-            return back()->with('failCustomer','يرجى ادخال رقم الزبون');
+            return back()->with('failCustomer',__('alerts.input_customer_num'));
         $repository = Repository::find($id);
         // check if customer exist in system before
         $customer = Customer::whereHas("repositories", function($q) use ($repository){ $q->where("repositories.id",$repository->id ); })->where('phone',$request->customer_phone_s)->first();
@@ -821,7 +821,7 @@ class SellController extends Controller
                 'recipe' => $recipe,
             ]);
         }
-        return redirect(route('create.special.invoice',$repository->id))->with('saveSuccess','تم حفظ الوصفة بنجاح');
+        return redirect(route('create.special.invoice',$repository->id))->with('saveSuccess',__('alerts.prescription_saved_success'));
     }
 
     public function retrieveIndex(Request $request , $id){
@@ -842,7 +842,7 @@ class SellController extends Controller
         $repository = $invoice->repository;
         $cash_retrieved = $invoice->cash_amount + $invoice->card_amount + $invoice->stc_amount;
         if($cash_retrieved > $repository->balance)
-            return back()->with('fail','لا يمكن الاسترجاع المبلغ في الدرج غير كاف');
+            return back()->with('fail',__('alerts.failed_retrieve_money_cashier_not_enough'));
         $records = unserialize($invoice->details); // array of arrays
         //foreach($records as $record)
         for($i=1;$i<count($records);$i++)
@@ -886,7 +886,7 @@ class SellController extends Controller
             'monthly_report_check' => false,
             'note' => $request->note,
         ]);
-        return redirect(route('sales.index'))->with('retrievedSuccess','تم استرجاع الفاتورة بنجاح');
+        return redirect(route('sales.index'))->with('retrievedSuccess',__('alerts.purchase_retrieve_success'));
     } 
 
     public function changePayment($id){   // form
@@ -933,7 +933,7 @@ class SellController extends Controller
     public function makeChangePayment(Request $request , $id){   // we must pay the same money value of the old payment but we change the methods of pay as we want
         $invoice = Invoice::find($id);
         if($request->cash + $request->card + $request->stc != $request->old_cash + $request->old_card + $request->old_stc)
-            return back()->with('fail','المبلغ المدفوع لا يتطابق مع المبلغ المدفوع سابقا');
+            return back()->with('fail',__('alerts.payed_money_notequal_to_old'));
         $repository = $invoice->repository;
         $invoice->update([
             'cash_amount' => $request->cash,
@@ -957,6 +957,6 @@ class SellController extends Controller
             'm_in_stc_balance' => $statistic->m_in_stc_balance + ($request->stc - $request->old_stc),
         ]);
 
-        return back()->with('success')->with('success','تم التعديل بنجاح');
+        return back()->with('success')->with('success',__('alerts.edit_success'));
     }
 }

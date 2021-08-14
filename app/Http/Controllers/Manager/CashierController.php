@@ -122,7 +122,7 @@ class CashierController extends Controller
             'd_out_external' => 0,
         ]);
             //return redirect()->route('cashier.index', ['success' => 'تم إغلاق الكاشير اليومي بنجاح']);
-            return redirect()->route('daily.reports.index',$repository->id)->with('success','تم اغلاق الكاشير بنجاح');
+            return redirect()->route('daily.reports.index',$repository->id)->with('success',__('alerts.cashier_closed_success'));
         }
 
         public function warning($id){
@@ -139,11 +139,11 @@ class CashierController extends Controller
         public function withdraw(Request $request , $id){
             $repository = Repository::find($id);
             if($repository->balance<$request->money)
-                return back()->with('fail','المبلغ المراد سحبه أكبر من المتوفر في الدرج');
+                return back()->with('fail',__('alerts.money_withdraw_bigger_than_in_cashier'));
             $repository->update([
                 'balance' => $repository->balance - $request->money,
             ]);
-            return back()->with('success','تم السحب بنجاح بمبلغ قدره '.$request->money);
+            return back()->with('success',__('alerts.withdraw_success').$request->money);
         }
 
         public function deposite(Request $request , $id){
@@ -151,6 +151,6 @@ class CashierController extends Controller
             $repository->update([
                 'balance' => $repository->balance + $request->money,
             ]);
-            return back()->with('success',' تم الايداع بنجاح بمبلغ وقدره  '.$request->money);
+            return back()->with('success',__('alerts.deposite_success').$request->money);
         }
 }

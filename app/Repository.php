@@ -260,6 +260,17 @@ class Repository extends Model
         return $month_sales;
     }
 
+    public function yearSales(){
+        $year_sales = 0;
+        $invoices = $this->invoices()->where('status','!=','retrieved')
+        ->whereYear('created_at',now()->year)
+        ->get();
+         foreach($invoices as $invoice){
+             $year_sales += $invoice->total_price;
+         }
+         return $year_sales;
+     }
+
     public function todayPendingMoney(){  // الأموال المعلقة
         $invoices = $this->invoices()->where('status','pending')->where('daily_report_check',false)->get();
         $total_price = 0 ;
@@ -293,6 +304,15 @@ class Repository extends Model
         ->get();
         foreach($invoices as $invoice){
             $money = $money + ($invoice->total_price - ($invoice->cash_amount + $invoice->card_amount + $invoice->stc_amount)) ;
+        }
+        return $money;
+    }
+
+    public function thisYearGainedMoney(){
+        $money=0;
+        $invoices = $this->invoices()->where('status','!=','retrieved')->whereYear('created_at',now()->year)->get();
+        foreach($invoices as $invoice){
+            $money += $invoice->cash_amount + $invoice->card_amount + $invoice->stc_amount;
         }
         return $money;
     }
@@ -363,20 +383,7 @@ class Repository extends Model
         ->orderBy('sum','DESC')
         ->take(5)
         ->get();  // get the total_price and supplier_id and suppliers.name grouped by supplier_id && suppliers.name
-        /*
-        // we have to get the names of suppliers
-        $suppliers = collect(new Supplier);
-        foreach($purchases as $purchase){
-        $supplier = Supplier::find($purchase->supplier_id);
-        $suppliers = $suppliers->merge($supplier);
-        }
-        return $suppliers;
-        $i=0;
-        $result = $purchases->map(function($object) use ($suppliers,$i){
-            $object->merge($suppliers[$i]);
-            $i++;
-        });
-        return $result;*/
+        
         return $purchases;
     }
 }

@@ -11,6 +11,7 @@ use App\Supplier;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\Console\Input\Input;
 
 class PurchaseController extends Controller
 {
@@ -55,7 +56,7 @@ class PurchaseController extends Controller
         ]);
         $repository->suppliers()->attach($supplier->id);  // pivot table
 
-        return redirect(route('purchases.index'))->with('success','تم اضافة مورد جديد بنجاح');
+        return redirect(route('purchases.index'))->with('success',__('alerts.add_supplier_success'));
     }
 
     public function showSuppliers($id){
@@ -78,13 +79,13 @@ class PurchaseController extends Controller
             'phone' => $request->phone,
             'account_num' => $request->account_num,
         ]);
-        return redirect(route('purchases.index'))->with('success','تم تعديل بيانات المورد بنجاح');
+        return redirect(route('purchases.index'))->with('success',__('alerts.edit_supplier_success'));
     }
 
     public function deleteSupplier(Request $request){
         $supplier = Supplier::find($request->supplier_id);
         $supplier->delete();
-        return redirect(route('purchases.index'))->with('success','تم حذف بيانات المورد بنجاح');
+        return redirect(route('purchases.index'))->with('success',__('alerts.delete_supplier_success'));
     }
 
     public function storePurchase(Request $request , $id){
@@ -138,7 +139,7 @@ class PurchaseController extends Controller
                 ]);
             }
         }
-        return back()->with('success','تم انشاء فاتورة مشتريات بنجاح');
+        return back()->with('success',__('alerts.create_new_purchase_success'));
     }
 
     public function showPurchases($id){
@@ -193,7 +194,7 @@ class PurchaseController extends Controller
         }
     }
         }
-        return back()->with('success','   تمت الإضافة بنجاح     ');
+        return back()->with('success',__('alerts.add_success'));
     }
 
     public function getProductAjax($repo_id,$barcode){
@@ -228,7 +229,7 @@ class PurchaseController extends Controller
             ]);
             }
             else
-                return back()->with('fail','المبلغ المتوافر في الدرج أقل من المبلغ الاجمالي');
+                return back()->with('fail',__('alerts.money_in_cashier_less_than_total_fail'));
         }
         else{
             $payment = 'external';
@@ -241,7 +242,7 @@ class PurchaseController extends Controller
             'daily_report_check' => false,
             'monthly_report_check' => false,
         ]);
-        return redirect(route('purchases.index'))->with('success','تم تسديد الفاتورة بنجاح');
+        return redirect(route('purchases.index'))->with('success',__('alerts.purchase_payed_success'));
     }
 
    /* public function retrieveIndex(Request $request,$id){
@@ -278,7 +279,7 @@ class PurchaseController extends Controller
         $repository->update([
             'balance' => $repository->balance + $purchase->total_price,
         ]);
-        return back()->with('success','تم استرجاع الفاتورة بنجاح');
+        return back()->with('success',__('alerts.purchase_retrieve_success'));
     }
 
     public function searchByDate(Request $request , $id){
@@ -303,7 +304,7 @@ class PurchaseController extends Controller
         return view('manager.Purchases.show_purchases')->with(['purchases'=>$purchases,'repository'=>$repository]);
     }
 
-    public function searchBySupplier(Request $request , $id){
+    /*public function searchBySupplier(Request $request , $id){
         $repository = Repository::find($id);
         $suppliers = $repository->suppliers; // to send to blade filter
         $supplier = $repository->suppliers()->where('supplier_id',$request->supplier)->first();
@@ -316,6 +317,30 @@ class PurchaseController extends Controller
                   ->where('supplier_id',$supplier->id)->orderBy('updated_at','DESC')->paginate(10);
         }
         return view('manager.Purchases.show_purchases')->with(['purchases'=>$purchases,'repository'=>$repository,'suppliers'=>$suppliers]);
+
+    }*/
+
+    public function searchBySupplier(Request $request , $id){
+        $repository = Repository::find($id);
+        $suppliers = $repository->suppliers; // to send to blade filter
+        $arr = array('supplier'=>$request->supplier,'later'=>$request->later);
+        if($request->supplier == 'all'){
+            $purchases = Purchase::where('repository_id',$repository->id)
+            ->orderBy('updated_at','DESC')->paginate(10);
+            return view('manager.Purchases.show_purchases')->with(['purchases'=>$purchases->appends($arr),'repository'=>$repository,'suppliers'=>$suppliers]);
+        }
+        else{ // filter to specific supplier
+        $supplier = $repository->suppliers()->where('supplier_id',$request->supplier)->first();
+        }
+        if($request->later){  // for search by highest suppliers we should pay in the dashboard and should not be retrieved
+            $purchases = Purchase::where('repository_id',$repository->id)
+            ->where('supplier_id',$supplier->id)->where('payment','later')->where('status','!=','retrieved')->orderBy('updated_at','DESC')->paginate(1);
+        }
+        else{
+        $purchases = Purchase::where('repository_id',$repository->id)
+                  ->where('supplier_id',$supplier->id)->orderBy('updated_at','DESC')->paginate(10);
+                }
+        return view('manager.Purchases.show_purchases')->with(['purchases'=>$purchases->appends($arr),'repository'=>$repository,'suppliers'=>$suppliers]);
 
     }
 
@@ -337,6 +362,6 @@ class PurchaseController extends Controller
             'name_en' => $request->details,
             'price' => $request->price,
         ]);
-        return back()->with('success','تم التعديل بنجاح');
+        return back()->with('success',__('alerts.edit_success'));
     }
 }

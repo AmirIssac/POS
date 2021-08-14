@@ -23,6 +23,9 @@ return [
     'month_purchases' => 'Month purchases',
     'none' => 'None',
     'highest_five_suppliers' => 'Top five suppliers you should pay',
-    
+    'Month_sales' => 'Month sales',
+    'collected_money_month' => 'Collected money this month',
+    'year_sales' => 'Year sales',
+    'collected_money_year' => 'Collected money this year',
 ];
 ?>

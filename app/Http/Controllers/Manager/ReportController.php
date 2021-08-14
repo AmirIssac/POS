@@ -193,7 +193,7 @@ class ReportController extends Controller
                 ]
                 );
         }
-        return redirect()->route('view.monthly.reports',$repository->id)->with('success','تم انشاء تقرير شهري بنجاح'); 
+        return redirect()->route('view.monthly.reports',$repository->id)->with('success',__('alerts.monthly_report_create_success')); 
     }
 
    /* public function viewMonthlyReports($id){

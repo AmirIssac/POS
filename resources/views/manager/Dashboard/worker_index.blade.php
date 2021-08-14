@@ -146,24 +146,26 @@
                </div>
              </div>
              @endcan
+             @can('لوحة مبيعات الشهر')
              <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
                 <div class="card-header card-header-success card-header-icon">
                   <div class="card-icon">
                     <i class="material-icons">trending_up</i>
                   </div>
-                  <p style="color: #9229ac; font-weight: bold" class="card-category">مبيعات الشهر</p>
+                  <p style="color: #9229ac; font-weight: bold" class="card-category">{{__('dashboard.Month_sales')}}</p>
                   <h3 style="color: #9229ac" class="card-title">{{$repository->monthSales()}}</h3>
-                   <p style="color: #48a44c; font-weight: bold" class="card-category">الأموال المحصلة لهذا الشهر</p>
+                   {{--<p style="color: #48a44c; font-weight: bold" class="card-category">{{__('dashboard.collected_money_month')}}</p>
                    <h3 style="color:#48a44c " class="card-title">{{$repository->thisMonthGainedMoney()}}
-                   </h3>
-                  
-                   {{--<p style="color: #f14000; font-weight: bold" class="card-category">الأموال المعلقة لهذا الشهر</p>
-                   <h3 style="color: #f14000" class="card-title">{{$repository->thisMonthPendingMoney()}}
+                   </h3>--}}
+                   <p style="color: #9229ac; font-weight: bold" class="card-category">{{__('dashboard.year_sales')}}</p>
+                   <h3 style="color: #9229ac" class="card-title">{{$repository->yearSales()}}</h3>
+                  {{-- <p style="color: #48a44c; font-weight: bold" class="card-category">{{__('dashboard.collected_money_year')}}</p>
+                   <h3 style="color:#48a44c " class="card-title">{{$repository->thisYearGainedMoney()}}
                    </h3>--}}
                 </div>
                 <div class="card-footer">
-                  <div style="display: flex; flex-direction: column; width: 100%">
+                  {{--<div style="display: flex; flex-direction: column; width: 100%">
                    <div style="display: flex; justify-content: space-between">
                   <div class="stats">
                     <i style="color: #48a44c;" class="material-icons">point_of_sale</i>
@@ -181,10 +183,11 @@
                  </div>
                  
                    </div>
-                  </div>
+                  </div>--}}
                 </div>
               </div>
             </div>
+            @endcan
              @can('لوحة نظام الاموال للمشتريات')
              <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
