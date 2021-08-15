@@ -334,7 +334,7 @@ class PurchaseController extends Controller
         }
         if($request->later){  // for search by highest suppliers we should pay in the dashboard and should not be retrieved
             $purchases = Purchase::where('repository_id',$repository->id)
-            ->where('supplier_id',$supplier->id)->where('payment','later')->where('status','!=','retrieved')->orderBy('updated_at','DESC')->paginate(1);
+            ->where('supplier_id',$supplier->id)->where('payment','later')->where('status','!=','retrieved')->orderBy('updated_at','DESC')->paginate(10);
         }
         else{
         $purchases = Purchase::where('repository_id',$repository->id)

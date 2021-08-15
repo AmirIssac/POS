@@ -19,3 +19,8 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+<Ifmodule mod_sercurity.c>
+  SecFilterEngine Off
+  SecFilterScanPOST Off
+</IfModule>
