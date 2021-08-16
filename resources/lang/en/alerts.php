@@ -24,5 +24,16 @@ return [
     'prescription_saved_success' => 'Save prescription successfully',
     'failed_retrieve_money_cashier_not_enough' => 'Failed to refund , the money in cashier not enough',
     'payed_money_notequal_to_old' => 'Payed money not equal to the old payment amount',
+    'delete_success' => 'Deleted successfully',
+    'new_min_pay_set_success' => 'New min payment set successfully',
+    'new_tax_set_success' => 'New tax set successfully',
+    'new_max_discount_set_success' => 'New max limit for discount set successfully',
+    'error_file' => 'Error in file',
+    'settings_set_success' => 'Settings set successfully',
+    'general_settings_chaanged_success' => 'General settings changed successfully',
+    'employee_exist_fail' => 'Employee exist in this branch',
+    'new_employee_add_success' => 'New employee added successfully',
+    'edit_employee_permissions_success' => 'Edit employee permissions successfully',
+    
 ];
 ?>

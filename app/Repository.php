@@ -128,32 +128,38 @@ class Repository extends Model
         $del = 0;
         $hang = 0;
         $retrieved = 0;
+        $deleted = 0;
         $invoices = $this->dailyInvoices;
         foreach($invoices as $invoice){
             if($invoice->status=='delivered')
                 $del+=1;
             elseif($invoice->status=='pending')
                 $hang+=1;
-            else
-            $retrieved+=1;
+            elseif($invoice->status=='retrieved')
+                $retrieved+=1;
+            elseif($invoice->status == 'deleted')
+                $deleted+=1;
         }
-        $arr = array('delivered'=>$del,'hanging'=>$hang,'retrieved'=>$retrieved);
+        $arr = array('delivered'=>$del,'hanging'=>$hang,'retrieved'=>$retrieved,'deleted'=>$deleted);
         return $arr;
     }
     public function monthlyInvoicesCount(){
         $del = 0;
         $hang = 0;
         $retrieved = 0;
+        $deleted = 0;
         $invoices = $this->monthlyInvoices;
         foreach($invoices as $invoice){
             if($invoice->status=='delivered')
                 $del+=1;
             elseif($invoice->status=='pending')
                 $hang+=1;
-            else
-            $retrieved+=1;
+            elseif($invoice->status=='retrieved')
+                $retrieved+=1;
+            elseif($invoice->status == 'deleted')
+                $deleted+=1;
         }
-        $arr = array('delivered'=>$del,'hanging'=>$hang,'retrieved'=>$retrieved);
+        $arr = array('delivered'=>$del,'hanging'=>$hang,'retrieved'=>$retrieved,'deleted'=>$deleted);
         return $arr;
     }
 
@@ -241,7 +247,8 @@ class Repository extends Model
         $today_sales = 0;
        // $invoices = $this->invoices()->where('status','!=','retrieved')->where('transform','!=','p-d')->where('daily_report_check',false)->get();
        //$invoices = $this->invoices()->where('status','!=','retrieved')->where('daily_report_check',false)->get();
-       $invoices = $this->invoices()->where('status','!=','retrieved')->where('daily_report_check',false)
+       $invoices = $this->invoices()->where('status','!=','retrieved')->
+       where('status','!=','deleted')->where('daily_report_check',false)
        ->doesntHave('dailyReports')->get();
         foreach($invoices as $invoice){
             $today_sales += $invoice->total_price;
@@ -251,7 +258,8 @@ class Repository extends Model
 
     public function monthSales(){
        $month_sales = 0;
-       $invoices = $this->invoices()->where('status','!=','retrieved')->where('monthly_report_check',false)
+       $invoices = $this->invoices()->where('status','!=','retrieved')->
+       where('status','!=','deleted')->where('monthly_report_check',false)
        ->whereYear('created_at',now()->year)->whereMonth('created_at',now()->month)
        ->get();
         foreach($invoices as $invoice){
@@ -262,7 +270,8 @@ class Repository extends Model
 
     public function yearSales(){
         $year_sales = 0;
-        $invoices = $this->invoices()->where('status','!=','retrieved')
+        $invoices = $this->invoices()->where('status','!=','retrieved')->
+        where('status','!=','deleted')
         ->whereYear('created_at',now()->year)
         ->get();
          foreach($invoices as $invoice){
@@ -299,7 +308,7 @@ class Repository extends Model
 
     public function thisMonthPendingMoney(){
         $money = 0;
-        $invoices = $this->invoices()->where('status','!=','retrieved')->where('status','pending')->where('monthly_report_check',false)
+        $invoices = $this->invoices()->where('status','pending')->where('monthly_report_check',false)
         ->whereYear('created_at',now()->year)->whereMonth('created_at',now()->month)
         ->get();
         foreach($invoices as $invoice){
@@ -310,7 +319,7 @@ class Repository extends Model
 
     public function thisYearGainedMoney(){
         $money=0;
-        $invoices = $this->invoices()->where('status','!=','retrieved')->whereYear('created_at',now()->year)->get();
+        $invoices = $this->invoices()->where('status','!=','retrieved')->where('status','!=','deleted')->whereYear('created_at',now()->year)->get();
         foreach($invoices as $invoice){
             $money += $invoice->cash_amount + $invoice->card_amount + $invoice->stc_amount;
         }

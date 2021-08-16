@@ -36,6 +36,12 @@
 <div class="main-panel">
   
 <div class="content">
+  @if ($message = Session::get('success'))
+  <div class="alert alert-success alert-block">
+      <button type="button" class="close" data-dismiss="alert">×</button>	
+          <strong>{{ $message }}</strong>
+  </div>
+  @endif
   @if(request()->is('show/invoices/*') || request()->is('en/show/invoices/*'))
   <span style="margin-right: 10px" class="badge badge-warning">
     {{__('reports.click_calendar_to_search_by_date')}}
@@ -157,6 +163,8 @@
                           {{__('sales.hang_badge')}}
                           @elseif($invoice->status == 'retrieved')
                           {{__('sales.retrieve')}}
+                          @elseif($invoice->status == 'deleted')
+                          {{__('reports.deleted')}}
                           @endif
                         </td>
                        
@@ -200,6 +208,39 @@
                           @else
                           <a style="color: #344b5e" class="disabled-a">  <i class="material-icons">
                             price_change
+                          </i> </a>
+                          @endif
+                          |
+                          @if($invoice->daily_report_check==false && $invoice->transform=='no') {{-- delete invoices that maked today --}}
+                          <a style="color: #ff4454" data-toggle="modal" data-target="#exampleModal{{$invoice->id}}" class="active-a"> <i id="{{$i}}" class="material-icons">
+                            delete_forever
+                          </i> </a>
+                                          <!-- Modal for Delete invoice -->
+                        <div class="modal fade" id="exampleModal{{$invoice->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel{{$invoice->id}}" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel{{$invoice->id}}">{{__('reports.delete_invoice')}} </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true"></span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                   {{__('reports.sure_want_to_delete_invoice')}} ? <p style="color: #ff4454; font-weight: bold">{{$invoice->code}} </p>
+                              </div>
+                              <div class="modal-footer">
+                                <a class="btn btn-danger" data-dismiss="modal">{{__('buttons.cancel')}}</a>
+                                <form action="{{route('delete.invoice',$invoice->id)}}" method="POST">
+                                  @csrf
+                                <button type="submit" class="btn btn-primary">{{__('buttons.confirm')}}</button>
+                              </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                          @else
+                          <a style="color: #344b5e" class="disabled-a">  <i class="material-icons">
+                            delete_forever
                           </i> </a>
                           @endif
                       </td>

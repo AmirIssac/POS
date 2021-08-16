@@ -107,7 +107,7 @@ input[type=number] {
                         <td>
                             <?php $total_sum_invoices = 0 ?>
                             @foreach($invoices as $invoice)
-                            @if($invoice->status != 'retrieved' && $invoice->monthlyReports()->count()==0) 
+                            @if($invoice->status != 'retrieved' && $invoice->status != 'deleted' && $invoice->monthlyReports()->count()==0) 
                             <?php $total_sum_invoices += $invoice->total_price ?>
                             @endif
                             @endforeach
@@ -145,7 +145,7 @@ input[type=number] {
                   <tbody>
                       @foreach($invoices as $invoice)
                       @if($invoice->monthlyReports()->count()==0)
-                      @if($invoice->status == 'retrieved')
+                      @if($invoice->status == 'retrieved' || $invoice->status == 'deleted')
                       <tr class="retrieved">
                       @else
                       <tr>
@@ -162,9 +162,13 @@ input[type=number] {
                         <td>
                           {{__('sales.hang_badge')}}
                         </td>
-                        @else
+                        @elseif($invoice->status=="retrieved")
                         <td>
                           {{__('sales.retrieved_badge')}}
+                        </td>
+                        @elseif($invoice->status=="deleted")
+                        <td>
+                          {{__('reports.deleted')}}
                         </td>
                         @endif
                       <td>
@@ -179,7 +183,7 @@ input[type=number] {
                       <td>
                         {{$invoice->stc_amount}}
                       </td>
-                      @if($invoice->status == 'retrieved')
+                      @if($invoice->status == 'retrieved' || $invoice->status == 'deleted')
                       <td class="retrieved-td">
                         {{$invoice->total_price}}-
                       </td>
@@ -267,9 +271,13 @@ input[type=number] {
                 <td>
                   {{__('sales.hang_badge')}}
                 </td>
-                @else
+                @elseif($invoice->status=="retrieved")
                 <td>
                   {{__('sales.retrieved_badge')}}
+                </td>
+                @elseif($invoice->status=="deleted")
+                <td>
+                  {{__('reports.deleted')}}
                 </td>
                 @endif
               <td>
@@ -284,7 +292,7 @@ input[type=number] {
               <td>
                 {{$invoice->stc_amount}}
               </td>
-              @if($invoice->status == 'retrieved')
+              @if($invoice->status == 'retrieved' || $invoice->status == 'deleted')
               <td class="retrieved-td">
                 {{$invoice->total_price}}-
               </td>

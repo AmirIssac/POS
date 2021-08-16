@@ -39,7 +39,7 @@
                      <td>{{$owner->email}}</td>
                      <td>{{$owner->phone}}</td>
                      <td>
-                      <a style="color: white" href="{{route('show.worker.sales',$owner->id)}}" role="button" class="btn btn-info"> {{__('buttons.view')}} </a>
+                      <a style="color: white" href="{{route('show.worker.sales',[$owner->id,$repository->id])}}" role="button" class="btn btn-info"> {{__('buttons.view')}} </a>
 
                      </td>
                     </tr>
@@ -109,7 +109,7 @@
                      </td>
                      @endif
                      <td>
-                      <a style="color: white" href="{{route('show.worker.sales',$worker->id)}}" role="button" class="btn btn-info"> {{__('buttons.view')}} </a>
+                      <a style="color: white" href="{{route('show.worker.sales',[$worker->id,$repository->id])}}" role="button" class="btn btn-info"> {{__('buttons.view')}} </a>
                      </td>
                     </tr>
                     @endforeach

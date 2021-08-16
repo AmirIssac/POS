@@ -58,8 +58,10 @@
                    </br>
                    <span class="badge badge-warning">
                    {{__('dashboard.hanging')}}  {{$arr['hanging']}}</span>
-                   <span class="badge badge-secondary">
+                   <span class="badge badge-danger">
                    {{__('dashboard.retrieved')}}  {{$arr['retrieved']}}</span>
+                   <span class="badge badge-secondary">
+                    {{__('reports.deleted')}}  {{$arr['deleted']}}</span>
                    </p>
                  </div>
                  <div class="card-footer">
@@ -86,8 +88,10 @@
                    </br>
                    <span class="badge badge-warning">
                    {{__('dashboard.hanging')}}  {{$arr['hanging']}}</span>
-                   <span class="badge badge-secondary">
+                   <span class="badge badge-danger">
                    {{__('dashboard.retrieved')}}  {{$arr['retrieved']}}</span>
+                   <span class="badge badge-secondary">
+                    {{__('reports.deleted')}}  {{$arr['deleted']}}</span>
                    </p>
                  </div>
                  <div class="card-footer">

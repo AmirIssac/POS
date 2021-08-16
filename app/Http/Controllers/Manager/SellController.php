@@ -959,4 +959,44 @@ class SellController extends Controller
 
         return back()->with('success')->with('success',__('alerts.edit_success'));
     }
+
+    public function deleteInvoice($id){
+        $invoice = Invoice::find($id);
+        $repository = $invoice->repository;
+        $records = unserialize($invoice->details); // array of arrays
+        for($i=1;$i<count($records);$i++)
+        {
+            $product = Product::where('repository_id',$repository->id)->where('barcode',$records[$i]['barcode'])->first();
+            $new_quantity = $product->quantity + floatval($records[$i]['delivered']);
+            $product->update([   // retrieve the products to stock
+                'quantity' => $new_quantity,
+            ]);
+        }
+        if($invoice->status == 'delivered')
+            $transform = 'd-x';
+        if($invoice->status == 'pending')
+            $transform = 'p-x';
+        $invoice->update([
+            'status' => 'deleted',
+            'transform' => $transform,
+            'created_at' => now(),
+        ]);
+
+        // back money
+        $repository->update([
+            'cash_balance' => $repository->cash_balance - $invoice->cash_amount,
+            'card_balance' => $repository->card_balance - $invoice->card_amount,
+            'stc_balance' => $repository->stc_balance - $invoice->stc_amount,
+            'balance' => $repository->balance - $invoice->cash_amount,
+        ]);
+        // update month statistics
+        $statistic = $repository->statistic;
+        $statistic->update([
+            'm_in_cash_balance' => $statistic->m_in_cash_balance - $invoice->cash_amount,
+            'm_in_card_balance' => $statistic->m_in_card_balance - $invoice->card_amount,
+            'm_in_stc_balance' => $statistic->m_in_stc_balance - $invoice->stc_amount,
+        ]);
+
+        return back()->with('success',__('alerts.delete_success'));
+    }
 }

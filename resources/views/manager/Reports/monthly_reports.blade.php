@@ -81,7 +81,7 @@
                       <td>
                         <?php $total_sum_invoices = 0 ?>
                             @foreach($invoices as $invoice)
-                            @if($invoice->status != 'retrieved')
+                            @if($invoice->status != 'retrieved' && $invoice->status != 'deleted')
                             <?php $total_sum_invoices += $invoice->total_price ?>
                             @endif
                             @endforeach
@@ -125,7 +125,7 @@
                         <td>
                             <?php $total_sum_invoices = 0 ?>
                             @foreach($report->invoices as $invoice)
-                            @if($invoice->status != 'retrieved')
+                            @if($invoice->status != 'retrieved' && $invoice->status != 'deleted')
                             <?php $total_sum_invoices += $invoice->total_price ?>
                             @endif
                             @endforeach

@@ -41,5 +41,8 @@ return [
     'previous_inv_edited_today' => 'فواتير سابقة تم استكمالها\استرجاعها في هذا التقرير',
     'monthly_sales' => 'مبيعات الشهر',
     'invoices_num' => 'عدد الفواتير',
+    'deleted' => 'محذوفة',
+    'sure_want_to_delete_invoice' => 'هل أنت متأكد أنك تريد حذف هذه الفاتورة',
+    'delete_invoice' => 'حذف فاتورة',
 ];
 ?>

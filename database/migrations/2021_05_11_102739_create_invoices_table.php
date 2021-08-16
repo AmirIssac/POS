@@ -27,11 +27,11 @@ class CreateInvoicesTable extends Migration
             $table->boolean('card_check')->default(0);
             $table->float('cash_amount')->default(0);
             $table->float('card_amount')->default(0);
-            $table->enum('status',['delivered','pending','retrieved']);    // حالة الفاتورة تم التسليم و معلق مسترجعة لمحل النظارات
+            $table->enum('status',['delivered','pending','retrieved']); // {{deleted}}    // حالة الفاتورة تم التسليم و معلق مسترجعة لمحل النظارات
             $table->string('phone')->nullable();  // client number
             $table->timestamp('created_at');   // custom timestamp
             $table->boolean('daily_report_check')->default(0);
-            $table->enum('transform',['no','p-d','p-r','d-r'])->after('created_at')->default('no');
+            $table->enum('transform',['no','p-d','p-r','d-r'])->after('created_at')->default('no'); // {{p-x,d-x}}
             $table->float('tax')->after('stc_amount')->default(0);   // real value
             $table->string('tax_code')->after('tax')->default('0000');
             $table->string('note')->default(null)->nullable();

@@ -145,6 +145,8 @@
                           {{__('sales.hang_badge')}}
                           @elseif($invoice->status == 'retrieved')
                           {{__('sales.retrieved_badge')}}
+                          @elseif($invoice->status == 'deleted')
+                          {{__('reports.deleted')}}
                           @endif
                         @else {{-- there is a transform --}}
                             @if($invoice->transform == 'p-d')
@@ -153,6 +155,10 @@
                             {{__('sales.hang_badge')}} => {{__('sales.retrieved_badge')}}
                             @elseif($invoice->transform == 'd-r')
                             {{__('sales.del_badge')}}  => {{__('sales.retrieved_badge')}}
+                            @elseif($invoice->transform == 'd-x')
+                            {{__('sales.del_badge')}}  => {{__('reports.deleted')}}
+                            @elseif($invoice->transform == 'p-x')
+                            {{__('sales.hang_badge')}}  => {{__('reports.deleted')}}
                             @endif
                         @endif
                        </td>

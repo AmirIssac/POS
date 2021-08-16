@@ -24,5 +24,15 @@ return [
     'prescription_saved_success' => 'تم حفظ الوصفة بنجاح',
     'failed_retrieve_money_cashier_not_enough' => 'لا يمكن الاسترجاع المبلغ في الدرج غير كاف',
     'payed_money_notequal_to_old' => 'المبلغ المدفوع لا يساوي المبلغ المدفوع سابقا',
+    'delete_success' => 'تم الحذف بنجاح',
+    'new_min_pay_set_success' => 'تم تعيين نسبة الحد الادنى للدفع بنجاح',
+    'new_tax_set_success' => 'تم تعيين الضريبة بنجاح',
+    'new_max_discount_set_success' => 'تم تعيين الحد الاعلى للخصم بنجاح',
+    'error_file' => 'خطأ في الملف',
+    'settings_set_success' => 'تم تعيين الاعدادات بنجاح',
+    'general_settings_chaanged_success' => 'تم تغيير الاعدادات العامة بنجاح',
+    'employee_exist_fail' => 'الموظف موجود في هذا الفرع',
+    'new_employee_add_success' => 'تم اضافة موظف جديد بنجاح',
+    'edit_employee_permissions_success' => 'تم تعديل صلاحيات الموظف بنجاح',
 ];
 ?>

@@ -39,7 +39,7 @@ class SettingsController extends Controller
                 'min_payment' => $request->min,
             ]
             );
-            return back()->with('success',' تم تعيين نسبة حد أدنى للدفع جديدة وهي '.$request->min);
+            return back()->with('success',__('alerts.new_min_pay_set_success').$request->min);
     }
 
     public function tax(Request $request , $id){
@@ -50,7 +50,7 @@ class SettingsController extends Controller
                 'tax_code' => $request->taxcode,
             ]
             );
-            return back()->with('success',' تم تعيين الضريبة الجديدة بنجاح ');
+            return back()->with('success',__('alerts.new_tax_set_success'));
     }
 
     public function maxDiscount(Request $request , $id){
@@ -58,7 +58,7 @@ class SettingsController extends Controller
         $repository->update([
             'max_discount' => $request->max_discount,
         ]);
-        return back()->with('success',' تم تعيين  الحد الأعلى للخصم بنجاح ');
+        return back()->with('success',__('alerts.new_max_discount_set_success'));
     }
 
     public function app($id){
@@ -87,7 +87,7 @@ class SettingsController extends Controller
             // Redirect or return json to frontend with a helpful message to inform the user 
             // that the provided file was not an adequate type
             //return back()->with(['errors' => $validator->errors()->getMessages()]);
-            return back()->with(['errors' => 'خطأ في الملف']);
+            return back()->with(['errors' => __('alerts.error_file')]);
         } else
         {
             // Store the File Now
@@ -101,7 +101,7 @@ class SettingsController extends Controller
             }
         }
             
-                return back()->with('success',' تم تعيين الاعدادات  بنجاح ');
+                return back()->with('success',__('alerts.settings_set_success'));
         
     }
 
@@ -114,7 +114,7 @@ class SettingsController extends Controller
             'close_time' => $request->close_time,
             'note' => $request->note,
         ]);
-        return back()->with('success','تم تغيير الاعدادت العامة بنجاح');
+        return back()->with('success',__('alerts.general_settings_chaanged_success'));
     }
 
     public function addWorkerForm($id){
@@ -137,7 +137,7 @@ class SettingsController extends Controller
             if(!$worker)
             $repository->users()->attach($user->id); //pivot table insert
             else
-            return redirect()->route('manager.settings.index')->with('fail','هذا الموظف موجود في هذا الفرع');
+            return redirect()->route('manager.settings.index')->with('fail',__('alerts.employee_exist_fail'));
         }
         else{
        $user = User::create(
@@ -152,7 +152,7 @@ class SettingsController extends Controller
             $user->assignRole('عامل-مخزن');  // this role will not contain any permission by default but we use role for dashboard
         }
             $user->givePermissionTo($request->permissions);
-            return redirect()->route('manager.settings.index')->with('successWorker','تم اضافة موظف جديد للمتجر بنجاح');
+            return redirect()->route('manager.settings.index')->with('successWorker',__('alerts.new_employee_add_success'));
   
     }
 
@@ -179,7 +179,7 @@ class SettingsController extends Controller
     public function editWorkerPermissions(Request $request,$id){
         $user = User::find($id);
         $user->syncPermissions($request->permissions);
-        return back()->with('success','تم تعديل صلاحيات الموظف بنجاح');
+        return back()->with('success',__('alerts.edit_employee_permissions_success'));
     }
 
     public function clients($id){
@@ -199,7 +199,7 @@ class SettingsController extends Controller
             'name' => $request->name,
             'phone' => $request->phone,
         ]);
-        return back()->with('success','تم التعديل بنجاح');
+        return back()->with('success',__('alerts.edit_success'));
     }
 
     public function editWorkerInfo($id){
@@ -213,13 +213,14 @@ class SettingsController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
         ]);
-        return back()->with('success','تم التعديل بنجاح');
+        return back()->with('success',__('alerts.edit_success'));
     }
 
-    public function showWorkerSales($id){   // this month sales
+    public function showWorkerSales($id , $repoId){   // this month sales
         $user = User::find($id);
+        $repository = Repository::find($repoId); 
         //$invoices = $user->invoices()->paginate(30);
-        $invoices = $user->invoices()->whereYear('created_at', '=', now()->year)
+        $invoices = $user->invoices()->where('repository_id',$repository->id)->whereYear('created_at', '=', now()->year)
         ->whereMonth('created_at','=',now()->month)->where('monthly_report_check',false)->get();
         return view('manager.Settings.worker_sales')->with(['user'=>$user,'invoices'=>$invoices]);
     }

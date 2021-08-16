@@ -41,5 +41,8 @@ return [
     'previous_inv_edited_today' => 'Previous invoices delivered/funded in this report',
     'monthly_sales' => 'Monthly sales',
     'invoices_num' => 'Number of invoices',
+    'deleted' => 'Deleted',
+    'sure_want_to_delete_invoice' => 'Are you sure you want to delete this invoice',
+    'delete_invoice' => 'Delete invoice',
 ];
 ?>

@@ -52,7 +52,7 @@
                   <tbody>
                     <?php $sales = 0 ; ?>
                    @foreach($invoices as $invoice)
-                   @if($invoice->status != 'retrieved' && $invoice->monthlyReports()->count()==0) 
+                   @if($invoice->status != 'retrieved' && $invoice->status != 'deleted' && $invoice->monthlyReports()->count()==0) 
                     <?php $sales+=$invoice->total_price ?>
                     @endif
                    @endforeach
