@@ -245,6 +245,92 @@
                     </div> 
         </div>
         <hr>
+        @if($repository->setting->print_prescription == true)
+        <div id='prescription'>
+          <div id="recipe" class="card">
+            <div class="card-header card-header-primary">
+              <h4 class="card-title ">  الوصفة الطبية  </h4>
+              @if(array_key_exists('name', $recipe))
+                {{$recipe['name']}}
+              @endif
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table dir="ltr" id="myTable" class="table table-bordered">
+                  <thead class="text-primary">
+                    <th style="text-align: center; font-weight: bold; font-size: 18px;">
+                      EYE 
+                    </th>
+                    <th>
+                      SPH  
+                    </th>
+                    <th>
+                      CYL  
+                     </th>   
+                     <th>
+                      Axis  
+                    </th>
+                    <th>
+                      ADD  
+                    </th>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="text-align: center; font-weight: bold; font-size: 18px;">
+                        RIGHT
+                      </td>
+                      <td>
+                        {{$recipe['sph_r']}}
+                      </td>
+                      <td>
+                        {{$recipe['cyl_r']}}
+                      </td>
+                      <td>
+                        {{$recipe['axis_r']}}
+                      </td>
+                      <td>
+                        {{$recipe['add_r']}}
+                      </td>
+                    </tr>
+                    <tr>
+                     <td style="text-align: center; font-weight: bold; font-size: 18px;">
+                       LEFT
+                     </td>
+                     <td>
+                      {{$recipe['sph_l']}}
+                    </td>
+                    <td>
+                      {{$recipe['cyl_l']}}
+                    </td>
+                    <td>
+                      {{$recipe['axis_l']}}
+                    </td>
+                    <td>
+                      {{$recipe['add_l']}}
+                    </td>
+                  </tr>
+                  <tr>
+                   <td style="border: none">
+                   </td>
+                   <td style="border: none">
+                   </td>
+                   <td style="text-align: center; font-weight: bold; font-size: 18px;">
+                     IPD
+                   </td>
+                    <td>
+                      {{$recipe['ipd']}}
+                    </td>
+                    <td style="border: none">
+                   </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr>
+        @endif
         <div style="display: flex; justify-content: space-between">
           <h4>العميل {{$customer->name}}</h4>
           <h4>جوال العميل {{$customer->phone}}</h4>
@@ -267,7 +353,7 @@
 
         
     </div>
- 
+
  
 @section('scripts')
 <script>

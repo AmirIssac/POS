@@ -69,5 +69,7 @@ return [
     'add_note' => 'أضف ملاحظة',
     'edit_note' => 'عدل الملاحظة', 
     'edit_payment_values_invoice' => 'تعديل قيم الدفع لهذه الفاتورة',
+    'basic_prescription' => 'الوصفة الاساسية',
+    'new_prescription' => 'وصفة جديدة',
 ];
 ?>

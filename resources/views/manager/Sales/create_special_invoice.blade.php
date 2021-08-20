@@ -1,11 +1,12 @@
 @extends('layouts.main')
 @section('links')
 <style>
-form i{
-  float: left;
-}
+
 form i:hover{
   cursor: pointer;
+}
+input[type="radio"]{
+  background-color: #93cb52;
 }
 .blank{
   background-color: white !important;
@@ -78,6 +79,7 @@ input[type=number] {
   font-weight: bold;
   width: 157px;
 }
+
 .delete:hover{
   cursor: pointer;
 }
@@ -87,6 +89,9 @@ select{
 }
 #tooltip:hover{
   cursor: default;
+}
+#plus-recipe{
+
 }
 @media print{
  /* body, html, #myform { 
@@ -253,6 +258,9 @@ select{
                 {{__('sales.total_price')}}
               </th>
               <th>
+                {{__('sales.prescription')}}
+              </th>
+              <th>
                 {{__('sales.date')}}
               </th>
               <th>
@@ -284,6 +292,14 @@ select{
               {{$invoice->total_price}}
             </td>
             <td>
+              <?php $rec = unserialize($invoice->recipe) ?>
+              @if(array_key_exists('name', $rec))
+              {{$rec['name']}}
+              @else
+              {{__('sales.basic_prescription')}}
+              @endif
+            </td>
+            <td>
               {{$invoice->created_at}}
             </td>
             <td>
@@ -310,23 +326,24 @@ select{
     <button class="btn btn-secondary dropdown-toggle" type="button" id="toggle-recipe" >
       {{__('sales.prescription')}} 
   </button>
-  @if(isset($saved_recipe) && count($saved_recipe)>0)
+  @if(isset($saved_recipes) && $saved_recipes->count()>0)
   <div id="recipe" class="card">
   @else
     <div id="recipe" class="card">
       @endif
       <div class="card-header card-header-primary">
         <h4 class="card-title ">  {{__('sales.prescription')}}  </h4>
+       {{-- <input type="radio" name="recipe_radio" value="0" checked> --}}
       </div>
       <div class="card-body">
         <div class="table-responsive">
           <table id="myTable" class="table table-bordered">
             <thead class="text-primary">
-              @if(isset($saved_recipe) && count($saved_recipe)>0)
+              @if(isset($saved_recipes)  && $saved_recipes->count()>0)
               <span class="badge badge-success"> {{__('sales.archived')}}  </span>
               @endif
               <th style="text-align: center; font-weight: bold; font-size: 18px;">
-                EYE  
+                EYE 
               </th>
               <th>
                 SPH  
@@ -342,7 +359,10 @@ select{
               </th>
             </thead>
             <tbody>
-              @if(isset($saved_recipe) && count($saved_recipe)>0)
+              @if(isset($saved_recipes) && $saved_recipes->count()>0)
+              @foreach($saved_recipes as $saved_recipe)
+              @if($saved_recipe->name == null)
+              <?php $saved_recipe = unserialize($saved_recipe->recipe) ?>
            <tr>
             <td style="text-align: center; font-weight: bold; font-size: 18px;">
               RIGHT
@@ -495,6 +515,8 @@ select{
              <td style="border: none">
             </td>
            </tr>
+           @endif
+           @endforeach
            @else
            <tr>
             <td style="text-align: center; font-weight: bold; font-size: 18px;">
@@ -623,6 +645,382 @@ select{
 </div>
 </div>
 
+
+<select id="plus-recipe" name="recipe_radio" class="form-control">
+<option value="0"  selected> {{__('sales.basic_prescription')}}</option>  {{-- value=0 mean its the basic recipe --}}
+<?php $additional_archived = 0; ?>  {{-- first we display archived additional recipes --}}
+@if(isset($saved_recipes))
+@foreach($saved_recipes as $saved_recipe)
+@if($saved_recipe->name != null)
+<?php
+ $additional_archived += 1;
+ $nickname = $saved_recipe->name; // to take name
+ $saved_recipe = unserialize($saved_recipe->recipe) ?>
+ <option value="{{$additional_archived}}">{{$nickname}}-{{$additional_archived}}</option>
+ @endif
+ @endforeach
+ @endif
+ @for ($t=$additional_archived + 1 ; $t<6 ; $t++)
+ <option value="{{$t}}"> {{__('sales.new_prescription')}}-{{$t}}</option>
+ @endfor
+</select>
+
+
+
+{{--<button style="margin-right: 15px;" id="plus-recipe" type="button" class="btn">اضافة وصفة أخرى</button>--}}
+<?php $additional_archived = 0; ?>  {{-- first we display archived additional recipes --}}
+@if(isset($saved_recipes))
+@foreach($saved_recipes as $saved_recipe)
+@if($saved_recipe->name != null)
+<?php
+ $additional_archived += 1;
+ $nickname = $saved_recipe->name; // to take name
+ $saved_recipe = unserialize($saved_recipe->recipe) ?>
+ <div class="col-md-12 displaynone" id='extra-recipe{{$additional_archived}}'>
+  <div class="card">
+    <div class="card-header card-header-primary">
+      <h4 class="card-title ">  {{__('sales.prescription')}}  </h4>
+      <span class="badge badge-success">{{$nickname}}</span>
+      <input type="hidden" id="recipe_name{{$additional_archived}}" name="recipe_name[]" value="{{$nickname}}" placeholder="اكتب الاسم هنا">
+     {{-- <input type="radio" name="recipe_radio" value="{{$additional_archived}}"> --}}{{-- to determine which recipe we are doing sell proccess now --}}
+    </div>                                {{-- we determine the index of arr from the recipe radio in controller --}}
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="myTable" class="table table-bordered">
+          <thead class="text-primary">
+            <th style="text-align: center; font-weight: bold; font-size: 18px;">
+              EYE
+            </th>
+            <th>
+              SPH  
+            </th>
+            <th>
+              CYL  
+             </th>   
+             <th>
+              Axis  
+            </th>
+            <th>
+              ADD  
+            </th>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align: center; font-weight: bold; font-size: 18px;">
+                RIGHT
+              </td>
+              <td>
+                <select name="sph_r_arr[]" class="form-control" required>
+                  @for($i=20.00;$i>=-20.00;$i-=0.25)
+                  @if($i==$saved_recipe['sph_r'] && $i>0)
+                  <option value="{{number_format((float)$i, 2, '.', '')}}" selected>+{{number_format((float)$i, 2, '.', '')}}</option>
+                  @elseif($i==$saved_recipe['sph_r'] && $i<=0)
+                  <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
+                  @elseif($i!=$saved_recipe['sph_r'] && $i>0))
+                  <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
+                  @else
+                  <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
+                  @endif
+                  @endfor
+                </select>
+                {{--<input type="number" step="0.25" min="-20" max="20" name="sph_r" value="{{$saved_recipe['sph_r']}}">--}}
+              </td>
+              <td>
+                <select name="cyl_r_arr[]" class="form-control" required>
+                  @for($i=20.00;$i>=-20.00;$i-=0.25)
+                  @if($i==$saved_recipe['cyl_r'] && $i>0)
+                  <option value="{{number_format((float)$i, 2, '.', '')}}" selected>+{{number_format((float)$i, 2, '.', '')}}</option>
+                  @elseif($i==$saved_recipe['cyl_r'] && $i<=0)
+                  <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
+                  @elseif($i!=$saved_recipe['cyl_r'] && $i>0))
+                  <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
+                  @else
+                  <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
+                  @endif
+                  @endfor
+                </select>
+                {{--<input type="number" step="0.25" min="-20" max="20" name="cyl_r" value="{{$saved_recipe['cyl_r']}}">--}}
+              </td>
+              <td>
+                {{--<select name="axis_r" class="form-control">
+                  @for($i=180;$i>=0;$i-=1)
+                  @if($i==$saved_recipe['axis_r'] && $i>0)
+                  <option value="{{$i}}" selected>+{{$i}}</option>
+                  @elseif($i==$saved_recipe['axis_r'] && $i==0)
+                  <option value="{{$i}}" selected>{{$i}}</option>
+                  @elseif($i!=$saved_recipe['axis_r'] && $i>0))
+                  <option value="{{$i}}">+{{$i}}</option>
+                  @else
+                  <option value="{{$i}}">{{$i}}</option>
+                  @endif
+                  @endfor
+                </select>--}}
+                <input type="number" step="1" max="180" name="axis_r_arr[]" value="{{$saved_recipe['axis_r']}}" class="form-control" required>
+                </td>
+              <td>
+                <select name="add_r_arr[]" class="form-control" required>
+                  @for($i=20.00;$i>=0;$i-=0.25)
+                  @if($i==$saved_recipe['add_r'] && $i>0)
+                  <option value="{{number_format((float)$i, 2, '.', '')}}" selected>+{{number_format((float)$i, 2, '.', '')}}</option>
+                  @elseif($i==$saved_recipe['add_r'] && $i==0)
+                  <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
+                  @elseif($i!=$saved_recipe['add_r'] && $i>0))
+                  <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
+                  @else
+                  <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
+                  @endif
+                  @endfor
+                </select>
+                {{--<input type="number" step="0.25" min="0" max="20" name="add_r" value="{{$saved_recipe['add_r']}}">--}}
+              </td>
+             </tr>
+             <tr>
+              <td style="text-align: center; font-weight: bold; font-size: 18px;">
+                LEFT
+              </td>
+              <td>
+                <select name="sph_l_arr[]" class="form-control" required>
+                  @for($i=20.00;$i>=-20.00;$i-=0.25)
+                  @if($i==$saved_recipe['sph_l'] && $i>0)
+                  <option value="{{number_format((float)$i, 2, '.', '')}}" selected>+{{number_format((float)$i, 2, '.', '')}}</option>
+                  @elseif($i==$saved_recipe['sph_l'] && $i<=0)
+                  <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
+                  @elseif($i!=$saved_recipe['sph_l'] && $i>0))
+                  <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
+                  @else
+                  <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
+                  @endif
+                  @endfor
+                </select>
+               {{-- <input type="number" step="0.25" min="-20" max="20" name="sph_l" value="{{$saved_recipe['sph_l']}}"> --}}
+              </td>
+              <td>
+                <select name="cyl_l_arr[]" class="form-control" required>
+                  @for($i=20.00;$i>=-20.00;$i-=0.25)
+                  @if($i==$saved_recipe['cyl_l'] && $i>0)
+                  <option value="{{number_format((float)$i, 2, '.', '')}}" selected>+{{number_format((float)$i, 2, '.', '')}}</option>
+                  @elseif($i==$saved_recipe['cyl_l'] && $i<=0)
+                  <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
+                  @elseif($i!=$saved_recipe['cyl_l'] && $i>0))
+                  <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
+                  @else
+                  <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
+                  @endif
+                  @endfor
+                </select>
+                {{--<input type="number" step="0.25" min="-20" max="20" name="cyl_l" value="{{$saved_recipe['cyl_l']}}">--}}
+              </td>
+              <td>
+                {{--<select name="axis_l" class="form-control">
+                  @for($i=180;$i>=0;$i-=1)
+                  @if($i==$saved_recipe['axis_l'] && $i>0)
+                  <option value="{{$i}}" selected>+{{$i}}</option>
+                  @elseif($i==$saved_recipe['axis_l'] && $i==0)
+                  <option value="{{$i}}" selected>{{$i}}</option>
+                  @elseif($i!=$saved_recipe['axis_l'] && $i>0))
+                  <option value="{{$i}}">+{{$i}}</option>
+                  @else
+                  <option value="{{$i}}">{{$i}}</option>
+                  @endif
+                  @endfor
+                </select>--}}
+                <input type="number" min="0" max="180" name="axis_l_arr[]" value="{{$saved_recipe['axis_l']}}" class="form-control" required>
+              </td>
+              <td>
+                <select name="add_l_arr[]" class="form-control" required>
+                  @for($i=20.00;$i>=0;$i-=0.25)
+                  @if($i==$saved_recipe['add_l'] && $i>0)
+                  <option value="{{number_format((float)$i, 2, '.', '')}}" selected>+{{number_format((float)$i, 2, '.', '')}}</option>
+                  @elseif($i==$saved_recipe['add_l'] && $i==0)
+                  <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
+                  @elseif($i!=$saved_recipe['add_l'] && $i>0))
+                  <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
+                  @else
+                  <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
+                  @endif
+                  @endfor
+                </select>
+                {{--<input type="number" step="0.25" min="0" max="20" name="add_l" value="{{$saved_recipe['add_l']}}">--}}
+              </td>
+             </tr>
+             <tr>
+              <td style="border: none">
+              </td>
+              <td style="border: none">
+              </td>
+              <td style="text-align: center; font-weight: bold; font-size: 18px;">
+                IPD
+              </td>
+               <td>
+                <input type="number" min="0" max="100" name="ipdval_arr[]" value="{{$saved_recipe['ipd']}}" class="form-control" required>
+               </td>
+               <td style="border: none">
+              </td>
+             </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+ </div>
+ @endif
+ @endforeach
+ @endif
+@for ($t=$additional_archived + 1 ; $t<6 ; $t++)
+<div class="col-md-12 displaynone" id='extra-recipe{{$t}}'>
+<div class="card">
+  <div class="card-header card-header-primary">
+    <h4 class="card-title ">  {{__('sales.prescription')}}  </h4>
+    <input type="text" id="recipe_name{{$t}}" name="recipe_name[]" placeholder="اكتب الاسم هنا">
+   {{-- <input type="radio" name="recipe_radio" value="{{$t}}"> --}} {{-- to determine which recipe we are doing sell proccess now --}}
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table id="myTable" class="table table-bordered">
+        <thead class="text-primary">
+          <th style="text-align: center; font-weight: bold; font-size: 18px;">
+            EYE 
+          </th>
+          <th>
+            SPH  
+          </th>
+          <th>
+            CYL  
+           </th>   
+           <th>
+            Axis  
+          </th>
+          <th>
+            ADD  
+          </th>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align: center; font-weight: bold; font-size: 18px;">
+              RIGHT
+            </td>
+            <td>
+              <select name="sph_r_arr[]" class="form-control" required>
+                @for($i=20.00;$i>=-20.00;$i-=0.25)
+                @if($i==0)  {{-- default value --}}
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
+                @elseif($i>0)
+                <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
+                @else
+                <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
+                @endif
+                @endfor
+              </select>
+             {{-- <input type="number" step="0.25" min="-20" max="20" name="sph_r" value="0"> --}}
+            </td>
+            <td>
+              <select name="cyl_r_arr[]" class="form-control" required>
+                @for($i=20.00;$i>=-20.00;$i-=0.25)
+                @if($i==0)  {{-- default value --}}
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
+                @elseif($i>0)
+                <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
+                @else
+                <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
+                @endif
+                @endfor
+              </select>
+              {{--<input type="number" step="0.25" min="-20" max="20" name="cyl_r" value="0">--}}
+            </td>
+            <td>
+              <input type="number" min="0" max="180" name="axis_r_arr[]" value="0" class="form-control" required>
+            </td>
+            <td>
+              <select name="add_r_arr[]" class="form-control" required>
+                @for($i=20.00;$i>=0;$i-=0.25)
+                @if($i==0)  {{-- default value --}}
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
+                @elseif($i>0)
+                <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
+                @else
+                <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
+                @endif
+                @endfor
+              </select>
+              {{--<input type="number" step="0.25" min="0" max="20" name="add_r" value="0">--}}
+            </td>
+           </tr>
+           <tr>
+            <td style="text-align: center; font-weight: bold; font-size: 18px;">
+              LEFT
+            </td>
+            <td>
+              <select name="sph_l_arr[]" class="form-control" required>
+                @for($i=20.00;$i>=-20.00;$i-=0.25)
+                @if($i==0)  {{-- default value --}}
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
+                @elseif($i>0)
+                <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
+                @else
+                <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
+                @endif
+                @endfor
+              </select>
+              {{--<input type="number" step="0.25" min="-20" max="20" name="sph_l" value="0">--}}
+            </td>
+            <td>
+              <select name="cyl_l_arr[]" class="form-control" required>
+                @for($i=20.00;$i>=-20.00;$i-=0.25)
+                @if($i==0)  {{-- default value --}}
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
+                @elseif($i>0)
+                <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
+                @else
+                <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
+                @endif
+                @endfor
+              </select>
+              {{--<input type="number" step="0.25" min="-20" max="20" name="cyl_l" value="0">--}}
+            </td>
+            <td>
+             
+             <input type="number" min="0" max="180" name="axis_l_arr[]" value="0" class="form-control" required>
+            </td>
+            <td>
+              {{--<input type="text" list="addl" min="0" max="20.00" step="0.25">
+              <datalist id="addl">--}}
+                <select name="add_l_arr[]" class="form-control" required>
+                @for($i=20.00;$i>=0;$i-=0.25)
+                @if($i==0)  {{-- default value --}}
+                <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
+                @elseif($i>0)
+                <option value="{{number_format((float)$i, 2, '.', '')}}">+{{number_format((float)$i, 2, '.', '')}}</option>
+                @else
+                <option value="{{number_format((float)$i, 2, '.', '')}}">{{number_format((float)$i, 2, '.', '')}}</option>
+                @endif
+                @endfor
+                </select>
+              {{--</datalist>--}}
+              
+              {{--<input type="number" step="0.25" min="0" max="20" name="add_l" value="0">--}}
+            </td>
+           </tr>
+           <tr>
+            <td style="border: none">
+            </td>
+            <td style="border: none">
+            </td>
+            <td style="text-align: center; font-weight: bold; font-size: 18px;">
+              IPD
+            </td>
+             <td>
+              <input type="number" min="0" max="100" name="ipdval_arr[]" value="0" class="form-control" required>
+             </td>
+             <td style="border: none">
+            </td>
+           </tr>
+     </tbody>
+   </table>
+</div>
+</div>
+</div>
+</div>
+@endfor
   {{--</div>--}}
   
 
@@ -1685,4 +2083,28 @@ window.onload=function(){
   });
  </script>
  
+ {{--<script>   // add new recipe
+  var county = 1;
+  $('#plus-recipe').on('click',function(){
+    $('#extra-recipe'+county).removeClass('displaynone');
+    $('#recipe_name').prop('required',true);
+    county = county + 1;
+  });
+</script> --}}
+
+<script>   // add new recipe
+  $('#plus-recipe').on('change',function(){
+    var value = $('#plus-recipe').val();
+    for(s=0;s<6;s++){
+      if(s==value){
+        $('#extra-recipe'+s).removeClass('displaynone');
+        $('#recipe_name'+s).prop('required',true);
+      }
+      else{
+        $('#extra-recipe'+s).addClass('displaynone');
+        $('#recipe_name'+s).prop('required',false);
+      }
+    }
+  });
+</script>
 @endsection

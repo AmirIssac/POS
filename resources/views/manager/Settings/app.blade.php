@@ -143,6 +143,53 @@ textarea{
       </div>
     </form>
 
+
+    <form action="{{route('confirm.print.settings',$repository->id)}}"  method="post">
+      @csrf
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <h4 class="card-title">{{__('settings.print_settings')}}</h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>
+                  {{__('settings.proccess')}}
+                </th>
+                <th>
+                  {{__('settings.show_hide')}}
+                </th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    {{__('settings.prescription')}}
+                  </td>
+                  <td>
+                    @if($repository->setting->print_prescription == false)
+                    <input type="checkbox" name="prescription" class="form-control">
+                    @else
+                    <input type="checkbox" name="prescription" class="form-control" checked>
+                    @endif
+                  </td>
+                </tr>
+               <tr>
+                 <td>
+                   <button class="btn btn-success">{{__('buttons.confirm')}}</button>
+                 </td>
+                 <td></td>
+               </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+
       </div>
 
 

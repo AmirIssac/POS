@@ -40,6 +40,9 @@ class ReportController extends Controller
     public function printInvoice($id){
         $invoice = Invoice::find($id);
         $repository = $invoice->repository;
+        // send recipe
+        $customer = $invoice->customer;
+        //$recipe = unserialize($customer->savedRecipes[0]->recipe);
         return view('manager.Reports.print_invoice')->with(['repository'=>$repository,'invoice'=>$invoice]);
     }
 

@@ -225,4 +225,16 @@ class SettingsController extends Controller
         return view('manager.Settings.worker_sales')->with(['user'=>$user,'invoices'=>$invoices]);
     }
     
+    public function printSettings(Request $request,$id){
+        $repository = Repository::find($id);
+        $setting = $repository->setting;
+        $print_prescription = false;
+        if($request->prescription)
+            $print_prescription = true;
+        $setting->update([
+            'print_prescription' => $print_prescription,
+        ]);
+
+        return back()->with('success' , 'update print settings');
+    }
 }

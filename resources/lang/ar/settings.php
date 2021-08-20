@@ -42,5 +42,9 @@
         'no_logo_please_upload_one' => 'لا يوجد شعار للمتجر يرجى تحميل شعار جديد',
         'english_name' => 'الاسم بالانجليزية',
         'owner' => 'المالك',
+        'print_settings' => 'اعدادات الطباعة',
+        'proccess' => 'الاجرائية',
+        'show_hide' => 'اظهار\اخفاء',
+        'prescription' => 'الوصفة الطبية',
     ];
     ?>

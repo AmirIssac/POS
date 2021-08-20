@@ -57,9 +57,9 @@
        display: none !important;   /* hide scroll bar */
      }
      #logo{
-       border-radius: 50%;
-       width: 100px;
-       height: 100px;
+      border-radius: 50%;
+       width: 75px;
+       height: 75px;
        z-index: 2;
        margin-top: 25px;
        filter: drop-shadow(0px 3px 5px black);
@@ -100,11 +100,27 @@
   
           Tip 2: you can also add an image using data-image tag
       -->
-        <div class="logo-container">
-          <a style="z-index: 2" href="/">
-        <img src="{{asset('public/img/rofood.jpg')}}" id="logo">
-          </a>
-        </div>
+      <div class="logo-container">
+        {{-- <a style="z-index: 2" href="/"> --}}
+       @if(isset($repositories))  {{-- page for multi repositories --}}
+       <div style="display: flex; flex-direction: row">
+       @if($repositories[0]->logo)
+       <img src="{{asset('public/storage/'.$repositories[0]->logo)}}" id="logo">
+       @else
+       <img src="{{asset('public/img/rofood.jpg')}}" id="logo">
+       @endif
+       </div>
+       @elseif(isset($repository)) {{-- page for one repository --}}
+       @if($repository->logo)
+       <img src="{{asset('public/storage/'.$repository->logo)}}" id="logo">
+       @else
+       <img src="{{asset('public/img/rofood.jpg')}}" id="logo">
+       @endif
+       @else  {{-- not sending repo variable at all --}}
+      <img src="{{asset('public/img/rofood.jpg')}}" id="logo">
+       @endif
+        {{-- </a>  --}}
+       </div>
         <div class="sidebar-wrapper">
           <ul class="nav">
             @can('لوحة التحكم')

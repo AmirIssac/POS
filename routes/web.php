@@ -168,6 +168,7 @@ Route::group(['middleware'=>['permission:الاعدادات']], function () {
     Route::get('edit/worker/info/form/{user_id}','Manager\SettingsController@editWorkerInfo')->name('edit.worker.info');
     Route::post('update/worker/info/{user_id}','Manager\SettingsController@updateWorkerInfo')->name('update.worker.info');
     Route::get('show/worker/sales/{user_id}/{repository_id}','Manager\SettingsController@showWorkerSales')->name('show.worker.sales');
+    Route::post('confirm/print/settings/{repository_id}','Manager\SettingsController@printSettings')->name('confirm.print.settings');
 });
 
 Route::group(['middleware'=>['permission:الكاشير']], function () {

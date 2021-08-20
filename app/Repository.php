@@ -64,6 +64,11 @@ class Repository extends Model
         return $this->hasOne(Statistics::class);
     }
 
+    public function setting()
+    {
+        return $this->hasOne(Setting::class);
+    }
+
     /*public function types(){
         return $this->hasMany(Type::class);
     }*/

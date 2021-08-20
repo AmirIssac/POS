@@ -8,7 +8,7 @@ class SavedRecipe extends Model
 {
     //
     protected $fillable = [
-        'repository_id','customer_id','user_id','recipe',
+        'repository_id','customer_id','user_id','name','recipe',
     ];
 
     public function repository(){

@@ -42,5 +42,10 @@
         'no_logo_please_upload_one' => 'There is no logo please upload new one',
         'english_name' => 'English name',
         'owner' => 'Owner',
+        'print_settings' => 'Print settings',
+        'proccess' => 'Proccess',
+        'show_hide' => 'Show/Hide',
+        'prescription' => 'Prescription',
+
     ];
     ?>

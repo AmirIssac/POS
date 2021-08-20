@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repository;
 use App\RepositoryCategory;
+use App\Setting;
 use App\Statistics;
 use App\User;
 use Illuminate\Http\Request;
@@ -49,6 +50,9 @@ class RepositoryController extends Controller
         ]);
         // open statistic record for this repository  (one-to-one relatioship)
         Statistics::create([
+            'repository_id' => $repository->id,
+        ]);
+        Setting::create([
             'repository_id' => $repository->id,
         ]);
         if(!$request->exist){      // owner not exist before

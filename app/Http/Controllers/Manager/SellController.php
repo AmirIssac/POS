@@ -60,9 +60,8 @@ class SellController extends Controller
                 $saved_recipe = $customer->savedRecipes()->get();
                 //return $saved_recipe;
                 if($saved_recipe && $saved_recipe->count()>0){
-                    $saved_recipe = $saved_recipe->pluck('recipe');
-                    $saved_recipe = unserialize($saved_recipe[0]);
-                    //return $saved_recipe;
+                    //$saved_recipe = $saved_recipe->pluck('recipe');
+                    //$saved_recipe = unserialize($saved_recipe[0]);
                 }
                  // code generate
                 do{
@@ -82,7 +81,7 @@ class SellController extends Controller
                     'code' => $code,
                     'date' => $date,
                     'invoices' => $prev_invoices,
-                    'saved_recipe' => $saved_recipe,
+                    'saved_recipes' => $saved_recipe,
                     'new' => $new,
                     'name_generated' => $name_generated,
                     ]);
@@ -499,9 +498,16 @@ class SellController extends Controller
             $stcVal = $request->stcVal;
         }
         
+        if($request->recipe_radio == 0){  // BASIC RECIPE
         $recipe = array('add_r'=>$request->add_r,'axis_r'=>$request->axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
                         'add_l'=>$request->add_l,'axis_l'=>$request->axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
                         'ipd'=>$request->ipdval,);
+        }
+        else{  // additional recipe
+            $recipe = array('name'=>$request->recipe_name[$request->recipe_radio-1],'add_r'=>$request->add_r_arr[$request->recipe_radio-1],'axis_r'=>$request->axis_r_arr[$request->recipe_radio-1],'cyl_r'=>$request->cyl_r_arr[$request->recipe_radio-1],'sph_r'=>$request->sph_r_arr[$request->recipe_radio-1],
+                        'add_l'=>$request->add_l_arr[$request->recipe_radio-1],'axis_l'=>$request->axis_l_arr[$request->recipe_radio-1],'cyl_l'=>$request->cyl_l_arr[$request->recipe_radio-1],'sph_l'=>$request->sph_l_arr[$request->recipe_radio-1],
+                        'ipd'=>$request->ipdval_arr[$request->recipe_radio-1],);
+        }
         $recipe = serialize($recipe);
 
         // get the owner of this repository to get customer archive from other sub repositories
@@ -577,7 +583,7 @@ class SellController extends Controller
             );
             
             
-            // archive the recipe after sell proccess
+           /* // archive the recipe after sell proccess
             $saved = $customer->savedRecipes;
             if($saved->count()>0){
                 $saved[0]->update([
@@ -593,8 +599,48 @@ class SellController extends Controller
                     'user_id' => Auth::user()->id,
                     'recipe' => $recipe,
                 ]);
+            } */
+
+            // we should determin the sell proccess on which recipe are doing by radio check value
+            if($request->recipe_radio == 0){  // the basic recipe
+                $saved = $customer->savedRecipes()->where('name',null)->first();
+                if($saved){
+                    $saved->update([
+                        'repository_id' => $repository->id,  // update recipe to newest sub repo
+                        'user_id' => Auth::user()->id,
+                        'recipe' => $recipe,
+                    ]);
+                }
+                else{
+                    SavedRecipe::create([
+                        'repository_id' => $id,
+                        'customer_id' => $customer->id,
+                        'user_id' => Auth::user()->id,
+                        'recipe' => $recipe,
+                    ]);
+                }
+                
             }
-       // return redirect(route('create.special.invoice',$repository->id))->with('sellSuccess','تمت عملية البيع بنجاح');
+            else{  // additional recipe
+                $saved = $customer->savedRecipes()->where('name',$request->recipe_name[$request->recipe_radio-1])->first();
+                if($saved){
+                    $saved->update([
+                        'repository_id' => $repository->id,  // update recipe to newest sub repo
+                        'user_id' => Auth::user()->id,
+                        'name' => $request->recipe_name[$request->recipe_radio-1],
+                        'recipe' => $recipe,
+                    ]);
+                }
+                else{
+                    SavedRecipe::create([
+                        'repository_id' => $id,
+                        'customer_id' => $customer->id,
+                        'user_id' => Auth::user()->id,
+                        'name' => $request->recipe_name[$request->recipe_radio-1],
+                        'recipe' => $recipe,
+                    ]);
+                }
+            }
 
        // prepare to send data to print page
        $records = array(array());
@@ -612,11 +658,14 @@ class SellController extends Controller
 
       $id = Auth::user()->id;
       $employee = User::find($id);
+      $recipe_print = unserialize($recipe);
       return view('manager.Sales.print_special_invoice')->with([
           'records'=>$records,'num'=>count($records),'sum'=>$request->sum,'tax'=>$request->taxprint,'total_price'=>$request->total_price,
           'cash'=>$cashVal,'card'=>$cardVal,'stc'=>$stcVal,'repo_id'=>$repository->id,'discount'=>$request->max_discount,
           'date'=>$request->date,'repository' => $repository,
-          'customer' => $customer,'employee'=>$employee,'note'=>$request->note,'remaining_amount'=>$remaining_amount,'invoice'=>$invoice]);   // to print the invoice
+          'customer' => $customer,'employee'=>$employee,'note'=>$request->note,'remaining_amount'=>$remaining_amount,'invoice'=>$invoice,
+          'recipe' => $recipe_print,
+        ]);   // to print the invoice
     }
     
 
