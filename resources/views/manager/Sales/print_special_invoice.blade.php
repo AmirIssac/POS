@@ -174,10 +174,21 @@
                  <div>
                   <h5>الحسم</h5>
                  <div style="display: flex; flex-direction: column; margin-top: 3px;">
+                  @if($repository->setting->discount_by_percent == true)
                    <div style="display: flex;">
                      %<input type="number" value="{{$discount}}" class="form-control" readonly>
-                   </div>
-                 </div>
+                    </div>
+                  @endif
+                  @if($repository->setting->discount_by_value == true)
+                  <div style="display: flex;">
+                    <input type="number" value="{{$discount_by_value}}" class="form-control" readonly>
+                  </div>
+                  @endif
+                  @if($repository->setting->discount_by_value == false && $repository->setting->discount_by_percent == false)
+                  <div style="display: flex;">
+                    <input type="number" value="0" class="form-control" readonly>
+                  </div>
+                  @endif
                </div>
                    </div>
                    @endif
@@ -246,6 +257,7 @@
         </div>
         <hr>
         @if($repository->setting->print_prescription == true)
+        @if(isset($recipe))
         <div id='prescription'>
           <div id="recipe" class="card">
             <div class="card-header card-header-primary">
@@ -330,6 +342,7 @@
           </div>
         </div>
         <hr>
+        @endif
         @endif
         <div style="display: flex; justify-content: space-between">
           <h4>العميل {{$customer->name}}</h4>

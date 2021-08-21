@@ -139,6 +139,64 @@ input[type=number] {
       </div>
       </form>
 
+
+      <form action="{{route('discount.settings',$repository->id)}}"  method="post">
+        @csrf
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-primary">
+              <h4 class="card-title">{{__('settings.determine_discount_proccess')}}</h4>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead class=" text-primary">
+                    <th>
+                      {{__('settings.proccess')}}  
+                    </th>
+                   <th>
+                   </th>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        {{__('settings.percent')}}
+                      </td>
+                      <td>
+                        @if($repository->setting->discount_by_percent == true)
+                        <input type="checkbox" class="form-control" name="discount_by_percent" checked>
+                        @else
+                        <input type="checkbox" class="form-control" name="discount_by_percent">
+                        @endif
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        {{__('settings.value')}}
+                      </td>
+                      <td>
+                        @if($repository->setting->discount_by_value == true)
+                        <input type="checkbox" class="form-control" name="discount_by_value" checked>
+                        @else
+                        <input type="checkbox" class="form-control" name="discount_by_value">
+                        @endif
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <button type="submit" class="btn btn-success">{{__('buttons.confirm')}}</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </form>
+
       
 
       </div>

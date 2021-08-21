@@ -8,7 +8,7 @@ class Setting extends Model
 {
     //
     protected $fillable = [
-        'repository_id', 'print_prescription',
+        'repository_id', 'print_prescription','discount_by_percent','discount_by_value', 
     ];
 
     public function repository()

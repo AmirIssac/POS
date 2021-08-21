@@ -237,4 +237,20 @@ class SettingsController extends Controller
 
         return back()->with('success' , 'update print settings');
     }
+
+    public function discountSettings(Request $request , $id){
+        $repository = Repository::find($id);
+        $discount_by_percent = false;
+        $discount_by_value = false;
+        if($request->discount_by_percent)
+            $discount_by_percent = true;
+        if($request->discount_by_value)
+            $discount_by_value = true;
+        $setting = $repository->setting;
+        $setting->update([
+            'discount_by_percent' => $discount_by_percent,
+            'discount_by_value' => $discount_by_value,
+        ]);
+        return back()->with('success',__('alerts.edit_success'));
+    }
 }

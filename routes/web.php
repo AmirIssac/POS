@@ -161,6 +161,7 @@ Route::group(['middleware'=>['permission:الاعدادات']], function () {
         Route::post('/worker/store/{repository_id}','Manager\SettingsController@storeWorker')->name('store.worker')->middleware('permission:اضافة موظف جديد');
         Route::get('all/workers/{repository_id}','Manager\SettingsController@showWorkers')->name('show.workers');
         Route::post('/general/settings/{repository_id}','Manager\SettingsController@generalSettings')->name('general.settings');
+        Route::post('/discount/settings/{repository_id}','Manager\SettingsController@discountSettings')->name('discount.settings');
     });
     // need middleware for variable
     Route::get('show/worker/permissions/{user_id}','Manager\SettingsController@showWorkerPermissions')->name('show.worker.permissions')->middleware('permission:عرض الموظفين');

@@ -46,5 +46,9 @@
         'proccess' => 'الاجرائية',
         'show_hide' => 'اظهار\اخفاء',
         'prescription' => 'الوصفة الطبية',
+        'determine_discount_proccess' => 'تحديد اجرائية الخصم',
+        'percent' => 'نسبة مئوية',
+        'value' => 'قيمة',
+        'discount_by_value' => 'خصم بالقيمة',
     ];
     ?>

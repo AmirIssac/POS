@@ -148,9 +148,11 @@
                     <h5>الحسم</h5>
                    <div style="display: flex; flex-direction: column; margin-top: 3px;">
                      <div style="display: flex;">
-                        <input type="hidden" name="discountval" value="{{$invoice->discount}}" id="discountVal">
-                       %<input type="number" value="" class="form-control" id="discount" readonly>
+                      {{--  <input type="hidden" name="discountval" value="{{$invoice->discount}}" id="discountVal">
+                       %<input type="number" value="" class="form-control" id="discount" readonly> --}}
+                       <input type="number" class="form-control" value="{{$invoice->discount}}" id="discount" readonly>
                      </div>
+
                    </div>
                  </div>
                      </div>
@@ -316,6 +318,16 @@ $(document).ready(function() {
   });
 </script>
 <script>
+  window.onload = (event) => {
+  var num = parseFloat($('#num').val()); // number of records
+  var sum = 0;
+  for(var i=1;i<num;i++){
+    sum = sum + $('#price'+i).val() * $('#quantity'+i).val();
+  }
+  $('#total_price').val(sum);
+  }
+</script>
+{{--<script>
 window.onload = (event) => {
   var num = parseFloat($('#num').val()); // number of records
   var sum = 0;
@@ -329,11 +341,11 @@ window.onload = (event) => {
   $('#discount').val(discountPercent);
   window.print();
 };
-</script>
-{{--<script>
+</script>--}}
+<script>
     window.onload = (event) => {
         window.print();
     }
-</script>--}}
+</script>
 @endsection
 @endsection

@@ -557,6 +557,7 @@ class SellController extends Controller
         }
 
         $remaining_amount = $request->total_price - ($cashVal + $cardVal + $stcVal); // for printing
+        $discounting = $request->discountVal + $request->discount_by_value;
        $invoice = Invoice::create(
             [
                 'repository_id' => $id,
@@ -566,7 +567,7 @@ class SellController extends Controller
                 'details' => $details,
                 'recipe' => $recipe,
                 'total_price' => $request->total_price,
-                'discount' => $request->discountVal,
+                'discount' => $discounting,
                 'cash_check' => $cash,
                 'card_check' => $card,
                 'stc_check' => $stc,
@@ -662,6 +663,7 @@ class SellController extends Controller
       return view('manager.Sales.print_special_invoice')->with([
           'records'=>$records,'num'=>count($records),'sum'=>$request->sum,'tax'=>$request->taxprint,'total_price'=>$request->total_price,
           'cash'=>$cashVal,'card'=>$cardVal,'stc'=>$stcVal,'repo_id'=>$repository->id,'discount'=>$request->max_discount,
+          'discount_by_value' => $request->discount_by_value, 
           'date'=>$request->date,'repository' => $repository,
           'customer' => $customer,'employee'=>$employee,'note'=>$request->note,'remaining_amount'=>$remaining_amount,'invoice'=>$invoice,
           'recipe' => $recipe_print,
@@ -814,11 +816,14 @@ class SellController extends Controller
                             }
                         }
                         $complete_invoice = true; // to check in blade if we sell invoice for first time or we are completing an invoice
+                        $recipe = unserialize($invoice->recipe);
                         return view('manager.Sales.print_special_invoice')->with([
                             'records'=>$records,'num'=>count($records),'total_price'=>$request->total_price,
                             'extra_price'=>$request->extra_price,'cash'=>$cashVal,'card'=>$cardVal,'stc'=>$stcVal,'repo_id'=>$repository->id
                             ,'date'=>$request->date,'repository' => $repository,
-                            'customer' => $customer,'employee'=>$employee,'complete_invoice'=>$complete_invoice,'invoice'=>$invoice,'note'=>$request->note]);   // to print the invoice
+                            'customer' => $customer,'employee'=>$employee,'complete_invoice'=>$complete_invoice,'invoice'=>$invoice,'note'=>$request->note,
+                            'recipe' => $recipe,
+                        ]);   // to print the invoice
                             } 
 
     public function saveSpecialInvoice(Request $request , $id){

@@ -46,6 +46,9 @@
         'proccess' => 'Proccess',
         'show_hide' => 'Show/Hide',
         'prescription' => 'Prescription',
-
+        'determine_discount_proccess' => 'Determine discount proccess',
+        'percent' => 'Percent',
+        'value' => 'Value',
+        'discount_by_value' => 'Discount by value',
     ];
     ?>

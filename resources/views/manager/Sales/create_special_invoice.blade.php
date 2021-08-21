@@ -1188,9 +1188,24 @@ select{
         <h5>{{__('sales.discount')}}</h5>
        <div style="display: flex; flex-direction: column; margin-top: 3px;">
          <div style="display: flex;">
+          @if($repository->setting->discount_by_percent == true)
            %<input type="number" name="max_discount" value="0" step="0.01" min="0" max="{{$repository->max_discount}}"  id="max-field" class="form-control" required>
            <input type="hidden" name="discountVal" id="discountVal" value="0.00">
+           <input type="hidden" name="check_discount_by_percent" value="1" id="check-discount-by-percent">
            <i id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title=" {{__('sales.max_is')}} %{{$repository->max_discount}} ">live_help</i>
+           @else
+           <input style="display: none" type="number" name="max_discount" value="0" step="0.01" min="0" max="{{$repository->max_discount}}"  id="max-field" class="form-control" required>
+           <input type="hidden" name="discountVal" id="discountVal" value="0.00">
+           <input type="hidden" name="check_discount_by_percent" value="1" id="check-discount-by-percent">
+          @endif
+          @if($repository->setting->discount_by_value == true)
+           <input type="number" name="discount_by_value" value="0" step="0.01" min="0"  id="discount-by-value" class="form-control" required>
+           <input type="hidden" name="check_discount_by_value" value="1" id="check-discount-by-value">
+           <i id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title="{{__('settings.discount_by_value')}}">live_help</i>
+           @else
+           <input style="display: none" type="number" name="discount_by_value" value="0" step="0.01" min="0"  id="discount-by-value" class="form-control" required>
+           <input type="hidden" name="check_discount_by_value" value="1" id="check-discount-by-value">
+          @endif
          </div>
        </div>
      </div>
@@ -1222,21 +1237,21 @@ select{
           <h4> &nbsp; {{__('sales.cash')}}</h4>
           <input style="margin: 7px 10px 0 0" type="checkbox" name="cash" id="cash" checked>
             </div>
-          <input style="margin-right: 0px" type="number" min="0.1" step="0.01" name="cashVal" id="cashVal" value="" class="form-control visible">
+          <input style="margin-right: 0px" type="number" min="0.0000001" step="0.0000001" name="cashVal" id="cashVal" value="" class="form-control visible">
           </div>
           <div style="display: flex;flex-direction: column;">
             <div style="display: flex;">
           <h4> &nbsp; {{__('sales.card')}}</h4>
           <input style="margin: 7px 10px 0 0" type="checkbox" id="card" name="card">
             </div>
-          <input style="margin-right: 0px" type="number" min="0.1" step="0.01" name="cardVal" id="cardVal" value="" class="form-control hidden">
+          <input style="margin-right: 0px" type="number" min="0.0000001" step="0.0000001" name="cardVal" id="cardVal" value="" class="form-control hidden">
           </div>
           <div style="display: flex;flex-direction: column;">
             <div style="display: flex;">
           <h4> &nbsp; STC pay</h4>
           <input style="margin: 7px 10px 0 0" type="checkbox" id="stc" name="stc">
             </div>
-          <input style="margin-right: 0px" type="number" min="0.1" step="0.01" name="stcVal" id="stcVal" value="" class="form-control hidden">
+          <input style="margin-right: 0px" type="number" min="0.0000001" step="0.0000001" name="stcVal" id="stcVal" value="" class="form-control hidden">
           </div>
           </div>
           <h4>{{__('sales.note')}}</h4>
@@ -1359,14 +1374,49 @@ select{
                 var increment1 = (tax * total_price_acc) / 100;
                 var increment2 = (tax * total_price_notacc) / 100;
                 $('#taxfield').val(increment);
+
+                var check_discount_by_percent = $('#check-discount-by-percent').val();
+                var check_discount_by_value = $('#check-discount-by-value').val();
+                if($('#check-discount-by-percent').val() == '1'){
                 var discount_percent = parseFloat($('#max-field').val());
                 var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                discount = discount.toFixed(2);
                 $('#discountVal').val(discount);
                 var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                discount1 = discount1.toFixed(2);
                 var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                discount2 = discount2.toFixed(2);
                 $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discount);
                 $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discount1);
                 $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discount2);
+                  if($('#check-discount-by-value').val() == '1'){
+                  var discountv = parseFloat($('#discount-by-value').val());
+                  $('#final_total_price').val(parseFloat($('#final_total_price').val())-discountv);
+                  $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discountv);
+                  $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discountv);
+                  }
+                }
+                else{
+                if($('#check-discount-by-value').val() == '1'){
+                var discountv = parseFloat($('#discount-by-value').val());
+                $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discountv);
+                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discountv);
+                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discountv);
+                  if($('#check-discount-by-percent').val() == '1'){
+                  var discount_percent = parseFloat($('#max-field').val());
+                  var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                  discount = discount.toFixed(2);
+                  $('#discountVal').val(discount);
+                  var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                  discount1 = discount1.toFixed(2);
+                  var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                  discount2 = discount2.toFixed(2);
+                  $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
+                  $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
+                  $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discount2);
+                  }
+                }
+                }
                 
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
@@ -1454,14 +1504,48 @@ $('#sell-form').keypress(function(e) {
                 var increment1 = (tax * total_price_acc) / 100;
                 var increment2 = (tax * total_price_notacc) / 100;
                 $('#taxfield').val(increment);
+                var check_discount_by_percent = $('#check-discount-by-percent').val();
+                var check_discount_by_value = $('#check-discount-by-value').val();
+                if($('#check-discount-by-percent').val() == '1'){
                 var discount_percent = parseFloat($('#max-field').val());
-                var discount = parseFloat(( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100).toFixed(2);
+                var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                discount = discount.toFixed(2);
                 $('#discountVal').val(discount);
                 var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                discount1 = discount1.toFixed(2);
                 var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                discount2 = discount2.toFixed(2);
                 $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discount);
                 $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discount1);
                 $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discount2);
+                  if($('#check-discount-by-value').val() == '1'){
+                  var discountv = parseFloat($('#discount-by-value').val());
+                  $('#final_total_price').val(parseFloat($('#final_total_price').val())-discountv);
+                  $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discountv);
+                  $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discountv);
+                  }
+                }
+                else{
+                if($('#check-discount-by-value').val() == '1'){
+                var discountv = parseFloat($('#discount-by-value').val());
+                $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discountv);
+                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discountv);
+                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discountv);
+                  if($('#check-discount-by-percent').val() == '1'){
+                  var discount_percent = parseFloat($('#max-field').val());
+                  var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                  discount = discount.toFixed(2);
+                  $('#discountVal').val(discount);
+                  var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                  discount1 = discount1.toFixed(2);
+                  var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                  discount2 = discount2.toFixed(2);
+                  $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
+                  $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
+                  $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discount2);
+                  }
+                }
+                }
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
                 // update min value when total price change
@@ -1608,14 +1692,48 @@ $('input[name="quantity[]"]').on("keyup",function(){
                 var increment1 = (tax * total_price_acc) / 100;
                 var increment2 = (tax * total_price_notacc) / 100;
     $('#taxfield').val(increment);
-    var discount_percent = parseFloat($('#max-field').val());
-    var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
-    $('#discountVal').val(discount);
-    var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
-    var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
-   $('#final_total_price').val((parseFloat($('#total_price').val())+increment)-discount);
-   $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discount1);
-    $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discount2);
+    var check_discount_by_percent = $('#check-discount-by-percent').val();
+                var check_discount_by_value = $('#check-discount-by-value').val();
+                if($('#check-discount-by-percent').val() == '1'){
+                var discount_percent = parseFloat($('#max-field').val());
+                var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                discount = discount.toFixed(2);
+                $('#discountVal').val(discount);
+                var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                discount1 = discount1.toFixed(2);
+                var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                discount2 = discount2.toFixed(2);
+                $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discount);
+                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discount1);
+                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discount2);
+                  if($('#check-discount-by-value').val() == '1'){
+                  var discountv = parseFloat($('#discount-by-value').val());
+                  $('#final_total_price').val(parseFloat($('#final_total_price').val())-discountv);
+                  $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discountv);
+                  $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discountv);
+                  }
+                }
+                else{
+                if($('#check-discount-by-value').val() == '1'){
+                var discountv = parseFloat($('#discount-by-value').val());
+                $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discountv);
+                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discountv);
+                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discountv);
+                  if($('#check-discount-by-percent').val() == '1'){
+                  var discount_percent = parseFloat($('#max-field').val());
+                  var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                  discount = discount.toFixed(2);
+                  $('#discountVal').val(discount);
+                  var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                  discount1 = discount1.toFixed(2);
+                  var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                  discount2 = discount2.toFixed(2);
+                  $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
+                  $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
+                  $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discount2);
+                  }
+                }
+                }
    //console.log($('#final_total_price').val());
   $('#cashVal').val($('#final_total_price').val());     // cash value input
    // update min value when total price change
@@ -1754,14 +1872,48 @@ window.onload=function(){
                 var increment1 = (tax * total_price_acc) / 100;
                 var increment2 = (tax * total_price_notacc) / 100;
                 $('#taxfield').val(increment);
+                var check_discount_by_percent = $('#check-discount-by-percent').val();
+                var check_discount_by_value = $('#check-discount-by-value').val();
+                if($('#check-discount-by-percent').val() == '1'){
                 var discount_percent = parseFloat($('#max-field').val());
                 var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                discount = discount.toFixed(2);
                 $('#discountVal').val(discount);
                 var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                discount1 = discount1.toFixed(2);
                 var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                discount2 = discount2.toFixed(2);
                 $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discount);
                 $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discount1);
                 $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discount2);
+                  if($('#check-discount-by-value').val() == '1'){
+                  var discountv = parseFloat($('#discount-by-value').val());
+                  $('#final_total_price').val(parseFloat($('#final_total_price').val())-discountv);
+                  $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discountv);
+                  $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discountv);
+                  }
+                }
+                else{
+                if($('#check-discount-by-value').val() == '1'){
+                var discountv = parseFloat($('#discount-by-value').val());
+                $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discountv);
+                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discountv);
+                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discountv);
+                  if($('#check-discount-by-percent').val() == '1'){
+                  var discount_percent = parseFloat($('#max-field').val());
+                  var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                  discount = discount.toFixed(2);
+                  $('#discountVal').val(discount);
+                  var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                  discount1 = discount1.toFixed(2);
+                  var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                  discount2 = discount2.toFixed(2);
+                  $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
+                  $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
+                  $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discount2);
+                  }
+                }
+                }
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
                 // update min value when total price change
@@ -1982,14 +2134,151 @@ window.onload=function(){
                 var increment1 = (tax * total_price_acc) / 100;
                 var increment2 = (tax * total_price_notacc) / 100;
                 $('#taxfield').val(increment);
+
+
+                var check_discount_by_percent = $('#check-discount-by-percent').val();
+                var check_discount_by_value = $('#check-discount-by-value').val();
+                if($('#check-discount-by-percent').val() == '1'){
                 var discount_percent = parseFloat($('#max-field').val());
                 var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                discount = discount.toFixed(2);
                 $('#discountVal').val(discount);
                 var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                discount1 = discount1.toFixed(2);
                 var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                discount2 = discount2.toFixed(2);
                 $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discount);
                 $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discount1);
                 $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discount2);
+                  if($('#check-discount-by-value').val() == '1'){
+                  var discountv = parseFloat($('#discount-by-value').val());
+                  $('#final_total_price').val(parseFloat($('#final_total_price').val())-discountv);
+                  $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discountv);
+                  $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discountv);
+                  }
+                }
+                else{
+                if($('#check-discount-by-value').val() == '1'){
+                var discountv = parseFloat($('#discount-by-value').val());
+                $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discountv);
+                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discountv);
+                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discountv);
+                  if($('#check-discount-by-percent').val() == '1'){
+                  var discount_percent = parseFloat($('#max-field').val());
+                  var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                  discount = discount.toFixed(2);
+                  $('#discountVal').val(discount);
+                  var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                  discount1 = discount1.toFixed(2);
+                  var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                  discount2 = discount2.toFixed(2);
+                  $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
+                  $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
+                  $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discount2);
+                  }
+                }
+                }
+                //min
+                $('#cashVal').val($('#final_total_price').val());     // cash value input
+                // update min value when total price change
+                //var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
+                var newMin = (parseFloat($('#percent').val()) * parseFloat($('#f_total_price_acc').val()))/100 + parseFloat($('#f_total_price_notacc').val());
+                //console.log(newMin);
+                $('#inputmin').val(newMin);
+                $('#minVal').text(newMin);
+                // check min validation
+                var cash =  parseFloat($('#cashVal').val());
+                var card = parseFloat($('#cardVal').val());
+                var stc = parseFloat($('#stcVal').val());
+                // min payment
+                var min = parseFloat($('#inputmin').val());
+                  if(card+cash+stc<min){
+                  $('#submit').prop('disabled', true);
+                  $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
+                  } 
+                  else{
+                  $('#badgecolor').removeClass('badge-danger').addClass('badge-success');
+                  }
+                  
+  });
+
+  $('#discount-by-value').on("keyup",function(){
+                var s = 0 ;
+                var s1 = 0;
+                var s2 = 0 ;
+                for(var i=0;i<=25;i++){   // number of records
+                  if(!$('#price'+i+'').val().length == 0){
+                     s = s + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
+                  }
+                } // end for loop
+                $('#total_price').val(s);
+                for(var i=0;i<=25;i++){   // number of records
+                  if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==1){
+                    console.log('first');
+                     s1 = s1 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
+                  }
+                } // end for loop
+                $('#total_price_acc').val(s1);  // hidden
+                for(var i=0;i<=25;i++){   // number of records
+                  if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==0){
+                    console.log('second');
+                     s2 = s2 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
+                  }
+                } // end for loop
+                $('#total_price_notacc').val(s2);  // hidden
+                 //tax
+                 var tax =  parseFloat($('#tax').val());
+                var total_price =  parseFloat($('#total_price').val());
+                var total_price_acc =  parseFloat($('#total_price_acc').val());
+                var total_price_notacc =  parseFloat($('#total_price_notacc').val());
+                var increment = (tax * total_price) / 100;
+                var increment1 = (tax * total_price_acc) / 100;
+                var increment2 = (tax * total_price_notacc) / 100;
+                $('#taxfield').val(increment);
+
+
+                var check_discount_by_percent = $('#check-discount-by-percent').val();
+                var check_discount_by_value = $('#check-discount-by-value').val();
+                if($('#check-discount-by-percent').val() == '1'){
+                var discount_percent = parseFloat($('#max-field').val());
+                var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                discount = discount.toFixed(2);
+                $('#discountVal').val(discount);
+                var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                discount1 = discount1.toFixed(2);
+                var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                discount2 = discount2.toFixed(2);
+                $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discount);
+                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discount1);
+                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discount2);
+                  if($('#check-discount-by-value').val() == '1'){
+                  var discountv = parseFloat($('#discount-by-value').val());
+                  $('#final_total_price').val(parseFloat($('#final_total_price').val())-discountv);
+                  $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discountv);
+                  $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discountv);
+                  }
+                }
+                else{
+                if($('#check-discount-by-value').val() == '1'){
+                var discountv = parseFloat($('#discount-by-value').val());
+                $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discountv);
+                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discountv);
+                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discountv);
+                  if($('#check-discount-by-percent').val() == '1'){
+                  var discount_percent = parseFloat($('#max-field').val());
+                  var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                  discount = discount.toFixed(2);
+                  $('#discountVal').val(discount);
+                  var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                  discount1 = discount1.toFixed(2);
+                  var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                  discount2 = discount2.toFixed(2);
+                  $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
+                  $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
+                  $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discount2);
+                  }
+                }
+                }
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
                 // update min value when total price change
@@ -2049,14 +2338,48 @@ window.onload=function(){
                 var increment1 = (tax * total_price_acc) / 100;
                 var increment2 = (tax * total_price_notacc) / 100;
                 $('#taxfield').val(increment);
+                var check_discount_by_percent = $('#check-discount-by-percent').val();
+                var check_discount_by_value = $('#check-discount-by-value').val();
+                if($('#check-discount-by-percent').val() == '1'){
                 var discount_percent = parseFloat($('#max-field').val());
                 var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                discount = discount.toFixed(2);
                 $('#discountVal').val(discount);
                 var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                discount1 = discount1.toFixed(2);
                 var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                discount2 = discount2.toFixed(2);
                 $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discount);
                 $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discount1);
                 $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discount2);
+                  if($('#check-discount-by-value').val() == '1'){
+                  var discountv = parseFloat($('#discount-by-value').val());
+                  $('#final_total_price').val(parseFloat($('#final_total_price').val())-discountv);
+                  $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discountv);
+                  $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discountv);
+                  }
+                }
+                else{
+                if($('#check-discount-by-value').val() == '1'){
+                var discountv = parseFloat($('#discount-by-value').val());
+                $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discountv);
+                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discountv);
+                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discountv);
+                  if($('#check-discount-by-percent').val() == '1'){
+                  var discount_percent = parseFloat($('#max-field').val());
+                  var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                  discount = discount.toFixed(2);
+                  $('#discountVal').val(discount);
+                  var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                  discount1 = discount1.toFixed(2);
+                  var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                  discount2 = discount2.toFixed(2);
+                  $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
+                  $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
+                  $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discount2);
+                  }
+                }
+                }
                 
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
