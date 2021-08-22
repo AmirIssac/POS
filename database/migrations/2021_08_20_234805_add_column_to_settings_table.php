@@ -15,8 +15,7 @@ class AddColumnToSettingsTable extends Migration
     {
         Schema::table('settings', function (Blueprint $table) {
             //
-            $table->boolean('discount_by_percent')->after('print_prescription')->default(false);
-            $table->boolean('discount_by_value')->after('discount_by_percent')->default(false);
+            $table->boolean('discount_change_price')->after('discount_by_value')->default(false);
         });
     }
 

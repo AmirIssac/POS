@@ -15,6 +15,70 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: #93cb52;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #9229ac;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
 </style>
 @endsection
 @section('body')
@@ -161,29 +225,62 @@ input[type=number] {
                   <tbody>
                     <tr>
                       <td>
-                        {{__('settings.percent')}}
+                        {{__('settings.percent_discount')}}
                       </td>
                       <td>
                         @if($repository->setting->discount_by_percent == true)
-                        <input type="checkbox" class="form-control" name="discount_by_percent" checked>
+                        <!-- Rounded switch -->
+                        <label class="switch">
+                        <input type="checkbox" name="discount_by_percent" checked>
+                        <span class="slider round"></span>
+                        </label>
                         @else
-                        <input type="checkbox" class="form-control" name="discount_by_percent">
+                        <label class="switch">
+                        <input type="checkbox" name="discount_by_percent">
+                        <span class="slider round"></span>
+                        </label>
                         @endif
                       </td>
-                    </tr>
+                    </tr>  
                     <tr>
+                      
                       <td>
-                        {{__('settings.value')}}
+                        {{__('settings.value_discount')}}
                       </td>
                       <td>
                         @if($repository->setting->discount_by_value == true)
+                        <label class="switch">
                         <input type="checkbox" class="form-control" name="discount_by_value" checked>
+                        <span class="slider round"></span>
+                        </label>
                         @else
+                        <label class="switch">
                         <input type="checkbox" class="form-control" name="discount_by_value">
+                        <span class="slider round"></span>
+                        </label>
                         @endif
                       </td>
                     </tr>
                     <tr>
+                      <tr>
+                        <td>
+                          {{__('settings.edit_price_discount')}}   
+                        </td>
+                        <td>
+                          @if($repository->setting->discount_change_price == true)
+                          <label class="switch">
+                          <input type="checkbox" class="form-control" name="discount_change_price" checked>
+                          <span class="slider round"></span>
+                        </label>
+                          @else
+                          <label class="switch">
+                          <input type="checkbox" class="form-control" name="discount_change_price">
+                          <span class="slider round"></span>
+                        </label>
+                          @endif
+                        </td>
+                      </tr>
+                      <tr>
                       <td>
                         <button type="submit" class="btn btn-success">{{__('buttons.confirm')}}</button>
                       </td>

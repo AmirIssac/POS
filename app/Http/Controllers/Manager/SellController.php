@@ -557,7 +557,19 @@ class SellController extends Controller
         }
 
         $remaining_amount = $request->total_price - ($cashVal + $cardVal + $stcVal); // for printing
-        $discounting = $request->discountVal + $request->discount_by_value;
+        // calculate the discount by changing price
+      $discount_by_change_price = 0;
+      for($i=0;$i<$count;$i++){
+        if($request->barcode[$i]){
+            $product = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->get();
+            if($product){
+            foreach($product as $prod){
+                $discount_by_change_price = $discount_by_change_price + (($prod->price - $request->price[$i]) * $request->quantity[$i]);
+            }
+            }
+        }   
+      }
+        $discounting = $request->discountVal + $request->discount_by_value + $discount_by_change_price;
        $invoice = Invoice::create(
             [
                 'repository_id' => $id,
@@ -660,10 +672,12 @@ class SellController extends Controller
       $id = Auth::user()->id;
       $employee = User::find($id);
       $recipe_print = unserialize($recipe);
+
+      
       return view('manager.Sales.print_special_invoice')->with([
           'records'=>$records,'num'=>count($records),'sum'=>$request->sum,'tax'=>$request->taxprint,'total_price'=>$request->total_price,
-          'cash'=>$cashVal,'card'=>$cardVal,'stc'=>$stcVal,'repo_id'=>$repository->id,'discount'=>$request->max_discount,
-          'discount_by_value' => $request->discount_by_value, 
+          'cash'=>$cashVal,'card'=>$cardVal,'stc'=>$stcVal,'repo_id'=>$repository->id,
+          'discount' => $discounting,
           'date'=>$request->date,'repository' => $repository,
           'customer' => $customer,'employee'=>$employee,'note'=>$request->note,'remaining_amount'=>$remaining_amount,'invoice'=>$invoice,
           'recipe' => $recipe_print,

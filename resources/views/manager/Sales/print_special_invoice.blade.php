@@ -174,7 +174,7 @@
                  <div>
                   <h5>الحسم</h5>
                  <div style="display: flex; flex-direction: column; margin-top: 3px;">
-                  @if($repository->setting->discount_by_percent == true)
+                  {{--@if($repository->setting->discount_by_percent == true)
                    <div style="display: flex;">
                      %<input type="number" value="{{$discount}}" class="form-control" readonly>
                     </div>
@@ -183,12 +183,13 @@
                   <div style="display: flex;">
                     <input type="number" value="{{$discount_by_value}}" class="form-control" readonly>
                   </div>
-                  @endif
+                  @endif 
                   @if($repository->setting->discount_by_value == false && $repository->setting->discount_by_percent == false)
                   <div style="display: flex;">
                     <input type="number" value="0" class="form-control" readonly>
                   </div>
-                  @endif
+                  @endif--}}
+                  <input type="number" value="{{$discount}}" step="0.01" class="form-control" readonly>
                </div>
                    </div>
                    @endif

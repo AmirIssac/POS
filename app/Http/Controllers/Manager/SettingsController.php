@@ -242,14 +242,18 @@ class SettingsController extends Controller
         $repository = Repository::find($id);
         $discount_by_percent = false;
         $discount_by_value = false;
+        $discount_change_price = false;
         if($request->discount_by_percent)
             $discount_by_percent = true;
         if($request->discount_by_value)
             $discount_by_value = true;
+        if($request->discount_change_price)
+            $discount_change_price = true;
         $setting = $repository->setting;
         $setting->update([
             'discount_by_percent' => $discount_by_percent,
             'discount_by_value' => $discount_by_value,
+            'discount_change_price' => $discount_change_price,
         ]);
         return back()->with('success',__('alerts.edit_success'));
     }

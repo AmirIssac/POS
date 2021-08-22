@@ -1100,7 +1100,11 @@ select{
                         <input type="hidden" id="cost_price0"  name="cost_price[]" value="{{old('cost_price0')}}" class="form-control blank" readonly>
                       </td>
                       <td>
+                        @if($repository->setting->discount_change_price == true)
                         <input type="number" id="price0" min="0" step="0.01"  name="price[]" value="{{old('price0')}}" class="form-control price blank">
+                        @else
+                        <input type="number" id="price0" min="0" step="0.01"  name="price[]" value="{{old('price0')}}" class="form-control price blank" readonly>
+                        @endif
                       </td>
                       <td>
                         @if(old('quantity0'))
@@ -1143,7 +1147,11 @@ select{
                         <input type="hidden" id="cost_price{{$count}}"  name="cost_price[]" value="{{old('cost_price.'.$count)}}" class="form-control blank" readonly>
                       </td>
                       <td>
+                        @if($repository->setting->discount_change_price == true)
                         <input type="number" id="price{{$count}}" min="0" step="0.01"  name="price[]" value="{{old('price.'.$count)}}" class="form-control price blank">
+                        @else
+                        <input type="number" id="price{{$count}}" min="0" step="0.01"  name="price[]" value="{{old('price.'.$count)}}" class="form-control price blank" readonly>
+                        @endif
                       </td>
                       <td>
                         @if(old('quantity.'.$count))

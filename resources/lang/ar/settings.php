@@ -47,8 +47,9 @@
         'show_hide' => 'اظهار\اخفاء',
         'prescription' => 'الوصفة الطبية',
         'determine_discount_proccess' => 'تحديد اجرائية الخصم',
-        'percent' => 'نسبة مئوية',
-        'value' => 'قيمة',
+        'percent_discount' => 'خصم نسبة مئوية على قيمة الفاتورة',
+        'value_discount' => 'خصم مبلغ من قيمة الفاتورة',
+        'edit_price_discount' => 'خصم بتعديل سعر المنتج',
         'discount_by_value' => 'خصم بالقيمة',
     ];
     ?>

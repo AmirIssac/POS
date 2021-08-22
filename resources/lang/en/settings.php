@@ -47,8 +47,9 @@
         'show_hide' => 'Show/Hide',
         'prescription' => 'Prescription',
         'determine_discount_proccess' => 'Determine discount proccess',
-        'percent' => 'Percent',
-        'value' => 'Value',
+        'percent_discount' => 'Percent discount on invoice value',
+        'value_discount' => 'Value discount from invoice value',
+        'edit_price_discount' => 'Discount by editing the product price',
         'discount_by_value' => 'Discount by value',
     ];
     ?>
