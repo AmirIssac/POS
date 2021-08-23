@@ -672,7 +672,10 @@ class SellController extends Controller
       $id = Auth::user()->id;
       $employee = User::find($id);
       $recipe_print = unserialize($recipe);
-
+      // check if recipe values 0 so we dont print the recipe
+      $is_recipe_null = false;
+      if($recipe_print['add_r']=='0' && $recipe_print['axis_r']=='0' && $recipe_print['cyl_r']=='0' && $recipe_print['sph_r']=='0' && $recipe_print['add_l']=='0' && $recipe_print['axis_l']=='0' && $recipe_print['cyl_l']=='0' && $recipe_print['sph_l']=='0' && $recipe_print['ipd']=='0' )
+        $is_recipe_null = true;
       
       return view('manager.Sales.print_special_invoice')->with([
           'records'=>$records,'num'=>count($records),'sum'=>$request->sum,'tax'=>$request->taxprint,'total_price'=>$request->total_price,
@@ -680,10 +683,9 @@ class SellController extends Controller
           'discount' => $discounting,
           'date'=>$request->date,'repository' => $repository,
           'customer' => $customer,'employee'=>$employee,'note'=>$request->note,'remaining_amount'=>$remaining_amount,'invoice'=>$invoice,
-          'recipe' => $recipe_print,
+          'recipe' => $recipe_print, 'is_recipe_null' => $is_recipe_null,
         ]);   // to print the invoice
     }
-    
 
     public function showPending($id){
         $repository = Repository::find($id);

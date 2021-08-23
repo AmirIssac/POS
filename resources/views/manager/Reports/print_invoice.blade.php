@@ -1,4 +1,4 @@
-@extends('layouts.withScrollBar')
+@extends('layouts.print')
 @section('links')
 <style>
   
@@ -14,7 +14,7 @@
   } */
   *{
     /*margin: 0;*/
-    font-size: 44px !important;
+    font-size: 22px !important;
     font-weight: 900 !important;
     color: black !important;
   }
@@ -53,8 +53,7 @@
 @endsection
 @section('body')
 
-<div class="main-panel">
- <div class="content" id="content">
+
     
                       <div id="print-content" class="table-responsive">
                           <button id="back" onclick="history.back()" class="btn btn-warning">رجوع</button>
@@ -199,7 +198,7 @@
         </div>
         <hr>
         @if($repository->setting->print_prescription == true)
-        <?php $recipe = unserialize($invoice->recipe); ?>
+        @if(isset($recipe) && $is_recipe_null == false)
         <div id='prescription'>
           <div id="recipe" class="card">
             <div class="card-header card-header-primary">
@@ -212,23 +211,26 @@
               <div class="table-responsive">
                 <table dir="ltr" id="myTable" class="table table-bordered">
                   <thead class="text-primary">
-                    <th style="text-align: center; font-weight: bold; font-size: 18px;">
-                      EYE 
-                    </th>
-                    <th>
-                      SPH  
-                    </th>
-                    <th>
-                      CYL  
-                     </th>   
-                     <th>
-                      Axis  
-                    </th>
-                    <th>
-                      ADD  
-                    </th>
+                    
                   </thead>
                   <tbody>
+                    <tr>
+                      <td style="text-align: center; font-weight: bold; font-size: 18px;">
+                        EYE 
+                      </td>
+                      <td>
+                        SPH  
+                      </td>
+                      <td>
+                        CYL  
+                       </td>   
+                       <td>
+                        Axis  
+                      </td>
+                      <td>
+                        ADD  
+                      </td>
+                    </tr>
                     <tr>
                       <td style="text-align: center; font-weight: bold; font-size: 18px;">
                         RIGHT
@@ -285,6 +287,7 @@
         </div>
         <hr>
         @endif
+        @endif
         <div style="display: flex; justify-content: space-between">
           <h4>العميل {{$invoice->customer->name}}</h4>
           <h4>جوال العميل {{$invoice->phone}}</h4>
@@ -303,7 +306,6 @@
         </div>
         @endif
         
-    </div>
  
  
 @section('scripts')

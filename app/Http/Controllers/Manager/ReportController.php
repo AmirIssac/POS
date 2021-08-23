@@ -41,9 +41,13 @@ class ReportController extends Controller
         $invoice = Invoice::find($id);
         $repository = $invoice->repository;
         // send recipe
-        $customer = $invoice->customer;
-        //$recipe = unserialize($customer->savedRecipes[0]->recipe);
-        return view('manager.Reports.print_invoice')->with(['repository'=>$repository,'invoice'=>$invoice]);
+        //$customer = $invoice->customer;
+        $recipe = unserialize($invoice->recipe);
+         // check if recipe values 0 so we dont print the recipe
+         $is_recipe_null = false;
+         if($recipe['add_r']=='0' && $recipe['axis_r']=='0' && $recipe['cyl_r']=='0' && $recipe['sph_r']=='0' && $recipe['add_l']=='0' && $recipe['axis_l']=='0' && $recipe['cyl_l']=='0' && $recipe['sph_l']=='0' && $recipe['ipd']=='0' )
+         $is_recipe_null = true;
+            return view('manager.Reports.print_invoice')->with(['repository'=>$repository,'invoice'=>$invoice,'recipe'=>$recipe,'is_recipe_null'=>$is_recipe_null]);
     }
 
     public function filterPending(Request $request,$id){

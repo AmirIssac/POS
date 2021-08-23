@@ -14,7 +14,7 @@
   } */
   *{
     /*margin: 0;*/
-    font-size: 44px !important;
+    font-size: 22px !important;
     font-weight: 900 !important;
     color: black !important;
   }
@@ -50,8 +50,7 @@
 @endsection
 @section('body')
 
-<div class="main-panel">
- <div class="content" id="content">
+
    <!-- Modal -->
    <div id="mod">
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -258,7 +257,7 @@
         </div>
         <hr>
         @if($repository->setting->print_prescription == true)
-        @if(isset($recipe))
+        @if(isset($recipe) && $is_recipe_null == false)
         <div id='prescription'>
           <div id="recipe" class="card">
             <div class="card-header card-header-primary">
@@ -271,23 +270,26 @@
               <div class="table-responsive">
                 <table dir="ltr" id="myTable" class="table table-bordered">
                   <thead class="text-primary">
-                    <th style="text-align: center; font-weight: bold; font-size: 18px;">
-                      EYE 
-                    </th>
-                    <th>
-                      SPH  
-                    </th>
-                    <th>
-                      CYL  
-                     </th>   
-                     <th>
-                      Axis  
-                    </th>
-                    <th>
-                      ADD  
-                    </th>
+                   
                   </thead>
                   <tbody>
+                    <tr>
+                      <td style="text-align: center; font-weight: bold; font-size: 18px;">
+                        EYE 
+                      </td>
+                      <td>
+                        SPH  
+                      </td>
+                      <td>
+                        CYL  
+                       </td>   
+                       <td>
+                        Axis  
+                      </td>
+                      <td>
+                        ADD  
+                      </td>
+                    </tr>
                     <tr>
                       <td style="text-align: center; font-weight: bold; font-size: 18px;">
                         RIGHT
@@ -366,7 +368,6 @@
         @endif
 
         
-    </div>
 
  
 @section('scripts')
