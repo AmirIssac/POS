@@ -1,5 +1,20 @@
 @extends('layouts.main')
-
+<style>
+.green-dot{
+  height: 15px;
+  width: 15px;
+  background-color: #92e930;
+  border-radius: 50%;
+  display: inline-block;
+ }
+ .red-dot{
+  height: 15px;
+  width: 15px;
+  background-color: #e93030;
+  border-radius: 50%;
+  display: inline-block;
+ }
+ </style>
 @section('body')
 <div class="main-panel">
 
@@ -31,6 +46,9 @@
                      <th>
                        {{__('reports.monthly_sales')}}
                      </th>
+                     <th>
+                       {{__('reports.status')}}
+                     </th>
                   </thead>
                   <tbody>
                     @foreach($owners as $owner)
@@ -41,6 +59,14 @@
                      <td>
                       <a style="color: white" href="{{route('show.worker.sales',[$owner->id,$repository->id])}}" role="button" class="btn btn-info"> {{__('buttons.view')}} </a>
 
+                     </td>
+                     <td>
+                     @if($owner->is_online)
+                     <span class="green-dot"></span>&nbsp;{{__('reports.online')}}
+                      @else
+                      <span class="red-dot"></span>&nbsp;{{__('reports.offline')}}
+                      ({{__('reports.last_logout')}} {{$owner->last_logout()}})
+                      @endif
                      </td>
                     </tr>
                     @endforeach
@@ -88,6 +114,9 @@
                      <th>
                        {{__('reports.monthly_sales')}}
                      </th>
+                     <th>
+                       {{__('reports.status')}}
+                     </th>
                   </thead>
                   <tbody>
                     <?php $user = Auth::user(); ?>
@@ -110,6 +139,14 @@
                      @endif
                      <td>
                       <a style="color: white" href="{{route('show.worker.sales',[$worker->id,$repository->id])}}" role="button" class="btn btn-info"> {{__('buttons.view')}} </a>
+                     </td>
+                     <td>
+                      @if($worker->is_online)
+                      <span class="green-dot"></span>&nbsp;{{__('reports.online')}}
+                      @else
+                      <span class="red-dot"></span>&nbsp;{{__('reports.offline')}}
+                      ({{__('reports.last_logout')}} {{$worker->last_logout()}})
+                      @endif
                      </td>
                     </tr>
                     @endforeach

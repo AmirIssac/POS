@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -16,8 +17,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','phone'
+        'name', 'email', 'password','phone','last_login','last_login_old','is_online','last_logout',
     ];
+
+    protected $dates = ['last_login','last_login_old','last_logout'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -55,5 +58,25 @@ class User extends Authenticatable
     }
     public function purchases(){
         return $this->hasMany(Purchase::class);
+    }
+
+    public function last_login_old(){
+        //$dateTime = Carbon::createFromFormat('F j, Y, g:i a', $this->last_login_old);
+        $dateTime =$this->last_login_old;
+        //$dateTime = Carbon::createFromFormat('D, d M Y H:i:s e', $dateTime)->toDateTimeString();
+        $dateTime = $dateTime->format('Y-m-d, g:i A');
+        return $dateTime;
+    }
+
+    public function last_login(){
+        $dateTime =$this->last_login;
+        $dateTime = $dateTime->format('Y-m-d, g:i A');
+        return $dateTime;
+    }
+
+    public function last_logout(){
+        $dateTime =$this->last_logout;
+        $dateTime = $dateTime->format('Y-m-d, g:i A');
+        return $dateTime;
     }
 }

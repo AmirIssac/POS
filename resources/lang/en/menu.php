@@ -14,5 +14,7 @@ return [
     'permissions' => 'Permissions',
     'repositories' => 'Repositories',
     'products' => 'Products',
+    'welcome' => 'Welcome',
+    
 ];
 ?>

@@ -833,12 +833,16 @@ class SellController extends Controller
                         }
                         $complete_invoice = true; // to check in blade if we sell invoice for first time or we are completing an invoice
                         $recipe = unserialize($invoice->recipe);
+                        // check if recipe values 0 so we dont print the recipe
+                        $is_recipe_null = false;
+                        if($recipe['add_r']=='0' && $recipe['axis_r']=='0' && $recipe['cyl_r']=='0' && $recipe['sph_r']=='0' && $recipe['add_l']=='0' && $recipe['axis_l']=='0' && $recipe['cyl_l']=='0' && $recipe['sph_l']=='0' && $recipe['ipd']=='0' )
+                          $is_recipe_null = true; 
                         return view('manager.Sales.print_special_invoice')->with([
                             'records'=>$records,'num'=>count($records),'total_price'=>$request->total_price,
                             'extra_price'=>$request->extra_price,'cash'=>$cashVal,'card'=>$cardVal,'stc'=>$stcVal,'repo_id'=>$repository->id
                             ,'date'=>$request->date,'repository' => $repository,
                             'customer' => $customer,'employee'=>$employee,'complete_invoice'=>$complete_invoice,'invoice'=>$invoice,'note'=>$request->note,
-                            'recipe' => $recipe,
+                            'recipe' => $recipe,'is_recipe_null' => $is_recipe_null,
                         ]);   // to print the invoice
                             } 
 

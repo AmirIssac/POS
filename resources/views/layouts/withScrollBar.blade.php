@@ -69,6 +69,10 @@
        justify-content: center;
        align-items: center;
      }
+     .user-info{
+       margin-top: 5px;       
+       z-index: 2;
+     }
     </style>
    @yield('links')
  
@@ -122,6 +126,11 @@
         {{-- </a>  --}}
        </div>
         <div class="sidebar-wrapper">
+          <?php $auther = Auth::user() ?>
+        <div class="user-info">
+         <span class="badge badge-success"> {{__('menu.welcome')}} {{$auther->name}} </span> {{__('reports.last_login')}} 
+         {{$auther->last_login_old()}}
+        </div>
           <ul class="nav">
             @can('لوحة التحكم')
             <li class="nav-item {{ request()->is('dashboard')||request()->is('/') ? 'active' : '' }}">

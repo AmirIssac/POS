@@ -14,5 +14,6 @@ return [
     'permissions' => 'صلاحيات الوصول',
     'repositories' => 'المخازن',
     'products' => 'المنتجات',
+    'welcome' => 'مرحبا',
 ];
 ?>

@@ -44,5 +44,10 @@ return [
     'deleted' => 'Deleted',
     'sure_want_to_delete_invoice' => 'Are you sure you want to delete this invoice',
     'delete_invoice' => 'Delete invoice',
+    'status' => 'Status',
+    'last_login' => 'Last login in',
+    'online' => 'Online',
+    'offline' => 'Offline',
+    'last_logout' => 'Last seen',
 ];
 ?>

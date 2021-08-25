@@ -44,5 +44,10 @@ return [
     'deleted' => 'محذوفة',
     'sure_want_to_delete_invoice' => 'هل أنت متأكد أنك تريد حذف هذه الفاتورة',
     'delete_invoice' => 'حذف فاتورة',
+    'status' => 'الحالة',
+    'last_login' => 'آخر دخول في',
+    'online' => 'متصل',
+    'offline' => 'غير متصل',
+    'last_logout' => 'آخر ظهور في',
 ];
 ?>
