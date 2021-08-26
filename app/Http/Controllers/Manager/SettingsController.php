@@ -257,4 +257,24 @@ class SettingsController extends Controller
         ]);
         return back()->with('success',__('alerts.edit_success'));
     }
+
+    public function viewAccount($id){
+        $user = User::find($id);
+        return view('manager.Settings.account')->with(['user'=>$user]);
+    }
+
+    public function changePassword(Request $request,$id){
+        $user = User::find($id);
+        if(password_verify($request->old_password , $user->password))
+            if($request->new_password == $request->confirm_password){
+                $user->update([
+                    'password' => Hash::make($request->new_password)
+                ]);
+                return back()->with('success',__('settings.password_change_success'));
+            }
+            else
+                return back()->with('fail',__('settings.fail_confirm_password'));
+            else
+                return back()->with('fail',__('settings.fail_old_password'));
+    }
 }

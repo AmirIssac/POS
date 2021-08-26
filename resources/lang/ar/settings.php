@@ -51,5 +51,13 @@
         'value_discount' => 'خصم مبلغ من قيمة الفاتورة',
         'edit_price_discount' => 'خصم بتعديل سعر المنتج',
         'discount_by_value' => 'خصم بالقيمة',
+        'roles' => 'المناصب',
+        'do_you_want_change_password' => 'هل تريد تغيير كلمة المرور ؟',
+        'old_password' => 'كلمة المرور القديمة',
+        'new_password' => 'كلمة المرور الجديدة',
+        'confirm_new_password' => 'تأكيد كلمة المرور الجديدة',
+        'password_change_success' => 'تم تغيير كلمة المرور بنجاح',
+        'fail_confirm_password' => 'تأكيد كلمة المرور الجديدة غير صحيح',
+        'fail_old_password' => 'كلمة المرور القديمة غير صحيحة',
     ];
     ?>

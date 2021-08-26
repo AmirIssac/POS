@@ -342,14 +342,14 @@
               </div>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link" href="javascript:;" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a  class="nav-link" href="javascript:;" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="material-icons">account_circle</i>
                 <p class="d-lg-none d-md-block">
                   الحساب
                 </p>
               </a>
               <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownProfile">
-                <a class="dropdown-item" href="#">{{__('settings.account')}}</a>
+                <a class="dropdown-item" href="{{route('view.account',Auth::id())}}">{{__('settings.account')}}</a>
                 <a class="dropdown-item" href="#">{{__('settings.settings')}}</a>
                 <div class="dropdown-divider"></div>
                 <form method="POST" action="{{route('logout')}}">

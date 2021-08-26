@@ -51,5 +51,13 @@
         'value_discount' => 'Value discount from invoice value',
         'edit_price_discount' => 'Discount by editing the product price',
         'discount_by_value' => 'Discount by value',
+        'roles' => 'Roles',
+        'do_you_want_change_password' => 'Do you want to change your password ?',
+        'old_password' => 'Old password',
+        'new_password' => 'New password',
+        'confirm_new_password' => 'Confirm new password',
+        'password_change_success' => 'password changed successfully',
+        'fail_confirm_password' => 'Confirming new password is not true',
+        'fail_old_password' => 'Old password not true',
     ];
     ?>
