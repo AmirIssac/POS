@@ -676,7 +676,8 @@ class SellController extends Controller
       $is_recipe_null = false;
       if($recipe_print['add_r']=='0' && $recipe_print['axis_r']=='0' && $recipe_print['cyl_r']=='0' && $recipe_print['sph_r']=='0' && $recipe_print['add_l']=='0' && $recipe_print['axis_l']=='0' && $recipe_print['cyl_l']=='0' && $recipe_print['sph_l']=='0' && $recipe_print['ipd']=='0' )
         $is_recipe_null = true;
-      
+
+        if($repository->setting->standard_printer) 
       return view('manager.Sales.print_special_invoice')->with([
           'records'=>$records,'num'=>count($records),'sum'=>$request->sum,'tax'=>$request->taxprint,'total_price'=>$request->total_price,
           'cash'=>$cashVal,'card'=>$cardVal,'stc'=>$stcVal,'repo_id'=>$repository->id,
@@ -685,6 +686,15 @@ class SellController extends Controller
           'customer' => $customer,'employee'=>$employee,'note'=>$request->note,'remaining_amount'=>$remaining_amount,'invoice'=>$invoice,
           'recipe' => $recipe_print, 'is_recipe_null' => $is_recipe_null,
         ]);   // to print the invoice
+        else
+        return view('manager.Sales.print_epson_special_invoice')->with([
+            'records'=>$records,'num'=>count($records),'sum'=>$request->sum,'tax'=>$request->taxprint,'total_price'=>$request->total_price,
+            'cash'=>$cashVal,'card'=>$cardVal,'stc'=>$stcVal,'repo_id'=>$repository->id,
+            'discount' => $discounting,
+            'date'=>$request->date,'repository' => $repository,
+            'customer' => $customer,'employee'=>$employee,'note'=>$request->note,'remaining_amount'=>$remaining_amount,'invoice'=>$invoice,
+            'recipe' => $recipe_print, 'is_recipe_null' => $is_recipe_null,
+          ]);   // to print the invoice
     }
 
     public function showPending($id){
@@ -836,8 +846,18 @@ class SellController extends Controller
                         // check if recipe values 0 so we dont print the recipe
                         $is_recipe_null = false;
                         if($recipe['add_r']=='0' && $recipe['axis_r']=='0' && $recipe['cyl_r']=='0' && $recipe['sph_r']=='0' && $recipe['add_l']=='0' && $recipe['axis_l']=='0' && $recipe['cyl_l']=='0' && $recipe['sph_l']=='0' && $recipe['ipd']=='0' )
-                          $is_recipe_null = true; 
+                          $is_recipe_null = true;
+
+                        if($repository->setting->standard_printer) 
                         return view('manager.Sales.print_special_invoice')->with([
+                            'records'=>$records,'num'=>count($records),'total_price'=>$request->total_price,
+                            'extra_price'=>$request->extra_price,'cash'=>$cashVal,'card'=>$cardVal,'stc'=>$stcVal,'repo_id'=>$repository->id
+                            ,'date'=>$request->date,'repository' => $repository,
+                            'customer' => $customer,'employee'=>$employee,'complete_invoice'=>$complete_invoice,'invoice'=>$invoice,'note'=>$request->note,
+                            'recipe' => $recipe,'is_recipe_null' => $is_recipe_null,
+                        ]);   // to print the invoice
+                        else
+                        return view('manager.Sales.print_epson_special_invoice')->with([
                             'records'=>$records,'num'=>count($records),'total_price'=>$request->total_price,
                             'extra_price'=>$request->extra_price,'cash'=>$cashVal,'card'=>$cardVal,'stc'=>$stcVal,'repo_id'=>$repository->id
                             ,'date'=>$request->date,'repository' => $repository,

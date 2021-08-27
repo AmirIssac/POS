@@ -59,5 +59,7 @@
         'password_change_success' => 'password changed successfully',
         'fail_confirm_password' => 'Confirming new password is not true',
         'fail_old_password' => 'Old password not true',
+        'standard_printer' => 'Standard printer',
+        'thermal_printer' => 'Thermal printer',
     ];
     ?>

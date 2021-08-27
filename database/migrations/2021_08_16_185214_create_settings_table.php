@@ -19,6 +19,7 @@ class CreateSettingsTable extends Migration
             $table->boolean('print_prescription')->default(false);  // طباعة الوصفة الطبية
             $table->boolean('discount_by_percent')->after('print_prescription')->default(false);
             $table->boolean('discount_by_value')->after('discount_by_percent')->default(false);
+            $table->boolean('discount_change_price')->after('discount_by_value')->default(false);
             $table->timestamps();
         });
     }

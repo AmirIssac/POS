@@ -30,9 +30,34 @@
     .bordered-table td , .bordered-table th {
       border: 1px solid black;
     }
+    .p-inline{
+        display: inline;
+        padding : 10px;
+    }
+    .modal{
+      color: red;
+      font-size: 25px;
+    }
+    @media print{
+      .modal{
+        display: none;
+      }
+    }
     </style>
     <body>
-      
+      <div class="modal">
+        هل تريد طباعة الفاتورة ؟
+      </div>
+      <div class="modal">
+        @if(isset($complete_invoice)) {{-- completing invoice --}}
+        <a href="{{route('show.pending',$repo_id)}}">لا</a>
+        <a id="print" onclick="window.print();" href="{{route('show.pending',$repo_id)}}">نعم</a>
+        @else {{-- sell invoice for first time --}}
+        <a href="{{route('create.special.invoice',$repo_id)}}">لا</a>
+        <a id="print" onclick="window.print();" href="{{route('create.special.invoice',$repo_id)}}">نعم</a>
+        @endif
+      </div>
+    </div>
     <h2 class="text-center">متجر {{$repository->name}}</h2>
     <h4 class="text-center">رقم الفاتورة {{$invoice->code}}</h4>
     <h4 class="text-center">التاريخ {{$invoice->created_at}}</h4>
@@ -44,86 +69,89 @@
             <th class="text-center">الاسم</th>
             <th class="text-center">السعر</th>
             <th class="text-center">الكمية</th>
-            <th class="text-center"> تم تسليمها</th>
+            @if(isset($complete_invoice))
+            <th class="text-center"> الواجب تسليمها </th>
+            @endif
+            <th class="text-center">تم تسليمها </th> 
           </thead>
-          <?php $records = unserialize($invoice->details) ?>
-            @for($i=1;$i<count($records);$i++)
+            @for($i=1;$i<$num;$i++)
             <tr>
                 <td class="text-center">
-                    <input type="hidden" value="{{count($records)}}" id="num">
                     {{$records[$i]['barcode']}}
                 </td>
                 <td class="text-center">  {{-- في الطباعة تم الطلب بعرض الاسم بالعربية فقط دوما --}}
                   {{$records[$i]['name_ar']}}
                 </td>
-                <td style="display: none;">
-                  {{$records[$i]['cost_price']}}
-                </td>
                 <td class="text-center">
-                  <p id="price{{$i}}">
                     {{$records[$i]['price']}}
-                  </p>
                 </td>
                 <td class="text-center">
-                  <p id="quantity{{$i}}">
                     {{$records[$i]['quantity']}}
-                  </p>
                 </td>
-              <td class="text-center">
-                  @if($records[$i]['delivered'] != 0)
-                  نعم
-                  @else
-                  لا
-                  @endif
-              </td>
+                @if(isset($complete_invoice))
+                <td class="text-center">
+                    {{$records[$i]['must_del']}}
+                </td>
+                @endif
+                <td class="text-center">
+                    {{$records[$i]['del']}}
+                </td>
           </tr>
           @endfor
-          <tfoot>
-            <tr>
-            <th>المجموع</th>
-            <th class="text-center">
-              <p id="total_price">
-              </p>
-            </th>
-            <th>الضريبة</th>
-            <th class="text-center">
-              <p>{{$invoice->tax}}</p>
-            </th>
-            <th>الحسم</th>
-            <th class="text-center">
-              <p>{{$invoice->discount}}</p>
-            </th>
-            </tr>
-            <tr>
-            <th>المبلغ الإجمالي</th>
-            <th class="text-center">
-              <p>{{$invoice->total_price}}</p>
-            </th>
-            </tr>
-            <th>الدفع كاش</th>
-            <th class="text-center">
-              <p>{{$invoice->cash_amount}}</p>
-            </th>
-            <th>الدفع بالبطاقة</th>
-            <th class="text-center">
-              <p>{{$invoice->card_amount}}</p>
-            </th>
-            <th>STC-pay</th>
-            <th class="text-center">
-              <p>{{$invoice->stc_amount}}</p>
-            </th>
-            <?php $remaining_amount = $invoice->total_price - ($invoice->cash_amount+$invoice->card_amount+$invoice->stc_amount) ?>
-            @if($remaining_amount > 0)
-            <th>المبلغ المتبقي للدفع</th>
-            <th class="text-center">
-              <p>{{$remaining_amount}}</p>
-            </th>
-            @endif
-          </tfoot>
         </table>
-      </div>
+        </div>
+            @if(isset($sum))
+            <p class="p-inline">المجموع
+                {{$sum}}
+            </p>
+            <p class="p-inline">الضريبة
+                {{$tax}}
+            <p class="p-inline">الحسم
+                {{$discount}}
+            </p>
+            @endif
+            @if(!isset($complete_invoice))
+            <p>
+            <p class="p-inline">المبلغ الإجمالي
+                {{$total_price}}
+            </p>
+            </p>
+            @else
+            <p>
+            <p class="p-inline">المبلغ الإجمالي
+                {{$total_price}}
+            </p>
+            <p class="p-inline">المدفوع سابقا
+                {{$total_price-$extra_price}}
+            </p>
+            <p class="p-inline">المدفوع الآن
+                {{$extra_price}}
+            </p>
+            </p>
+            @endif
+            <p>
+            <p class="p-inline">الدفع كاش
+                {{$cash}}
+            </p>
+            <p class="p-inline">الدفع بالبطاقة
+                {{$card}}
+            </p>
+            <p class="p-inline">stc-pay
+                {{$stc}}
+            </p>
+            </p>
+            @if(isset($remaining_amount) && $remaining_amount > 0)
+            <p> المبلغ المتبقي للدفع
+                {{$remaining_amount}}
+            </p>
+            @endif
+        
       @if($repository->setting->print_prescription == true)
       @if(isset($recipe) && $is_recipe_null == false)
+      <h4>  الوصفة الطبية  </h4>
+              @if(array_key_exists('name', $recipe))
+                {{$recipe['name']}}
+              @endif
       <div class="bordred">
       <table class="bordered-table" dir="ltr">
         <thead>
@@ -165,13 +193,13 @@
       @endif
       @endif
       <h4 class="text-center">
-        العميل {{$invoice->customer->name}}
+        العميل {{$customer->name}}
       </h4>
-      <h4>جوال العميل {{$invoice->phone}}</h4>
-      <h4>موظف البيع {{$invoice->user->name}}</h4>
-      @if($invoice->note)
+      <h4>جوال العميل {{$customer->phone}}</h4>
+      <h4>موظف البيع {{$employee->name}}</h4>
+      @if($note)
       <div>
-        <h4>{{$invoice->note}}</h4>
+        <h4>{{$note}}</h4>
       </div>
       @endif
       @if($repository->note)
@@ -193,7 +221,7 @@
             sum = sum + parseFloat($('#price'+i).text()) * parseFloat($('#quantity'+i).text());
           }
           $('#total_price').text(sum);
-          window.print();
+         // window.print();
         }
       </script>
    </body>

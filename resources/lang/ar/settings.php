@@ -59,5 +59,7 @@
         'password_change_success' => 'تم تغيير كلمة المرور بنجاح',
         'fail_confirm_password' => 'تأكيد كلمة المرور الجديدة غير صحيح',
         'fail_old_password' => 'كلمة المرور القديمة غير صحيحة',
+        'standard_printer' => 'طابعة عادية',
+        'thermal_printer' => 'طابعة حرارية',
     ];
     ?>

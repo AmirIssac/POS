@@ -229,10 +229,18 @@ class SettingsController extends Controller
         $repository = Repository::find($id);
         $setting = $repository->setting;
         $print_prescription = false;
+        $standard_printer = true;
+        $thermal_printer = false;
         if($request->prescription)
             $print_prescription = true;
+        if($request->printer_type == 'thermal'){
+            $standard_printer = false;
+            $thermal_printer = true;
+        }
         $setting->update([
             'print_prescription' => $print_prescription,
+            'standard_printer' => $standard_printer,
+            'thermal_printer' => $thermal_printer,
         ]);
 
         return back()->with('success' , 'update print settings');

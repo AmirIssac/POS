@@ -175,6 +175,30 @@ textarea{
                     @endif
                   </td>
                 </tr>
+                <tr>
+                  <td>
+                     {{__('settings.standard_printer')}}
+                  </td>
+                  <td>
+                    @if($repository->setting->standard_printer == false)
+                    <input type="radio" name="printer_type" value="standard" class="form-control">
+                    @else
+                    <input type="radio" name="printer_type" value="standard" class="form-control" checked>
+                    @endif
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    {{__('settings.thermal_printer')}}
+                  </td>
+                  <td>
+                    @if($repository->setting->thermal_printer == false)
+                    <input type="radio" name="printer_type" value="thermal" class="form-control">
+                    @else
+                    <input type="radio" name="printer_type" value="thermal" class="form-control" checked>
+                    @endif
+                  </td>
+                </tr>
                <tr>
                  <td>
                    <button class="btn btn-success">{{__('buttons.confirm')}}</button>

@@ -47,7 +47,10 @@ class ReportController extends Controller
          $is_recipe_null = false;
          if($recipe['add_r']=='0' && $recipe['axis_r']=='0' && $recipe['cyl_r']=='0' && $recipe['sph_r']=='0' && $recipe['add_l']=='0' && $recipe['axis_l']=='0' && $recipe['cyl_l']=='0' && $recipe['sph_l']=='0' && $recipe['ipd']=='0' )
          $is_recipe_null = true;
-            //return view('manager.Reports.print_invoice')->with(['repository'=>$repository,'invoice'=>$invoice,'recipe'=>$recipe,'is_recipe_null'=>$is_recipe_null]);
+
+         if($repository->setting->standard_printer) 
+            return view('manager.Reports.print_invoice')->with(['repository'=>$repository,'invoice'=>$invoice,'recipe'=>$recipe,'is_recipe_null'=>$is_recipe_null]);
+            else
             return view('manager.Sales.epson_recipe_data')->with(['repository'=>$repository,'invoice'=>$invoice,'recipe'=>$recipe,'is_recipe_null'=>$is_recipe_null]);
     }
 

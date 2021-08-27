@@ -15,7 +15,8 @@ class AddColumnToSettingsTable extends Migration
     {
         Schema::table('settings', function (Blueprint $table) {
             //
-            $table->boolean('discount_change_price')->after('discount_by_value')->default(false);
+            $table->boolean('standard_printer')->after('discount_change_price')->default(true);
+            $table->boolean('thermal_printer')->after('standard_printer')->default(false);
         });
     }
 
