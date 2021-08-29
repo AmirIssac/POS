@@ -32,7 +32,9 @@
     }
     </style>
     <body>
-      
+      @if($repository->logo)
+    <img src="{{asset('public/storage/'.$repository->logo)}}" width="50px" height="50px" id="logorep">
+    @endif
     <h2 class="text-center">متجر {{$repository->name}}</h2>
     <h4 class="text-center">رقم الفاتورة {{$invoice->code}}</h4>
     <h4 class="text-center">التاريخ {{$invoice->created_at}}</h4>

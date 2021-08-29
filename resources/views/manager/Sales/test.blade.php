@@ -1,5 +1,5 @@
 <!DOCTYPE html>
- <html  lang="ar" dir="ltr">
+ <html dir="rtl">
     <head>
     	<!-- Metas -->
         <meta charset="utf-8">
@@ -8,9 +8,8 @@
         <meta name="keywords" content="amir" />
         <meta name="description" content="amir" />
         <meta name="author" content="amir" />
- <!-- CSS Files -->
- <link href="{{asset('public/css/material-dashboard.min.css?v=2.1.2')}}" rel="stylesheet" />
- <!-- Title  -->
+
+        <!-- Title  -->
         <title>Rofood</title>
       
         
@@ -36,91 +35,65 @@
         padding : 10px;
     }
     .modal{
+      color: red;
       font-size: 25px;
     }
-    #header{
-      display: flex;
-    }
-        .table-c td {
-            padding: 10px;
-        }
-        .table-c th {
-            padding: 10px;
-        }
-
     @media print{
-      #mod{
+      .modal{
         display: none;
-      }
-      *{
-        font-weight: bold;
       }
     }
     </style>
     <body>
-   <!-- Modal -->
-   <div id="mod" dir="rtl">
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">تمت عملية البيع بنجاح</h5>
-          </div>
-          <div class="modal-body">
-            هل تريد طباعة الفاتورة ؟
-          </div>
-          <div class="modal-footer">
-            @if(isset($complete_invoice)) {{-- completing invoice --}}
-            <a href="{{route('show.pending',$repo_id)}}" class="btn btn-danger">لا</a>
-            <a id="print" onclick="window.print();" href="{{route('show.pending',$repo_id)}}" class="btn btn-primary">نعم</a>
-            @else {{-- sell invoice for first time --}}
-            <a href="{{route('create.special.invoice',$repo_id)}}" class="btn btn-danger">لا</a>
-            <a id="print" onclick="window.print();" href="{{route('create.special.invoice',$repo_id)}}" class="btn btn-primary">نعم</a>
-            @endif
-          </div>
-        </div>
+      <div class="modal">
+        هل تريد طباعة الفاتورة ؟
+      </div>
+      <div class="modal">
+        @if(isset($complete_invoice)) {{-- completing invoice --}}
+        <a href="{{route('show.pending',$repo_id)}}">لا</a>
+        <a id="print" onclick="window.print();" href="{{route('show.pending',$repo_id)}}">نعم</a>
+        @else {{-- sell invoice for first time --}}
+        <a href="{{route('create.special.invoice',$repo_id)}}">لا</a>
+        <a id="print" onclick="window.print();" href="{{route('create.special.invoice',$repo_id)}}">نعم</a>
+        @endif
       </div>
     </div>
-       </div>
-       @if($repository->logo)
-    <img src="{{asset('public/storage/'.$repository->logo)}}" width="50px" height="50px" id="logorep">
-    @endif
-    <h4 class="text-start">متجر {{$repository->name}}</h4>
-    <h4>رقم الفاتورة {{$invoice->code}}</h4>
-    <h4>التاريخ {{$invoice->created_at}}</h4>
-    <h4>الرقم الضريبي {{$repository->tax_code}}</h4>
+    <h2 class="text-center">متجر {{$repository->name}}</h2>
+    <h4 class="text-center">رقم الفاتورة {{$invoice->code}}</h4>
+    <h4 class="text-center">التاريخ {{$invoice->created_at}}</h4>
+    <h4 class="text-center">الرقم الضريبي {{$repository->tax_code}}</h4>
       <div class="bordred">
-        <table class="table-c">
+        <table>
           <thead class="head">
             <th>Barcode</th>
-            <th>الاسم</th>
-            <th>السعر</th>
-            <th>الكمية</th>
+            <th class="text-center">الاسم</th>
+            <th class="text-center">السعر</th>
+            <th class="text-center">الكمية</th>
             @if(isset($complete_invoice))
-            <th> الواجب تسليمها </th>
+            <th class="text-center"> الواجب تسليمها </th>
             @endif
-            <th>تم تسليمها </th> 
+            <th class="text-center">تم تسليمها </th> 
           </thead>
             @for($i=1;$i<$num;$i++)
             <tr>
-                <td>
+                <td class="text-center">
                     {{$records[$i]['barcode']}}
                 </td>
-                <td>  {{-- في الطباعة تم الطلب بعرض الاسم بالعربية فقط دوما --}}
+                <td class="text-center">  {{-- في الطباعة تم الطلب بعرض الاسم بالعربية فقط دوما --}}
                   {{$records[$i]['name_ar']}}
                 </td>
-                <td>
+                <td class="text-center">
                     {{$records[$i]['price']}}
                 </td>
-                <td>
+                <td class="text-center">
                     {{$records[$i]['quantity']}}
                 </td>
                 @if(isset($complete_invoice))
-                <td>
+                <td class="text-center">
                     {{$records[$i]['must_del']}}
                 </td>
                 @endif
-                <td>
+                <td class="text-center">
                     {{$records[$i]['del']}}
                 </td>
           </tr>
@@ -219,7 +192,7 @@
       </div>
       @endif
       @endif
-      <h4>
+      <h4 class="text-center">
         العميل {{$customer->name}}
       </h4>
       <h4>جوال العميل {{$customer->phone}}</h4>
@@ -234,13 +207,11 @@
         <h4>{{$repository->note}}</h4>
       </div>
       @endif
-      <!--   Core JS Files   -->
-  
-  <script src="{{asset('public/js/core/jquery.min.js')}}" type="text/javascript"></script>
-  <script src="{{asset('public/js/core/popper.min.js')}}" type="text/javascript"></script>
-  <script src="{{asset('public/js/core/bootstrap-material-design.min.js')}}" type="text/javascript"></script>
- 
-        <script>
+      <script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+      <script>
         
         // to make sure the data is loading before print //
         window.onload = function() {
@@ -253,15 +224,5 @@
          // window.print();
         }
       </script>
-      <script>
-        $(document).ready(function() {
-          $('#exampleModal').modal('show');
-        });
-        </script>
-        <script>
-          $('#print').on('click',function(){
-            $('#mod').addClass('displaynone');
-          });
-        </script>
    </body>
 </html>
