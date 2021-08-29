@@ -317,16 +317,16 @@ class SellController extends Controller
             return back()->with('failPayment','عملية الدفع غير صحيحة');*/
         $repository = Repository::find($id);
         $count = count($request->barcode);
-        $count2 = count( $request->del);
+        $count2 = count($request->del);
         $delivered = true;
         // check if hanging or delivered
         if($count == $count2) // delivered
-        {
+        {   // we dont look for unstored product quantities
                 for($i=0;$i<$count;$i++){   // check all the quantities before any sell process
                     if($request->barcode[$i]){
                         $product = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->get();
                         // check all the quantities if <= the stored quantity of stored products
-                        if($product){
+                        if($product && $product[0]->stored){
                             // check all records for this barcode for quantity because the repeated values is available
                             $sum_quantity = 0;
                         for($j=0;$j<$count;$j++){
@@ -351,7 +351,7 @@ class SellController extends Controller
                 for($i=0;$i<$count;$i++){
                     if($request->barcode[$i]){
                         $product = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->get();
-                        if($product){
+                        if($product && $product[0]->stored){
                         foreach($product as $prod)
                         $new_quantity = $prod->quantity - $request->quantity[$i];
                         $prod->update(
@@ -371,7 +371,7 @@ class SellController extends Controller
                 $product = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->get();
                 // check if del this item
                 if(in_array($i,$request->del)) // delivered
-                if($product){
+                if($product && $product[0]->stored){
                     // check all records for this barcode for quantity because the repeated values is available
                     $sum_quantity = 0;
                 for($j=0;$j<$count;$j++){
@@ -395,7 +395,7 @@ class SellController extends Controller
                 if($request->barcode[$i]){
                 $product = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->get();
                 if($product){
-                if(in_array($i,$request->del)){ // delivered this item
+                if(in_array($i,$request->del) && $product[0]->stored){ // delivered this item
                 foreach($product as $prod)
                 $new_quantity = $prod->quantity - $request->quantity[$i];
                 $prod->update(
@@ -723,7 +723,7 @@ class SellController extends Controller
                         if($request->barcode[$i]){
                             $product = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->get();
                             // check all the quantities if <= the stored quantity of stored products
-                            if($product){
+                            if($product && $product[0]->stored){
                                 // check all records for this barcode for quantity because the repeated values is available
                                 $sum_quantity = 0;
                             for($j=0;$j<$count;$j++){
@@ -825,6 +825,7 @@ class SellController extends Controller
                         // delete the delivered products from repository
                         for($i=0;$i<$count;$i++){
                             $product = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->get();
+                            if($product && $product[0]->stored){
                             foreach($product as $prod)
                             $new_quantity = $prod->quantity - $request->quantity[$i];
                             $prod->update(
@@ -832,6 +833,7 @@ class SellController extends Controller
                                     'quantity' => $new_quantity,
                                 ]
                                 );
+                            }
                         }
                         // prepare to send data to print page
                         $records = array(array());
@@ -943,10 +945,12 @@ class SellController extends Controller
         {
             //return $records[$i];
             $product = Product::where('repository_id',$repository->id)->where('barcode',$records[$i]['barcode'])->first();
+            if($product && $product->stored){
             $new_quantity = $product->quantity + floatval($records[$i]['delivered']);
             $product->update([   // retrieve the products to stock
                 'quantity' => $new_quantity,
             ]);
+            }
         }
         // give the money back to the customer
         // !? for now we will do the back money just from cash for all cash and card and stc !?
@@ -1061,10 +1065,12 @@ class SellController extends Controller
         for($i=1;$i<count($records);$i++)
         {
             $product = Product::where('repository_id',$repository->id)->where('barcode',$records[$i]['barcode'])->first();
+            if($product && $product->stored){
             $new_quantity = $product->quantity + floatval($records[$i]['delivered']);
             $product->update([   // retrieve the products to stock
                 'quantity' => $new_quantity,
             ]);
+            }
         }
         if($invoice->status == 'delivered')
             $transform = 'd-x';

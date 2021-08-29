@@ -20,6 +20,12 @@
       <strong>{{ session('deleteProductSuccess') }}</strong>
     </div>
     @endif
+    @if (session('fail'))
+    <div class="alert alert-danger alert-block">
+    <button type="button" class="close" data-dismiss="alert">×</button>	
+    <strong>{{ session('fail') }}</strong>
+  </div>
+  @endif
            @foreach($repositories as $repository)
           
            <div class="col-md-4">

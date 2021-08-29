@@ -30,5 +30,8 @@ return [
     'yes' => 'نعم',
     'no' => 'لا',
     'store' => 'متجر',
+    'available_in_stock' => 'متوفر في المخزون',
+    'unavailable_in_stock' => 'غير متوفر في المخزون',
+    'storing_method' => 'اجرائية التخزين',
 ];
 ?>

@@ -39,13 +39,20 @@ class RepositoryController extends Controller
             $product = Product::where('repository_id',$request->repo_id)->where('barcode',$request->barcode[$i])->first();
             if($product)  // found it
             {
+            if($product->stored == true)
             $new_quantity = $product->quantity + $request->quantity[$i];
+            else
+            $new_quantity = 0;   // we give zero quantity for unstored products
             $new_price = $request->price[$i];
             $new_cost_price = $request->cost_price[$i];
+            $new_stored = true;
+            if($request->stored[$i] == 'no')
+                $new_stored = false;
             $product->update([
                 'quantity' => $new_quantity,
                 'cost_price' => $new_cost_price,
                 'price' => $new_price,
+                'stored' => $new_stored,
             ]);
             $totalPrice+=$request->total_price[$i];
             }
@@ -57,6 +64,10 @@ class RepositoryController extends Controller
                     $acceptmin = 1; // yes
                     else
                     $acceptmin = 0; //no
+                $stored = true;
+                if($request->stored[$i] == 'no')
+                    $stored = false;
+            if($stored)
             Product::create(
                 [
                     'repository_id'=>$request->repo_id,
@@ -68,10 +79,32 @@ class RepositoryController extends Controller
                     'cost_price'=>$request->cost_price[$i],
                     'price'=>$request->price[$i],
                     'accept_min' => $acceptmin,
+                    'stored' => $stored,
                 ]
                 );
+                else
+                Product::create(
+                    [
+                        'repository_id'=>$request->repo_id,
+                        'type_id'=>$request->type[$i],
+                        'barcode' => $request->barcode[$i],
+                        'name_ar'=>$request->name[$i],
+                        'name_en'=>$request->details[$i],
+                        'quantity'=>0,
+                        'cost_price'=>$request->cost_price[$i],
+                        'price'=>$request->price[$i],
+                        'accept_min' => $acceptmin,
+                        'stored' => $stored,
+                    ]
+                    );
+                $totalPrice+=$request->total_price[$i];
             }
             else  // original product
+            {
+                $stored = true;
+                if($request->stored[$i] == 'no')
+                    $stored = false;
+            if($stored)
             Product::create(
                 [
                     'repository_id'=>$request->repo_id,
@@ -81,9 +114,24 @@ class RepositoryController extends Controller
                     'quantity'=>$request->quantity[$i],
                     'cost_price'=>$request->cost_price[$i],
                     'price'=>$request->price[$i],
+                    'stored' => $stored,
+                ]
+                );
+            else
+            Product::create(
+                [
+                    'repository_id'=>$request->repo_id,
+                    'barcode' => $request->barcode[$i],
+                    'name_ar'=>$request->name[$i],
+                    'name_en'=>$request->details[$i],
+                    'quantity'=>0,
+                    'cost_price'=>$request->cost_price[$i],
+                    'price'=>$request->price[$i],
+                    'stored' => $stored,
                 ]
                 );
             $totalPrice+=$request->total_price[$i];
+            }
         }
     }
         }
@@ -98,8 +146,19 @@ class RepositoryController extends Controller
 
     public function showProducts($id){
         $repository = Repository::find($id);
-        $products = $repository->productsAsc()->paginate(15);
+        //$products = $repository->productsAsc()->paginate(15);
+        $products = $repository->products()->where('stored',true)->orderBy('quantity','ASC')->paginate(15);
         return view('manager.Repository.show_products')->with(['products'=>$products,'repository'=>$repository]);
+    }
+
+    public function filterProducts(Request $request,$id){
+        $repository = Repository::find($id);
+        $arr = array('isStored'=>$request->isStored);
+        $stored = true;
+        if($request->isStored == 'no')
+            $stored = false;
+        $products = $repository->products()->where('stored',$stored)->orderBy('updated_at','DESC')->paginate(15);
+        return view('manager.Repository.show_products')->with(['products'=>$products->appends($arr),'repository'=>$repository]);
     }
 
     public function importExcelForm($id){
@@ -138,6 +197,13 @@ class RepositoryController extends Controller
 
     public function updateProduct(Request $request){
         $product = Product::find($request->product_id);
+        $repository = $product->repository;
+        // check if we change the barcode and its equal to specific barcode so we cancel the updating proccess
+        if($request->barcode != $request->old_barcode){
+            $temp = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode)->first();
+            if($temp)
+                return redirect(route('repository.index'))->with('fail','هذا الباركود محجوز لمنتج سابق');
+        }
         if($request->type){   // special form
             if($request->acceptmin)
                 $acceptmin = 1;

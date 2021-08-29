@@ -4,18 +4,46 @@
   table span{
     width: 50px;
   }
+  .select{
+    border-radius: 10px;
+    border:1px solid white;
+    background-color: #2d3e4f;
+    color: white
+  }
+  
 </style>
 @endsection
 @section('body')
 <div class="main-panel">
 
 <div class="content">
+ 
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title">{{__('repository.all_products')}}</h4>
+              @if(request()->query('isStored')=='no')
+              <h4 class="card-title">{{__('repository.unavailable_in_stock')}}</h4>
+              @else
+              <h4 class="card-title">{{__('repository.available_in_stock')}}</h4>
+              @endif
+              {{-- filter --}}
+  <form action="{{route('filter.products',$repository->id)}}" method="GET">
+    @csrf
+    <select class="select" name="isStored">
+      @if(request()->query('isStored')=='no')
+      <option value="yes">متوفر في المخزون</option>
+      <option value="no" selected>غير متوفر في المخزون</option>
+      @else
+      <option value="yes" selected>متوفر في المخزون</option>
+      <option value="no">غير متوفر في المخزون</option>
+      @endif
+    </select>
+    <button type="submit" class="btn btn-success btn-round btn-just-icon">
+      <i class="material-icons">search</i>
+    </button>
+    </form>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -68,10 +96,10 @@
                      @if($repository->isSpecial())
                      <td>
                       @if(LaravelLocalization::getCurrentLocale() == 'ar')
-                       {{$product->type->name_ar}}
+                       {{$product->type['name_ar']}} 
                        @endif
                        @if(LaravelLocalization::getCurrentLocale() == 'en')
-                       {{$product->type->name_en}}
+                       {{$product->type['name_en']}}
                        @endif
                      </td>
                      <td>

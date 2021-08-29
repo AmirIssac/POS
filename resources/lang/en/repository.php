@@ -30,5 +30,8 @@ return [
     'yes' => 'Yes',
     'no' => 'No',
     'store' => 'Store',
+    'available_in_stock' => 'Available in stock',
+    'unavailable_in_stock' => 'Unavailable in stock',
+    'storing_method' => 'Storing method',
 ];
 ?>

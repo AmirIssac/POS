@@ -75,6 +75,7 @@
                       
                        <td>
                           <input type="hidden" name="product_id" class="form-control" value="{{$product->id}}">
+                          <input type="hidden" name="old_barcode" class="form-control" value="{{$product->barcode}}">
                            <input type="text" name="barcode" class="form-control" value="{{$product->barcode}}" required>
                        </td>
                        <td>

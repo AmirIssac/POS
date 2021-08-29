@@ -17,6 +17,15 @@ form #tooltip:hover{
 .displaynone{
   display: none;
 }
+.table-c {
+            width:100%;
+            height: 30px;
+            /*table-layout: fixed;*/
+        }
+        .table-c td {
+            border: 2px solid #9229ac;
+            padding: 10px;
+        }
 </style>
 @endsection
 @section('body')
@@ -49,55 +58,58 @@ form #tooltip:hover{
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table id="myTable" class="table">
+                <table class="table-c">
                   <thead class="text-primary">
-                    <th>
+                    <th style="width: 10%">
                       Barcode  
                     </th>
-                    <th>
+                    <th style="width: 20%">
                       {{__('repository.arabic_name')}}  
-                    </th>
-                    <th>
+                    </th> 
+                    <th style="width: 20%">
                       {{__('repository.english_name')}}
                     </th>
                     @if($repository->isSpecial())  {{-- محل خاص --}}
-                    <th>
+                    <th style="width: 10%">
                       {{__('repository.product_type')}}
                     </th>
-                    <th>
+                    <th style="width: 5%">
                       {{__('repository.accept_min')}}  
                     </th>
+                    <th style="width: 10%">
+                      {{__('repository.storing_method')}} 
+                    </th>
                     @endif
-                    <th>
+                    <th style="width: 5%">
                       {{__('sales.quantity')}} 
                     </th>
-                    <th>
+                    <th style="width: 5%">
                       {{__('reports.cost_price')}}  
                     </th>
-                    <th>
+                    <th style="width: 5%">
                       {{__('sales.sell_price')}}  
                     </th>
-                    <th>   {{-- for future use to save every input details in table of repository inputs --}}
+                    <th style="width: 8%">   {{-- for future use to save every input details in table of repository inputs --}}
                       {{__('sales.total_price')}}  
-                      <td>
-                      <i id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title=" {{__('sales.total_price')}} =" data-content=" {{__('reports.cost_price')}} X {{__('sales.quantity')}}">live_help</i>
-                      </td>
+                      <th  style="width: 2%">
+                        <i id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title=" {{__('sales.total_price')}} =" data-content=" {{__('reports.cost_price')}} X {{__('sales.quantity')}}">live_help</i>
+                      </th>
                     </th>
                   </thead>
                   <tbody>
                      <div id="record">
                       <tr>
-                        <td>
+                        <td style="width: 10%">
                             <input type="text" name="barcode[]" class="form-control barcode" placeholder=" {{__('sales.scanner_input')}} " id="autofocus"  required>
                         </td>
-                        <td>
+                        <td style="width: 20%">
                           <input type="text" name="name[]" class="form-control" placeholder="{{__('repository.arabic_name')}}" id="ar0" required>
                       </td>
-                      <td>
+                      <td style="width: 20%">
                         <input type="text" name="details[]" class="form-control" placeholder="{{__('repository.english_name')}}">
                     </td>
                     @if($repository->isSpecial())  {{-- محل خاص --}}
-                    <td>
+                    <td style="width: 10%">
                       @if(LaravelLocalization::getCurrentLocale() == 'ar')
                       <select id="sel0" name="type[]" class="form-control sel">
                         @foreach($types as $type)
@@ -116,23 +128,29 @@ form #tooltip:hover{
                       <input type="number" id="sph0" min="-20.00" max="20.00" step="0.25" name="sph[]" placeholder="sph">
                       <input type="number" id="cyl0" min="-20.00" max="20.00" step="0.25" name="cyl[]" placeholder="cyl">
                       <input type="number" id="add0" min="0.00" max="20.00" step="0.25" name="add[]" placeholder="add">
-                      <input type="text" id="ty0" name="type[]" placeholder="type">
+                      <input type="text" id="ty0" name="typee[]" placeholder="type">
                       </span>
                   </td>
-                  <td>
+                  <td style="width: 10%">
                     <input type="checkbox" name="acceptmin[]" class="form-control" value="0" checked>
                   </td>
                   @endif
-                    <td>
+                  <td style="width: 10%">
+                    <select id="stored0" name="stored[]" class="form-control">
+                      <option value="yes">{{__('repository.available_in_stock')}}</option>
+                      <option value="no">{{__('repository.unavailable_in_stock')}}</option>
+                    </select>
+                  </td>
+                    <td style="width: 5%">
                       <input id="quantity0" type="number" name="quantity[]" min="0" class="form-control" value="1" placeholder="{{__('sales.quantity')}}" required>
                   </td>
-                      <td>
+                      <td style="width: 5%">
                         <input id="cost_price0"  type="number" name="cost_price[]" step="0.01" class="form-control" value="0" placeholder="{{__('reports.cost_price')}}" required>
                       </td>
-                        <td>
+                        <td style="width: 5%">
                             <input id="price0"  type="number" name="price[]" step="0.01" class="form-control target" value="0" placeholder="{{__('sales.price')}}" required>
                         </td>
-                        <td>
+                        <td style="width: 5%">
                             <input id="total_price0" type="number" name="total_price[]" step="0.01" class="form-control" placeholder="{{__('sales.total_price')}}" required>
                             <input type="hidden" name="repo_id" value="{{$repository->id}}">
                         </td>
@@ -160,7 +178,7 @@ form #tooltip:hover{
                     @endforeach
                   </select>
                   @endif
-                  @if(LaravelLocalization::getCurrentLocale() == 'en')
+                 @if(LaravelLocalization::getCurrentLocale() == 'en')
                   <select id="sel{{$count}}" name="type[]" class="form-control sel">
                     @foreach($types as $type)
                     <option value="{{$type->id}}">{{$type->name_en}}</option>
@@ -171,13 +189,19 @@ form #tooltip:hover{
                   <input type="number" id="sph{{$count}}" min="-20.00" max="20.00" step="0.25" name="sph[]" placeholder="sph">
                   <input type="number" id="cyl{{$count}}" min="-20.00" max="20.00" step="0.25" name="cyl[]" placeholder="cyl">
                   <input type="number" id="add{{$count}}" min="0.00" max="20.00" step="0.25" name="add[]" placeholder="add">
-                  <input type="text" id="ty{{$count}}" name="type[]" placeholder="type">
+                  <input type="text" id="ty{{$count}}" name="typee[]" placeholder="type">
                   </span>
               </td>
               <td>
-                <input type="checkbox" name="acceptmin[]" class="form-control" value="0" checked>
+                <input type="checkbox" name="acceptmin[]" class="form-control" value="{{$count}}" checked>
               </td>
               @endif
+              <td>
+                <select id="stored{{$count}}" name="stored[]" class="form-control">
+                  <option value="yes">{{__('repository.available_in_stock')}}</option>
+                  <option value="no">{{__('repository.unavailable_in_stock')}}</option>
+                </select>
+              </td>
                 <td>
                   <input id="quantity{{$count}}" type="number" name="quantity[]" min="0" class="form-control" value="1" placeholder="{{__('sales.quantity')}}">
               </td>
