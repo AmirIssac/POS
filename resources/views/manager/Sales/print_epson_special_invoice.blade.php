@@ -1,5 +1,5 @@
 <!DOCTYPE html>
- <html  lang="ar" dir="ltr">
+ <html dir="rtl">
     <head>
     	<!-- Metas -->
         <meta charset="utf-8">
@@ -8,9 +8,8 @@
         <meta name="keywords" content="amir" />
         <meta name="description" content="amir" />
         <meta name="author" content="amir" />
- <!-- CSS Files -->
- <link href="{{asset('public/css/material-dashboard.min.css?v=2.1.2')}}" rel="stylesheet" />
- <!-- Title  -->
+
+        <!-- Title  -->
         <title>Rofood</title>
       
         
@@ -36,56 +35,29 @@
         padding : 10px;
     }
     .modal{
+      color: red;
       font-size: 25px;
     }
-    #header{
-      display: flex;
+    .table-c td {
+            padding: 10px;
+        }
+    .table-c th {
+            padding: 10px 0 10px 10px;
+        }
+    .big-padding{
+      padding: 10px 0 10px 30px !important;
     }
-        .table-c td {
-            padding: 10px;
-        }
-        .table-c th {
-            padding: 10px;
-        }
-
     @media print{
-      #mod{
+      .modal{
         display: none;
-      }
-      *{
-        font-weight: bold;
       }
     }
     </style>
     <body>
-   <!-- Modal -->
-   <div id="mod" dir="rtl">
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">تمت عملية البيع بنجاح</h5>
-          </div>
-          <div class="modal-body">
-            هل تريد طباعة الفاتورة ؟
-          </div>
-          <div class="modal-footer">
-            @if(isset($complete_invoice)) {{-- completing invoice --}}
-            <a href="{{route('show.pending',$repo_id)}}" class="btn btn-danger">لا</a>
-            <a id="print" onclick="window.print();" href="{{route('show.pending',$repo_id)}}" class="btn btn-primary">نعم</a>
-            @else {{-- sell invoice for first time --}}
-            <a href="{{route('create.special.invoice',$repo_id)}}" class="btn btn-danger">لا</a>
-            <a id="print" onclick="window.print();" href="{{route('create.special.invoice',$repo_id)}}" class="btn btn-primary">نعم</a>
-            @endif
-          </div>
-        </div>
-      </div>
-    </div>
-       </div>
-       @if($repository->logo)
-    <img src="{{asset('public/storage/'.$repository->logo)}}" width="50px" height="50px" id="logorep">
-    @endif
-    <h4 class="text-start">متجر {{$repository->name}}</h4>
+      @if($repository->logo)
+      <img src="{{asset('public/storage/'.$repository->logo)}}" width="50px" height="50px" id="logorep">
+      @endif
+    <h2>متجر {{$repository->name}}</h2>
     <h4>رقم الفاتورة {{$invoice->code}}</h4>
     <h4>التاريخ {{$invoice->created_at}}</h4>
     <h4>الرقم الضريبي {{$repository->tax_code}}</h4>
@@ -93,7 +65,7 @@
         <table class="table-c">
           <thead class="head">
             <th>Barcode</th>
-            <th>الاسم</th>
+            <th class="big-padding">الاسم</th>
             <th>السعر</th>
             <th>الكمية</th>
             @if(isset($complete_invoice))
@@ -106,7 +78,7 @@
                 <td>
                     {{$records[$i]['barcode']}}
                 </td>
-                <td>  {{-- في الطباعة تم الطلب بعرض الاسم بالعربية فقط دوما --}}
+                <td class="big-padding">  {{-- في الطباعة تم الطلب بعرض الاسم بالعربية فقط دوما --}}
                   {{$records[$i]['name_ar']}}
                 </td>
                 <td>
@@ -234,14 +206,17 @@
         <h4>{{$repository->note}}</h4>
       </div>
       @endif
-      <!--   Core JS Files   -->
-  
-  <script src="{{asset('public/js/core/jquery.min.js')}}" type="text/javascript"></script>
-  <script src="{{asset('public/js/core/popper.min.js')}}" type="text/javascript"></script>
-  <script src="{{asset('public/js/core/bootstrap-material-design.min.js')}}" type="text/javascript"></script>
- 
-        <script>
-        
+      <input type="hidden" value="{{$repository->id}}" id="repo_id">
+      @if(isset($complete_invoice)) {{-- completing invoice --}}
+      <input type="hidden" value="true" id="is-completing">
+      @else
+      <input type="hidden" value="false" id="is-completing">
+      @endif
+      <script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+      <script>
         // to make sure the data is loading before print //
         window.onload = function() {
           var num = parseFloat($('#num').val()); // number of records
@@ -250,18 +225,30 @@
             sum = sum + parseFloat($('#price'+i).text()) * parseFloat($('#quantity'+i).text());
           }
           $('#total_price').text(sum);
-         // window.print();
+          var repo_id = $('#repo_id').val();
+          var is_completing = $('#is-completing').val();
+          result = confirm('تم البيع بنجاح هل تريد طباعة الفاتورة');
+          if(result == true){
+              if(is_completing == 'true'){
+                  window.print();
+                  window.onafterprint = function(){
+                  window.location.href = "/show/pending/invoices/"+repo_id;
+                  }
+              }
+              else{
+                  window.print();
+                  window.onafterprint = function(){
+                  window.location.href = "/create/special/invoice/form/"+repo_id;
+                  }
+              }
+          }
+          else{
+            if(is_completing == 'true')
+               window.location.href = "/show/pending/invoices/"+repo_id;
+            else
+               window.location.href = "/create/special/invoice/form/"+repo_id;
+          }
         }
       </script>
-      <script>
-        $(document).ready(function() {
-          $('#exampleModal').modal('show');
-        });
-        </script>
-        <script>
-          $('#print').on('click',function(){
-            $('#mod').addClass('displaynone');
-          });
-        </script>
    </body>
 </html>
