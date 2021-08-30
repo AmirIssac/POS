@@ -61,5 +61,7 @@
         'fail_old_password' => 'Old password not true',
         'standard_printer' => 'Standard printer',
         'thermal_printer' => 'Thermal printer',
+        'booked_barcode' => 'Barcode booked',
+        'available_barcode' => 'Barcode available',
     ];
     ?>

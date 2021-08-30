@@ -23,21 +23,35 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
-              @if(request()->query('isStored')=='no')
+              @if(request()->query('isStored')=='all')
+              <h4 class="card-title">{{__('repository.all_products')}}</h4>
+              @elseif(request()->query('isStored')=='no')
               <h4 class="card-title">{{__('repository.unavailable_in_stock')}}</h4>
-              @else
+              @elseif(request()->query('isStored')=='yes')
               <h4 class="card-title">{{__('repository.available_in_stock')}}</h4>
+              @else
+              <h4 class="card-title">{{__('repository.all_products')}}</h4>
               @endif
               {{-- filter --}}
   <form action="{{route('filter.products',$repository->id)}}" method="GET">
     @csrf
     <select class="select" name="isStored">
-      @if(request()->query('isStored')=='no')
-      <option value="yes">متوفر في المخزون</option>
-      <option value="no" selected>غير متوفر في المخزون</option>
+      @if(request()->query('isStored')=='all')
+      <option value="all" selected>{{__('repository.all_products')}}</option>
+      <option value="yes">{{__('repository.available_in_stock')}}</option>
+      <option value="no">{{__('repository.buy_from_market')}}</option>
+      @elseif(request()->query('isStored')=='no')
+      <option value="all">{{__('repository.all_products')}}</option>
+      <option value="yes">{{__('repository.available_in_stock')}}</option>
+      <option value="no" selected>{{__('repository.buy_from_market')}}</option>
+      @elseif(request()->query('isStored')=='yes')
+      <option value="all">{{__('repository.all_products')}}</option>
+      <option value="yes" selected>{{__('repository.available_in_stock')}}</option>
+      <option value="no">{{__('repository.buy_from_market')}}</option>
       @else
-      <option value="yes" selected>متوفر في المخزون</option>
-      <option value="no">غير متوفر في المخزون</option>
+      <option value="all" selected>{{__('repository.all_products')}}</option>
+      <option value="yes">{{__('repository.available_in_stock')}}</option>
+      <option value="no">{{__('repository.buy_from_market')}}</option>
       @endif
     </select>
     <button type="submit" class="btn btn-success btn-round btn-just-icon">
@@ -73,6 +87,9 @@
                   @endcan
                     <th>
                       {{__('sales.sell_price')}}   
+                    </th>
+                    <th>
+                      {{__('repository.storing_method')}}
                     </th>
                     <th>
                       {{__('repository.quantity_available')}}   
@@ -118,6 +135,10 @@
                      <td>
                         {{$product->price}}
                     </td>
+                    @if($product->stored)
+                    <td>
+                       {{__('repository.available_in_stock')}}
+                    </td>
                     <td>
                       @if($product->quantity<=10)
                         <span class="badge badge-danger">
@@ -133,6 +154,14 @@
                         </span>
                       @endif
                     </td>
+                    @else
+                    <td>
+                      {{__('repository.buy_from_market')}}
+                    </td>
+                    <td>
+                      /
+                    </td>
+                    @endif
                     <td>
                       <form action="{{route('edit.product')}}" method="POST">
                         @csrf

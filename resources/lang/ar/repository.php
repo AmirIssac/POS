@@ -33,5 +33,6 @@ return [
     'available_in_stock' => 'متوفر في المخزون',
     'unavailable_in_stock' => 'غير متوفر في المخزون',
     'storing_method' => 'اجرائية التخزين',
+    'buy_from_market' => 'مشترى من السوق',
 ];
 ?>

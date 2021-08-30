@@ -204,5 +204,6 @@ Route::get('cashier/warning/{repository_id}','Manager\CashierController@warning'
 }); // end of localization
 
 Route::get('/ajax/get/typeName/{type_id}','Manager\RepositoryController@getTypeNameAjax');
+Route::get('/ajax/check/barcode/exist/{repository_id}','Manager\RepositoryController@checkBarcodeAjax')->name('ajax.check.barcode');
 
 

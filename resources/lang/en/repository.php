@@ -33,5 +33,6 @@ return [
     'available_in_stock' => 'Available in stock',
     'unavailable_in_stock' => 'Unavailable in stock',
     'storing_method' => 'Storing method',
+    'buy_from_market' => 'Bought from market',
 ];
 ?>

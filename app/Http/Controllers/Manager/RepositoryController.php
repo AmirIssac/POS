@@ -147,18 +147,27 @@ class RepositoryController extends Controller
     public function showProducts($id){
         $repository = Repository::find($id);
         //$products = $repository->productsAsc()->paginate(15);
-        $products = $repository->products()->where('stored',true)->orderBy('quantity','ASC')->paginate(15);
+        $products = $repository->products()->orderBy('updated_at','DESC')->paginate(15);
         return view('manager.Repository.show_products')->with(['products'=>$products,'repository'=>$repository]);
     }
 
     public function filterProducts(Request $request,$id){
         $repository = Repository::find($id);
         $arr = array('isStored'=>$request->isStored);
-        $stored = true;
+        $stored = 'unknown';
+        $isStored = true;
         if($request->isStored == 'no')
-            $stored = false;
-        $products = $repository->products()->where('stored',$stored)->orderBy('updated_at','DESC')->paginate(15);
-        return view('manager.Repository.show_products')->with(['products'=>$products->appends($arr),'repository'=>$repository]);
+            $isStored = false;
+        if($request->isStored == 'all')
+            $stored = 'all';
+        if($stored == 'all'){
+            $products = $repository->products()->orderBy('updated_at','DESC')->paginate(15);
+            return view('manager.Repository.show_products')->with(['products'=>$products->appends($arr),'repository'=>$repository]);
+        }
+        else{
+            $products = $repository->products()->where('stored',$isStored)->orderBy('updated_at','DESC')->paginate(15);
+            return view('manager.Repository.show_products')->with(['products'=>$products->appends($arr),'repository'=>$repository]);
+        }
     }
 
     public function importExcelForm($id){
@@ -205,10 +214,16 @@ class RepositoryController extends Controller
                 return redirect(route('repository.index'))->with('fail','هذا الباركود محجوز لمنتج سابق');
         }
         if($request->type){   // special form
+            $stored = true;
             if($request->acceptmin)
                 $acceptmin = 1;
             else
                 $acceptmin=0;
+            if($request->stored == 'no')
+                {
+                $stored = false;
+                $request->quantity = 0;
+                }
             $product->update([
                 'type_id' => $request->type,
                 'barcode' => $request->barcode,
@@ -218,6 +233,7 @@ class RepositoryController extends Controller
                 'price' => $request->price,
                 'quantity' => $request->quantity,
                 'accept_min' => $acceptmin,
+                'stored' => $stored,
             ]);
         }
         else // original form
@@ -236,5 +252,25 @@ class RepositoryController extends Controller
         $product = Product::find($request->product_id);
         $product->delete();
         return redirect(route('repository.index'))->with('deleteProductSuccess',__('alerts.product_delete_success'));
+    }
+
+    public function checkBarcodeAjax(Request $request,$id){
+        $repository = Repository::find($id);
+        if($request->barcode != $request->old_barcode){
+            $temp = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode)->first();
+            if($temp)
+                {
+                    $status = 'error';
+                    return response($status);
+                }
+            else{
+                $status = 'success';
+                return response($status);
+            }
+        }
+        else{
+            $status = 'success';
+            return response($status);
+        }
     }
 }

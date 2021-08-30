@@ -61,5 +61,7 @@
         'fail_old_password' => 'كلمة المرور القديمة غير صحيحة',
         'standard_printer' => 'طابعة عادية',
         'thermal_printer' => 'طابعة حرارية',
+        'booked_barcode' => 'باركود محجوز',
+        'available_barcode' => 'باركود متاح',
     ];
     ?>
