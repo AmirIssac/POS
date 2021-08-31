@@ -95,7 +95,7 @@
               </a>
              </div>
              @endcan
-             {{--@can('عرض التقارير اليومية')
+             
              <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card card-stats" data-toggle="modal" data-target="#exampleModal{{$repository->id}}" id="modalicon{{$repository->id}}">
                   <div class="card-header card-header-success card-header-icon">
@@ -135,7 +135,6 @@
                                             </div>
                                           </div>
                                         </div>
-             @endcan--}}
            </div>
          
            </div>

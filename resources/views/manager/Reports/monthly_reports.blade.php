@@ -146,9 +146,9 @@
                         <?php $total_sum_purchases = 0 ?>
                         @foreach($report->purchases as $purchase)
                         @if($purchase->status == 'done')
-                        @if($purchase->dailyReports()->count()==1)
+                        @if($purchase->monthlyReports()->count()==1)
                             <?php $total_sum_purchases += $purchase->total_price; ?>
-                            @elseif($purchase->dailyReports()->count()>1)
+                            @elseif($purchase->monthlyReports()->count()>1)
                             <?php $rep = $purchase->dailyReports->first(); ?>
                             @if($report->id == $rep->id)
                             <?php $total_sum_purchases += $purchase->total_price; ?>

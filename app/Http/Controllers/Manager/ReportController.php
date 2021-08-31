@@ -168,6 +168,7 @@ class ReportController extends Controller
     } */
 
     public function makeMonthlyReport($id){
+        ini_set('max_execution_time', 300);
         $repository = Repository::find($id);
         $user = User::find(Auth::user()->id);   // worker
         $invoices = $repository->invoices()->where('monthly_report_check',false)->whereYear('created_at','=', now()->year)
@@ -181,12 +182,25 @@ class ReportController extends Controller
         $cash_amount = $repository->statistic->m_in_cash_balance;
         $card_amount = $repository->statistic->m_in_card_balance;
         $stc_amount = $repository->statistic->m_in_stc_balance;
+
+        $purchases = $repository->purchases()->where('monthly_report_check',false)->whereYear('updated_at','=',now()->year)
+        ->whereMonth('updated_at','=',now()->month)->get();
+        $out_cashier = 0 ;
+        $out_external = 0 ;
+        foreach($purchases as $purchase){
+            if($purchase->payment == 'cashier' && $purchase->status != 'retrieved')
+                $out_cashier = $out_cashier + $purchase->total_price;
+            elseif($purchase->payment == 'external' && $purchase->status != 'retrieved')
+                $out_external = $out_external + $purchase->total_price;
+        }
         $monthly_report = MonthlyReport::create([
             'repository_id' => $repository->id,
             'user_id' => $user->id,
             'cash_balance' => $cash_amount,
             'card_balance' => $card_amount,
-            'stc_balance' => $stc_amount,
+            'stc_balance' => $stc_amount, 
+            'out_cashier' => $out_cashier,
+            'out_external' => $out_external,
         ]);
 
         // make statistic for month is Zero because we start new month
@@ -199,6 +213,14 @@ class ReportController extends Controller
         foreach($invoices as $invoice){
             $monthly_report->invoices()->attach($invoice->id);
             $invoice->update(
+                [
+                    'monthly_report_check' => true,
+                ]
+                );
+        }
+        foreach($purchases as $purchase){
+            $monthly_report->purchases()->attach($purchase->id);
+            $purchase->update(
                 [
                     'monthly_report_check' => true,
                 ]
