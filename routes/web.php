@@ -172,6 +172,7 @@ Route::group(['middleware'=>['permission:الاعدادات']], function () {
     Route::get('show/worker/sales/{user_id}/{repository_id}','Manager\SettingsController@showWorkerSales')->name('show.worker.sales');
     Route::post('confirm/print/settings/{repository_id}','Manager\SettingsController@printSettings')->name('confirm.print.settings');
     Route::post('change/password/{user_id}','Manager\SettingsController@changePassword')->name('change.password');
+    Route::get('print/settings/{repository_id}','Manager\SettingsController@printSettingsIndex')->name('print.settings');
 });
 
 Route::get('view/account/{user_id}','Manager\SettingsController@viewAccount')->name('view.account');

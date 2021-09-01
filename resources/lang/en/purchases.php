@@ -33,7 +33,7 @@ return [
     'suppliers' => 'Suppliers',
     'address' => 'Address',
     'phone' => 'Phone',
-    'account_num' => 'Account number',
+    'account_num' => 'Tax number',
     'edit_supplier_data' => 'Edit supplier data',
     'invoice_num_or_supplier_name' => 'Invoice number | Supplier name',
     'retrieve_inv' => 'Refund invoice',

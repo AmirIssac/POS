@@ -44,6 +44,9 @@
                       {{__('settings.mobile')}} 
                      </th>
                      <th>
+                      {{__('settings.info')}} 
+                     </th>
+                     <th>
                        {{__('reports.monthly_sales')}}
                      </th>
                      <th>
@@ -57,8 +60,10 @@
                      <td>{{$owner->email}}</td>
                      <td>{{$owner->phone}}</td>
                      <td>
+                      <a style="color: white" href="{{route('edit.worker.info',$owner->id)}}" role="button" class="btn btn-info"> {{__('buttons.edit')}} </a>
+                     </td>
+                     <td>
                       <a style="color: white" href="{{route('show.worker.sales',[$owner->id,$repository->id])}}" role="button" class="btn btn-info"> {{__('buttons.view')}} </a>
-
                      </td>
                      <td>
                      @if($owner->is_online)
@@ -150,7 +155,13 @@
                      </td>
                     </tr>
                     @endforeach
-                    
+                    @can('اضافة موظف جديد')
+                    <tr>
+                      <td>
+                      <a href="{{route('add.worker',$repository->id)}}" class="btn btn-success">{{__('settings.add_new_employee')}}</a>
+                      </td>
+                    </tr>
+                    @endcan
                   </tbody>
                 </table>
               </div>

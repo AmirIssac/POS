@@ -63,5 +63,7 @@
         'thermal_printer' => 'طابعة حرارية',
         'booked_barcode' => 'باركود محجوز',
         'available_barcode' => 'باركود متاح',
+        'add_new_employee' => 'انشاء موظف جديد',
+        'print_time_settings' => 'اعدادات الطباعة والوقت',
     ];
     ?>

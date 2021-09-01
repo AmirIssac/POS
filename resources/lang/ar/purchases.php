@@ -33,7 +33,7 @@ return [
     'suppliers' => 'الموردون',
     'address' => 'العنوان',
     'phone' => 'الهاتف',
-    'account_num' => 'رقم الحساب',
+    'account_num' => 'الرقم الضريبي',
     'edit_supplier_data' => 'تعديل بيانات المورد',
     'invoice_num_or_supplier_name' => 'رقم الفاتورة | اسم المورد',
     'retrieve_inv' => 'استرجاع فاتورة',

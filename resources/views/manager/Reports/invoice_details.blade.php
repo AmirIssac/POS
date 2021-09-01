@@ -105,6 +105,9 @@
                           {{__('sales.invoice_status')}}  
                         </td>
                         <td>
+                          الوصفة
+                        </td>
+                        <td>
                           {{__('reports.customer')}} 
                         </td>
                         <td>
@@ -160,6 +163,14 @@
                             @elseif($invoice->transform == 'p-x')
                             {{__('sales.hang_badge')}}  => {{__('reports.deleted')}}
                             @endif
+                        @endif
+                       </td>
+                       <td>
+                        <?php $rec = unserialize($invoice->recipe) ?>
+                        @if(array_key_exists('name', $rec))
+                        {{$rec['name']}}
+                        @else
+                        {{__('sales.basic_prescription')}}
                         @endif
                        </td>
                        <td>

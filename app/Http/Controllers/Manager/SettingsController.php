@@ -111,8 +111,6 @@ class SettingsController extends Controller
             'name' => $request->repo_name,
             'name_en' =>$request->repo_name_en,
             'address' => $request->address,
-            'close_time' => $request->close_time,
-            'note' => $request->note,
         ]);
         return back()->with('success',__('alerts.general_settings_chaanged_success'));
     }
@@ -208,6 +206,11 @@ class SettingsController extends Controller
     }
     public function updateWorkerInfo(Request $request , $id){
         $user = User::find($id);
+        if($request->old_email != $request->email){
+            $temp = User::where('email',$request->email)->first();
+            if($temp)
+                return back()->with('fail','هذا الايميل موجود مسبقا');
+        }
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
@@ -237,10 +240,15 @@ class SettingsController extends Controller
             $standard_printer = false;
             $thermal_printer = true;
         }
+
         $setting->update([
             'print_prescription' => $print_prescription,
             'standard_printer' => $standard_printer,
             'thermal_printer' => $thermal_printer,
+        ]);
+        $repository->update([
+            'close_time' => $request->close_time,
+            'note' => $request->note,
         ]);
 
         return back()->with('success' , 'update print settings');
@@ -284,5 +292,10 @@ class SettingsController extends Controller
                 return back()->with('fail',__('settings.fail_confirm_password'));
             else
                 return back()->with('fail',__('settings.fail_old_password'));
+    }
+
+    public function printSettingsIndex($id){
+        $repository = Repository::find($id);
+        return view('manager.Settings.print_settings')->with(['repository'=>$repository]);
     }
 }

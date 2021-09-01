@@ -9,7 +9,7 @@
           <div class="card">
             <div class="card-header card-header-primary">
               <h4 class="card-title float-right">كل المخازن</h4>
-                </div>
+                </div> 
                  <div class="card-body">
                   <div class="table-responsive">
                     <table class="table">

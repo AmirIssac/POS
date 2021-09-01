@@ -102,14 +102,7 @@ textarea{
                  <th>
                   {{__('settings.address')}} 
                </th>
-                  <th>
-                    {{__('settings.close_time')}}
-                   <i id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title="{{__('settings.note')}}" data-content="{{__('settings.note_content')}}">live_help</i>
-                  </th>
-                  <th>
-                     {{__('settings.repo_note')}} <i id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title="{{__('settings.appear_in_invoice')}}">live_help</i>
-
-                 </th>
+                  
                 </thead>
                 <tbody>
                   <tr>
@@ -122,15 +115,7 @@ textarea{
                     <td>
                       <input type="text" name="address" value="{{$repository->address}}" class="form-control" required>
                   </td>
-                    <td>
-                      <input type="time" name="close_time" value="{{$repository->close_time}}" class="form-control" required>
-                  </td>
-                  <td>
-                    <textarea rows="5" cols="60" name="note">
-                      {{$repository->note}}
-                    </textarea>
-                    {{--<input type="text" name="note" value="{{$repository->note}}" class="form-control">--}}
-                </td>
+                    
                     <td>
                       <button type="submit" class="btn btn-danger"> {{__('buttons.confirm')}} </button>
                     </td>
@@ -144,74 +129,7 @@ textarea{
     </form>
 
 
-    <form action="{{route('confirm.print.settings',$repository->id)}}"  method="post">
-      @csrf
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-header card-header-primary">
-          <h4 class="card-title">{{__('settings.print_settings')}}</h4>
-        </div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table">
-              <thead class=" text-primary">
-                <th>
-                  {{__('settings.proccess')}}
-                </th>
-                <th>
-                  {{__('settings.show_hide')}}
-                </th>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    {{__('settings.prescription')}}
-                  </td>
-                  <td>
-                    @if($repository->setting->print_prescription == false)
-                    <input type="checkbox" name="prescription" class="form-control">
-                    @else
-                    <input type="checkbox" name="prescription" class="form-control" checked>
-                    @endif
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                     {{__('settings.standard_printer')}}
-                  </td>
-                  <td>
-                    @if($repository->setting->standard_printer == false)
-                    <input type="radio" name="printer_type" value="standard" class="form-control">
-                    @else
-                    <input type="radio" name="printer_type" value="standard" class="form-control" checked>
-                    @endif
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    {{__('settings.thermal_printer')}}
-                  </td>
-                  <td>
-                    @if($repository->setting->thermal_printer == false)
-                    <input type="radio" name="printer_type" value="thermal" class="form-control">
-                    @else
-                    <input type="radio" name="printer_type" value="thermal" class="form-control" checked>
-                    @endif
-                  </td>
-                </tr>
-               <tr>
-                 <td>
-                   <button class="btn btn-success">{{__('buttons.confirm')}}</button>
-                 </td>
-                 <td></td>
-               </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </form>
+    
 
 
       </div>

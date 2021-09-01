@@ -48,6 +48,7 @@ class CashierController extends Controller
 
         // we will check if the last daily report submitted by less than two hours so we add this report details to the latest report and dont make new daily report
         $dailyReport = $repository->dailyReports->last();
+        if($dailyReport){
         $now = now();
         $created_at = $dailyReport->created_at;
         $hours = $now->diffInHours($created_at);   // the number of hours between last daily report and NOW
@@ -66,6 +67,7 @@ class CashierController extends Controller
                 'out_cashier' => $dailyReport->out_cashier + $out_cashier,
                 'out_external' => $dailyReport->out_external + $out_external,
             ]);
+        }
         }
         else{
         $dailyReport = DailyReport::create(

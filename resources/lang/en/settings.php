@@ -63,5 +63,7 @@
         'thermal_printer' => 'Thermal printer',
         'booked_barcode' => 'Barcode booked',
         'available_barcode' => 'Barcode available',
+        'add_new_employee' => 'Create new employee',
+        'print_time_settings' => 'Print and Time settings',
     ];
     ?>

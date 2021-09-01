@@ -22,13 +22,29 @@
 @endsection
 @section('body')
 <div class="main-panel">
-    @if (session('success'))
-    <div class="alert alert-success alert-block">
-        <button type="button" class="close" data-dismiss="alert">×</button>	
-            <strong>{{ session('success') }}</strong>
-    </div>
-    @endif
+  
 <div class="content">
+  @if (session('success'))
+  <div class="alert alert-success alert-block">
+      <button type="button" class="close" data-dismiss="alert">×</button>	
+          <strong>{{ session('success') }}</strong>
+  </div>
+  @endif
+  @if (session('fail'))
+  <div class="alert alert-danger alert-block">
+      <button type="button" class="close" data-dismiss="alert">×</button>	
+          <strong>{{ session('fail') }}</strong>
+  </div>
+  @endif
+  @if ($errors->any())
+  <div class="alert alert-danger">
+      <ul>
+          @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+          @endforeach
+      </ul>
+  </div>
+@endif
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
@@ -59,6 +75,7 @@
                            <input type="text" name="name" class="form-control" value="{{$user->name}}" required>
                        </td>
                        <td>
+                        <input type="hidden" name="old_email" class="form-control" value="{{$user->email}}" required>
                         <input type="text" name="email" class="form-control" value="{{$user->email}}" required>
                        </td>
                        <td>

@@ -26,6 +26,15 @@ form #tooltip:hover{
             border: 2px solid #9229ac;
             padding: 10px;
         }
+        /* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
 </style>
 @endsection
 @section('body')
@@ -63,10 +72,10 @@ form #tooltip:hover{
                     <th style="width: 10%">
                       Barcode  
                     </th>
-                    <th style="width: 20%">
+                    <th style="width: 15%">
                       {{__('repository.arabic_name')}}  
                     </th> 
-                    <th style="width: 20%">
+                    <th style="width: 15%">
                       {{__('repository.english_name')}}
                     </th>
                     @if($repository->isSpecial())  {{-- محل خاص --}}
@@ -83,13 +92,13 @@ form #tooltip:hover{
                     <th style="width: 5%">
                       {{__('sales.quantity')}} 
                     </th>
-                    <th style="width: 5%">
+                    <th style="width: 7%">
                       {{__('reports.cost_price')}}  
                     </th>
-                    <th style="width: 5%">
+                    <th style="width: 7%">
                       {{__('sales.sell_price')}}  
                     </th>
-                    <th style="width: 8%">   {{-- for future use to save every input details in table of repository inputs --}}
+                    <th style="width: 10%">   {{-- for future use to save every input details in table of repository inputs --}}
                       {{__('sales.total_price')}}  
                       <th  style="width: 2%">
                         <i id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title=" {{__('sales.total_price')}} =" data-content=" {{__('reports.cost_price')}} X {{__('sales.quantity')}}">live_help</i>
@@ -138,7 +147,7 @@ form #tooltip:hover{
                   <td style="width: 10%">
                     <select id="stored0" name="stored[]" class="form-control">
                       <option value="yes">{{__('repository.available_in_stock')}}</option>
-                      <option value="no">{{__('repository.unavailable_in_stock')}}</option>
+                      <option value="no">{{__('repository.buy_from_market')}}</option>
                     </select>
                   </td>
                     <td style="width: 5%">

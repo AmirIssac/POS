@@ -91,8 +91,28 @@ select{
   cursor: default;
 }
 #plus-recipe{
-
+  background-color: #93cb52;
+  color: #344b5e;
+  font-size: 16px;
+  margin-right: 17px;
+  width: 157px;
+  border:0px solid #344b5e;
+  border-radius: 2px;
 }
+#plus-recipe:hover{
+  cursor: pointer;
+  background-color: #344b5e;
+  color:#93cb52;
+}
+.table-c {
+  overflow: hidden
+
+        }
+        .table-c td {
+            border: 1px solid #9229ac !important;
+            overflow: hidden
+        }
+
 @media print{
  /* body, html, #myform { 
           height: 100%;
@@ -646,8 +666,9 @@ select{
 </div>
 
 
-<select id="plus-recipe" name="recipe_radio" class="form-control">
-<option value="0"  selected> {{__('sales.basic_prescription')}}</option>  {{-- value=0 mean its the basic recipe --}}
+<select id="plus-recipe" name="recipe_radio">
+<option value="0" selected> {{__('sales.basic_prescription')}}
+</option>  {{-- value=0 mean its the basic recipe --}}
 <?php $additional_archived = 0; ?>  {{-- first we display archived additional recipes --}}
 @if(isset($saved_recipes))
 @foreach($saved_recipes as $saved_recipe)
@@ -1039,7 +1060,7 @@ select{
           </div>
           <div class="card-body">
             <div class="table-responsive">
-              <table class="table">
+              <table class="table table-c">
                 <thead class="text-primary">
                      
                   {{--@if($repository->logo)
@@ -1052,22 +1073,22 @@ select{
                       الرقم الضريبي  <input type="text" name="tax_code" id="tax_code" value="{{$repository->tax_code}}" readonly>
                       --}}
                       <input style="display: none" type="text" name="code" id="code" value="{{isset($code)?$code:''}}" readonly>
-                  <th>
+                  <th style="width: 20%">
                     Barcode  
                   </th>
-                  <th>
+                  <th style="width: 40%">
                     {{__('sales.name')}}  
                   </th>
-                  <th>
+                  <th style="width: 10%">
                     {{__('sales.price')}}  
                   </th>
-                  <th>
+                  <th style="width: 10%">
                     {{__('sales.quantity')}} 
                   </th>
-                  <th id="del" class="">
+                  <th style="width: 10%" id="del" class="">
                     {{__('sales.delivered')}}   
                   </th>
-                  <th>
+                  <th style="width: 10%">
                   </th>
                 </thead>
 

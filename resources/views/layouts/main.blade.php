@@ -107,7 +107,7 @@
       -->
         <div class="logo-container">
          {{-- <a style="z-index: 2" href="/"> --}}
-        @if(isset($repositories))  {{-- page for multi repositories --}}
+        @if(isset($repositories)  && $repositories->count()>0)  {{-- page for multi repositories --}}
         <div style="display: flex; flex-direction: row">
         @if($repositories[0]->logo)
         <img src="{{asset('public/storage/'.$repositories[0]->logo)}}" id="logo">

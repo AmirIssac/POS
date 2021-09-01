@@ -68,7 +68,7 @@
              @endcan
             
 
-             @can('اضافة موظف جديد')
+           {{--  @can('اضافة موظف جديد')
             <div class="col-lg-3 col-md-6 col-sm-6">
               <a href="{{route('add.worker',$repository->id)}}">
               <div class="card card-stats">
@@ -87,7 +87,7 @@
               </div>
             </a>
             </div>
-            @endcan
+            @endcan --}}
 
            
 
@@ -114,6 +114,26 @@
             </div>
             @endcan
 
+            @can('التطبيق')
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <a href="{{route('print.settings',$repository->id)}}">
+              <div class="card card-stats">
+                <div class="card-header card-header-danger card-header-icon">
+                  <div class="card-icon">
+                  <i class="material-icons">settings_suggest</i>
+                  </div>
+                  <p class="card-category">{{__('settings.print_time_settings')}}</p>
+                  <h6 class="card-title">{{__('settings.customize')}}</h6>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">update</i>
+                  </div>
+                </div>
+              </div>
+            </a>
+            </div>
+            @endcan
            
            
             @can('التطبيق')

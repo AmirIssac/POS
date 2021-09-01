@@ -120,7 +120,7 @@
                     @foreach($reports as $report)
                     <tr>
                         <td>
-                            {{$report->created_at->format('m/y')}}
+                            {{$report->created_at->format('m/Y')}}
                         </td>
                         <td>
                             <?php $total_sum_invoices = 0 ?>
