@@ -254,15 +254,28 @@
                     <i class="material-icons">badge</i>
                    </div>
                    <p class="card-category">{{__('dashboard.number_of_employees')}}</p>
-                   <h3 class="card-title">{{$repository->workersCount()}}</h3>
+                   <h3 class="card-title">{{$repository->workersCount()}}
+                    
+                  </h3>
                  </div>
-                 <div class="card-footer">
-                   <div class="stats">
-                     <i class="material-icons">update</i>
-                   </div>
-                 </div>
+                </a>
+                 
+                    <p style="color: #2dace2; font-weight: bold">اعلى 5 فواتير معلقة</p>
+
+                    <div style="display: flex; flex-direction: column">
+                      @if($repository->mostFivePendingInvoices()->count()>0)
+                      @foreach($repository->mostFivePendingInvoices() as $inv)
+                     <div>
+                      <a href="{{route('invoice.details',$inv->id)}}"> فاتورة {{$inv->code}} بمبلغ متبقي {{$inv->total_price - ($inv->cash_amount+$inv->card_amount+$inv->stc_amount)}}</a>
+                     </div>
+                     @endforeach
+                     @else
+                     لا يوجد
+                     @endif
+                     </div>
+                 
                </div>
-              </a>
+
              </div>
            </div>
         

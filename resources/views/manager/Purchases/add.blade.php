@@ -13,6 +13,18 @@ form #tooltip:hover{
 .displaynone{
   display: none;
 }
+.success{
+  background-color: greenyellow;
+}
+.success:focus{
+  background-color: greenyellow;
+}
+.failed{
+  background-color: #f14000;
+}
+.failed:focus{
+  background-color: #f14000;
+}
 </style>
 @endsection
 @section('body')
@@ -115,7 +127,7 @@ form #tooltip:hover{
                             <input type="text" name="barcode[]" class="form-control barcode" placeholder=" {{__('sales.scanner_input')}} " id="bar0"  required>
                         </td>
                         <td>
-                          <input type="text" name="name[]" class="form-control" placeholder="{{__('purchases.type_name_here')}}" id="ar0" required>
+                          <input type="text" name="name[]" class="form-control" id="ar0" required readonly>
                       
                   
                     <td>
@@ -126,7 +138,7 @@ form #tooltip:hover{
                             <input id="price0"  type="number" name="price[]" step="0.01" class="form-control target" value="0" placeholder="{{__('sales.price')}}" id="price0" required>
                         </td>
                         <td>
-                            <input id="total_price0" type="number" name="total_price[]" step="0.01" class="form-control" placeholder="{{__('sales.total_price')}}" required>
+                            <input id="total_price0" type="number" name="total_price[]" step="0.01" class="form-control" placeholder="{{__('sales.total_price')}}" readonly>
                             <input type="hidden" name="repo_id" value="{{$repository->id}}">
                         </td>  
                         
@@ -137,7 +149,7 @@ form #tooltip:hover{
                         <input type="text" name="barcode[]" class="form-control barcode" placeholder=" {{__('sales.scanner_input')}}"  id="bar{{$count}}">
                     </td>
                     <td>
-                      <input type="text" name="name[]" class="form-control" placeholder="{{__('purchases.type_name_here')}}" id="ar{{$count}}">
+                      <input type="text" name="name[]" class="form-control" id="ar{{$count}}" readonly>
                   </td>
                 <td>
                   <input id="quantity{{$count}}" type="number" name="quantity[]" min="0" class="form-control" value="1" placeholder="{{__('sales.quantity')}}">
@@ -147,7 +159,7 @@ form #tooltip:hover{
                         <input id="price{{$count}}"  type="number" name="price[]" step="0.01" class="form-control target" value="0" placeholder="{{__('sales.price')}}">
                     </td>
                     <td>
-                        <input id="total_price{{$count}}" type="number" name="total_price[]" step="0.01" class="form-control" placeholder="{{__('sales.total_price')}}">
+                        <input id="total_price{{$count}}" type="number" name="total_price[]" step="0.01" class="form-control" placeholder="{{__('sales.total_price')}}" readonly>
                     </td>
                   </tr>
                       @endfor
@@ -240,9 +252,7 @@ form #tooltip:hover{
 </div>
 @endsection
 @section('scripts')
-<script>
-  
-</script>
+
 <script>
   var intervalId = window.setInterval(function(){
     var sum = 0 ;
@@ -306,7 +316,6 @@ form #tooltip:hover{
   </script>
   <script>    // Ajax
     $('.barcode').on('keyup',function(){
-     
     var barcode = $(this).val();
     var id = $(this).attr("id");  // extract id
     var gold =  id.slice(3);   // remove bar from id to take just the number
@@ -316,10 +325,18 @@ form #tooltip:hover{
            url: '/ajax/get/purchase/product/'+repo_id+'/'+barcode,
            //dataType: 'json',
           success: function(data){    // data is the response come from controller
-            $.each(data,function(i,value){
-              $('#ar'+gold+'').val(value.name_ar);
-              $('#price'+gold+'').val(value.price);
-           });
+              if(data != 'no_data'){
+              $('#'+id).addClass('success').removeClass('failed');
+              $('#ar'+gold+'').val(data.name_ar);
+              $('#price'+gold+'').val(data.price);
+              $('#price'+gold+'').prop('readonly',false);
+              }
+              else{
+                $('#'+id).addClass('failed').removeClass('success');
+                $('#ar'+gold+'').val(null);
+                $('#price'+gold+'').val(0);
+                $('#price'+gold+'').prop('readonly',true);
+              }
           }
     }); // ajax close
   });

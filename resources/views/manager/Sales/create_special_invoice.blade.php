@@ -1347,7 +1347,6 @@ select{
 </script>
 <script>    // Ajax
     $('.barcode').on('keyup',function(){
-     
     var barcode = $(this).val();
     var id = $(this).attr("id");  // extract id
     var gold =  id.slice(3);   // remove bar from id to take just the number

@@ -400,4 +400,13 @@ class Repository extends Model
         
         return $purchases;
     }
+
+    public function mostFivePendingInvoices(){    // اكثر 5 فواتير معلقة حسب المبلغ المتبقي للدفع
+        $invoices = Invoice::where('repository_id',$this->id)->where('status','pending')
+        ->whereRaw('total_price > cash_amount+card_amount+stc_amount')
+        ->orderByRaw('(total_price - (cash_amount+card_amount+stc_amount)) DESC')
+        ->take(5)
+        ->get();
+        return $invoices;
+    }
 }

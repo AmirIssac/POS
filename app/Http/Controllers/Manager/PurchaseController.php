@@ -88,7 +88,7 @@ class PurchaseController extends Controller
         return redirect(route('purchases.index'))->with('success',__('alerts.delete_supplier_success'));
     }
 
-    public function storePurchase(Request $request , $id){
+   /* public function storePurchase(Request $request , $id){
 
         $validated = $request->validate([
             'supplier_id' => 'required',
@@ -140,7 +140,71 @@ class PurchaseController extends Controller
             }
         }
         return back()->with('success',__('alerts.create_new_purchase_success'));
+    }  */
+
+    public function storePurchase(Request $request , $id){
+
+        $validated = $request->validate([
+            'supplier_id' => 'required',
+        ]);
+        //  variable will check if the invoice has all false barcodes so we dont create it
+        $actual_records = 0;
+        $repository = Repository::find($id);
+        $statistic = $repository->statistic;
+        if($request->pay=='later')
+            $payment = 'later';
+        else // cash has two options
+            {
+                if($request->cash_option=='cashier'){
+                    $payment = 'cashier';
+                    $repository->update([
+                    'balance' => $repository->balance - $request->sum,
+                    ]);
+                    $statistic->update([
+                        'd_out_cashier' => $statistic->d_out_cashier + $request->sum,
+                    ]);
+                }
+                else{
+                    $payment = 'external';
+                    $statistic->update([
+                        'd_out_external' => $statistic->d_out_external + $request->sum,
+                    ]);
+                    }
+            }
+        $purchase = Purchase::create([
+            'repository_id' => $repository->id,
+            'user_id' => Auth::id(),
+            'supplier_id' => $request->supplier_id,
+            'code' => $request->code,
+            'supplier_invoice_num' => $request->supplier_invoice_num,
+            'total_price' => $request->sum,
+            'payment' =>  $payment,
+            'daily_report_check' => false,
+            'monthly_report_check' => false,
+        ]);
+        $count = count($request->barcode);
+        for($i=0;$i<$count;$i++){
+            if($request->barcode[$i]){  // record exist (inserted)
+                $product = PurchaseProduct::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->first();
+                if($product)  // the barcode is right
+                {   
+                    PurchaseRecord::create([
+                        'purchase_id' => $purchase->id,
+                        'barcode' => $request->barcode[$i],
+                        'name' => $request->name[$i],
+                        'quantity' => $request->quantity[$i],
+                        'price' => $request->price[$i],
+                    ]);
+                    // editing the price of stored product
+                    $product->update([
+                        'price' => $request->price[$i],
+                    ]);
+                }
+            }
+        }
+        return back()->with('success',__('alerts.create_new_purchase_success'));
     }
+
 
     public function showPurchases($id){
         $repository = Repository::find($id);
@@ -198,8 +262,11 @@ class PurchaseController extends Controller
     }
 
     public function getProductAjax($repo_id,$barcode){
-        $product = PurchaseProduct::where('repository_id',$repo_id)->where('barcode',$barcode)->get(); // first record test
+        $product = PurchaseProduct::where('repository_id',$repo_id)->where('barcode',$barcode)->first(); // first record test
+        if($product)
         return response($product);
+        else
+        return response('no_data');
     }
 
     /*public function showLaterPurchases($id){

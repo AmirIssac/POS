@@ -55,7 +55,7 @@ class CashierController extends Controller
         if($hours < 2){
              $dailyReport->update([
                 'user_id' => $user->id,
-                'cash_balance' => $dailyReport->cash_balance + $request->cash_balance,
+                'cash_balance' => $request->cash_balance,
                 'card_balance' => $dailyReport->card_balance + $request->card_balance,
                 'stc_balance' => $dailyReport->stc_balance + $request->stc_balance,
                 'cash_shortage' => $dailyReport->cash_shortage + $request->cashNeg,
@@ -67,6 +67,25 @@ class CashierController extends Controller
                 'out_cashier' => $dailyReport->out_cashier + $out_cashier,
                 'out_external' => $dailyReport->out_external + $out_external,
             ]);
+        }
+        else{
+            $dailyReport = DailyReport::create(
+                [
+                    'repository_id' => $repository->id,
+                    'user_id' => $user->id,
+                    'cash_balance' => $request->cash_balance,
+                    'card_balance' => $request->card_balance,
+                    'stc_balance' => $request->stc_balance,
+                    'cash_shortage' => $request->cashNeg,
+                    'card_shortage' => $request->cardNeg,
+                    'stc_shortage' => $request->stcNeg,
+                    'cash_plus' => $request->cashPos,
+                    'card_plus' => $request->cardPos,
+                    'stc_plus' => $request->stcPos,
+                    'out_cashier' => $out_cashier,
+                    'out_external' => $out_external,
+                ]
+                );
         }
         }
         else{
