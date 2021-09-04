@@ -27,5 +27,6 @@ return [
     'collected_money_month' => 'الأموال المحصلة هذا الشهر',
     'year_sales' => 'مبيعات السنة',
     'collected_money_year' => 'الأموال المحصلة هذه السنة',
+    'highest_five_customers_should_pay' => 'اعلى 5 عملاء عليهم اموال معلقة',
 ];
 ?>

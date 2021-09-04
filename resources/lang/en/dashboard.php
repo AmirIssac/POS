@@ -27,5 +27,6 @@ return [
     'collected_money_month' => 'Collected money this month',
     'year_sales' => 'Year sales',
     'collected_money_year' => 'Collected money this year',
+    'highest_five_customers_should_pay' => 'Highest 5 customers should pay',
 ];
 ?>

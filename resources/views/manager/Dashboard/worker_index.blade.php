@@ -268,19 +268,28 @@
                   </h3>
                  </div>
                 </a>
-                 
-                    <p style="color: #2dace2; font-weight: bold">اعلى 5 فواتير معلقة</p>
+                
+                <p style="color: #2dace2; font-weight: bold">{{__('dashboard.highest_five_customers_should_pay')}}</p>
 
-                    <div style="display: flex; flex-direction: column">
-                      @if($repository->mostFivePendingInvoices()->count()>0)
-                      @foreach($repository->mostFivePendingInvoices() as $inv)
-                     <div>
-                      <a href="{{route('invoice.details',$inv->id)}}"> فاتورة {{$inv->code}} بمبلغ متبقي {{$inv->total_price - ($inv->cash_amount+$inv->card_amount+$inv->stc_amount)}}</a>
-                     </div>
-                     @endforeach
-                     @else
-                     لا يوجد
-                     @endif
+                <div style="display: flex; flex-direction: column">
+                  @if($repository->mostFivePendingInvoices()->count()>0)
+               @foreach($repository->mostFivePendingInvoices() as $inv)
+               <form action="{{route('view.customer.invoices',$inv->customer_id)}}" method="GET">
+                @csrf
+                <input type="hidden" name="repo_id" value="{{$repository->id}}">
+               <div style="display: flex; justify-content: space-between; font-weight: bold;font-size: 14px; color:#f14000">
+                   {{$inv->sum}} / {{$inv->customer->name}}
+                <button style="background: none; padding: 0px; border: none"><i class="material-icons form-icon">
+                  preview
+                </i></button>
+               </div>
+              </form>
+               @endforeach
+               @else
+               <div style="font-weight: bold; font-size: 14px; color:#48a44c;">
+                {{__('dashboard.none')}} 
+               </div>
+               @endif
                      </div>
                  
                </div>

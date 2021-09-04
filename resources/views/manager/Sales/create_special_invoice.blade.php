@@ -8,6 +8,7 @@ form i:hover{
 input[type="radio"]{
   background-color: #93cb52;
 }
+
 .blank{
   background-color: white !important;
   border: 2px solid white !important;
@@ -1266,21 +1267,21 @@ select{
           <h4> &nbsp; {{__('sales.cash')}}</h4>
           <input style="margin: 7px 10px 0 0" type="checkbox" name="cash" id="cash" checked>
             </div>
-          <input style="margin-right: 0px" type="number" min="0.0000001" step="0.0000001" name="cashVal" id="cashVal" value="" class="form-control visible">
+          <input style="margin-right: 0px" type="number" min="0.0000001" step="0.0000001" name="cashVal" id="cashVal" value="" placeholder="{{__('settings.input_cash_here')}}" class="visible">
           </div>
           <div style="display: flex;flex-direction: column;">
             <div style="display: flex;">
           <h4> &nbsp; {{__('sales.card')}}</h4>
           <input style="margin: 7px 10px 0 0" type="checkbox" id="card" name="card">
             </div>
-          <input style="margin-right: 0px" type="number" min="0.0000001" step="0.0000001" name="cardVal" id="cardVal" value="" class="form-control hidden">
+          <input style="margin-right: 0px" type="number" min="0.0000001" step="0.0000001" name="cardVal" id="cardVal" value="" placeholder="{{__('settings.input_card_here')}}" class="hidden">
           </div>
           <div style="display: flex;flex-direction: column;">
             <div style="display: flex;">
           <h4> &nbsp; STC pay</h4>
           <input style="margin: 7px 10px 0 0" type="checkbox" id="stc" name="stc">
             </div>
-          <input style="margin-right: 0px" type="number" min="0.0000001" step="0.0000001" name="stcVal" id="stcVal" value="" class="form-control hidden">
+          <input style="margin-right: 0px" type="number" min="0.0000001" step="0.0000001" name="stcVal" id="stcVal" value="" placeholder="{{__('settings.input_stc_here')}}" class="hidden">
           </div>
           </div>
           <h4>{{__('sales.note')}}</h4>

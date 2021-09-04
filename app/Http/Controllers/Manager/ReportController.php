@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Customer;
 use App\DailyReport;
 use App\Http\Controllers\Controller;
 use App\Invoice;
@@ -105,6 +106,14 @@ class ReportController extends Controller
         return view('manager.Reports.show_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
     }
 
+    public function viewCustomerInvoices(Request $request,$id){
+        $customer = Customer::find($id);
+        $repository = Repository::find($request->repo_id);
+        $invoices = Invoice::where('repository_id',$repository->id)->where('customer_id',$customer->id)
+        ->where('status','pending')
+        ->whereRaw('total_price > cash_amount+card_amount+stc_amount')->paginate(20);
+        return view('manager.Reports.show_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);  
+    }
     /*public function dailyReports($id){
         $repository = Repository::find($id);
         $reports = $repository->dailyReportsDesc()->paginate(1);

@@ -73,6 +73,8 @@ Route::group(['middleware' => ['permission:المبيعات']], function () {
     Route::post('make/change/invoice/payment/{invoice_id}','Manager\SellController@makeChangePayment')->name('make.change.invoice.payment');
     Route::post('delete/invoice/{invoice_id}','Manager\SellController@deleteInvoice')->name('delete.invoice');
 });
+Route::get('view/customer/invoices/{customer_id}','Manager\ReportController@viewCustomerInvoices')->name('view.customer.invoices');
+
 Route::group(['middleware' => ['permission:المخزون']], function () {
     Route::get('/repository','Manager\RepositoryController@index')->name('repository.index');
     Route::post('/store/product','Manager\RepositoryController@storeProduct')->name('store.product');

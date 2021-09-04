@@ -401,10 +401,24 @@ class Repository extends Model
         return $purchases;
     }
 
-    public function mostFivePendingInvoices(){    // اكثر 5 فواتير معلقة حسب المبلغ المتبقي للدفع
+   /* public function mostFivePendingInvoices(){    // اكثر 5 فواتير معلقة حسب المبلغ المتبقي للدفع
         $invoices = Invoice::where('repository_id',$this->id)->where('status','pending')
         ->whereRaw('total_price > cash_amount+card_amount+stc_amount')
         ->orderByRaw('(total_price - (cash_amount+card_amount+stc_amount)) DESC')
+        ->take(5)
+        ->get();
+        return $invoices;
+    } */
+
+    public function mostFivePendingInvoices(){    // اكثر 5 عملاء عليهم اموال معلقة
+        $invoices = Invoice::query()
+        ->join('customers', 'customers.id', '=', 'invoices.customer_id')  // relationship
+        ->selectRaw('sum(invoices.total_price - (invoices.cash_amount + invoices.card_amount +invoices.stc_amount)) as sum , customer_id , customers.name')
+        ->where('invoices.repository_id',$this->id)
+        ->where('invoices.status','pending')
+        ->whereRaw('invoices.total_price > invoices.cash_amount+invoices.card_amount+invoices.stc_amount')
+        ->groupBy('customer_id','customers.name')
+        ->orderBy('sum','DESC')
         ->take(5)
         ->get();
         return $invoices;

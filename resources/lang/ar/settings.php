@@ -65,5 +65,8 @@
         'available_barcode' => 'باركود متاح',
         'add_new_employee' => 'انشاء موظف جديد',
         'print_time_settings' => 'اعدادات الطباعة والوقت',
+        'input_cash_here' => 'ادخل المبلغ هنا',
+        'input_card_here' => 'ادخل المبلغ هنا',
+        'input_stc_here' => 'ادخل المبلغ هنا',
     ];
     ?>
