@@ -210,3 +210,5 @@ Route::get('/ajax/get/typeName/{type_id}','Manager\RepositoryController@getTypeN
 Route::get('/ajax/check/barcode/exist/{repository_id}','Manager\RepositoryController@checkBarcodeAjax')->name('ajax.check.barcode');
 
 
+Route::get('autocomplete/purchase/products', 'Manager\PurchaseController@autocomplete')->name('autocomplete.purchase.products');
+Route::get('autocomplete/invoice/products', 'Manager\SellController@autocomplete')->name('autocomplete.invoice.products');

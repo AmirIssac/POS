@@ -1099,4 +1099,12 @@ class SellController extends Controller
 
         return back()->with('success',__('alerts.delete_success'));
     }
+
+    /* AJAX Request */
+    public function autocomplete(Request $request){
+        $repository = Repository::find($request->repos_id);
+          $search = $request->get('term');
+            $result = Product::where('repository_id',$repository->id)->where('barcode', 'LIKE', $search. '%')->get();
+          return response()->json($result);
+    }
 }

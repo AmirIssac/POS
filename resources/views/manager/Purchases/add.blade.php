@@ -1,5 +1,8 @@
 @extends('layouts.main')
 @section('links')
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  {{--<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">--}}
+ 
 <style>
 form i{
   float: left;
@@ -125,6 +128,8 @@ form #tooltip:hover{
                         <td>
                           <input type="hidden" value="{{$repository->id}}" id="repo_id">
                             <input type="text" name="barcode[]" class="form-control barcode" placeholder=" {{__('sales.scanner_input')}} " id="bar0"  required>
+                          {{--  <input id="search" name="search" type="text" class="form-control" placeholder="Search" /> --}}
+
                         </td>
                         <td>
                           <input type="text" name="name[]" class="form-control" id="ar0" required readonly>
@@ -141,7 +146,9 @@ form #tooltip:hover{
                             <input id="total_price0" type="number" name="total_price[]" step="0.01" class="form-control" placeholder="{{__('sales.total_price')}}" readonly>
                             <input type="hidden" name="repo_id" value="{{$repository->id}}">
                         </td>  
-                        
+                        <td>
+                          <a id="delete0" class="delete"><img src="{{asset('public/img/delete-icon.jpg')}}" width="45px" height="45px"></a>
+                      </td>
                       </tr>
                       @for ($count=1;$count<=100;$count++)
                       <tr id="record{{$count}}" class="displaynone">
@@ -161,6 +168,9 @@ form #tooltip:hover{
                     <td>
                         <input id="total_price{{$count}}" type="number" name="total_price[]" step="0.01" class="form-control" placeholder="{{__('sales.total_price')}}" readonly>
                     </td>
+                    <td>
+                      <a id="delete{{$count}}" class="delete"><img src="{{asset('public/img/delete-icon.jpg')}}" width="45px" height="45px"></a>
+                  </td>
                   </tr>
                       @endfor
                      </div>
@@ -252,10 +262,13 @@ form #tooltip:hover{
 </div>
 @endsection
 @section('scripts')
-
-<script>
+{{--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>--}}
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  
+    <script>
   var intervalId = window.setInterval(function(){
     var sum = 0 ;
+    var count = 100;
   for(var i=0;i<count;i++){
       $('#total_price'+i+'').val($('#price'+i+'').val()*$('#quantity'+i+'').val());
       sum = sum + parseFloat($('#total_price'+i+'').val());
@@ -264,7 +277,7 @@ form #tooltip:hover{
 }, 3000);
 </script>
 
-<script>
+{{--<script>
     var count = 1;
     $('form #plus').on('click',function(){
       $('#record'+count).removeClass('displaynone');
@@ -276,7 +289,7 @@ form #tooltip:hover{
       $('#total_price'+count).prop('required',true);
       count = count + 1;
     });
-</script>
+</script>--}}
 <script>
   window.onload=function(){
     $('#autofocus').focus();
@@ -315,7 +328,8 @@ form #tooltip:hover{
     });
   </script>
   <script>    // Ajax
-    $('.barcode').on('keyup',function(){
+    
+    $('.barcode').on('keyup input focus',function(){
     var barcode = $(this).val();
     var id = $(this).attr("id");  // extract id
     var gold =  id.slice(3);   // remove bar from id to take just the number
@@ -340,5 +354,105 @@ form #tooltip:hover{
           }
     }); // ajax close
   });
+
 </script>
+
+<script>
+  
+     $(".barcode").autocomplete({
+        
+         source: function(request, response) {
+             $.ajax({
+             url: "{{url('autocomplete/purchase/products')}}",
+             data: {
+                     term : request.term,
+                     repos_id : $('#repo_id').val(),
+              },
+             dataType: "json",
+             success: function(data){
+               //alert(data);
+                var resp = $.map(data,function(obj){
+                     return obj.barcode;
+                }); 
+ 
+                response(resp);
+             }
+             
+         });
+         
+     },
+     select: function (event, ui) {     // listen to the event when we select an option  
+      setTimeout(    // wait 1 second then get the barcode id
+      function() 
+      {     
+            //alert('yes');
+            var barcode = $(':focus').val();
+            var id = $(':focus').attr("id");  // extract id
+            var gold =  id.slice(3);   // remove bar from id to take just the number
+            var repo_id = $('#repo_id').val();
+    $.ajax({
+           type: "get",
+           url: '/ajax/get/purchase/product/'+repo_id+'/'+barcode,
+           //dataType: 'json',
+          success: function(data){    // data is the response come from controller
+              if(data != 'no_data'){
+              $('#'+id).addClass('success').removeClass('failed');
+              $('#ar'+gold+'').val(data.name_ar);
+              $('#price'+gold+'').val(data.price);
+              $('#price'+gold+'').prop('readonly',false);
+              }
+              else{
+                $('#'+id).addClass('failed').removeClass('success');
+                $('#ar'+gold+'').val(null);
+                $('#price'+gold+'').val(0);
+                $('#price'+gold+'').prop('readonly',true);
+              }
+          }
+    }); // ajax close
+  }, 100);
+            },
+     minLength: 1
+  });
+
+ 
+ </script>   
+<script>   // stop submiting form when click enter
+  $('form').keypress(function(e) {
+      if (e.keyCode == 13) {
+          e.preventDefault();
+          return false;
+      }
+  });
+  </script>
+  
+  <script>
+  $('form').keypress(function(e) {
+    if (e.keyCode == 13) {
+      // Get the focused element:
+      var focused = $(':focus');
+      var id = focused.attr("id");  // extract id
+      var gold =  id.slice(3);   // remove bar from id to take just the number
+      var count = parseInt(gold) +1;
+      // focus on next element
+      $('#record'+count).removeClass('displaynone');
+      $('#bar'+count+'').focus();
+      //$('#bar'+count).prop('required',true);
+      $('#ar'+count).prop('required',true);
+      $('#quantity'+count).prop('required',true);
+      $('#price'+count).prop('required',true);
+      $('#total_price'+count).prop('required',true);
+    }
+    });
+  </script>
+  <script>  // delete record by clicking the icon
+    $('.delete').on('click',function(){
+      var id = $(this).attr("id");  // extract id
+      var gold =  id.slice(6);   // remove bar from id to take just the number
+              $('#bar'+gold+'').val(null);
+              $('#ar'+gold+'').val(null);
+              $('#price'+gold+'').val(0);
+              $('#price'+gold+'').prop('readonly',true);
+              $('#bar'+gold).removeClass('failed').removeClass('success');
+    });
+  </script>
 @endsection

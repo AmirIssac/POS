@@ -1,5 +1,7 @@
 @extends('layouts.main')
 @section('links')
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
 <style>
 
 form i:hover{
@@ -2435,14 +2437,7 @@ window.onload=function(){
   });
  </script>
  
- {{--<script>   // add new recipe
-  var county = 1;
-  $('#plus-recipe').on('click',function(){
-    $('#extra-recipe'+county).removeClass('displaynone');
-    $('#recipe_name').prop('required',true);
-    county = county + 1;
-  });
-</script> --}}
+ 
 
 <script>   // add new recipe
   $('#plus-recipe').on('change',function(){
@@ -2459,4 +2454,170 @@ window.onload=function(){
     }
   });
 </script>
+
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+{{-- Ajax request to autocomplete barcode --}}
+<script>
+  
+  $(".barcode").autocomplete({
+     
+      source: function(request, response) {
+          $.ajax({
+          url: "{{url('autocomplete/invoice/products')}}",
+          data: {
+                  term : request.term,
+                  repos_id : $('#repo_id').val(),
+           },
+          dataType: "json",
+          success: function(data){
+            //alert(data);
+             var resp = $.map(data,function(obj){
+                  return obj.barcode;
+             }); 
+
+             response(resp);
+          }
+          
+      });
+      
+  },
+  select: function (event, ui) {     // listen to the event when we select an option  
+      setTimeout(    // wait 1 second then get the barcode id
+      function() 
+      {     
+            //alert('yes');
+            var barcode = $(':focus').val();
+            var id = $(':focus').attr("id");  // extract id
+            var gold =  id.slice(3);   // remove bar from id to take just the number
+            var repo_id = $('#repo_id').val();
+            $.ajax({
+           type: "get",
+           url: '/ajax/get/product/'+repo_id+'/'+barcode,
+           //dataType: 'json',
+          success: function(data){    // data is the response come from controller
+            $.each(data,function(i,value){
+              $('#name'+gold+'').val(value.name_ar);
+              //$('#name'+gold+'').addClass('ajaxSuccess');
+              $('#details'+gold+'').val(value.name_en);
+              $('#cost_price'+gold+'').val(value.cost_price);
+              //$('#details'+gold+'').addClass('ajaxSuccess');
+              $('#price'+gold+'').val(value.price);
+              //$('#price'+gold+'').prop('max',value.price);  // for manuall discount
+              //$('#price'+gold+'').addClass('ajaxSuccess');
+              $('#d'+gold+'').removeClass('hidden').addClass('visible');
+              $('#d'+gold+'').prop('checked',false); // because the default value is hanging
+              $('#accept_min'+gold).val(value.accept_min);
+              if(parseFloat($('#price'+gold+'').val())!=NaN){
+                var s = 0 ;  
+                var s1 = 0 ; // sum for accept min value
+                var s2 = 0 ;   // sum for not accept min value
+                for(var i=0;i<=25;i++){   // number of records
+                  if(!$('#price'+i+'').val().length == 0){
+                    console.log('zero');
+                     s = s + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
+                  }
+                } // end for loop
+                $('#total_price').val(s);
+                for(var i=0;i<=25;i++){   // number of records
+                  if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==1){
+                    console.log('first');
+                     s1 = s1 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
+                  }
+                } // end for loop
+                $('#total_price_acc').val(s1);  // hidden
+                for(var i=0;i<=25;i++){   // number of records
+                  if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==0){
+                    console.log('second');
+                     s2 = s2 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
+                  }
+                } // end for loop
+                $('#total_price_notacc').val(s2);  // hidden
+                //tax
+                var tax =  parseFloat($('#tax').val());
+                var total_price =  parseFloat($('#total_price').val());
+                var total_price_acc =  parseFloat($('#total_price_acc').val());
+                var total_price_notacc =  parseFloat($('#total_price_notacc').val());
+                var increment = (tax * total_price) / 100;
+                var increment1 = (tax * total_price_acc) / 100;
+                var increment2 = (tax * total_price_notacc) / 100;
+                $('#taxfield').val(increment);
+
+                var check_discount_by_percent = $('#check-discount-by-percent').val();
+                var check_discount_by_value = $('#check-discount-by-value').val();
+                if($('#check-discount-by-percent').val() == '1'){
+                var discount_percent = parseFloat($('#max-field').val());
+                var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                discount = discount.toFixed(2);
+                $('#discountVal').val(discount);
+                var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                discount1 = discount1.toFixed(2);
+                var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                discount2 = discount2.toFixed(2);
+                $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discount);
+                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discount1);
+                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discount2);
+                  if($('#check-discount-by-value').val() == '1'){
+                  var discountv = parseFloat($('#discount-by-value').val());
+                  $('#final_total_price').val(parseFloat($('#final_total_price').val())-discountv);
+                  $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discountv);
+                  $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discountv);
+                  }
+                }
+                else{
+                if($('#check-discount-by-value').val() == '1'){
+                var discountv = parseFloat($('#discount-by-value').val());
+                $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discountv);
+                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discountv);
+                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discountv);
+                  if($('#check-discount-by-percent').val() == '1'){
+                  var discount_percent = parseFloat($('#max-field').val());
+                  var discount = ( increment+parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                  discount = discount.toFixed(2);
+                  $('#discountVal').val(discount);
+                  var discount1 = ( increment1+parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                  discount1 = discount1.toFixed(2);
+                  var discount2 = ( increment2+parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                  discount2 = discount2.toFixed(2);
+                  $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
+                  $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
+                  $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discount2);
+                  }
+                }
+                }
+                
+                //min
+                $('#cashVal').val($('#final_total_price').val());     // cash value input
+                // update min value when total price change
+                //var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
+                var newMin = (parseFloat($('#percent').val()) * parseFloat($('#f_total_price_acc').val()))/100 + parseFloat($('#f_total_price_notacc').val());
+                //console.log(newMin);
+                $('#inputmin').val(newMin);
+                $('#minVal').text(newMin);
+                // check min validation
+                var cash =  parseFloat($('#cashVal').val());
+                var card = parseFloat($('#cardVal').val());
+                var stc = parseFloat($('#stcVal').val());
+                // min payment
+                var min = parseFloat($('#inputmin').val());
+                  if(card+cash+stc<min){
+                  $('#submit').prop('disabled', true);
+                  $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
+                  } 
+                  else{
+                  $('#badgecolor').removeClass('badge-danger').addClass('badge-success');
+                  }
+                  
+              } // end if
+              
+           });
+          }
+    }); // ajax close
+  }, 100);
+            },
+  minLength: 1
+});
+
+
+</script>   
 @endsection

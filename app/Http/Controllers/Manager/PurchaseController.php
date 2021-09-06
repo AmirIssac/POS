@@ -431,4 +431,15 @@ class PurchaseController extends Controller
         ]);
         return back()->with('success',__('alerts.edit_success'));
     }
+
+
+    /*
+   AJAX request when create new purchase invoice
+   */
+   public function autocomplete(Request $request){
+          $repository = Repository::find($request->repos_id);
+          $search = $request->get('term');
+            $result = PurchaseProduct::where('repository_id',$repository->id)->where('barcode', 'LIKE', $search. '%')->get();
+          return response()->json($result);
+ }
 }
