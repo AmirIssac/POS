@@ -7,7 +7,7 @@ return [
     'today_revenue' => 'ارباح اليوم',
     'information' => 'معلومات',
     'card' => 'البطاقة',
-    'cashier' => 'الدرج',
+    'cashier' => 'الصندوق',
     'today_invoices' => 'فواتير اليوم',
     'month_invoices' => 'فواتير الشهر',
     'delivered' => 'مستلمة',

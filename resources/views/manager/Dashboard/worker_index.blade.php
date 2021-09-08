@@ -138,7 +138,7 @@
                     <div style="display: flex; justify-content: space-between">
                   <div class="stats">
                     <i style="color: #48a44c" class="material-icons">payment</i>
-                    STC {{$repository->stc_balance}}
+                    stc pay {{$repository->stc_balance}}
                   </div>
                   <div class="stats">
                      <i style="color: #9229ac" class="material-icons">account_balance</i>

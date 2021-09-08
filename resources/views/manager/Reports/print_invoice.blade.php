@@ -62,7 +62,7 @@
                           <img src="{{asset('public/storage/'.$repository->logo)}}" width="50px" height="50px" id="logorep">
                           @endif
                           <div style="display: flex; justify-content: center;align-items: center; margin-right: 10px;">
-                          <h4> متجر {{$repository->name}}</h4>
+                          <h4>{{$repository->name}}</h4>
                           </div>
                           </div> 
                         <div style="display: flex; justify-content: space-between">
@@ -186,14 +186,12 @@
                     <input type="number" min="0.1" step="0.01" name="stcVal" id="stcVal" value="{{$invoice->stc_amount}}" class="form-control" readonly>
                     </div>
                     <?php $remaining_amount = $invoice->total_price - ($invoice->cash_amount+$invoice->card_amount+$invoice->stc_amount) ?>
-                    @if($remaining_amount > 0)
                     <div style="display: flex;flex-direction: column;">
                       <div style="display: flex;">
                     <h4> &nbsp; المبلغ المتبقي للدفع </h4>
                       </div>
                     <input type="number" step="0.01"  value="{{$remaining_amount}}" class="form-control" readonly>
                     </div>
-                    @endif
                     </div> 
         </div>
         <hr>

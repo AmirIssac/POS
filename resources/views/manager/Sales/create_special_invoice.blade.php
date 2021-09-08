@@ -1269,6 +1269,7 @@ select{
           <h4> &nbsp; {{__('sales.cash')}}</h4>
           <input style="margin: 7px 10px 0 0" type="checkbox" name="cash" id="cash" checked>
             </div>
+          <input type="hidden" id="all_price_value">   {{-- to set value for all payment method when activate from this input --}}
           <input style="margin-right: 0px" type="number" min="0.0000001" step="0.0000001" name="cashVal" id="cashVal" value="" placeholder="{{__('settings.input_cash_here')}}" class="visible">
           </div>
           <div style="display: flex;flex-direction: column;">
@@ -1451,6 +1452,7 @@ select{
                 
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
+                $('#all_price_value').val($('#final_total_price').val());
                 // update min value when total price change
                 //var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
                 var newMin = (parseFloat($('#percent').val()) * parseFloat($('#f_total_price_acc').val()))/100 + parseFloat($('#f_total_price_notacc').val());
@@ -1579,6 +1581,8 @@ $('#sell-form').keypress(function(e) {
                 }
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
+                $('#all_price_value').val($('#final_total_price').val());
+
                 // update min value when total price change
                 //var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
                 var newMin = (parseFloat($('#percent').val()) * parseFloat($('#f_total_price_acc').val()))/100 + parseFloat($('#f_total_price_notacc').val());
@@ -1610,17 +1614,22 @@ $('#sell-form').keypress(function(e) {
     });
 </script>
 {{--  scripts from beforeprint blade --}}
-<script>
-  $('input[type="checkbox"]').change(function(){
+{{--<script>
+  $('input[type="checkbox"]').on('click',function(){
 if($('#cash').is(':checked') && $('#card').is(':checked') && $('#stc').is(':checked')){
     $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
     $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
     $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="cashVal"]').val($('#all_price_value').val());
+    $('input[name="cardVal"]').val($('#all_price_value').val());
+    $('input[name="stcVal"]').val($('#all_price_value').val());
+
 }
 if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){
   $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
   $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
   $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cashVal"]').val($('#all_price_value').val());
   $('#cardVal').val(null);
   $('#stcVal').val(null);
 }
@@ -1628,6 +1637,82 @@ if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc')
   $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
   $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
   $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="cashVal"]').val($('#all_price_value').val());
+  $('input[name="stcVal"]').val($('#all_price_value').val());
+  $('#cardVal').val(null);
+}
+if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == true){
+  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="cardVal"]').val($('#all_price_value').val());
+  $('input[name="stcVal"]').val($('#all_price_value').val());
+  $('#cashVal').val(null);
+}
+if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
+  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cardVal"]').val($('#all_price_value').val());
+  $('#cashVal').val(null);
+  $('#stcVal').val(null);
+}
+if($('#cash').prop('checked') == true && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
+  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cardVal"]').val($('#all_price_value').val());
+  $('input[name="cashVal"]').val($('#all_price_value').val());
+  $('#stcVal').val(null);
+}
+if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
+  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="stcVal"]').val($('#all_price_value').val());
+  $('#cashVal').val(null);
+  $('#cardVal').val(null);
+}
+if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){   // error
+  //$('#cash').prop('checked',true);
+  //$('input[name="cashVal"]').removeClass('hidden').addClass('visibl');
+  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+  //$('#cashVal').val( $('#total_price').val());
+  $('#cashVal').val(null);
+  $('#cardVal').val(null);
+  $('#stcVal').val(null);
+  //$('#submit').prop('disabled', true);
+  if($('.delivered:checked').length != $('.delivered').length && $('#name0').val()!='')   // we put name0 to prevent confirm empty invoice
+  $('#submit').prop('disabled', false);
+  else
+  $('#submit').prop('disabled', true);
+}
+});
+</script>--}}
+{{-- new checkbox click --}}
+<script>
+  $('#cash').on('click',function(){
+if($('#cash').is(':checked') && $('#card').is(':checked') && $('#stc').is(':checked')){
+    $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="cashVal"]').val($('#all_price_value').val());
+}
+if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){
+  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cashVal"]').val($('#all_price_value').val());
+  $('#cardVal').val(null);
+  $('#stcVal').val(null);
+}
+if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
+  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="cashVal"]').val($('#all_price_value').val());
   $('#cardVal').val(null);
 }
 if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == true){
@@ -1647,6 +1732,7 @@ if($('#cash').prop('checked') == true && $('#card').prop('checked') == true && $
   $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
   $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
   $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cashVal"]').val($('#all_price_value').val());
   $('#stcVal').val(null);
 }
 if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
@@ -1675,10 +1761,149 @@ if($('#cash').prop('checked') == false && $('#card').prop('checked') == false &&
 });
 </script>
 <script>
+  $('#card').on('click',function(){
+if($('#cash').is(':checked') && $('#card').is(':checked') && $('#stc').is(':checked')){
+    $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="cardVal"]').val($('#all_price_value').val());
+}
+if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){
+  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+  $('#cardVal').val(null);
+  $('#stcVal').val(null);
+}
+if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
+  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+  $('#cardVal').val(null);
+}
+if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == true){
+  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="cardVal"]').val($('#all_price_value').val());
+  $('#cashVal').val(null);
+}
+if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
+  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cardVal"]').val($('#all_price_value').val());
+  $('#cashVal').val(null);
+  $('#stcVal').val(null);
+}
+if($('#cash').prop('checked') == true && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
+  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cardVal"]').val($('#all_price_value').val());
+  $('#stcVal').val(null);
+}
+if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
+  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+  $('#cashVal').val(null);
+  $('#cardVal').val(null);
+}
+if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){   // error
+  //$('#cash').prop('checked',true);
+  //$('input[name="cashVal"]').removeClass('hidden').addClass('visibl');
+  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+  //$('#cashVal').val( $('#total_price').val());
+  $('#cashVal').val(null);
+  $('#cardVal').val(null);
+  $('#stcVal').val(null);
+  //$('#submit').prop('disabled', true);
+  if($('.delivered:checked').length != $('.delivered').length && $('#name0').val()!='')   // we put name0 to prevent confirm empty invoice
+  $('#submit').prop('disabled', false);
+  else
+  $('#submit').prop('disabled', true);
+}
+});
+</script>
+<script>
+  $('#stc').on('click',function(){
+if($('#cash').is(':checked') && $('#card').is(':checked') && $('#stc').is(':checked')){
+    $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="stcVal"]').val($('#all_price_value').val());
+}
+if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){
+  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+  $('#cardVal').val(null);
+  $('#stcVal').val(null);
+}
+if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
+  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="cashVal"]').val($('#all_price_value').val());
+  $('input[name="stcVal"]').val($('#all_price_value').val());
+  $('#cardVal').val(null);
+}
+if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == true){
+  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="stcVal"]').val($('#all_price_value').val());
+  $('#cashVal').val(null);
+}
+if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
+  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+  $('#cashVal').val(null);
+  $('#stcVal').val(null);
+}
+if($('#cash').prop('checked') == true && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
+  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+  $('#stcVal').val(null);
+}
+if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
+  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+  $('input[name="stcVal"]').val($('#all_price_value').val());
+  $('#cashVal').val(null);
+  $('#cardVal').val(null);
+}
+if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){   // error
+  //$('#cash').prop('checked',true);
+  //$('input[name="cashVal"]').removeClass('hidden').addClass('visibl');
+  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+  //$('#cashVal').val( $('#total_price').val());
+  $('#cashVal').val(null);
+  $('#cardVal').val(null);
+  $('#stcVal').val(null);
+  //$('#submit').prop('disabled', true);
+  if($('.delivered:checked').length != $('.delivered').length && $('#name0').val()!='')   // we put name0 to prevent confirm empty invoice
+  $('#submit').prop('disabled', false);
+  else
+  $('#submit').prop('disabled', true);
+}
+});
+</script>
+<script>
   //$('#cashVal').val($('#final_total_price').val());
 window.onload=function(){
   $('#submit').prop('disabled',true);
   $('#cashVal').val($('#final_total_price').val());
+  $('#all_price_value').val($('#final_total_price').val());
+
   // tax
   var tax =  parseFloat($('#tax').val());
     var total_price =  parseFloat($('#total_price').val());
@@ -1767,6 +1992,8 @@ $('input[name="quantity[]"]').on("keyup",function(){
                 }
    //console.log($('#final_total_price').val());
   $('#cashVal').val($('#final_total_price').val());     // cash value input
+  $('#all_price_value').val($('#final_total_price').val());
+
    // update min value when total price change
     //var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
     var newMin = (parseFloat($('#percent').val()) * parseFloat($('#f_total_price_acc').val()))/100 + parseFloat($('#f_total_price_notacc').val());
@@ -1947,6 +2174,8 @@ window.onload=function(){
                 }
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
+                $('#all_price_value').val($('#final_total_price').val());
+
                 // update min value when total price change
                 //var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
                 var newMin = (parseFloat($('#percent').val()) * parseFloat($('#f_total_price_acc').val()))/100 + parseFloat($('#f_total_price_notacc').val());
@@ -1998,6 +2227,8 @@ window.onload=function(){
                 $('#final_total_price').val(increment+parseFloat($('#total_price').val()));
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
+                $('#all_price_value').val($('#final_total_price').val());
+
                 // update min value when total price change
                 var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
                 //console.log(newMin);
@@ -2211,6 +2442,8 @@ window.onload=function(){
                 }
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
+                $('#all_price_value').val($('#final_total_price').val());
+
                 // update min value when total price change
                 //var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
                 var newMin = (parseFloat($('#percent').val()) * parseFloat($('#f_total_price_acc').val()))/100 + parseFloat($('#f_total_price_notacc').val());
@@ -2312,6 +2545,8 @@ window.onload=function(){
                 }
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
+                $('#all_price_value').val($('#final_total_price').val());
+
                 // update min value when total price change
                 //var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
                 var newMin = (parseFloat($('#percent').val()) * parseFloat($('#f_total_price_acc').val()))/100 + parseFloat($('#f_total_price_notacc').val());
@@ -2414,6 +2649,8 @@ window.onload=function(){
                 
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
+                $('#all_price_value').val($('#final_total_price').val());
+
                 // update min value when total price change
                 //var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
                 var newMin = (parseFloat($('#percent').val()) * parseFloat($('#f_total_price_acc').val()))/100 + parseFloat($('#f_total_price_notacc').val());
@@ -2588,6 +2825,8 @@ window.onload=function(){
                 
                 //min
                 $('#cashVal').val($('#final_total_price').val());     // cash value input
+                $('#all_price_value').val($('#final_total_price').val());
+
                 // update min value when total price change
                 //var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
                 var newMin = (parseFloat($('#percent').val()) * parseFloat($('#f_total_price_acc').val()))/100 + parseFloat($('#f_total_price_notacc').val());

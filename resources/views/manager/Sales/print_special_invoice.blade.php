@@ -82,7 +82,7 @@
                           <img src="{{asset('public/storage/'.$repository->logo)}}" width="50px" height="50px" id="logorep">
                           @endif
                           <div style="display: flex; justify-content: center;align-items: center; margin-right: 10px;">
-                          <h4> متجر {{$repository->name}}</h4>
+                          <h4>  {{$repository->name}}</h4>
                           </div>
                           </div>
                         <div style="display: flex; justify-content: space-between">
@@ -245,7 +245,8 @@
                       </div>
                     <input type="number" min="0.1" step="0.01" name="stcVal" id="stcVal" value="{{$stc}}" class="form-control" readonly>
                     </div>
-                    @if(isset($remaining_amount) && $remaining_amount > 0)
+
+                    @if(isset($remaining_amount))
                     <div style="display: flex;flex-direction: column;">
                       <div style="display: flex;">
                     <h4> &nbsp; المبلغ المتبقي للدفع </h4>

@@ -57,7 +57,7 @@
       @if($repository->logo)
       <img src="{{asset('public/storage/'.$repository->logo)}}" width="50px" height="50px" id="logorep">
       @endif
-    <h2>متجر {{$repository->name}}</h2>
+    <h2>{{$repository->name}}</h2>
     <h4>رقم الفاتورة {{$invoice->code}}</h4>
     <h4>التاريخ {{$invoice->created_at}}</h4>
     <h4>الرقم الضريبي {{$repository->tax_code}}</h4>
@@ -139,7 +139,7 @@
                 {{$stc}}
             </p>
             </p>
-            @if(isset($remaining_amount) && $remaining_amount > 0)
+            @if(isset($remaining_amount))
             <p> المبلغ المتبقي للدفع
                 {{$remaining_amount}}
             </p>

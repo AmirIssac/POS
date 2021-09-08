@@ -133,6 +133,9 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'supplier_id' => [
+            'required' => 'We need your email address also.',
+        ],
     ],
 
     /*

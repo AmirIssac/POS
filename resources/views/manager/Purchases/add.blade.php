@@ -68,8 +68,14 @@ form #tooltip:hover{
                          <div>
                           <tr>
                             <td>{{__('purchases.invoice_num')}}</td>
-                            <td><span style="font-size: 22px;" class="badge badge-primary">{{$code}}</span>
+                            <td>
+                              @if(old('code'))
+                              <span style="font-size: 22px;" class="badge badge-primary">{{old('code')}}</span>
+                              <input type="hidden" name="code" value="{{old('code')}}">
+                              @else
+                              <span style="font-size: 22px;" class="badge badge-primary">{{$code}}</span>
                               <input type="hidden" name="code" value="{{$code}}">
+                              @endif
                             </td>
                           </tr>
                           <tr>
@@ -85,7 +91,7 @@ form #tooltip:hover{
                           </tr>
                           <tr>
                             <td>  {{__('purchases.supplier_invoice_num')}} </td>
-                            <td><input type="text" name="supplier_invoice_num" class="form-control" placeholder="{{__('purchases.supplier_invoice_num')}}"></td>
+                            <td><input type="text" name="supplier_invoice_num" class="form-control" value="{{old('supplier_invoice_num')}}" placeholder="{{__('purchases.supplier_invoice_num')}}"></td>
                           </tr>
                          </div>
                       </tbody>
@@ -127,20 +133,29 @@ form #tooltip:hover{
                       <tr>
                         <td>
                           <input type="hidden" value="{{$repository->id}}" id="repo_id">
-                            <input type="text" name="barcode[]" class="form-control barcode" placeholder=" {{__('sales.scanner_input')}} " id="bar0"  required>
+                          <?php $old_index = 0 ; ?>
+                            <input type="text" name="barcode[]" class="form-control barcode" value="{{old('barcode.'.$old_index)}}" placeholder=" {{__('sales.scanner_input')}} " id="bar0"  required>
                           {{--  <input id="search" name="search" type="text" class="form-control" placeholder="Search" /> --}}
 
                         </td>
                         <td>
-                          <input type="text" name="name[]" class="form-control" id="ar0" required readonly>
+                          <input type="text" name="name[]" class="form-control" value="{{old('name.'.$old_index)}}" id="ar0" required readonly>
                       
                   
                     <td>
+                      @if(old('quantity.'.$old_index))
+                      <input id="quantity0" type="number" name="quantity[]" min="0" class="form-control" value="{{old('quantity.'.$old_index)}}" placeholder="{{__('sales.quantity')}}" required>
+                      @else
                       <input id="quantity0" type="number" name="quantity[]" min="0" class="form-control" value="1" placeholder="{{__('sales.quantity')}}" required>
+                      @endif
                   </td>
                       
                         <td>
+                          @if(old('price.'.$old_index))
+                            <input id="price0"  type="number" name="price[]" step="0.01" class="form-control target" value="{{old('price.'.$old_index)}}" placeholder="{{__('sales.price')}}" id="price0" required>
+                            @else
                             <input id="price0"  type="number" name="price[]" step="0.01" class="form-control target" value="0" placeholder="{{__('sales.price')}}" id="price0" required>
+                            @endif
                         </td>
                         <td>
                             <input id="total_price0" type="number" name="total_price[]" step="0.01" class="form-control" placeholder="{{__('sales.total_price')}}" readonly>
@@ -151,19 +166,31 @@ form #tooltip:hover{
                       </td>
                       </tr>
                       @for ($count=1;$count<=100;$count++)
+                      @if(old('name.'.$count)) {{-- this record exist in old input so we dont hide it --}}
+                      <tr id="record{{$count}}">
+                      @else
                       <tr id="record{{$count}}" class="displaynone">
+                      @endif
                       <td>
-                        <input type="text" name="barcode[]" class="form-control barcode" placeholder=" {{__('sales.scanner_input')}}"  id="bar{{$count}}">
+                        <input type="text" name="barcode[]" class="form-control barcode" value="{{old('barcode.'.$count)}}" placeholder=" {{__('sales.scanner_input')}}"  id="bar{{$count}}">
                     </td>
                     <td>
-                      <input type="text" name="name[]" class="form-control" id="ar{{$count}}" readonly>
+                      <input type="text" name="name[]" class="form-control" value="{{old('name.'.$count)}}" id="ar{{$count}}" readonly>
                   </td>
                 <td>
+                  @if(old('quantity.'.$count))
+                  <input id="quantity{{$count}}" type="number" name="quantity[]" min="0" class="form-control" value="{{old('quantity.'.$count)}}" placeholder="{{__('sales.quantity')}}">
+                  @else
                   <input id="quantity{{$count}}" type="number" name="quantity[]" min="0" class="form-control" value="1" placeholder="{{__('sales.quantity')}}">
+                  @endif
               </td>
                   
                     <td>
+                        @if(old('price.'.$count))
+                        <input id="price{{$count}}"  type="number" name="price[]" step="0.01" class="form-control target" value="{{old('price.'.$count)}}" placeholder="{{__('sales.price')}}">
+                        @else
                         <input id="price{{$count}}"  type="number" name="price[]" step="0.01" class="form-control target" value="0" placeholder="{{__('sales.price')}}">
+                        @endif
                     </td>
                     <td>
                         <input id="total_price{{$count}}" type="number" name="total_price[]" step="0.01" class="form-control" placeholder="{{__('sales.total_price')}}" readonly>
@@ -178,7 +205,6 @@ form #tooltip:hover{
                 </table>
                 <label style="font-weight: bold; color: black"> {{__('purchases.total')}} </label>
                 <input type="number" name="sum" id="sum" class="form-control" readonly>
-                <i id="plus" class="material-icons">add_circle</i>
             </div>
         </div>
       </div>
@@ -205,20 +231,36 @@ form #tooltip:hover{
                   <tr>
                     <td>{{__('purchases.cash')}}</td>
                     <td>
+                      @if(old('pay')=='cash')
+                      <input type="radio" class="form-control" value="cash" id="cashradio" name="pay" checked>
+                      @else
                       <input type="radio" class="form-control" value="cash" id="cashradio" name="pay">
+                      @endif
                     </td>
                   </tr>
+                  @if(old('pay')=='cash')
+                  <tr id="cashoption1">
+                  @else
                   <tr id="cashoption1" class="displaynone">
+                  @endif
                     <td>   {{__('purchases.cash_from_cashier')}} ({{__('purchases.cashier_balance')}}  {{$repository->balance}})</td>
                     <input type="hidden" id="cash_balance" value="{{$repository->balance}}">
                     <td>
                       <input type="radio" id="cashrad" value="cashier" name="cash_option" checked>
                     </td>
                   </tr>
-                  <tr id="cashoption2" class="displaynone">
+                  @if(old('pay')=='cash')
+                  <tr id="cashoption2">
+                    @else
+                    <tr id="cashoption2" class="displaynone">
+                    @endif
                     <td>{{__('purchases.cash_from_external_budget')}}</td>
                     <td>
+                      @if(old('cash_option')=='external')
+                      <input type="radio" value="external" name="cash_option" checked>
+                      @else
                       <input type="radio" value="external" name="cash_option">
+                      @endif
                     </td>
                   </tr>
                  </div>

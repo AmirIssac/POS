@@ -144,9 +144,18 @@ class PurchaseController extends Controller
 
     public function storePurchase(Request $request , $id){
 
-        $validated = $request->validate([
+        /*$validated = $request->validate([
             'supplier_id' => 'required',
-        ]);
+        ]);*/
+        $rules = [
+            'supplier_id' => 'required',
+        ];
+    
+        $customMessages = [
+            'required' => __('settings.must_select_supplier'),
+        ];
+    
+        $this->validate($request, $rules, $customMessages);
         //  variable will check if the invoice has all false barcodes so we dont create it
         $actual_records = 0;
         $repository = Repository::find($id);

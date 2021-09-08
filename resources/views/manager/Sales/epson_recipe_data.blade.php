@@ -35,7 +35,7 @@
       @if($repository->logo)
     <img src="{{asset('public/storage/'.$repository->logo)}}" width="50px" height="50px" id="logorep">
     @endif
-    <h2 class="text-center">متجر {{$repository->name}}</h2>
+    <h2 class="text-center">{{$repository->name}}</h2>
     <h4 class="text-center">رقم الفاتورة {{$invoice->code}}</h4>
     <h4 class="text-center">التاريخ {{$invoice->created_at}}</h4>
     <h4 class="text-center">الرقم الضريبي {{$repository->tax_code}}</h4>
@@ -115,15 +115,16 @@
               <p>{{$invoice->stc_amount}}</p>
             </th>
             <?php $remaining_amount = $invoice->total_price - ($invoice->cash_amount+$invoice->card_amount+$invoice->stc_amount) ?>
-            @if($remaining_amount > 0)
-            <th>المبلغ المتبقي للدفع</th>
+          {{--  <th>المبلغ المتبقي للدفع</th>
             <th class="text-center">
               <p>{{$remaining_amount}}</p>
-            </th>
-            @endif
+            </th>  --}}
           </tfoot>
         </table>
       </div>
+     <h4>المبلغ المتبقي للدفع</h4>
+              <h4>{{$remaining_amount}}</h4>
+
       @if($repository->setting->print_prescription == true)
       @if(isset($recipe) && $is_recipe_null == false)
       <div class="bordred">

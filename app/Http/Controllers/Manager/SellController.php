@@ -1030,8 +1030,10 @@ class SellController extends Controller
     }*/
     public function makeChangePayment(Request $request , $id){   // we must pay the same money value of the old payment but we change the methods of pay as we want
         $invoice = Invoice::find($id);
-        if($request->cash + $request->card + $request->stc != $request->old_cash + $request->old_card + $request->old_stc)
-            return back()->with('fail',__('alerts.payed_money_notequal_to_old'));
+        if($request->cash + $request->card + $request->stc < $request->old_cash + $request->old_card + $request->old_stc)
+            return back()->with('fail',__('alerts.payed_money_less_than_old'));
+        if($request->cash + $request->card + $request->stc > $invoice->total_price)
+            return back()->with('fail',__('alerts.payed_money_larger_than_total_price'));
         $repository = $invoice->repository;
         $invoice->update([
             'cash_amount' => $request->cash,
