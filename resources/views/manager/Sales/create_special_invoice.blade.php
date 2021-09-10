@@ -245,7 +245,7 @@ select{
 
   <div  class="container-fluid">
     <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-12"> 
     <button class="btn btn-secondary dropdown-toggle" type="button" id="toggle-invoices" >
       {{__('sales.previous_sales')}}  
   </button>

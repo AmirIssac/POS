@@ -55,7 +55,7 @@ class SellController extends Controller
             {
                 $new = false;
                 $customer_name = $customer->name;
-                $prev_invoices = $customer->invoices;
+                $prev_invoices = $customer->invoices()->orderBy('created_at','DESC')->get();
                 // check if customer has saved recipe
                 $saved_recipe = $customer->savedRecipes()->get();
                 //return $saved_recipe;

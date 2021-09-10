@@ -112,6 +112,7 @@ Route::get('/search/purchases/bySupplier/{repository_id}','Manager\PurchaseContr
 Route::get('/show/purchase/products/{repository_id}','Manager\PurchaseController@showProducts')->name('show.purchase.products');
 Route::get('edit/purchase/product/{product_id}','Manager\PurchaseController@editProductForm')->name('edit.purchase.product');
 Route::post('update/purchase/product/{product_id}','Manager\PurchaseController@updateProduct')->name('update.purchase.product');
+Route::get('/filter/purchases/byPaymentMethod/supplier/{supplier_id}','Manager\PurchaseController@filterByPaymentMethodSupplier')->name('filter.purchases.byPaymentMethod.supplier');
 
 
 

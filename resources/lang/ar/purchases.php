@@ -46,4 +46,5 @@ return [
     'payed_from_cashier' => 'المدفوع من الصندوق',
     'payed_from_external_money' => 'المدفوع من ميزانية خارجية',
     'all_suppliers' => 'كل الموردين',
+    'sum' => 'المجموع',
 ];

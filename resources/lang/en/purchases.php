@@ -46,4 +46,5 @@ return [
     'payed_from_cashier' => 'Payed from cashier',
     'payed_from_external_money' => 'Payed from external money',
     'all_suppliers' => 'All suppliers',
+    'sum' => 'Sum',
 ];

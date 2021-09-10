@@ -154,10 +154,10 @@ input[type=number] {
                       <input id="quantity0" type="number" name="quantity[]" min="0" class="form-control" value="1" placeholder="{{__('sales.quantity')}}" required>
                   </td>
                       <td style="width: 5%">
-                        <input id="cost_price0"  type="number" name="cost_price[]" step="0.01" class="form-control" value="0" placeholder="{{__('reports.cost_price')}}" required>
+                        <input id="cost_price0"  type="number" name="cost_price[]" step="0.01" min="0" class="form-control" value="" placeholder="{{__('reports.cost_price')}}" required>
                       </td>
                         <td style="width: 5%">
-                            <input id="price0"  type="number" name="price[]" step="0.01" class="form-control target" value="0" placeholder="{{__('sales.price')}}" required>
+                            <input id="price0"  type="number" name="price[]" step="0.01" min="0" class="form-control target" value="" placeholder="{{__('sales.price')}}" required>
                         </td>
                         <td style="width: 5%">
                             <input id="total_price0" type="number" name="total_price[]" step="0.01" class="form-control" placeholder="{{__('sales.total_price')}}" required>
@@ -215,10 +215,10 @@ input[type=number] {
                   <input id="quantity{{$count}}" type="number" name="quantity[]" min="0" class="form-control" value="1" placeholder="{{__('sales.quantity')}}">
               </td>
                   <td>
-                    <input id="cost_price{{$count}}"  type="number" name="cost_price[]" step="0.01" class="form-control" value="0" placeholder="{{__('reports.cost_price')}}">
+                    <input id="cost_price{{$count}}"  type="number" name="cost_price[]" step="0.01" min="0" class="form-control" value="" placeholder="{{__('reports.cost_price')}}">
                   </td>
                     <td>
-                        <input id="price{{$count}}"  type="number" name="price[]" step="0.01" class="form-control target" value="0" placeholder="{{__('sales.price')}}">
+                        <input id="price{{$count}}"  type="number" name="price[]" step="0.01" min="0" class="form-control target" value="" placeholder="{{__('sales.price')}}">
                     </td>
                     <td>
                         <input id="total_price{{$count}}" type="number" name="total_price[]" step="0.01" class="form-control" placeholder="{{__('sales.total_price')}}">

@@ -85,6 +85,22 @@
       @endif
     </div>
     @endif {{--  request check --}}
+    @if(request()->is('search/purchases/bySupplier/*') || request()->is('en/search/purchases/bySupplier/*'))
+  <div style="display: flex;width: 300px; margin-right: 20px;">
+    <form action="{{route('filter.purchases.byPaymentMethod.supplier',$supplier->id)}}" method="GET">
+      @csrf
+      <select class="select-suppliers" name="payment_method">
+        <option value="all">{{__('sales.all')}}</option>
+        <option value="payed">{{__('sales.payed')}}</option>
+        <option value="notpayed">{{__('sales.not_payed')}}</option>
+      </select>
+      <input type="hidden" name="repo_id" value="{{$repository->id}}">
+      <button type="submit" class="btn btn-success btn-round btn-just-icon">
+        <i class="material-icons">search</i>
+      </button>
+    </form>
+  </div>
+    @endif
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
@@ -95,9 +111,7 @@
                 
               <h4 class="card-title"> </h4>
               <h4> {{__('reports.invoices')}} <span class="badge badge-success"></span></h4>
-              {{--<i style="float: left" id="{{$i}}" class="material-icons eye">
-                visibility
-              </i>--}}
+              
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -233,6 +247,23 @@
                       </td>
                     </tr>
                     @endif
+                    @if(isset($total_value) && isset($payed) && isset($unpayed))
+                    <tr>
+                     <td> <h5 style="font-weight: bold; color:#9229ac">{{__('purchases.sum')}}  {{$total_value}}</h5> </td>
+                     <td></td>
+                     <td> <h5 style="font-weight: bold; color:#48a44c">{{__('sales.payed')}} {{$payed}}</h5> </td>
+                     <td></td>
+                     <td> <h5 style="font-weight: bold; color:#f14000">{{__('sales.not_payed')}}  {{$unpayed}}</h5> </td>
+                    </tr>
+                    @elseif(isset($total_value))
+                    <tr>
+                      <td> <h5 style="font-weight: bold; color:#9229ac">{{__('purchases.sum')}}  {{$total_value}}</h5> </td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    @endif
                   </tbody>
                 </table>
               </div>
@@ -240,6 +271,7 @@
             </div>
           </div>
         </div>
+
         {{ $purchases->links() }}
 
       </div>

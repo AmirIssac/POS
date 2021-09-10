@@ -71,5 +71,6 @@ return [
     'edit_payment_values_invoice' => 'تعديل قيم الدفع لهذه الفاتورة',
     'basic_prescription' => 'الوصفة الاساسية',
     'new_prescription' => 'وصفة جديدة',
+    'all' => 'الكل',
 ];
 ?>

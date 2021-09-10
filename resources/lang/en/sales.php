@@ -71,5 +71,6 @@ return [
     'edit_payment_values_invoice' => 'Edit payment values for this invoice',
     'basic_prescription' => 'Basic prescription',
     'new_prescription' => 'New prescription',
+    'all' => 'All',
 ];
 ?>
