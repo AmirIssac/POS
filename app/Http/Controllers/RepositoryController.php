@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Branch;
 use App\Repository;
 use App\RepositoryCategory;
 use App\Setting;
@@ -31,7 +32,8 @@ class RepositoryController extends Controller
     public function create()
     {
         $categories = RepositoryCategory::all();
-        return view('dashboard.Repositories.add')->with('categories',$categories);
+        $branches = Branch::all();
+        return view('dashboard.Repositories.add')->with(['categories'=>$categories,'branches'=>$branches]);
     }
 
     /**

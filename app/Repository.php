@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Repository extends Model
 {
     protected $fillable = [
-        'name','name_en','address','category_id','cash_balance','card_balance','stc_balance','balance','today_sales','min_payment','max_discount','tax','tax_code','logo','close_time','note',
+        'branch_id','name','name_en','address','category_id','cash_balance','card_balance','stc_balance','balance','today_sales','min_payment','max_discount','tax','tax_code','logo','close_time','note',
     ];
     //
     public function users(){
@@ -67,6 +67,10 @@ class Repository extends Model
     public function setting()
     {
         return $this->hasOne(Setting::class);
+    }
+
+    public function branch(){
+        return $this->belongsTo(Branch::class);
     }
 
     /*public function types(){

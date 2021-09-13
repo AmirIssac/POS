@@ -356,7 +356,6 @@ select{
       @endif
       <div class="card-header card-header-primary">
         <h4 class="card-title ">  {{__('sales.prescription')}}  </h4>
-       {{-- <input type="radio" name="recipe_radio" value="0" checked> --}}
       </div>
       <div class="card-body">
         <div class="table-responsive">

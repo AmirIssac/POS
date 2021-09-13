@@ -162,17 +162,53 @@
         </thead>
         <tr>
         <th>RIGHT</th>
-        <th class="text-center">{{$recipe['sph_r']}}</th>
-        <th class="text-center">{{$recipe['cyl_r']}}</th>
+        <th class="text-center">
+          @if(floatval($recipe['sph_r']) > 0)
+          +{{$recipe['sph_r']}}
+          @else
+          {{$recipe['sph_r']}}
+          @endif
+        </th>
+        <th class="text-center">
+          @if(floatval($recipe['cyl_r']) > 0)
+          +{{$recipe['cyl_r']}}
+          @else
+          {{$recipe['cyl_r']}}
+          @endif
+        </th>
         <th class="text-center">{{$recipe['axis_r']}}</th>
-        <th class="text-center">{{$recipe['add_r']}}</th>
+        <th class="text-center">
+          @if(floatval($recipe['add_r']) > 0)
+          +{{$recipe['add_r']}}
+          @else
+          {{$recipe['add_r']}}
+          @endif
+        </th>
         </tr>
         <tr>
           <th>LEFT</th>
-          <th class="text-center">{{$recipe['sph_l']}}</th>
-          <th class="text-center">{{$recipe['cyl_l']}}</th>
+          <th class="text-center">
+          @if(floatval($recipe['sph_l']) > 0)
+          +{{$recipe['sph_l']}}
+          @else
+          {{$recipe['sph_l']}}
+          @endif
+          </th>
+          <th class="text-center">
+          @if(floatval($recipe['cyl_l']) > 0)
+          +{{$recipe['cyl_l']}}
+          @else
+          {{$recipe['cyl_l']}}
+          @endif
+          </th>
           <th class="text-center">{{$recipe['axis_l']}}</th>
-          <th class="text-center">{{$recipe['add_l']}}</th>
+          <th class="text-center">
+          @if(floatval($recipe['add_l']) > 0)
+          +{{$recipe['add_l']}}
+          @else
+          {{$recipe['add_l']}}
+          @endif
+          </th>
           </tr>
           <td>
           </td>

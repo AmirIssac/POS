@@ -296,16 +296,28 @@
                         RIGHT
                       </td>
                       <td>
+                        @if(floatval($recipe['sph_r']) > 0)
+                        +{{$recipe['sph_r']}}
+                        @else
                         {{$recipe['sph_r']}}
+                        @endif
                       </td>
                       <td>
+                        @if(floatval($recipe['cyl_r']) > 0)
+                        +{{$recipe['cyl_r']}}
+                        @else
                         {{$recipe['cyl_r']}}
+                        @endif
                       </td>
                       <td>
                         {{$recipe['axis_r']}}
                       </td>
                       <td>
+                        @if(floatval($recipe['add_r']) > 0)
+                        +{{$recipe['add_r']}}
+                        @else
                         {{$recipe['add_r']}}
+                        @endif
                       </td>
                     </tr>
                     <tr>
@@ -313,16 +325,28 @@
                        LEFT
                      </td>
                      <td>
+                      @if(floatval($recipe['sph_l']) > 0)
+                      +{{$recipe['sph_l']}}
+                      @else
                       {{$recipe['sph_l']}}
+                      @endif
                     </td>
                     <td>
+                      @if(floatval($recipe['cyl_l']) > 0)
+                      +{{$recipe['cyl_l']}}
+                      @else
                       {{$recipe['cyl_l']}}
+                      @endif
                     </td>
                     <td>
                       {{$recipe['axis_l']}}
                     </td>
                     <td>
+                      @if(floatval($recipe['add_l']) > 0)
+                      +{{$recipe['add_l']}}
+                      @else
                       {{$recipe['add_l']}}
+                      @endif
                     </td>
                   </tr>
                   <tr>

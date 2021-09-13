@@ -7,6 +7,9 @@
 .visible{
   visibility: visible;
 }
+.displaynone{
+  display: none;
+}
 </style>
 @endsection
 @section('body')
@@ -44,6 +47,12 @@
                                 <th>
                                 نوع المتجر   
                                 </th>
+                              {{--  <th>
+                                  الشعار    
+                                  </th>
+                                  <th class="displaynone branchname">
+                                    اسم الشعار    
+                                    </th> --}}
                                  </thead>
                                 <tbody>
                                 <tr>
@@ -64,6 +73,18 @@
                                     @endforeach
                                   </select>
                                 </td>
+                           {{--     <td>
+                                  <select id="branch" class="form-control" name="branch_id">
+                                    @foreach($branches as $branch)
+                                    <option value="" disabled selected hidden> انقر هنا لاختيار الشعار الذي يتبع له هذا المحل </option>
+                                    <option value="new">شعار جديد</option>
+                                    <option value="{{$branch->id}}">{{$branch->name}}</option>
+                                    @endforeach
+                                  </select>
+                                </td>
+                                <td class="displaynone branchname">
+                                  <input name="branch_name">
+                                </td> --}}
                                 </tr>
                             </tbody>
                             </table>
@@ -143,4 +164,12 @@
   }
 });
 </script>
+{{--<script>
+  $('#branch').on('change',function(){
+    if($(this).val() == 'new')
+      $('.branchname').removeClass('displaynone');
+    else
+    $('.branchname').addClass('displaynone');
+  });
+</script>--}}
 @endsection
