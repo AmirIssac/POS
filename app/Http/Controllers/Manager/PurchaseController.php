@@ -16,11 +16,9 @@ use Symfony\Component\Console\Input\Input;
 class PurchaseController extends Controller
 {
     //
-    public function index(){
-        $user = Auth::user();
-        $user = User::find($user->id);
-        $repositories = $user->repositories;   // display all repositories for the owner|worker
-        return view('manager.Purchases.index')->with(['repositories'=>$repositories]);    
+    public function index($id){
+        $repository = Repository::find($id);
+        return view('manager.Purchases.index')->with(['repository'=>$repository]);    
     }
 
     public function add($id){
@@ -217,7 +215,7 @@ class PurchaseController extends Controller
 
     public function showPurchases($id){
         $repository = Repository::find($id);
-        $purchases = $repository->purchases()->orderBy('created_at','DESC')->paginate(10);
+        $purchases = $repository->purchases()->orderBy('updated_at','DESC')->paginate(10);
         $suppliers = $repository->suppliers;
         return view('manager.Purchases.show_purchases')->with(['repository'=>$repository,'purchases'=>$purchases,'suppliers'=>$suppliers]);
     }
@@ -478,7 +476,7 @@ class PurchaseController extends Controller
 
     public function filterByPaymentMethodSupplier(Request $request,$id){
         $supplier = Supplier::find($id);
-        $repository = Repository::find($id);
+        $repository = Repository::find($request->repo_id);
         $arr = array('repo_id'=>$request->repo_id,'payment_method'=>$request->payment_method);
         $total_value = 0;
         $payed = 0 ;

@@ -20,11 +20,12 @@ class SettingsController extends Controller
 {
     //
 
-    public function index(){
-        $user = Auth::user();
+    public function index($id){
+      /*  $user = Auth::user();
         $user = User::find($user->id);
-        $repositories = $user->repositories;   // display all repositories for the owner|worker
-        return view('manager.Settings.index')->with(['repositories'=>$repositories]);   
+        $repositories = $user->repositories;   // display all repositories for the owner|worker */
+        $repository = Repository::find($id);
+        return view('manager.Settings.index')->with(['repository'=>$repository]);   
     }
 
     public function minForm($id){

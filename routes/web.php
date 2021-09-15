@@ -18,10 +18,19 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 
 Auth::routes();
+// Admin
+Route::get('/roles','RolesController@index')->name('roles')->middleware('auth');
+Route::get('/permissions','PermissionController@index')->name('permissions')->middleware('auth');
+Route::resource('/repositories','RepositoryController')->middleware('auth');
+Route::get('/products','ProductsController@index')->name('products.index')->middleware('auth');
+
+
 
 Route::group(['prefix' => LaravelLocalization::setLocale(),'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]], function()
 {
-Route::get('/',  'HomeController@main')->middleware('auth');//->middleware('cashier_warning');
+Route::get('/',  'HomeController@selectRepository')->middleware('auth');//->middleware('cashier_warning');
+Route::get('/{repository_id}','HomeController@main')->name('in.repository')->middleware('auth')->middleware('check_user');
+
 Route::get('/home','HomeController@index')->middleware('auth');
 Route::get('/ltr',function () {
     return view('settings.ltr');
@@ -29,7 +38,6 @@ Route::get('/ltr',function () {
 //Route::group(['middleware' => ['permission:المناصب']], function () {
 
     // Admin
-Route::get('/roles','RolesController@index')->name('roles');
 Route::get('/role/add/form','RolesController@addRoleForm')->name('role.add.form');
 Route::post('/role/add','RolesController@addRole')->name('role.add');
 Route::get('/edit/role/permissions/{id}','RolesController@editRolePermissionForm')->name('edit.role.permissions');
@@ -41,15 +49,13 @@ Route::get('/permission/add/form','PermissionController@addPermissionForm')->nam
 Route::post('/permission/store','PermissionController@store')->name('permission.store');
 
 
-Route::resource('/repositories','RepositoryController');
 
-Route::get('/products','ProductsController@index')->name('products.index');
 Route::get('/products/show','ProductsController@show')->name('products.show');
 Route::post('/store/type','ProductsController@storeType')->name('store.type');
 
 // manager
 Route::group(['middleware' => ['permission:المبيعات']], function () {
-    Route::get('/sales','Manager\SellController@index')->name('sales.index');
+    Route::get('/sales/{repository_id}','Manager\SellController@index')->name('sales.index')->middleware('check_user');
     Route::get('/ajax/get/product/{repository_id}/{barcode}','Manager\RepositoryController@getProductAjax');
     Route::group(['middleware' => ['check_user']], function () {
         Route::get('/create/invoice/form/{repository_id}','Manager\SellController@createInvoiceForm')->name('create.invoice');
@@ -76,7 +82,7 @@ Route::group(['middleware' => ['permission:المبيعات']], function () {
 Route::get('view/customer/invoices/{customer_id}','Manager\ReportController@viewCustomerInvoices')->name('view.customer.invoices');
 
 Route::group(['middleware' => ['permission:المخزون']], function () {
-    Route::get('/repository','Manager\RepositoryController@index')->name('repository.index');
+    Route::get('/repository/{repository_id}','Manager\RepositoryController@index')->name('repository.index')->middleware('check_user');
     Route::post('/store/product','Manager\RepositoryController@storeProduct')->name('store.product');
     Route::group(['middleware' => ['check_user']], function () {
         Route::get('/add/product/form/{repository_id}','Manager\RepositoryController@addProductForm')->name('add.product.form');
@@ -87,7 +93,7 @@ Route::group(['middleware' => ['permission:المخزون']], function () {
     });
 });
 
-Route::get('/purchases','Manager\PurchaseController@index')->name('purchases.index');
+Route::get('/purchases/{repository_id}','Manager\PurchaseController@index')->name('purchases.index')->middleware('check_user');
 Route::get('/add/purchase/{repository_id}','Manager\PurchaseController@add')->name('purchase.add');
 Route::get('/add/supplier/form/{repository_id}','Manager\PurchaseController@addSupplier')->name('add.supplier');
 Route::post('/store/supplier/{repository_id}','Manager\PurchaseController@storeSupplier')->name('store.supplier');
@@ -117,7 +123,7 @@ Route::get('/filter/purchases/byPaymentMethod/supplier/{supplier_id}','Manager\P
 
 
 Route::group(['middleware'=>['permission:التقارير']], function () {
-    Route::get('/reports','Manager\ReportController@index')->name('reports.index');
+    Route::get('/reports/{repository_id}','Manager\ReportController@index')->name('reports.index')->middleware('check_user');
     Route::group(['middleware' => ['check_user']], function () {
         Route::get('/show/invoices/{repository_id}','Manager\ReportController@showInvoices')->name('show.invoices');
         Route::get('/show/today/invoices/{repository_id}','Manager\ReportController@showTodayInvoices')->name('show.today.invoices');
@@ -153,7 +159,7 @@ Route::get('/print/purchase/monthly/report/details/{report_id}','Manager\ReportC
 
 
 Route::group(['middleware'=>['permission:الاعدادات']], function () {
-    Route::get('manager/settings','Manager\SettingsController@index')->name('manager.settings.index');
+    Route::get('manager/settings/{repository_id}','Manager\SettingsController@index')->name('manager.settings.index')->middleware('check_user');
     Route::group(['middleware' => ['check_user']], function () {
         Route::get('settings/min/{repository_id}','Manager\SettingsController@minForm')->name('settings.min.form');
         Route::post('change/min/{repository_id}','Manager\SettingsController@min')->name('settings.min');
@@ -181,7 +187,7 @@ Route::group(['middleware'=>['permission:الاعدادات']], function () {
 Route::get('view/account/{user_id}','Manager\SettingsController@viewAccount')->name('view.account');
 
 Route::group(['middleware'=>['permission:الكاشير']], function () {
-    Route::get('/cashier','Manager\CashierController@index')->name('cashier.index');
+    Route::get('/cashier/{repository_id}','Manager\CashierController@index')->name('cashier.index')->middleware('check_user');
     Route::group(['middleware' => ['check_user']], function () {
         Route::get('/daily/cashier/{repository_id}','Manager\CashierController@dailyCashierForm')->name('daily.cashier.form')->middleware('permission:اغلاق الكاشير');
         Route::get('/daily/cashier/warning/{repository_id}','Manager\CashierController@dailyCashierWarningForm')->name('daily.cashier.warning.form')->middleware('permission:اغلاق الكاشير');

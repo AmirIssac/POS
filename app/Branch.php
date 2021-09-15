@@ -8,7 +8,7 @@ class Branch extends Model
 {
     //
     protected $fillable = [
-        'name',
+        'company_code','name',
     ];
 
     public function repositories(){

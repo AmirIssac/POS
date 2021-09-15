@@ -8,7 +8,6 @@
      <div class="main-panel">
       
        <div class="content">
-        @foreach($repositories as $repository)
         <div class="col-md-4">
          <div class="card card-chart">
            <div class="card-header card-header-primary">
@@ -138,6 +137,5 @@
            </div>
          
            </div>
-  @endforeach
  </body>
  @endsection

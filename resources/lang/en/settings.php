@@ -69,5 +69,6 @@
         'input_card_here' => 'Input the amount here',
         'input_stc_here' => 'Input the amount here',
         'must_select_supplier' => 'You must chose supplier',
+        'you_must_chose_branch' => 'You must chose branch',
     ];
     ?>

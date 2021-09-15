@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Branch;
 use App\Customer;
 use App\Http\Controllers\Controller;
 use App\Invoice;
@@ -14,11 +15,9 @@ use Illuminate\Support\Facades\Auth;
 
 class SellController extends Controller
 {
-    public function index(){
-        $user = Auth::user();
-        $user = User::find($user->id);
-        $repositories = $user->repositories;   // display all repositories for the owner
-        return view('manager.Sales.index')->with(['repositories'=>$repositories]);
+    public function index($id){
+        $repository = Repository::find($id);
+        return view('manager.Sales.index')->with(['repository'=>$repository]);
     }
 
     public function createInvoiceForm($id){
@@ -37,12 +36,18 @@ class SellController extends Controller
         }
         $new = true;
         $name_generated = false;
-        // get the owner of this repository to get customer archive from other sub repositories
+       /* // get the owner of this repository to get customer archive from other sub repositories
         $users = $repository->users;
         foreach($users as $user)
             if($user->hasRole('مالك-مخزن'))
                 $owner = $user;
         $sub_repositories = $owner->repositories()->where('category_id',2)->get();  // كل الافرع من النوع محل خاص
+        */
+
+        // get all branches for this repository
+        $branch_id = $repository->branch_id;
+        $branch = Branch::find($branch_id);
+        $sub_repositories = $branch->repositories;    // جلبنا كل الافرع
 
         // search for customer if exists before or create new one
         foreach($sub_repositories as $repository){
@@ -510,13 +515,19 @@ class SellController extends Controller
         }
         $recipe = serialize($recipe);
 
-        // get the owner of this repository to get customer archive from other sub repositories
+     /*   // get the owner of this repository to get customer archive from other sub repositories
         $users = $repository->users;
         foreach($users as $user)
             if($user->hasRole('مالك-مخزن'))
                 $owner = $user;
         $sub_repositories = $owner->repositories()->where('category_id',2)->get();  // كل الافرع من النوع محل خاص
+        */
 
+        // get all branches for this repository to get customer archive from other sub repositories
+        $branch_id = $repository->branch_id;
+        $branch = Branch::find($branch_id);
+        $sub_repositories = $branch->repositories;    // جلبنا كل الافرع
+        
         // search for customer if exists before or create new one
         foreach($sub_repositories as $repository){
             $customer = Customer::whereHas("repositories", function($q) use ($repository){ $q->where("repositories.id",$repository->id ); })->where('phone',$request->customer_phone)->first();

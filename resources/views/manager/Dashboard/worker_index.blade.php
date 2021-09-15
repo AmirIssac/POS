@@ -14,7 +14,6 @@
        <div class="content">
         <div class="container-fluid">
           <div class="row">
-        @foreach($repositories as $repository)
         <div class="col-md-4">
           <div class="card card-chart">
             <div class="card-header card-header-primary">
@@ -296,7 +295,6 @@
              @endcan
            </div>
              
-               @endforeach
              </div>
            </div>
  @endsection

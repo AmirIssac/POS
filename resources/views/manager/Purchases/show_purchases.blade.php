@@ -86,6 +86,7 @@
     </div>
     @endif {{--  request check --}}
     @if(request()->is('search/purchases/bySupplier/*') || request()->is('en/search/purchases/bySupplier/*'))
+    @if(request()->get('supplier') != 'all')  {{-- not displaying the payment filter if we search by all suppliers --}}
   <div style="display: flex;width: 300px; margin-right: 20px;">
     <form action="{{route('filter.purchases.byPaymentMethod.supplier',$supplier->id)}}" method="GET">
       @csrf
@@ -100,6 +101,7 @@
       </button>
     </form>
   </div>
+  @endif
     @endif
     <div class="container-fluid">
       <div class="row">

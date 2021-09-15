@@ -69,5 +69,6 @@
         'input_card_here' => 'ادخل المبلغ هنا',
         'input_stc_here' => 'ادخل المبلغ هنا',
         'must_select_supplier' => 'عليك اختيار مورد',
+        'you_must_chose_branch' => 'عليك اختيار الفرع',
     ];
     ?>

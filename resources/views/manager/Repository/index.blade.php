@@ -26,7 +26,6 @@
     <strong>{{ session('fail') }}</strong>
   </div>
   @endif
-           @foreach($repositories as $repository)
           
            <div class="col-md-4">
             <div class="card card-chart">
@@ -122,6 +121,5 @@
 
 </div>
   </div>
-  @endforeach
  </body>
  @endsection

@@ -15,11 +15,16 @@ class CashierController extends Controller
 {
     //
 
-    public function index(){
+    /*public function index(){
         $user = Auth::user();
         $user = User::find($user->id);
         $repositories = $user->repositories;   // display all repositories for the owner|worker
         return view('manager.Cashier.index')->with(['repositories'=>$repositories]);    
+    }*/
+
+    public function index($id){
+        $repository = Repository::find($id);
+        return view('manager.Cashier.index')->with(['repository'=>$repository]);    
     }
 
     public function dailyCashierForm($id){

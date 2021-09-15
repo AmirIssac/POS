@@ -16,11 +16,9 @@ class ReportController extends Controller
 {
     //
 
-    public function index(){
-        $user = Auth::user();
-        $user = User::find($user->id);
-        $repositories = $user->repositories;   // display all repositories for the owner|worker
-        return view('manager.Reports.index')->with(['repositories'=>$repositories]);   
+    public function index($id){
+        $repository = Repository::find($id);
+        return view('manager.Reports.index')->with(['repository'=>$repository]);   
     }
 
     public function showInvoices($id){
@@ -129,21 +127,23 @@ class ReportController extends Controller
     }
     public function dailyReportDetails($id){
         $report = DailyReport::find($id);
-        return view('manager.Reports.daily_report_details')->with(['report' => $report]);
+        $repository = $report->repository;
+        return view('manager.Reports.daily_report_details')->with(['report' => $report,'repository'=>$repository]);
     }
     public function dailyPurchaseReportDetails($id){
         $report = DailyReport::find($id);
-        return view('manager.Reports.daily_purchase_report_details')->with(['report' => $report]);
+        $repository = $report->repository;
+        return view('manager.Reports.daily_purchase_report_details')->with(['report' => $report,'repository'=>$repository]);
     }
     public function reportDetailsCurrentDay($id){   // for current dynamic day (( not created report yet))
         $repository = Repository::find($id);
         $invoices = $repository->invoices()->where('daily_report_check',false)->get();
-        return view('manager.Reports.current_day_details')->with(['invoices'=>$invoices]);
+        return view('manager.Reports.current_day_details')->with(['invoices'=>$invoices,'repository'=>$repository]);
     }
     public function reportPurchaseDetailsCurrentDay($id){   // for current dynamic day (( not created report yet))
         $repository = Repository::find($id);
         $purchases = $repository->purchases()->where('daily_report_check',false)->get();
-        return view('manager.Reports.current_purchase_day')->with(['purchases'=>$purchases]);
+        return view('manager.Reports.current_purchase_day')->with(['purchases'=>$purchases,'repository'=>$repository]);
     }
     /*public function makeMonthlyReport($id){
         $repository = Repository::find($id);
@@ -258,13 +258,15 @@ class ReportController extends Controller
 
     public function monthlyReportDetails($id){
         $report = MonthlyReport::find($id);
-        return view('manager.Reports.monthly_report_details')->with(['report' => $report]);
+        $repository = $report->repository;
+        return view('manager.Reports.monthly_report_details')->with(['report' => $report,'repository'=>$repository]);
     }
 
 
     public function monthlyPurchaseReportDetails($id){
         $report = MonthlyReport::find($id);
-        return view('manager.Reports.purchase_monthly_report_details')->with(['report' => $report]);
+        $repository = $report->repository;
+        return view('manager.Reports.purchase_monthly_report_details')->with(['report' => $report,'repository'=>$repository]);
     }
 
     public function reportDetailsCurrentMonth($id){   // for current dynamic month (( not created report yet))
@@ -272,7 +274,7 @@ class ReportController extends Controller
         $invoices = $repository->invoices()->whereYear('created_at', '=', now()->year)
         ->whereMonth('created_at','=',now()->month)->where('monthly_report_check',false)->get();
         $statistics = $repository->statistic;
-        return view('manager.Reports.current_month_details')->with(['invoices'=>$invoices,'statistics'=>$statistics]);
+        return view('manager.Reports.current_month_details')->with(['invoices'=>$invoices,'statistics'=>$statistics,'repository'=>$repository]);
     }
 
     public function purchaseReportDetailsCurrentMonth($id){
@@ -281,6 +283,6 @@ class ReportController extends Controller
         $purchases = $repository->purchases()->whereYear('created_at', '=', now()->year)
         ->whereMonth('created_at','=',now()->month)->where('monthly_report_check',false)->get();
         //$statistics = $repository->statistic;
-        return view('manager.Reports.purchase_current_month')->with(['purchases'=>$purchases]);
+        return view('manager.Reports.purchase_current_month')->with(['purchases'=>$purchases,'repository'=>$repository]);
     }
 }

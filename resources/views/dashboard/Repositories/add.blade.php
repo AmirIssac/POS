@@ -15,6 +15,15 @@
 @section('body')
 <div class="main-panel">
 <div class="content">
+  @if ($errors->any())
+  <div class="alert alert-danger">
+      <ul>
+          @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+          @endforeach
+      </ul>
+  </div>
+@endif
     <div class="container-fluid">
       <div class="row">
         @if ($message = Session::get('success'))
@@ -47,12 +56,15 @@
                                 <th>
                                 نوع المتجر   
                                 </th>
-                              {{--  <th>
+                                <th>
                                   الشعار    
                                   </th>
                                   <th class="displaynone branchname">
                                     اسم الشعار    
-                                    </th> --}}
+                                    </th>
+                                    <th class="displaynone branchname">
+                                       رقم الشعار    
+                                      </th>
                                  </thead>
                                 <tbody>
                                 <tr>
@@ -73,18 +85,21 @@
                                     @endforeach
                                   </select>
                                 </td>
-                           {{--     <td>
+                                <td>
                                   <select id="branch" class="form-control" name="branch_id">
-                                    @foreach($branches as $branch)
                                     <option value="" disabled selected hidden> انقر هنا لاختيار الشعار الذي يتبع له هذا المحل </option>
                                     <option value="new">شعار جديد</option>
+                                    @foreach($branches as $branch)
                                     <option value="{{$branch->id}}">{{$branch->name}}</option>
                                     @endforeach
                                   </select>
                                 </td>
                                 <td class="displaynone branchname">
-                                  <input name="branch_name">
-                                </td> --}}
+                                  <input name="branch_name" id="branch-name-input">
+                                </td>
+                                <td class="displaynone branchname">
+                                  <input name="company_code" id="company_code" value="{{$code}}" readonly>
+                                </td>
                                 </tr>
                             </tbody>
                             </table>
@@ -164,12 +179,18 @@
   }
 });
 </script>
-{{--<script>
+<script>
   $('#branch').on('change',function(){
-    if($(this).val() == 'new')
+    if($(this).val() == 'new'){
       $('.branchname').removeClass('displaynone');
-    else
+      $('#company_code').removeClass('displaynone');
+      $('#branch-name-input').prop('required',true);
+    }
+    else{
     $('.branchname').addClass('displaynone');
+    $('#company_code').addClass('displaynone');
+    $('#branch-name-input').prop('required',false);
+    }
   });
-</script>--}}
+</script>
 @endsection

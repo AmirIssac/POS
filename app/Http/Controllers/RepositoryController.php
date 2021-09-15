@@ -33,7 +33,13 @@ class RepositoryController extends Controller
     {
         $categories = RepositoryCategory::all();
         $branches = Branch::all();
-        return view('dashboard.Repositories.add')->with(['categories'=>$categories,'branches'=>$branches]);
+        // generate code for the new company   {{4 cells}}
+        $branchesCount = Branch::all()->count();
+        $branchesCount++;
+        $code = str_pad($branchesCount, 4, '0', STR_PAD_LEFT);
+        return view('dashboard.Repositories.add')->with(['categories'=>$categories,'branches'=>$branches,
+                    'code' => $code,
+        ]);
     }
 
     /**
@@ -44,12 +50,37 @@ class RepositoryController extends Controller
      */
     public function store(Request $request)
     {
-       $repository = Repository::create([
-            'name' => $request->repositoryName,
-            'name_en' => $request->repositoryName_en,
-            'address' => $request->address,
-            'category_id'=>$request->category_id,
-        ]);
+        $rules = [
+            'branch_id' => 'required',
+        ];
+    
+        $customMessages = [
+            'required' => __('settings.you_must_chose_branch'),
+        ];
+    
+        $this->validate($request, $rules, $customMessages);
+        if($request->branch_id == 'new'){  // new company/branch
+            $branch = Branch::create([
+                'company_code' => $request->company_code,
+                'name' => $request->branch_name,
+            ]);
+            $repository = Repository::create([
+                    'branch_id' => $branch->id,
+                    'name' => $request->repositoryName,
+                    'name_en' => $request->repositoryName_en,
+                    'address' => $request->address,
+                    'category_id'=>$request->category_id,
+                ]);
+        }
+        else{  // repository attached to specific branch/company
+            $repository = Repository::create([
+                'branch_id' => $request->branch_id,
+                'name' => $request->repositoryName,
+                'name_en' => $request->repositoryName_en,
+                'address' => $request->address,
+                'category_id'=>$request->category_id,
+            ]);
+        }
         // open statistic record for this repository  (one-to-one relatioship)
         Statistics::create([
             'repository_id' => $repository->id,

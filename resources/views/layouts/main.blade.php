@@ -136,7 +136,7 @@
           <ul class="nav">
             @can('لوحة التحكم')
             <li class="nav-item {{ request()->is('dashboard')||request()->is('/') ||request()->is('en') ? 'active' : '' }}">
-              <a class="nav-link" href="/">
+             <a class="nav-link" href="/">
                 <i class="material-icons">dashboard</i>
                 <p>{{__('menu.dashboard')}}</p>
               </a>
@@ -179,7 +179,8 @@
            @endcan 
            @can('لوحة تحكم مالك-مخزن')
             <li class="nav-item {{ request()->is('dashboard')||request()->is('/')||request()->is('en') ? 'active' : '' }}">
-              <a class="nav-link" href="/">
+             {{-- <a class="nav-link" href="/">  --}} 
+              <a class="nav-link" href="{{route('in.repository',$repository->id)}}">
                 <i class="material-icons">dashboard</i>
                 <p> {{__('menu.owner_dashboard')}}</p>
               </a>
@@ -187,7 +188,7 @@
             @endcan
             @can('لوحة تحكم موظف')
             <li class="nav-item {{ request()->is('dashboard')||request()->is('/') ? 'active' : '' }}">
-              <a class="nav-link" href="/">
+              <a class="nav-link" href="{{route('in.repository',$repository->id)}}">
                 <i class="material-icons">dashboard</i>
                 <p>{{__('menu.employee')}}</p>
               </a>
@@ -195,7 +196,7 @@
             @endcan
             @can('المبيعات')
            <li class="nav-item {{ request()->is('sales')||request()->is('en/sales')? 'active' : ''}}">
-            <a class="nav-link" href="{{route('sales.index')}}">
+            <a class="nav-link" href="{{route('sales.index',$repository->id)}}">
               <i class="material-icons">shopping_bag</i>
               <p>{{__('menu.sales')}}</p>
             </a>
@@ -203,7 +204,7 @@
           @endcan
           @can('التقارير')
           <li class="nav-item {{ request()->is('reports')||request()->is('en/reports')? 'active' :'' }}">
-            <a class="nav-link" href="{{route('reports.index')}}">
+            <a class="nav-link" href="{{route('reports.index',$repository->id)}}">
               <i class="material-icons">receipt_long</i>
               <p>{{__('menu.reports')}}</p>
             </a>
@@ -211,7 +212,7 @@
          @endcan
           @can('المخزون')
           <li class="nav-item {{ request()->is('repository')||request()->is('add/product/form/*')||request()->is('show/products/*')||request()->is('import/products/excel/*')||request()->is('en/repository')? 'active' : ''}}">
-            <a class="nav-link" href="{{route('repository.index')}}">
+            <a class="nav-link" href="{{route('repository.index',$repository->id)}}">
               <i class="material-icons">store</i>
               <p>{{__('menu.stock')}}</p>
             </a>
@@ -219,7 +220,7 @@
           @endcan
           @can('المشتريات')
           <li class="nav-item {{ request()->is('purchases')||request()->is('en/purchases')? 'active' : ''}}">
-            <a class="nav-link" href="{{route('purchases.index')}}">
+            <a class="nav-link" href="{{route('purchases.index',$repository->id)}}">
               <i class="material-icons">local_shipping</i>
               <p>{{__('purchases.purchases')}}</p>
             </a>
@@ -227,7 +228,7 @@
           @endcan
           @can('الكاشير')
           <li class="nav-item {{ request()->is('cashier')||request()->is('en/cashier')? 'active' : ''}}">
-            <a class="nav-link" href="{{route('cashier.index')}}">
+            <a class="nav-link" href="{{route('cashier.index',$repository->id)}}">
               <i class="material-icons">point_of_sale</i>
               <p>{{__('menu.cashier')}}</p>
             </a>
@@ -235,7 +236,7 @@
           @endcan
           @can('الاعدادات')
           <li class="nav-item {{ request()->is('manager/settings')||request()->is('en/manager/settings')? 'active' : ''}}">
-            <a class="nav-link" href="{{route('manager.settings.index')}}">
+            <a class="nav-link" href="{{route('manager.settings.index',$repository->id)}}">
               <i class="material-icons">settings</i>
               <p>{{__('menu.settings')}}</p>
             </a>
@@ -351,6 +352,9 @@
               <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownProfile">
                 <a class="dropdown-item" href="{{route('view.account',Auth::id())}}">{{__('settings.account')}}</a>
                 <a class="dropdown-item" href="#">{{__('settings.settings')}}</a>
+                @if(!$auther->hasRole('مشرف'))
+                <a class="dropdown-item" href="/">تبديل الفرع</a>
+                @endif
                 <div class="dropdown-divider"></div>
                 <form method="POST" action="{{route('logout')}}">
                   @csrf
