@@ -91,7 +91,7 @@ input[type=number] {
                     <tr class="price">
                       @foreach($purchases as $purchase)
                       @if($purchase->status != 'retrieved' && $purchase->dailyReports()->count()==0)
-                      <?php $total_sum_invoices += $invoice->total_price ?>
+                      <?php $total_sum_invoices += $purchase->total_price ?>
                       @endif
                       @endforeach
                       <td>
@@ -184,7 +184,6 @@ input[type=number] {
                     </tr>
                   </tbody>
                 </table>
-                
               </div>
             </div>
           </div>

@@ -30,6 +30,34 @@
   .disabled-a:hover{
     cursor: default;
   }
+
+
+/* for the date format */
+  input[type=date] {
+    position: relative;
+    width: 150px; height: 20px;
+    color: white;
+}
+
+input[type=date]:before {
+    position: absolute;
+    top: 3px; left: 3px;
+    content: attr(data-date);
+    display: inline-block;
+    color: black;
+}
+
+input[type=date]::-webkit-datetime-edit, input::-webkit-inner-spin-button, input::-webkit-clear-button {
+    display: none;
+}
+
+input[type=date]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 3px;
+    right: 0;
+    color: black;
+    opacity: 1;
+}
 </style>
 @endsection
 @section('body')
@@ -50,7 +78,7 @@
   <form action="{{route('search.invoices',$repository->id)}}" method="GET">
     @csrf
     <div style="width: 300px; margin-right: 20px;" class="input-group no-border">
-      <input type="date" name="dateSearch" class="form-control">
+      <input type="date" data-date="" data-date-format="DD-MM-YYYY" name="dateSearch" class="form-control">
       <button type="submit" class="btn btn-success btn-round btn-just-icon">
         <i class="material-icons">search</i>
       </button>
@@ -273,18 +301,16 @@
 @endsection
 
 @section('scripts')
+{{-- for the Date format --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
-  $('.eye').on('click',function(){
-    var id = $(this).attr('id');
-    if($('#th'+id).hasClass('displaynone')){  // show
-    $('#th'+id).removeClass('displaynone');
-    $('#tb'+id).removeClass('displaynone');
-    }
-    else
-    {  // hide
-      $('#th'+id).addClass('displaynone');
-      $('#tb'+id).addClass('displaynone');
-    }
-  });
+  $("input[type=date]").on("change", function() {
+    this.setAttribute(
+        "data-date",
+        moment(this.value, "YYYY-MM-DD")
+        .format( this.getAttribute("data-date-format") )
+    )
+}).trigger("change");
 </script>
 @endsection

@@ -19,6 +19,12 @@
           <strong>{{ session('completeSuccess') }}</strong>
   </div>
   @endif
+  @if (session('fail'))
+  <div class="alert alert-success alert-block">
+      <button type="button" class="close" data-dismiss="alert">×</button>	
+          <strong>{{ session('fail') }}</strong>
+  </div>
+  @endif
   <div style="display: flex">
   <form action="{{route('search.pending',$repository->id)}}" method="GET">
     @csrf

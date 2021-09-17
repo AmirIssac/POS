@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -167,11 +168,13 @@ class SettingsController extends Controller
 
     public function showWorkerPermissions($id){
         $user = User::find($id);
+        $repository = Repository::find(Session::get('repo_id'));   // better than sending id by hidden input
         $permissions_on = $user->getAllPermissions();
         // all permissions that owner has because its impossible to give worker a permission that the owner dont have
         $permissions = Role::findByName('مالك-مخزن')->permissions; 
         $categories = PermissionCategory::all();
         return view('manager.Settings.edit_worker')->with(['categories'=>$categories,'permissionsOwner'=>$permissions,'permissions_on'=>$permissions_on,'user'=>$user,
+        'repository' => $repository,
         ]);
     }   
 
@@ -189,7 +192,8 @@ class SettingsController extends Controller
 
     public function editClient($id){
         $customer = Customer::find($id);
-        return view('manager.Settings.edit_client')->with('customer',$customer);
+        $repository = Repository::find(Session::get('repo_id'));   // better than sending id by hidden input
+        return view('manager.Settings.edit_client')->with(['customer'=>$customer,'repository'=>$repository]);
     }
 
     public function updateClient(Request $request,$id){
@@ -203,7 +207,9 @@ class SettingsController extends Controller
 
     public function editWorkerInfo($id){
         $user = User::find($id);
-        return view('manager.Settings.edit_worker_info')->with('user',$user);
+        $repository = Repository::find(Session::get('repo_id'));   // better than sending id by hidden input
+        //$repository = Repository::find($request->repo_id);
+        return view('manager.Settings.edit_worker_info')->with(['user'=>$user,'repository'=>$repository]);
     }
     public function updateWorkerInfo(Request $request , $id){
         $user = User::find($id);
@@ -226,7 +232,7 @@ class SettingsController extends Controller
         //$invoices = $user->invoices()->paginate(30);
         $invoices = $user->invoices()->where('repository_id',$repository->id)->whereYear('created_at', '=', now()->year)
         ->whereMonth('created_at','=',now()->month)->where('monthly_report_check',false)->get();
-        return view('manager.Settings.worker_sales')->with(['user'=>$user,'invoices'=>$invoices]);
+        return view('manager.Settings.worker_sales')->with(['user'=>$user,'invoices'=>$invoices,'repository'=>$repository]);
     }
     
     public function printSettings(Request $request,$id){
@@ -277,7 +283,8 @@ class SettingsController extends Controller
 
     public function viewAccount($id){
         $user = User::find($id);
-        return view('manager.Settings.account')->with(['user'=>$user]);
+        $repository = Repository::find(Session::get('repo_id'));   // better than sending id by hidden input
+        return view('manager.Settings.account')->with(['user'=>$user,'repository'=>$repository]);
     }
 
     public function changePassword(Request $request,$id){

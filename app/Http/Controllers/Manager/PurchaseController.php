@@ -11,6 +11,7 @@ use App\Supplier;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Symfony\Component\Console\Input\Input;
 
 class PurchaseController extends Controller
@@ -222,7 +223,8 @@ class PurchaseController extends Controller
 
     public function showPurchaseDetails($id){
         $purchase = Purchase::find($id);
-        return view('manager.Purchases.purchase_details')->with(['purchase'=>$purchase]);
+        $repository = Repository::find(Session::get('repo_id'));
+        return view('manager.Purchases.purchase_details')->with(['purchase'=>$purchase,'repository'=>$repository]);
     }
 
     /*public function showPurchaseRetrieveDetails($id){
@@ -290,6 +292,9 @@ class PurchaseController extends Controller
     public function payLaterPurchase(Request $request , $id){
         $purchase = Purchase::find($id);
         $repository = $purchase->repository;
+        // check if purchase payment is later to continue
+        if($purchase->payment != 'later')
+            return back();
         $statistic = $repository->statistic;
         if($request->payment=='cashier'){
             // check first if cashier has this amount of money
@@ -542,7 +547,8 @@ class PurchaseController extends Controller
 
     public function editProductForm($id){
         $product = PurchaseProduct::find($id);
-        return view('manager.Purchases.edit_product')->with(['product'=>$product]);
+        $repository = Repository::find(Session::get('repo_id'));   // better than sending id by hidden input
+        return view('manager.Purchases.edit_product')->with(['product'=>$product,'repository'=>$repository]);
     }
     public function updateProduct(Request $request,$id){
         $product = PurchaseProduct::find($id);

@@ -726,6 +726,9 @@ class SellController extends Controller
                 public function completeInvoice(Request $request , $id){
                     $invoice = Invoice::find($id);
                     $repository = $invoice->repository;
+                     // check if invoice pending
+                     if($invoice->status != 'pending')
+                        return redirect(route('show.pending',$repository->id))->with('fail','هذه الفاتورة تم استكمالها سابقا');
                     // get customer
                     $customer = $invoice->customer;
                     // check if delivered quantity <= quantity in store // new 6-8-2021
