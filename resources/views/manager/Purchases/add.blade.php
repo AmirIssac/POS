@@ -371,7 +371,7 @@ form #tooltip:hover{
   </script>
   <script>    // Ajax
     
-    $('.barcode').on('keyup input focus',function(){
+    $('.barcode').on('keyup input',function(){
     var barcode = $(this).val();
     var id = $(this).attr("id");  // extract id
     var gold =  id.slice(3);   // remove bar from id to take just the number
@@ -466,7 +466,7 @@ form #tooltip:hover{
       }
   });
   </script>
-  
+  {{--
   <script>
   $('form').keypress(function(e) {
     if (e.keyCode == 13) {
@@ -485,7 +485,31 @@ form #tooltip:hover{
       $('#total_price'+count).prop('required',true);
     }
     });
-  </script>
+  </script> --}}
+  <script>
+    $('form').keypress(function(e) {
+      if (e.keyCode == 13) {
+        // Get the focused element:
+        var focused = $(':focus');
+        var id = focused.attr("id");  // extract id
+        var string = id.slice(0, 3); // take first 3 character from id to check its bar or pri we are focused in
+        if(string == 'bar')
+        var gold =  id.slice(3);   // remove bar from id to take just the number
+        else // we are focused on price input
+        var gold =  id.slice(5);   // remove price from id to take just the number
+        var count = parseInt(gold) +1;
+        // focus on next element
+        $('#record'+count).removeClass('displaynone');
+        $('#bar'+count+'').focus();
+        //$('#bar'+count).prop('required',true);
+        $('#ar'+count).prop('required',true);
+        $('#quantity'+count).prop('required',true);
+        $('#price'+count).prop('required',true);
+        $('#price'+count).prop('readonly',true);
+        $('#total_price'+count).prop('required',true);
+      }
+      });
+    </script>
   <script>  // delete record by clicking the icon
     $('.delete').on('click',function(){
       var id = $(this).attr("id");  // extract id

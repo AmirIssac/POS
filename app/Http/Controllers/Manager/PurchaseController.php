@@ -55,7 +55,7 @@ class PurchaseController extends Controller
         ]);
         $repository->suppliers()->attach($supplier->id);  // pivot table
 
-        return redirect(route('purchases.index'))->with('success',__('alerts.add_supplier_success'));
+        return redirect(route('purchases.index',$repository->id))->with('success',__('alerts.add_supplier_success'));
     }
 
     public function showSuppliers($id){
@@ -72,19 +72,21 @@ class PurchaseController extends Controller
 
     public function updateSupplier(Request $request){
         $supplier = Supplier::find($request->supplier_id);
+        $repository = Repository::find(Session::get('repo_id'));
         $supplier->update([
             'name' => $request->name,
             'address' => $request->address,
             'phone' => $request->phone,
             'account_num' => $request->account_num,
         ]);
-        return redirect(route('purchases.index'))->with('success',__('alerts.edit_supplier_success'));
+        return redirect(route('purchases.index',$repository->id))->with('success',__('alerts.edit_supplier_success'));
     }
 
     public function deleteSupplier(Request $request){
         $supplier = Supplier::find($request->supplier_id);
+        $repository = Repository::find(Session::get('repo_id'));
         $supplier->delete();
-        return redirect(route('purchases.index'))->with('success',__('alerts.delete_supplier_success'));
+        return redirect(route('purchases.index',$repository->id))->with('success',__('alerts.delete_supplier_success'));
     }
 
    /* public function storePurchase(Request $request , $id){

@@ -137,7 +137,7 @@ class SettingsController extends Controller
             if(!$worker)
             $repository->users()->attach($user->id); //pivot table insert
             else
-            return redirect()->route('manager.settings.index')->with('fail',__('alerts.employee_exist_fail'));
+            return redirect()->route('manager.settings.index',$repository->id)->with('fail',__('alerts.employee_exist_fail'));
         }
         else{
        $user = User::create(
@@ -152,7 +152,7 @@ class SettingsController extends Controller
             $user->assignRole('عامل-مخزن');  // this role will not contain any permission by default but we use role for dashboard
         }
             $user->givePermissionTo($request->permissions);
-            return redirect()->route('manager.settings.index')->with('successWorker',__('alerts.new_employee_add_success'));
+            return redirect()->route('manager.settings.index',$repository->id)->with('successWorker',__('alerts.new_employee_add_success'));
   
     }
 

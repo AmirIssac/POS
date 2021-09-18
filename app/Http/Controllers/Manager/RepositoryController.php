@@ -209,7 +209,7 @@ class RepositoryController extends Controller
         if($request->barcode != $request->old_barcode){
             $temp = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode)->first();
             if($temp)
-                return redirect(route('repository.index'))->with('fail','هذا الباركود محجوز لمنتج سابق');
+                return redirect(route('repository.index',$repository->id))->with('fail','هذا الباركود محجوز لمنتج سابق');
         }
         if($request->type){   // special form
             $stored = true;
@@ -243,13 +243,14 @@ class RepositoryController extends Controller
             'price' => $request->price,
             'quantity' => $request->quantity,
         ]);
-        return redirect(route('repository.index'))->with('editProductSuccess',__('alerts.product_edit_success').$product->name);
+        return redirect(route('repository.index',$repository->id))->with('editProductSuccess',__('alerts.product_edit_success').$product->name);
     }
 
     public function deleteProduct(Request $request){
         $product = Product::find($request->product_id);
+        $repository = $product->repository;
         $product->delete();
-        return redirect(route('repository.index'))->with('deleteProductSuccess',__('alerts.product_delete_success'));
+        return redirect(route('repository.index',$repository->id))->with('deleteProductSuccess',__('alerts.product_delete_success'));
     }
 
     public function checkBarcodeAjax(Request $request,$id){

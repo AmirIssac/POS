@@ -998,7 +998,7 @@ class SellController extends Controller
             'monthly_report_check' => false,
             'note' => $request->note,
         ]);
-        return redirect(route('sales.index'))->with('retrievedSuccess',__('alerts.purchase_retrieve_success'));
+        return redirect(route('sales.index',$repository->id))->with('retrievedSuccess',__('alerts.purchase_retrieve_success'));
     } 
 
     public function changePayment($id){   // form
