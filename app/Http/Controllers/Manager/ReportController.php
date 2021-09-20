@@ -40,17 +40,24 @@ class ReportController extends Controller
         $invoice = Invoice::find($id);
         $repository = $invoice->repository;
         // send recipe
-        //$customer = $invoice->customer;
-        $recipe = unserialize($invoice->recipe);
-         // check if recipe values 0 so we dont print the recipe
-         $is_recipe_null = false;
-         if($recipe['add_r']=='0' && $recipe['axis_r']=='0' && $recipe['cyl_r']=='0' && $recipe['sph_r']=='0' && $recipe['add_l']=='0' && $recipe['axis_l']=='0' && $recipe['cyl_l']=='0' && $recipe['sph_l']=='0' && $recipe['ipd']=='0' )
-         $is_recipe_null = true;
-
+        $r = unserialize($invoice->recipe);   // it was array in old version and now its a array of array so we will handle both way to display recipe in old version invoices
+        $recipe = array();
+        if(count($r)<7){   // new version  array of arrays (impossible to have more than 6 recipes)
+            // check if recipe values 0 so we dont print the recipe
+            // send to printing just the valuable recipes
+            for($i=0;$i<count($r);$i++){
+            if($r[$i]['add_r']=='0' && $r[$i]['axis_r']=='0' && $r[$i]['cyl_r']=='0' && $r[$i]['sph_r']=='0' && $r[$i]['add_l']=='0' && $r[$i]['axis_l']=='0' && $r[$i]['cyl_l']=='0' && $r[$i]['sph_l']=='0' && $r[$i]['ipd']=='0' )
+                continue;
+                $recipe[] = $r[$i]; // input array into array so we get array of arrays
+            }
+        }
+        else{   // old version
+            $recipe[] = $r;
+        }
          if($repository->setting->standard_printer) 
-            return view('manager.Reports.print_invoice')->with(['repository'=>$repository,'invoice'=>$invoice,'recipe'=>$recipe,'is_recipe_null'=>$is_recipe_null]);
+            return view('manager.Reports.print_invoice')->with(['repository'=>$repository,'invoice'=>$invoice,'recipe'=>$recipe]);
             else
-            return view('manager.Sales.epson_recipe_data')->with(['repository'=>$repository,'invoice'=>$invoice,'recipe'=>$recipe,'is_recipe_null'=>$is_recipe_null]);
+            return view('manager.Sales.epson_recipe_data')->with(['repository'=>$repository,'invoice'=>$invoice,'recipe'=>$recipe]);
     }
 
     public function filterPending(Request $request,$id){

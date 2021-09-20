@@ -196,13 +196,14 @@
         </div>
         <hr>
         @if($repository->setting->print_prescription == true)
-        @if(isset($recipe) && $is_recipe_null == false)
+        @if(isset($recipe) && $recipe) 
         <div id='prescription'>
+          @for($i=0;$i<count($recipe);$i++)
           <div id="recipe" class="card">
             <div class="card-header card-header-primary">
               <h4 class="card-title ">  الوصفة الطبية  </h4>
-              @if(array_key_exists('name', $recipe))
-                {{$recipe['name']}}
+              @if(array_key_exists('name', $recipe[$i]))
+                {{$recipe[$i]['name']}}
               @endif
             </div>
             <div class="card-body">
@@ -234,27 +235,27 @@
                         RIGHT
                       </td>
                       <td>
-                        @if(floatval($recipe['sph_r']) > 0)
-                        +{{$recipe['sph_r']}}
+                        @if(floatval($recipe[$i]['sph_r']) > 0)
+                        +{{$recipe[$i]['sph_r']}}
                         @else
-                        {{$recipe['sph_r']}}
+                        {{$recipe[$i]['sph_r']}}
                         @endif
                       </td>
                       <td>
-                        @if(floatval($recipe['cyl_r']) > 0)
-                        +{{$recipe['cyl_r']}}
+                        @if(floatval($recipe[$i]['cyl_r']) > 0)
+                        +{{$recipe[$i]['cyl_r']}}
                         @else
-                        {{$recipe['cyl_r']}}
+                        {{$recipe[$i]['cyl_r']}}
                         @endif
                       </td>
                       <td>
-                        {{$recipe['axis_r']}}
+                        {{$recipe[$i]['axis_r']}}
                       </td>
                       <td>
-                        @if(floatval($recipe['add_r']) > 0)
-                        +{{$recipe['add_r']}}
+                        @if(floatval($recipe[$i]['add_r']) > 0)
+                        +{{$recipe[$i]['add_r']}}
                         @else
-                        {{$recipe['add_r']}}
+                        {{$recipe[$i]['add_r']}}
                         @endif
                       </td>
                     </tr>
@@ -263,27 +264,27 @@
                        LEFT
                      </td>
                      <td>
-                      @if(floatval($recipe['sph_l']) > 0)
-                      +{{$recipe['sph_l']}}
+                      @if(floatval($recipe[$i]['sph_l']) > 0)
+                      +{{$recipe[$i]['sph_l']}}
                       @else
-                      {{$recipe['sph_l']}}
+                      {{$recipe[$i]['sph_l']}}
                       @endif
                     </td>
                     <td>
-                      @if(floatval($recipe['cyl_l']) > 0)
-                      +{{$recipe['cyl_l']}}
+                      @if(floatval($recipe[$i]['cyl_l']) > 0)
+                      +{{$recipe[$i]['cyl_l']}}
                       @else
-                      {{$recipe['cyl_l']}}
+                      {{$recipe[$i]['cyl_l']}}
                       @endif
                     </td>
                     <td>
-                      {{$recipe['axis_l']}}
+                      {{$recipe[$i]['axis_l']}}
                     </td>
                     <td>
-                      @if(floatval($recipe['add_l']) > 0)
-                      +{{$recipe['add_l']}}
+                      @if(floatval($recipe[$i]['add_l']) > 0)
+                      +{{$recipe[$i]['add_l']}}
                       @else
-                      {{$recipe['add_l']}}
+                      {{$recipe[$i]['add_l']}}
                       @endif
                     </td>
                   </tr>
@@ -296,7 +297,7 @@
                      IPD
                    </td>
                     <td>
-                      {{$recipe['ipd']}}
+                      {{$recipe[$i]['ipd']}}
                     </td>
                     <td style="border: none">
                    </td>
@@ -306,6 +307,7 @@
               </div>
             </div>
           </div>
+          @endfor
         </div>
         <hr>
         @endif

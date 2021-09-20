@@ -324,6 +324,7 @@ class SellController extends Controller
         $count = count($request->barcode);
         $count2 = count($request->del);
         $delivered = true;
+
         // check if hanging or delivered
         if($count == $count2) // delivered
         {   // we dont look for unstored product quantities
@@ -503,7 +504,7 @@ class SellController extends Controller
             $stcVal = $request->stcVal;
         }
         
-        if($request->recipe_radio == 0){  // BASIC RECIPE
+     /*   if($request->recipe_radio == 0){  // BASIC RECIPE
         $recipe = array('add_r'=>$request->add_r,'axis_r'=>$request->axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
                         'add_l'=>$request->add_l,'axis_l'=>$request->axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
                         'ipd'=>$request->ipdval,);
@@ -513,7 +514,33 @@ class SellController extends Controller
                         'add_l'=>$request->add_l_arr[$request->recipe_radio-1],'axis_l'=>$request->axis_l_arr[$request->recipe_radio-1],'cyl_l'=>$request->cyl_l_arr[$request->recipe_radio-1],'sph_l'=>$request->sph_l_arr[$request->recipe_radio-1],
                         'ipd'=>$request->ipdval_arr[$request->recipe_radio-1],);
         }
-        $recipe = serialize($recipe);
+        $recipe = serialize($recipe);  */
+        $recipe = array();
+        if($request->recipe_radio == 0){  // BASIC RECIPE
+            $recipe[] = array('add_r'=>$request->add_r,'axis_r'=>$request->axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
+                            'add_l'=>$request->add_l,'axis_l'=>$request->axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
+                            'ipd'=>$request->ipdval,);
+            }
+            else{  // additional recipe  from the index and going back   // beacuse the system changed and now the invoice may contain several recipes
+                $gg = $request->recipe_radio;
+                //$recipe = array();
+                do{
+                if($gg == 0){  // basic recipe we insert it in the begin
+                    array_unshift($recipe, array('add_r'=>$request->add_r,'axis_r'=>$request->axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
+                    'add_l'=>$request->add_l,'axis_l'=>$request->axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
+                    'ipd'=>$request->ipdval,));
+                }
+                else{
+                    $recipe[] = array('name'=>$request->recipe_name[$request->recipe_radio-$gg],'add_r'=>$request->add_r_arr[$request->recipe_radio-$gg],'axis_r'=>$request->axis_r_arr[$request->recipe_radio-$gg],'cyl_r'=>$request->cyl_r_arr[$request->recipe_radio-$gg],'sph_r'=>$request->sph_r_arr[$request->recipe_radio-$gg],
+                    'add_l'=>$request->add_l_arr[$request->recipe_radio-$gg],'axis_l'=>$request->axis_l_arr[$request->recipe_radio-$gg],'cyl_l'=>$request->cyl_l_arr[$request->recipe_radio-$gg],'sph_l'=>$request->sph_l_arr[$request->recipe_radio-$gg],
+                    'ipd'=>$request->ipdval_arr[$request->recipe_radio-$gg],);
+                }
+                $gg--;
+                }
+                while($gg >= 0);
+               // while($gg<=$request->recipe_radio || $gg == intval($request->recipe_radio)+1);
+            }
+            $recipe = serialize($recipe);
 
      /*   // get the owner of this repository to get customer archive from other sub repositories
         $users = $repository->users;
@@ -625,7 +652,10 @@ class SellController extends Controller
                 ]);
             } */
 
+
+
             // we should determin the sell proccess on which recipe are doing by radio check value
+            /*
             if($request->recipe_radio == 0){  // the basic recipe
                 $saved = $customer->savedRecipes()->where('name',null)->first();
                 if($saved){
@@ -664,7 +694,91 @@ class SellController extends Controller
                         'recipe' => $recipe,
                     ]);
                 }
+            }*/
+
+            if($request->recipe_radio == 0){  // the basic recipe
+                $recipe = unserialize($recipe);  // array of arrays
+                $saved = $customer->savedRecipes()->where('name',null)->first();
+                if($saved){
+                    $saved->update([
+                        'repository_id' => $repository->id,  // update recipe to newest sub repo
+                        'user_id' => Auth::user()->id,
+                        'recipe' => serialize($recipe[0]),  // array
+                    ]);
+                }
+                else{
+                    SavedRecipe::create([
+                        'repository_id' => $id,
+                        'customer_id' => $customer->id,
+                        'user_id' => Auth::user()->id,
+                        'recipe' => serialize($recipe[0]),  // array
+                    ]);
+                }
+                
             }
+            else{  // additional recipe  (multi recipes)
+                $saved = $customer->savedRecipes;
+                $count = $saved->count();
+                $new = $request->recipe_radio + 1 - $count;  // number of new recipes
+                //return $request->recipe_radio;
+                $recipe = unserialize($recipe);  // array of arrays
+                foreach($saved as $single_recipe){
+                    foreach($recipe as $rec){
+                        if(array_key_exists('name', $rec)){
+                            if($rec['name']==$single_recipe->name){
+                                $single_recipe->update([
+                                    'repository_id' => $repository->id,  // update recipe to newest sub repo
+                                    'user_id' => Auth::user()->id,
+                                    //'name' => $request->recipe_name[$request->recipe_radio-1],
+                                    'recipe' => serialize($rec),
+                                ]);
+                                break;
+                            }
+                        }
+                        else{   // key name not exists  (basic recipe)
+                            if(!$single_recipe->name){
+                                $single_recipe->update([
+                                    'repository_id' => $repository->id,  // update recipe to newest sub repo
+                                    'user_id' => Auth::user()->id,
+                                    'recipe' => serialize($rec),
+                                ]);
+                            }
+                        }
+                    }
+                   
+                }
+                $basic = false;
+                // now we save the new recipes
+                    for($i=$new;$i>=1;$i--){
+                        foreach($recipe as $rec){
+                            if($request->recipe_radio-$i < 0 && !array_key_exists('name', $rec)){  // basic recipe
+                                $basic = true;
+                                break;
+                            }
+                            if(array_key_exists('name', $rec) && $rec['name']==$request->recipe_name[$request->recipe_radio-$i]){
+                                $basic = false;
+                                break;  // yes  
+                            }
+                        }
+                        if($basic == true)
+                            SavedRecipe::create([
+                                'repository_id' => $id,
+                                'customer_id' => $customer->id,
+                                'user_id' => Auth::user()->id,
+                                'recipe' => serialize($rec),
+                            ]);
+                        else
+                            SavedRecipe::create([
+                                'repository_id' => $id,
+                                'customer_id' => $customer->id,
+                                'user_id' => Auth::user()->id,
+                                'name' => $request->recipe_name[$request->recipe_radio-$i],
+                                'recipe' => serialize($rec),
+                            ]);
+                    }
+                }
+
+
 
        // prepare to send data to print page
        $records = array(array());
@@ -682,11 +796,26 @@ class SellController extends Controller
 
       $id = Auth::user()->id;
       $employee = User::find($id);
+
+      /*
       $recipe_print = unserialize($recipe);
       // check if recipe values 0 so we dont print the recipe
       $is_recipe_null = false;
       if($recipe_print['add_r']=='0' && $recipe_print['axis_r']=='0' && $recipe_print['cyl_r']=='0' && $recipe_print['sph_r']=='0' && $recipe_print['add_l']=='0' && $recipe_print['axis_l']=='0' && $recipe_print['cyl_l']=='0' && $recipe_print['sph_l']=='0' && $recipe_print['ipd']=='0' )
         $is_recipe_null = true;
+        */
+
+        // send recipe
+        $r = array();
+        if(count($recipe)<7){   // new version  array of arrays (impossible to have more than 6 recipes)
+            // check if recipe values 0 so we dont print the recipe
+            // send to printing just the valuable recipes
+            for($i=0;$i<count($recipe);$i++){
+            if($recipe[$i]['add_r']=='0' && $recipe[$i]['axis_r']=='0' && $recipe[$i]['cyl_r']=='0' && $recipe[$i]['sph_r']=='0' && $recipe[$i]['add_l']=='0' && $recipe[$i]['axis_l']=='0' && $recipe[$i]['cyl_l']=='0' && $recipe[$i]['sph_l']=='0' && $recipe[$i]['ipd']=='0' )
+                continue;
+                $r[] = $recipe[$i]; // input array into array so we get array of arrays
+            }
+        }
 
         if($repository->setting->standard_printer) 
       return view('manager.Sales.print_special_invoice')->with([
@@ -695,7 +824,7 @@ class SellController extends Controller
           'discount' => $discounting,
           'date'=>$request->date,'repository' => $repository,
           'customer' => $customer,'employee'=>$employee,'note'=>$request->note,'remaining_amount'=>$remaining_amount,'invoice'=>$invoice,
-          'recipe' => $recipe_print, 'is_recipe_null' => $is_recipe_null,
+          'recipe' => $r,
         ]);   // to print the invoice
         else
         return view('manager.Sales.print_epson_special_invoice')->with([
@@ -704,7 +833,7 @@ class SellController extends Controller
             'discount' => $discounting,
             'date'=>$request->date,'repository' => $repository,
             'customer' => $customer,'employee'=>$employee,'note'=>$request->note,'remaining_amount'=>$remaining_amount,'invoice'=>$invoice,
-            'recipe' => $recipe_print, 'is_recipe_null' => $is_recipe_null,
+            'recipe' => $r,
           ]);   // to print the invoice
     }
 

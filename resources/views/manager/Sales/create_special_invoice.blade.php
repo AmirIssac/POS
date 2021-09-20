@@ -668,7 +668,7 @@ select{
 </div>
 
 
-<select id="plus-recipe" name="recipe_radio">
+<select id="plus-recipe" name="recipe_radio">   {{--  we change the system to take all recipes from the index and going back --}}
 <option value="0" selected> {{__('sales.basic_prescription')}}
 </option>  {{-- value=0 mean its the basic recipe --}}
 <?php $additional_archived = 0; ?>  {{-- first we display archived additional recipes --}}
@@ -2731,11 +2731,27 @@ window.onload=function(){
  
  
 
-<script>   // add new recipe
+{{--<script>   // add new recipe
   $('#plus-recipe').on('change',function(){
     var value = $('#plus-recipe').val();
     for(s=0;s<6;s++){
       if(s==value){
+        $('#extra-recipe'+s).removeClass('displaynone');
+        $('#recipe_name'+s).prop('required',true);
+      }
+      else{
+        $('#extra-recipe'+s).addClass('displaynone');
+        $('#recipe_name'+s).prop('required',false);
+      }
+    }
+  });
+</script>--}}
+
+<script>   // add new recipe
+  $('#plus-recipe').on('change',function(){
+    var value = $('#plus-recipe').val();
+    for(s=0;s<6;s++){
+      if(s<=value){    // show all recipes from index and back steps
         $('#extra-recipe'+s).removeClass('displaynone');
         $('#recipe_name'+s).prop('required',true);
       }

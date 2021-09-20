@@ -126,7 +126,12 @@
               <h4>{{$remaining_amount}}</h4>
 
       @if($repository->setting->print_prescription == true)
-      @if(isset($recipe) && $is_recipe_null == false)
+      @if(isset($recipe) && $recipe) 
+      @for($i=0;$i<count($recipe);$i++)
+      <h4>  الوصفة الطبية  </h4>
+              @if(array_key_exists('name', $recipe[$i]))
+                {{$recipe[$i]['name']}}
+              @endif
       <div class="bordred">
       <table class="bordered-table" dir="ltr">
         <thead>
@@ -139,50 +144,50 @@
         <tr>
         <th>RIGHT</th>
         <th class="text-center">
-          @if(floatval($recipe['sph_r']) > 0)
-          +{{$recipe['sph_r']}}
+          @if(floatval($recipe[$i]['sph_r']) > 0)
+          +{{$recipe[$i]['sph_r']}}
           @else
-          {{$recipe['sph_r']}}
+          {{$recipe[$i]['sph_r']}}
           @endif
         </th>
         <th class="text-center">
-          @if(floatval($recipe['cyl_r']) > 0)
-          +{{$recipe['cyl_r']}}
+          @if(floatval($recipe[$i]['cyl_r']) > 0)
+          +{{$recipe[$i]['cyl_r']}}
           @else
-          {{$recipe['cyl_r']}}
+          {{$recipe[$i]['cyl_r']}}
           @endif
         </th>
-        <th class="text-center">{{$recipe['axis_r']}}</th>
+        <th class="text-center">{{$recipe[$i]['axis_r']}}</th>
         <th class="text-center">
-          @if(floatval($recipe['add_r']) > 0)
-          +{{$recipe['add_r']}}
+          @if(floatval($recipe[$i]['add_r']) > 0)
+          +{{$recipe[$i]['add_r']}}
           @else
-          {{$recipe['add_r']}}
+          {{$recipe[$i]['add_r']}}
           @endif
         </th>
         </tr>
         <tr>
           <th>LEFT</th>
           <th class="text-center">
-            @if(floatval($recipe['sph_l']) > 0)
-            +{{$recipe['sph_l']}}
+            @if(floatval($recipe[$i]['sph_l']) > 0)
+            +{{$recipe[$i]['sph_l']}}
             @else
-            {{$recipe['sph_l']}}
+            {{$recipe[$i]['sph_l']}}
             @endif
           </th>
           <th class="text-center">
-            @if(floatval($recipe['cyl_l']) > 0)
-            +{{$recipe['cyl_l']}}
+            @if(floatval($recipe[$i]['cyl_l']) > 0)
+            +{{$recipe[$i]['cyl_l']}}
             @else
-            {{$recipe['cyl_l']}}
+            {{$recipe[$i]['cyl_l']}}
             @endif
           </th>
-          <th class="text-center">{{$recipe['axis_l']}}</th>
+          <th class="text-center">{{$recipe[$i]['axis_l']}}</th>
           <th class="text-center">
-            @if(floatval($recipe['add_l']) > 0)
-            +{{$recipe['add_l']}}
+            @if(floatval($recipe[$i]['add_l']) > 0)
+            +{{$recipe[$i]['add_l']}}
             @else
-            {{$recipe['add_l']}}
+            {{$recipe[$i]['add_l']}}
             @endif
           </th>
           </tr>
@@ -194,13 +199,14 @@
             IPD
           </th>
           <th>
-            {{$recipe['ipd']}}
+            {{$recipe[$i]['ipd']}}
           </th>
           <td>
           </td>
           <tr>
       </table>
       </div>
+      @endfor
       @endif
       @endif
       <h4 class="text-center">
