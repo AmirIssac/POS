@@ -40,6 +40,14 @@
               @else
               {{$repository->name}}
               @endif
+              /
+                 {{$repository->address}}
+                 {{--
+                 php $warning = $repository->CashierWarningDetails() 
+                 {{$warning['status']}}
+                 /
+                 {{$warning['hours']}}
+                 --}}
               </h4>
            </div>
            <div class="card-footer">

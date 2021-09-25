@@ -30,48 +30,64 @@
     .bordered-table td , .bordered-table th {
       border: 1px solid black;
     }
+    .p-inline{
+        display: inline;
+        padding : 10px;
+    }
+    .table-c,.table-c td,.table-c th,.table-c tr{
+      border: 1px solid black;
+    }
+    .table-c td {
+            padding: 10px;
+        }
+    .table-c th {
+            padding: 10px 0 10px 10px;
+        }
+    /*.big-padding{
+      padding: 10px 0 10px 30px !important;
+    }*/
     </style>
     <body>
       @if($repository->logo)
     <img src="{{asset('public/storage/'.$repository->logo)}}" width="50px" height="50px" id="logorep">
     @endif
-    <h2 class="text-center">{{$repository->name}}</h2>
-    <h4 class="text-center">رقم الفاتورة {{$invoice->code}}</h4>
-    <h4 class="text-center">التاريخ {{$invoice->created_at}}</h4>
-    <h4 class="text-center">الرقم الضريبي {{$repository->tax_code}}</h4>
+    <h2>{{$repository->name}}</h2>
+    <h4>رقم الفاتورة {{$invoice->code}}</h4>
+    <h4>التاريخ {{$invoice->created_at}}</h4>
+    <h4>الرقم الضريبي {{$repository->tax_code}}</h4>
       <div class="bordred">
-        <table>
+        <table class="table-c"> 
           <thead class="head">
-            <th>Barcode</th>
-            <th class="text-center">الاسم</th>
-            <th class="text-center">السعر</th>
-            <th class="text-center">الكمية</th>
-            <th class="text-center"> تم تسليمها</th>
+            <th style="width: 100px">Barcode</th>
+            <th style="width: 250px" class="big-padding">الاسم</th> 
+            <th style="width: 30px">السعر</th>
+            <th style="width: 30px">الكمية</th>
+            <th style="width: 30px">تم تسليمها </th> 
           </thead>
           <?php $records = unserialize($invoice->details) ?>
             @for($i=1;$i<count($records);$i++)
             <tr>
-                <td class="text-center">
+                <td style="width: 100px">
                     <input type="hidden" value="{{count($records)}}" id="num">
                     {{$records[$i]['barcode']}}
                 </td>
-                <td class="text-center">  {{-- في الطباعة تم الطلب بعرض الاسم بالعربية فقط دوما --}}
+                <td style="width: 250px" class="big-padding">  {{-- في الطباعة تم الطلب بعرض الاسم بالعربية فقط دوما --}}
                   {{$records[$i]['name_ar']}}
                 </td>
                 <td style="display: none;">
                   {{$records[$i]['cost_price']}}
                 </td>
-                <td class="text-center">
+                <td style="width: 30px">
                   <p id="price{{$i}}">
                     {{$records[$i]['price']}}
                   </p>
                 </td>
-                <td class="text-center">
+                <td style="width: 30px">
                   <p id="quantity{{$i}}">
                     {{$records[$i]['quantity']}}
                   </p>
                 </td>
-              <td class="text-center">
+              <td style="width: 30px">
                   @if($records[$i]['delivered'] != 0)
                   نعم
                   @else
@@ -80,48 +96,49 @@
               </td>
           </tr>
           @endfor
-          <tfoot>
-            <tr>
-            <th>المجموع</th>
-            <th class="text-center">
-              <p id="total_price">
+        </table>
+        </div>
+        <br>
+        <p>
+        <p class="p-inline"> المجموع
+              <p id="total_price" class="p-inline">
+              </p> </p>
+              <p class="p-inline">   الضريبة
+              {{$invoice->tax}}</p>
+              <p class="p-inline">
+           الحسم
+              {{$invoice->discount}}
               </p>
-            </th>
-            <th>الضريبة</th>
-            <th class="text-center">
-              <p>{{$invoice->tax}}</p>
-            </th>
-            <th>الحسم</th>
-            <th class="text-center">
-              <p>{{$invoice->discount}}</p>
-            </th>
-            </tr>
-            <tr>
-            <th>المبلغ الإجمالي</th>
-            <th class="text-center">
+        </p>
+              <p>
+              <p class="p-inline">
+            المبلغ الإجمالي
+            
               <p>{{$invoice->total_price}}</p>
-            </th>
-            </tr>
-            <th>الدفع كاش</th>
-            <th class="text-center">
-              <p>{{$invoice->cash_amount}}</p>
-            </th>
-            <th>الدفع بالبطاقة</th>
-            <th class="text-center">
-              <p>{{$invoice->card_amount}}</p>
-            </th>
-            <th>STC-pay</th>
-            <th class="text-center">
-              <p>{{$invoice->stc_amount}}</p>
-            </th>
+              </p>
+              </p>
+              <p>
+              <p class="p-inline">
+            الدفع كاش
+            
+              {{$invoice->cash_amount}}
+              <p class="p-inline">
+            الدفع بالبطاقة
+            
+              {{$invoice->card_amount}}
+              </p>
+              <p class="p-inline">
+            STC-pay
+            
+              {{$invoice->stc_amount}}
+              </p>
+              </p>
+            
             <?php $remaining_amount = $invoice->total_price - ($invoice->cash_amount+$invoice->card_amount+$invoice->stc_amount) ?>
           {{--  <th>المبلغ المتبقي للدفع</th>
             <th class="text-center">
               <p>{{$remaining_amount}}</p>
             </th>  --}}
-          </tfoot>
-        </table>
-      </div>
      <h4>المبلغ المتبقي للدفع</h4>
               <h4>{{$remaining_amount}}</h4>
 

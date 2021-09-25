@@ -26,6 +26,9 @@ class Repository extends Model
     public function invoices(){
         return $this->hasMany(Invoice::class);
     }
+    public function invoiceProcesses(){
+        return $this->hasMany(InvoiceProcess::class);
+    }
     public function invoicesDesc(){
         return $this->hasMany(Invoice::class)->orderBy('created_at','DESC');
     }
@@ -207,7 +210,8 @@ class Repository extends Model
         return false;
      }*/
 
-     public function CashierWarningDetails(){
+
+    /* public function CashierWarningDetails(){
         $warning = array('status'=>false,'hours'=>0);
         $daily_report = $this->dailyReportsDesc()->first();
         if($daily_report){
@@ -251,6 +255,46 @@ class Repository extends Model
         else
         return $warning;
      }
+     */
+     public function CashierWarningDetails(){
+        $warning = array('status'=>false,'hours'=>0);
+        $daily_report = $this->dailyReportsDesc()->first();
+        $datetimeTemp = new Carbon('1994-07-10'.$this->close_time);  // make it random date to get hour
+        $hour_in_close_time = $datetimeTemp->hour;
+        if($daily_report){
+            $now = now();
+            $created_at = $daily_report->created_at;
+            $diff_in_hours = $created_at->diffInHours($now);
+            if($diff_in_hours > 24){
+                $h1 = $diff_in_hours - 24;
+                $h2 = $created_at->hour - $hour_in_close_time;
+                $h = $h1 + $h2;
+                if($h > 6 ){
+                    $warning['status']=true;
+                    $warning['hours']=$h;  // تخطي الوقت المسموح به عن ساعة وقت الاغلاق بمقدار h
+                    return $warning;
+                } 
+                else{
+                    $warning['status']=false;
+                    $warning['hours']=$h;
+                    return $warning;
+                }
+            }
+            else{
+                $h = $now->hour - $hour_in_close_time;
+                if($h > 6 ){
+                    $warning['status']=true;
+                    $warning['hours']=$h;  // تخطي الوقت المسموح به عن ساعة وقت الاغلاق بمقدار h
+                    return $warning;
+                } 
+            }
+        }
+        else{  // there is no daily report
+            $warning['status']=false;
+            $warning['hours']='no problem for now';
+            return $warning;
+        }
+    }
 
     public function todaySales(){
         $today_sales = 0;

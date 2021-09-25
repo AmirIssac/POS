@@ -49,5 +49,6 @@ return [
     'online' => 'متصل',
     'offline' => 'غير متصل',
     'last_logout' => 'آخر ظهور في',
+    'multiple' => 'متعددة',
 ];
 ?>

@@ -61,9 +61,7 @@ input[type=number] {
                 
               <h4 class="card-title"> </h4>
               <h4> {{__('sales.edit_payment_values_invoice')}} {{$invoice->created_at}}   <span class="badge badge-success">{{$invoice->code}}</span></h4>
-              {{--<i style="float: left" id="{{$i}}" class="material-icons eye">
-                visibility
-              </i>--}}
+           
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -108,9 +106,13 @@ input[type=number] {
                         </td>
                     </tr>
                     @endfor
-                    <tr style="font-weight: 900">
+                    <tr style="font-weight: 900"> 
                         <td>
+                          @if(!isset($updated))
                           {{__('sales.total_price')}}
+                          @else
+                          المدفوع في عملية الاستكمال
+                          @endif
                         </td>
                         <td>
                           {{__('sales.cash')}}
@@ -140,6 +142,7 @@ input[type=number] {
                           {{__('sales.note')}}  
                         </td>
                     </tr>
+                    @if(!isset($updated))
                     <tr>
                         <td>
                             {{$invoice->total_price}}
@@ -205,6 +208,73 @@ input[type=number] {
                         </td>
                         <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                     </tr>
+                    @else   {{-- updated invoice --}}  {{-- تعديل الدفع لفاتورة مستكملة تاسك شهر 9 --}}
+                    <tr>
+                      <td>
+                    {{$invoice->total_price - ($previous_inv->cash_amount+$previous_inv->card_amount+$previous_inv->stc_amount)}}
+                      </td>
+                      <td>
+                        <input type="hidden" name="old_cash" step="0.01" min="0" value="{{$invoice->cash_amount - $previous_inv->cash_amount}}" class="form-control">
+                        <input type="number" name="cash" step="0.01" min="0" value="{{$invoice->cash_amount - $previous_inv->cash_amount}}" class="form-control">
+                       </td>
+                       <td>
+                        <input type="hidden" name="old_card" step="0.01" min="0" value="{{$invoice->card_amount - $previous_inv->card_amount}}" class="form-control">
+                        <input type="number" name="card" step="0.01" min="0" value="{{$invoice->card_amount - $previous_inv->card_amount}}" class="form-control">
+                       </td>
+                       <td>
+                        <input type="hidden" name="old_stc" step="0.01" min="0" value="{{$invoice->stc_amount - $previous_inv->stc_amount}}" class="form-control">
+                        <input type="number" name="stc" step="0.01" min="0" value="{{$invoice->stc_amount - $previous_inv->stc_amount}}" class="form-control">
+                       </td>
+                       <td>
+                          @if($invoice->discount==0)
+                          {{__('sales.none')}}
+                          @else
+                          {{$invoice->discount}}
+                          @endif
+                       </td>
+                       <td>
+                        @if($invoice->transform == 'no')
+                          @if($invoice->status == 'delivered')
+                          {{__('sales.del_badge')}} 
+                          @elseif($invoice->status == 'pending')
+                          {{__('sales.hang_badge')}}
+                          @elseif($invoice->status == 'retrieved')
+                          {{__('sales.retrieved_badge')}}
+                          @endif
+                        @else {{-- there is a transform --}}
+                            @if($invoice->transform == 'p-d')
+                            {{__('sales.hang_badge')}} => {{__('sales.del_badge')}} 
+                            @elseif($invoice->transform == 'p-r')
+                            {{__('sales.hang_badge')}} => {{__('sales.retrieved_badge')}}
+                            @elseif($invoice->transform == 'd-r')
+                            {{__('sales.del_badge')}}  => {{__('sales.retrieved_badge')}}
+                            @endif
+                        @endif
+                       </td>
+                       <td>
+                        {{$invoice->customer->name}}
+                       </td>
+                       <td>
+                        {{$invoice->phone}}
+                       </td>
+                       <td>
+                        {{$invoice->user->name}}
+                       </td>
+                       <td>
+                         @if($invoice->note)
+                        {{$invoice->note}}
+                        @else
+                        {{__('sales.none')}}
+                        @endif
+                       </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="btn btn-primary">{{__('buttons.confirm')}}</button>
+                        </td>
+                        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                    </tr>
+                  @endif
                   </tbody>
                 </table>
                   </form>

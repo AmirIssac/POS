@@ -49,5 +49,6 @@ return [
     'online' => 'Online',
     'offline' => 'Offline',
     'last_logout' => 'Last seen',
+    'multiple' => 'Multiple',
 ];
 ?>

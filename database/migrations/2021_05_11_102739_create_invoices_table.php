@@ -20,7 +20,7 @@ class CreateInvoicesTable extends Migration
             $table->foreignId('customer_id')->nullable()->default(null); // null in original repository
             $table->string('code',8);
             $table->string('details',10000);
-            $table->string('recipe',500)->nullable()->default(null); //الوصفة الطبية
+            $table->string('recipe',3000)->nullable()->default(null); //الوصفة الطبية
             $table->float('total_price');
             $table->float('discount')->default(0.00);   // discount value
             $table->boolean('cash_check')->default(0);

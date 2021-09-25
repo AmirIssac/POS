@@ -229,7 +229,8 @@ input[type=date]::-webkit-calendar-picker-indicator {
                           @endif
                           @endcan
                           |
-                          @if($invoice->daily_report_check==false && $invoice->transform=='no') {{-- change the payment values for today invoices and not edited ones --}}
+                       {{--   @if($invoice->daily_report_check==false && $invoice->transform=='no') {{-- change the payment values for today invoices and not edited ones --}}
+                          @if($invoice->daily_report_check==false && ($invoice->transform=='no' || $invoice->transform=='p-d')) {{-- change the payment values for today invoices and not edited or edited invoices just for p-d and allow from another day --}}
                           <a style="color: #fc8f04" href="{{route('change.invoice.payment',$invoice->id)}}" class="active-a"> <i id="{{$i}}" class="material-icons">
                             price_change
                           </i> </a>

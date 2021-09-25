@@ -59,6 +59,9 @@ class User extends Authenticatable
     public function purchases(){
         return $this->hasMany(Purchase::class);
     }
+    public function invoiceProcesses(){
+        return $this->hasMany(InvoiceProcess::class);
+    }
 
     public function last_login_old(){
         //$dateTime = Carbon::createFromFormat('F j, Y, g:i a', $this->last_login_old);

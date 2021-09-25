@@ -1311,7 +1311,7 @@ select{
               <input type="text" name="customer_phone_s" value="{{isset($phone)?$phone:''}}">
               <input type="text" name="customer_name_s" value="{{isset($customer_name)?$customer_name:''}}">
               </div>
-              <button type="submit" class="btn btn-success">{{__('buttons.save')}}</button>
+              <button type="submit" class="btn btn-success" disabled>{{__('buttons.save')}}</button>
             </form>
             {{--<a onclick="PrintElem($('#print-content').attr('id'));" style="color: white" class="btn btn-success">حفظ</a>--}}
             <a href="{{route('create.special.invoice',$repository->id)}}" style="color: white;" class="btn btn-danger">{{__('buttons.cancel')}}</a>

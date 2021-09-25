@@ -22,6 +22,8 @@
               @else
               {{$repository->name}}
               @endif
+              /
+                 {{$repository->address}}
               </h4>
            </div>
            <div class="card-footer">

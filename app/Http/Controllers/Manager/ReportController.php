@@ -33,7 +33,8 @@ class ReportController extends Controller
     public function invoiceDetails($id){
         $invoice = Invoice::find($id);
         $repository = $invoice->repository;
-        return view('manager.Reports.invoice_details')->with(['repository'=>$repository,'invoice'=>$invoice]);
+        $invoice_processes = $invoice->invoiceProcesses;
+        return view('manager.Reports.invoice_details')->with(['repository'=>$repository,'invoice'=>$invoice,'invoice_processes'=>$invoice_processes]);
     }
 
     public function printInvoice($id){

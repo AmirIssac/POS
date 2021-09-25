@@ -6,6 +6,7 @@ use App\Branch;
 use App\Customer;
 use App\Http\Controllers\Controller;
 use App\Invoice;
+use App\InvoiceProcess;
 use App\Product;
 use App\Repository;
 use App\SavedRecipe;
@@ -633,7 +634,6 @@ class SellController extends Controller
             ]
             );
             
-            
            /* // archive the recipe after sell proccess
             $saved = $customer->savedRecipes;
             if($saved->count()>0){
@@ -930,6 +930,21 @@ class SellController extends Controller
                         $array[$i]['delivered'] = $array[$i]['quantity'];
                     }
                     $array = serialize($array);
+                    // before updating invoice we save the important details of the old invoice process
+                    InvoiceProcess::create(
+                        [
+                            'repository_id' => $repository->id,
+                            'invoice_id' => $invoice->id,
+                            'user_id' => Auth::user()->id,
+                            'details' => $invoice->details,
+                            'cash_amount' => $invoice->cash_amount,
+                            'card_amount' => $invoice->card_amount,
+                            'stc_amount' => $invoice->stc_amount,
+                            'status' => $invoice->status,
+                            'created_at' => $invoice->created_at,
+                            'note' => $invoice->note,
+                        ]
+                        );
                     $invoice->update(
                         [
                             'user_id' => Auth::user()->id,
@@ -987,19 +1002,35 @@ class SellController extends Controller
                             }
                         }
                         $complete_invoice = true; // to check in blade if we sell invoice for first time or we are completing an invoice
+                        /*
                         $recipe = unserialize($invoice->recipe);
                         // check if recipe values 0 so we dont print the recipe
                         $is_recipe_null = false;
                         if($recipe['add_r']=='0' && $recipe['axis_r']=='0' && $recipe['cyl_r']=='0' && $recipe['sph_r']=='0' && $recipe['add_l']=='0' && $recipe['axis_l']=='0' && $recipe['cyl_l']=='0' && $recipe['sph_l']=='0' && $recipe['ipd']=='0' )
                           $is_recipe_null = true;
-
+                          */
+                          $r = unserialize($invoice->recipe);   // it was array in old version and now its a array of array so we will handle both way to display recipe in old version invoices
+                            $recipe = array();
+                            if(count($r)<7){   // new version  array of arrays (impossible to have more than 6 recipes)
+                                // check if recipe values 0 so we dont print the recipe
+                                // send to printing just the valuable recipes
+                                for($i=0;$i<count($r);$i++){
+                                if($r[$i]['add_r']=='0' && $r[$i]['axis_r']=='0' && $r[$i]['cyl_r']=='0' && $r[$i]['sph_r']=='0' && $r[$i]['add_l']=='0' && $r[$i]['axis_l']=='0' && $r[$i]['cyl_l']=='0' && $r[$i]['sph_l']=='0' && $r[$i]['ipd']=='0' )
+                                    continue;
+                                    $recipe[] = $r[$i]; // input array into array so we get array of arrays
+                                }
+                            }
+                            else{   // old version
+                                $recipe[] = $r;
+                            }
+ 
                         if($repository->setting->standard_printer) 
                         return view('manager.Sales.print_special_invoice')->with([
                             'records'=>$records,'num'=>count($records),'total_price'=>$request->total_price,
                             'extra_price'=>$request->extra_price,'cash'=>$cashVal,'card'=>$cardVal,'stc'=>$stcVal,'repo_id'=>$repository->id
                             ,'date'=>$request->date,'repository' => $repository,
                             'customer' => $customer,'employee'=>$employee,'complete_invoice'=>$complete_invoice,'invoice'=>$invoice,'note'=>$request->note,
-                            'recipe' => $recipe,'is_recipe_null' => $is_recipe_null,
+                            'recipe' => $recipe,
                         ]);   // to print the invoice
                         else
                         return view('manager.Sales.print_epson_special_invoice')->with([
@@ -1007,7 +1038,7 @@ class SellController extends Controller
                             'extra_price'=>$request->extra_price,'cash'=>$cashVal,'card'=>$cardVal,'stc'=>$stcVal,'repo_id'=>$repository->id
                             ,'date'=>$request->date,'repository' => $repository,
                             'customer' => $customer,'employee'=>$employee,'complete_invoice'=>$complete_invoice,'invoice'=>$invoice,'note'=>$request->note,
-                            'recipe' => $recipe,'is_recipe_null' => $is_recipe_null,
+                            'recipe' => $recipe,
                         ]);   // to print the invoice
                             } 
 
@@ -1118,6 +1149,21 @@ class SellController extends Controller
             $transform = 'd-r';
             else
             $transform = 'p-r';
+            // before updating invoice we save the important details of the old invoice process
+            InvoiceProcess::create(
+                [
+                    'repository_id' => $repository->id,
+                    'invoice_id' => $invoice->id,
+                    'user_id' => Auth::user()->id,
+                    'details' => $invoice->details,
+                    'cash_amount' => $invoice->cash_amount,
+                    'card_amount' => $invoice->card_amount,
+                    'stc_amount' => $invoice->stc_amount,
+                    'status' => $invoice->status,
+                    'created_at' => $invoice->created_at,
+                    'note' => $invoice->note,
+                ]
+                );
         // change invoice status
         $invoice->update([
             'status' => 'retrieved',
@@ -1132,8 +1178,17 @@ class SellController extends Controller
 
     public function changePayment($id){   // form
         $invoice = Invoice::find($id);
+        if($invoice->status != 'delivered' && $invoice->status != 'pending')
+            return back();  // cant process
         $repository = $invoice->repository;
-        return view('manager.Sales.change_invoice_payment')->with(['invoice'=>$invoice,'repository'=>$repository]);
+        if($invoice->invoiceProcesses()->count() == 0)   // the invoice has just one status (life cycle)
+            return view('manager.Sales.change_invoice_payment')->with(['invoice'=>$invoice,'repository'=>$repository]);
+        elseif($invoice->invoiceProcesses()->count() == 1 && $invoice->transform == 'p-d' && $invoice->daily_report_check == false)   // تعديل الدفع لفاتورة مستكملة ((تاسك شهر 9))
+            {
+            $updated = true;
+            $previous_inv = $invoice->invoiceProcesses()->first();
+            return view('manager.Sales.change_invoice_payment')->with(['updated'=>$updated,'invoice'=>$invoice,'previous_inv'=>$previous_inv,'repository'=>$repository]);
+            }
     }
 
     /*public function makeChangePayment(Request $request , $id){
@@ -1171,36 +1226,54 @@ class SellController extends Controller
 
         return back()->with('success')->with('success','تم التعديل بنجاح');
     }*/
-    public function makeChangePayment(Request $request , $id){   // we must pay the same money value of the old payment but we change the methods of pay as we want
+    public function makeChangePayment(Request $request , $id){   // we must pay the same money value of the old payment or larger but we change the methods of pay as we want
         $invoice = Invoice::find($id);
-        if($request->cash + $request->card + $request->stc < $request->old_cash + $request->old_card + $request->old_stc)
-            return back()->with('fail',__('alerts.payed_money_less_than_old'));
-        if($request->cash + $request->card + $request->stc > $invoice->total_price)
-            return back()->with('fail',__('alerts.payed_money_larger_than_total_price'));
         $repository = $invoice->repository;
-        $invoice->update([
-            'cash_amount' => $request->cash,
-            'card_amount' => $request->card,
-            'stc_amount' => $request->stc,
-        ]);
-        // update repository balance
-        $repository->update(
-            [
-                'cash_balance' => $repository->cash_balance + ($request->cash - $request->old_cash),
-                'card_balance' => $repository->card_balance + ($request->card - $request->old_card),
-                'stc_balance' => $repository->stc_balance + ($request->stc - $request->old_stc),
-                'balance' => $repository->balance + ($request->cash - $request->old_cash),
-            ]
-            );
-        // update month statistics
-        $statistic = $repository->statistic;
-        $statistic->update([
-            'm_in_cash_balance' => $statistic->m_in_cash_balance + ($request->cash - $request->old_cash),
-            'm_in_card_balance' => $statistic->m_in_card_balance + ($request->card - $request->old_card),
-            'm_in_stc_balance' => $statistic->m_in_stc_balance + ($request->stc - $request->old_stc),
-        ]);
+        if($invoice->invoiceProcesses()->count() == 0){   // the invoice has just one status (life cycle)
+            if($request->cash + $request->card + $request->stc < $request->old_cash + $request->old_card + $request->old_stc)
+                return back()->with('fail',__('alerts.payed_money_less_than_old'));
+            if($request->cash + $request->card + $request->stc > $invoice->total_price)
+                return back()->with('fail',__('alerts.payed_money_larger_than_total_price'));
 
-        return back()->with('success')->with('success',__('alerts.edit_success'));
+            $invoice->update([
+                    'cash_amount' => $request->cash,
+                    'card_amount' => $request->card,
+                    'stc_amount' => $request->stc,
+                ]);
+        }
+        // تعديل طرق الدفع للفواتير المستكملة
+        elseif($invoice->invoiceProcesses()->count() == 1 && $invoice->transform == 'p-d' && $invoice->daily_report_check == false){
+            $prev_inv = $invoice->invoiceProcesses()->first();
+            if($request->cash + $request->card + $request->stc != $request->old_cash + $request->old_card + $request->old_stc)
+                return back()->with('fail','المبلغ المدفوع لا يساوي المبلغ الذي تم دفعه للاستكمال');
+            $invoice->update([
+                    'cash_amount' => $request->cash + $prev_inv->cash_amount,
+                    'card_amount' => $request->card + $prev_inv->card_amount,
+                    'stc_amount' => $request->stc + $prev_inv->stc_amount,
+                ]);
+        }
+            
+        
+            // update repository balance
+            $repository->update(
+                [
+                    'cash_balance' => $repository->cash_balance + ($request->cash - $request->old_cash),
+                    'card_balance' => $repository->card_balance + ($request->card - $request->old_card),
+                    'stc_balance' => $repository->stc_balance + ($request->stc - $request->old_stc),
+                    'balance' => $repository->balance + ($request->cash - $request->old_cash),
+                ]
+                );
+            // update month statistics
+            $statistic = $repository->statistic;
+            $statistic->update([
+                'm_in_cash_balance' => $statistic->m_in_cash_balance + ($request->cash - $request->old_cash),
+                'm_in_card_balance' => $statistic->m_in_card_balance + ($request->card - $request->old_card),
+                'm_in_stc_balance' => $statistic->m_in_stc_balance + ($request->stc - $request->old_stc),
+            ]);
+
+            return back()->with('success')->with('success',__('alerts.edit_success'));
+         
+        
     }
 
     public function deleteInvoice($id){
@@ -1221,6 +1294,21 @@ class SellController extends Controller
             $transform = 'd-x';
         if($invoice->status == 'pending')
             $transform = 'p-x';
+            // before updating invoice we save the important details of the old invoice process
+            InvoiceProcess::create(
+                [
+                    'repository_id' => $repository->id,
+                    'invoice_id' => $invoice->id,
+                    'user_id' => Auth::user()->id,
+                    'details' => $invoice->details,
+                    'cash_amount' => $invoice->cash_amount,
+                    'card_amount' => $invoice->card_amount,
+                    'stc_amount' => $invoice->stc_amount,
+                    'status' => $invoice->status,
+                    'created_at' => $invoice->created_at,
+                    'note' => $invoice->note,
+                ]
+                );
         $invoice->update([
             'status' => 'deleted',
             'transform' => $transform,

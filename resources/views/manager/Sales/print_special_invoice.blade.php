@@ -46,6 +46,11 @@
     top: 0;
   }*/
 }
+#prescription{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
 </style>
 @endsection
 @section('body')
@@ -173,21 +178,7 @@
                  <div>
                   <h5>الحسم</h5>
                  <div style="display: flex; flex-direction: column; margin-top: 3px;">
-                  {{--@if($repository->setting->discount_by_percent == true)
-                   <div style="display: flex;">
-                     %<input type="number" value="{{$discount}}" class="form-control" readonly>
-                    </div>
-                  @endif
-                  @if($repository->setting->discount_by_value == true)
-                  <div style="display: flex;">
-                    <input type="number" value="{{$discount_by_value}}" class="form-control" readonly>
-                  </div>
-                  @endif 
-                  @if($repository->setting->discount_by_value == false && $repository->setting->discount_by_percent == false)
-                  <div style="display: flex;">
-                    <input type="number" value="0" class="form-control" readonly>
-                  </div>
-                  @endif--}}
+                 
                   <input type="number" value="{{$discount}}" step="0.01" class="form-control" readonly>
                </div>
                    </div>
@@ -258,7 +249,7 @@
         </div>
         <hr>
         @if($repository->setting->print_prescription == true)
-        @if(isset($recipe) && $recipe) 
+        @if(isset($recipe) && $recipe)
         <div id='prescription'>
           @for($i=0;$i<count($recipe);$i++)
           <div id="recipe" class="card">
@@ -368,6 +359,7 @@
                 </table>
               </div>
             </div>
+          </div>
             @endfor
           </div>
         </div>

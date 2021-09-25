@@ -38,6 +38,9 @@
       color: red;
       font-size: 25px;
     }
+    .table-c,.table-c td,.table-c th,.table-c tr{
+      border: 1px solid black;
+    }
     .table-c td {
             padding: 10px;
         }
@@ -64,41 +67,42 @@
       <div class="bordred">
         <table class="table-c">
           <thead class="head">
-            <th>Barcode</th>
-            <th class="big-padding">الاسم</th>
-            <th>السعر</th>
-            <th>الكمية</th>
+            <th style="width: 100px">Barcode</th>
+            <th style="width: 250px" class="big-padding">الاسم</th> 
+            <th style="width: 30px">السعر</th>
+            <th style="width: 30px">الكمية</th>
             @if(isset($complete_invoice))
-            <th> الواجب تسليمها </th>
+            <th style="width: 30px"> الواجب تسليمها </th>
             @endif
-            <th>تم تسليمها </th> 
+            <th style="width: 30px">تم تسليمها </th> 
           </thead>
             @for($i=1;$i<$num;$i++)
             <tr>
-                <td>
+                <td style="width: 100px">
                     {{$records[$i]['barcode']}}
                 </td>
-                <td class="big-padding">  {{-- في الطباعة تم الطلب بعرض الاسم بالعربية فقط دوما --}}
+                <td style="width: 250px" class="big-padding">  {{-- في الطباعة تم الطلب بعرض الاسم بالعربية فقط دوما --}}
                   {{$records[$i]['name_ar']}}
                 </td>
-                <td>
+                <td style="width: 30px">
                     {{$records[$i]['price']}}
                 </td>
-                <td>
+                <td style="width: 30px">
                     {{$records[$i]['quantity']}}
                 </td>
                 @if(isset($complete_invoice))
-                <td>
+                <td style="width: 30px">
                     {{$records[$i]['must_del']}}
                 </td>
                 @endif
-                <td>
+                <td style="width: 30px">
                     {{$records[$i]['del']}}
                 </td>
           </tr>
           @endfor
         </table>
         </div>
+        <br>
             @if(isset($sum))
             <p class="p-inline">المجموع
                 {{$sum}}
