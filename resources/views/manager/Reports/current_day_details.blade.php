@@ -61,7 +61,10 @@ input[type=number] {
                 <strong>{{ session('success') }}</strong>
         </div>
         @endif
-        <?php $total_sum_invoices = 0 ?>
+        <?php $total_sum_invoices = 0 ;
+              $total_sum_purchases = 0 ;
+         ?>
+
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
@@ -94,12 +97,90 @@ input[type=number] {
                       <?php $total_sum_invoices += $invoice->total_price ?>
                       @endif
                       @endforeach
+
+                      @foreach($purchases as $purchase)
+                            @if($purchase->status == 'done' && $purchase->dailyReports()->count()==0)
+                            <?php $total_sum_purchases += $purchase->total_price; ?>
+                            @endif
+                      @endforeach
                       <td>
                        {{-- {{__('reports.total_balance')}} &nbsp;&nbsp;{{$report->cash_balance+($report->cash_plus-$report->cash_shortage) + $report->card_balance+($report->card_plus-$report->card_shortage)}} --}}
                        {{__('menu.sales')}} &nbsp;&nbsp; {{$total_sum_invoices}}
                       </td>
+                      <td>
+                        {{__('purchases.purchases')}} {{$total_sum_purchases}}
+                      </td>
                     </tr>
                     
+                    <tr>
+                      <?php
+                            $today_invoices_count = 0 ;
+                            $prev_invoices_count = 0 ;
+                            $delivered = 0 ;
+                            $pending = 0 ;
+                            $retrieved = 0 ;
+                            $deleted = 0 ;
+                            $pending_money = 0 ;
+                            $gained_money = 0 ;
+                            $gained_money_for_today_sales = 0 ;
+                            ?>
+                      @foreach($invoices as $invoice)
+                             @if($invoice->dailyReports()->count()==0)
+                              <?php $today_invoices_count+=1; ?>
+                              @if($invoice->status == 'delivered')
+                              <?php $delivered+=1;
+                                   /* $gained_money+=$invoice->cash_amount + $invoice->card_amount + $invoice->stc_amount */
+                               ?>
+                            @elseif($invoice->status == 'pending')
+                              <?php $pending+=1;
+                                    $pending_money+=$invoice->total_price - ($invoice->cash_amount + $invoice->card_amount + $invoice->stc_amount);
+                                  /*  $gained_money+=$invoice->cash_amount + $invoice->card_amount + $invoice->stc_amount */
+                              ?>
+                            @elseif($invoice->status == 'retrieved')
+                              <?php $retrieved+=1; ?>
+                            @elseif($invoice->status == 'deleted')
+                              <?php $deleted+=1; ?>
+                            @endif
+                            @endif
+                              
+                            @if($invoice->dailyReports()->count()>0)
+                            <?php $prev_invoices_count+=1; ?>
+                        @endif
+                      @endforeach
+
+                      {{-- حساب الاموال المحصلة سواء فواتير اليوم او الفواتير سابقة تم استكمالها اليوم --}}
+                      @foreach($invoices as $invoice)
+                      @if($invoice->dailyReports()->count()==0) {{-- today --}}
+                        @if($invoice->status == 'delivered' || $invoice->status == 'pending')
+                        <?php $gained_money += $invoice->cash_amount + $invoice->card_amount + $invoice->stc_amount;
+                              $gained_money_for_today_sales +=  $invoice->cash_amount + $invoice->card_amount + $invoice->stc_amount;
+                        ?>
+                        @endif
+                      @elseif($invoice->dailyReports()->count()>0) {{-- prvious invoices --}}
+                        @if($invoice->status == 'delivered')
+                          <?php $gained_money+= ($invoice->cash_amount - $invoice->invoiceProcesses[0]->cash_amount) + ($invoice->card_amount - $invoice->invoiceProcesses[0]->card_amount) + ($invoice->stc_amount - $invoice->invoiceProcesses[0]->stc_amount) ?>
+                        @endif
+                      @endif
+                      @endforeach
+                      <td style="font-weight: bold">{{__('reports.number_of_invoices')}}  {{$today_invoices_count}}</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <tr>
+                      <td>{{__('dashboard.delivered')}} {{$delivered}}</td>
+                      <td>{{__('dashboard.hanging')}} {{$pending}}</td>
+                      <td>{{__('dashboard.retrieved')}} {{$retrieved}}</td>
+                      <td>{{__('reports.deleted')}} {{$deleted}}</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td> {{__('reports.pending_money_thisday_sales')}} {{$pending_money}}</td>
+                      <td> {{__('reports.total_gained_money')}} {{$gained_money}}</td>
+                      <td>    {{__('reports.thisday_gained_money_sales')}}  {{$gained_money_for_today_sales}}</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
                     
                     <tr class="price">
                      {{--  <td>
@@ -215,6 +296,7 @@ input[type=number] {
           <div class="card-header card-header-warning">
             <h4 class="card-title">    {{__('reports.previous_inv_edited_today')}} 
             </h4>
+            <td style="font-weight: bold;">{{__('reports.number_of_invoices')}}  {{$prev_invoices_count}}</td>
           </div>
           <div class="card-body">
             <div class="table-responsive">

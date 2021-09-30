@@ -72,5 +72,9 @@ return [
     'basic_prescription' => 'الوصفة الاساسية',
     'new_prescription' => 'وصفة جديدة',
     'all' => 'الكل',
+    'register_invoice' => 'تسجيل فاتورة',
+    'by_specific_date' => 'بتاريخ محدد',
+    'plz_input_date_invoice' => 'من فضلك أدخل تاريخ الفاتورة',
+    'inv_not_belong_to_todays_invoices' => 'الفاتورة لا تنتمي لفواتير اليوم الحالي',
 ];
 ?>

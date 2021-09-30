@@ -225,6 +225,28 @@
           </a>
           </div>
 
+          @can('انشاء فاتورة مشتريات')
+          <div class="col-lg-3 col-md-6 col-sm-6">
+            <form action="{{route('purchase.add',$repository->id)}}" method="GET">
+              @csrf
+              <input type="hidden" name="old" value="yes">
+            <div onClick="javascript:this.parentNode.submit();" class="card card-stats">
+              <div class="card-header card-header-primary card-header-icon">
+                <div class="card-icon">
+                <i class="material-icons">pending_actions</i>
+                </div>
+                <p class="card-category">{{__('sales.register_invoice')}}</p>
+                <h6 class="card-title">{{__('sales.by_specific_date')}}</h6>
+              </div>
+              <div class="card-footer">
+                <div class="stats">
+                  <i class="material-icons">update</i>
+                </div>
+              </div>
+            </div>
+            </form>
+          </div>
+          @endcan
 
            </div>
          

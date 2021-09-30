@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\MonthlyReport;
 use App\Purchase;
 use App\PurchaseProduct;
 use App\PurchaseRecord;
 use App\Repository;
 use App\Supplier;
 use App\User;
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -22,7 +25,9 @@ class PurchaseController extends Controller
         return view('manager.Purchases.index')->with(['repository'=>$repository]);    
     }
 
-    public function add($id){
+  
+
+    public function add(Request $request,$id){
         $repository = Repository::find($id);
         // code generate
         do{
@@ -37,7 +42,11 @@ class PurchaseController extends Controller
             while($purchase);   // if the code exists before we generate new code
             //$suppliers = $repository->suppliers;
             $suppliers = Supplier::whereHas("repositories", function($q) use ($repository){ $q->where("repositories.id",$repository->id ); })->get();
-            return view('manager.Purchases.add')->with(['repository'=>$repository,'code'=>$code,'suppliers'=>$suppliers]);
+            $custom_date = false;
+            if($request->old){
+                $custom_date = true;
+            }
+            return view('manager.Purchases.add')->with(['repository'=>$repository,'code'=>$code,'suppliers'=>$suppliers,'custom_date'=>$custom_date]);
     }
 
     public function addSupplier($id){
@@ -143,11 +152,9 @@ class PurchaseController extends Controller
         return back()->with('success',__('alerts.create_new_purchase_success'));
     }  */
 
-    public function storePurchase(Request $request , $id){
+     public function storePurchase(Request $request , $id){
 
-        /*$validated = $request->validate([
-            'supplier_id' => 'required',
-        ]);*/
+        
         $rules = [
             'supplier_id' => 'required',
         ];
@@ -213,7 +220,119 @@ class PurchaseController extends Controller
             }
         }
         return back()->with('success',__('alerts.create_new_purchase_success'));
+    }  
+
+    public function storeOldPurchase(Request $request , $id){
+
+        /*$validated = $request->validate([
+            'supplier_id' => 'required',
+        ]);*/
+        $rules = [
+            'supplier_id' => 'required',
+            'date' => 'required',
+        ];
+    
+        $customMessages = [
+            'supplier_id.required' => __('settings.must_select_supplier'),
+            'date.required' => 'عليك اختيار التاريخ',
+        ];
+    
+        $this->validate($request, $rules, $customMessages);
+        //  variable will check if the invoice has all false barcodes so we dont create it
+        $actual_records = 0;
+        $repository = Repository::find($id);
+        $statistic = $repository->statistic;
+        $daily_report_check = true;
+        $monthly_report_check = true;
+        if($request->date){   // register old invoice form
+            $input_date = new DateTime();
+            $input_date = date("Y-m", strtotime($request->date));
+            if ($input_date === now()->format('Y-m'))  // IMPORTANT
+                $monthly_report_check = false;              
+            if(!$request->old_purchase)
+                $daily_report_check = false;
+        }
+        
+        if($request->pay=='later')
+            $payment = 'later';
+        else // cash has two options
+            {
+                if($request->cash_option=='cashier'){
+                    $payment = 'cashier';
+                    if(!$daily_report_check){
+                        $repository->update([
+                        'balance' => $repository->balance - $request->sum,
+                        ]);
+                        $statistic->update([
+                            'd_out_cashier' => $statistic->d_out_cashier + $request->sum,
+                        ]);
+                    }
+                }
+                else{
+                    $payment = 'external';
+                    if(!$daily_report_check)
+                        $statistic->update([
+                            'd_out_external' => $statistic->d_out_external + $request->sum,
+                        ]);
+                    }
+            }
+
+            $purchase = new Purchase();
+            $purchase->timestamps = false;   // temporary insert custom timestamps values
+            $purchase->repository_id = $repository->id;
+            $purchase->user_id = Auth::id();
+            $purchase->supplier_id = $request->supplier_id;
+            $purchase->code = $request->code;
+            $purchase->supplier_invoice_num = $request->supplier_invoice_num;
+            $purchase->total_price = $request->sum;
+            $purchase->payment = $payment;
+            $purchase->daily_report_check = $daily_report_check;
+            $purchase->monthly_report_check = $monthly_report_check;
+            $purchase->created_at = $request->date;
+            $purchase->updated_at = $request->date;
+            $purchase->save();
+
+            if($monthly_report_check == true){     // مأخوذة في شهر سابق لذلك علينا  اضافة هذه الفاتورة مع التقرير القديم
+                // get the monthly report
+                $temp_date = new DateTime();
+                $temp_date = date("Y-m-d H:i:s", strtotime($request->date));
+                $temp_date = Carbon::createFromFormat('Y-m-d H:i:s', $temp_date);
+                //return $input_date->year;
+                $report = MonthlyReport::where('repository_id',$repository->id)->whereYear('created_at', '=', $temp_date->year)
+                    ->whereMonth('created_at','=',$temp_date->month)->first();
+                if($report){
+                    if($purchase->payment == 'cashier')
+                        $report->update([
+                            'out_cashier' => $report->out_cashier + $purchase->total_price,
+                        ]);
+                    elseif($purchase->payment == 'external')
+                        $report->update([
+                            'out_external' => $report->out_external + $purchase->total_price,
+                        ]);
+                $report->purchases()->attach($purchase->id);
+                }
+            }
+       
+        $count = count($request->barcode);
+        for($i=0;$i<$count;$i++){
+            if($request->barcode[$i]){  // record exist (inserted)
+                $product = PurchaseProduct::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->first();
+                if($product)  // the barcode is right
+                {   
+                    PurchaseRecord::create([
+                        'purchase_id' => $purchase->id,
+                        'barcode' => $request->barcode[$i],
+                        'name' => $request->name[$i],
+                        'quantity' => $request->quantity[$i],
+                        'price' => $request->price[$i],
+                    ]);
+                   
+                }
+            }
+        }
+        return back()->with('success',__('alerts.create_new_purchase_success'));
     }
+    
 
 
     public function showPurchases($id){

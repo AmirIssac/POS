@@ -72,5 +72,9 @@ return [
     'basic_prescription' => 'Basic prescription',
     'new_prescription' => 'New prescription',
     'all' => 'All',
+    'register_invoice' => 'Register invoice',
+    'by_specific_date' => 'By specific date',
+    'plz_input_date_invoice' => 'Please input the invoice date',
+    'inv_not_belong_to_todays_invoices' => 'Invoice Not belong to the invoices of current day',
 ];
 ?>

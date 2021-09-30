@@ -51,11 +51,20 @@ form #tooltip:hover{
 @endif
     <div class="container-fluid">
       <div class="row">
-        <form method="POST" action="{{route('store.purchase',$repository->id)}}">
+        @if($custom_date)
+        <form method="POST" action="{{route('store.old.purchase',$repository->id)}}">
             @csrf
+        @else
+        <form method="POST" action="{{route('store.purchase',$repository->id)}}">
+          @csrf
+        @endif
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header card-header-primary">
+                  @if($custom_date)
+                  {{__('sales.plz_input_date_invoice')}}   
+                  <input type="datetime-local" name="date">
+                  @endif
                   <h4 class="card-title "></h4>
                 </div>
                 <div class="card-body">
@@ -93,6 +102,14 @@ form #tooltip:hover{
                             <td>  {{__('purchases.supplier_invoice_num')}} </td>
                             <td><input type="text" name="supplier_invoice_num" class="form-control" value="{{old('supplier_invoice_num')}}" placeholder="{{__('purchases.supplier_invoice_num')}}"></td>
                           </tr>
+                          @if($custom_date)
+                          <tr>
+                            <td>{{__('sales.inv_not_belong_to_todays_invoices')}}</td>
+                            <td>
+                              <input type="checkbox" name="old_purchase" value="yes" checked>
+                            </td>
+                          </tr>
+                          @endif
                          </div>
                       </tbody>
                     </table>

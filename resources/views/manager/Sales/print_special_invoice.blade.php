@@ -40,11 +40,7 @@
   hr{
     border: 1px solid black;
   }
-  /*#print-content {
-    position: absolute;
-    left: 0;
-    top: 0;
-  }*/
+  
 }
 #prescription{
   display: flex;
@@ -72,8 +68,13 @@
         <a href="{{route('show.pending',$repo_id)}}" class="btn btn-danger">لا</a>
         <a id="print" onclick="window.print();" href="{{route('show.pending',$repo_id)}}" class="btn btn-primary">نعم</a>
         @else {{-- sell invoice for first time --}}
+        @if(isset($saving_old_invoice))
+        <a href="{{route('sales.index',$repo_id)}}" class="btn btn-danger">لا</a>
+        <a id="print" onclick="window.print();" href="{{route('sales.index',$repo_id)}}" class="btn btn-primary">نعم</a>
+        @else
         <a href="{{route('create.special.invoice',$repo_id)}}" class="btn btn-danger">لا</a>
         <a id="print" onclick="window.print();" href="{{route('create.special.invoice',$repo_id)}}" class="btn btn-primary">نعم</a>
+        @endif
         @endif
       </div>
     </div>

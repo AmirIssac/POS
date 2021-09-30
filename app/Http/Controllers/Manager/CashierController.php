@@ -57,7 +57,7 @@ class CashierController extends Controller
         $now = now();
         $created_at = $dailyReport->created_at;
         $hours = $now->diffInHours($created_at);   // the number of hours between last daily report and NOW
-        if($hours < 2){
+        if($hours < 2){ 
              $dailyReport->update([
                 'user_id' => $user->id,
                 'cash_balance' => $request->cash_balance,
@@ -71,6 +71,7 @@ class CashierController extends Controller
                 'stc_plus' => $dailyReport->stc_plus + $request->stcPos,
                 'out_cashier' => $dailyReport->out_cashier + $out_cashier,
                 'out_external' => $dailyReport->out_external + $out_external,
+                'box_balance' => $repository->balance,
             ]);
         }
         else{
@@ -89,6 +90,7 @@ class CashierController extends Controller
                     'stc_plus' => $request->stcPos,
                     'out_cashier' => $out_cashier,
                     'out_external' => $out_external,
+                    'box_balance' => $repository->balance,
                 ]
                 );
         }
@@ -109,6 +111,7 @@ class CashierController extends Controller
                 'stc_plus' => $request->stcPos,
                 'out_cashier' => $out_cashier,
                 'out_external' => $out_external,
+                'box_balance' => $repository->balance,
             ]
             );
         }

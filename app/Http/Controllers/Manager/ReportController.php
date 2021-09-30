@@ -146,7 +146,8 @@ class ReportController extends Controller
     public function reportDetailsCurrentDay($id){   // for current dynamic day (( not created report yet))
         $repository = Repository::find($id);
         $invoices = $repository->invoices()->where('daily_report_check',false)->get();
-        return view('manager.Reports.current_day_details')->with(['invoices'=>$invoices,'repository'=>$repository]);
+        $purchases = $repository->purchases()->where('daily_report_check',false)->get();  //لعرض قيمة المشتريات حتى في تقرير المبيعات
+        return view('manager.Reports.current_day_details')->with(['invoices'=>$invoices,'repository'=>$repository,'purchases'=>$purchases]);
     }
     public function reportPurchaseDetailsCurrentDay($id){   // for current dynamic day (( not created report yet))
         $repository = Repository::find($id);
@@ -185,7 +186,7 @@ class ReportController extends Controller
     } */
 
     public function makeMonthlyReport($id){
-        ini_set('max_execution_time', 300);
+        ini_set('max_execution_time', 500);
         $repository = Repository::find($id);
         $user = User::find(Auth::user()->id);   // worker
         $invoices = $repository->invoices()->where('monthly_report_check',false)->whereYear('created_at','=', now()->year)

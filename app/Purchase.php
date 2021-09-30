@@ -10,6 +10,13 @@ class Purchase extends Model
     protected $fillable = [
         'repository_id','user_id','supplier_id','code','supplier_invoice_num','total_price','payment','status','daily_report_check','monthly_report_check',
     ];
+    /*
+    public function setCreatedAt($value)
+    {
+      return NULL;
+    }
+    */
+
     public function purchaseRecords(){
         return $this->hasMany(PurchaseRecord::class);
     }

@@ -254,6 +254,11 @@
       @else
       <input type="hidden" value="false" id="is-completing">
       @endif
+      @if(isset($saving_old_invoice))
+      <input type="hidden" value="true" id="old-invoice">
+      @else
+      <input type="hidden" value="false" id="old-invoice">
+      @endif
       <script
   src="https://code.jquery.com/jquery-3.6.0.min.js"
   integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
@@ -280,15 +285,22 @@
               else{
                   window.print();
                   window.onafterprint = function(){
+                  if($('#old-invoice').val()=='false')
                   window.location.href = "/create/special/invoice/form/"+repo_id;
+                  else
+                  window.location.href = "/sales/"+repo_id;
                   }
               }
           }
           else{
             if(is_completing == 'true')
                window.location.href = "/show/pending/invoices/"+repo_id;
-            else
-               window.location.href = "/create/special/invoice/form/"+repo_id;
+            else{
+                  if($('#old-invoice').val()=='false')
+                  window.location.href = "/create/special/invoice/form/"+repo_id;
+                  else
+                  window.location.href = "/sales/"+repo_id;
+            }
           }
         }
       </script>

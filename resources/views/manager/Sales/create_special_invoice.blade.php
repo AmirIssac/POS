@@ -177,8 +177,14 @@ select{
   @endif
   
   <div  class="container-fluid">
-    <form method="GET" action="{{route('create.special.invoice',$repository->id)}}">
-      @csrf
+           @if(isset($date) && $date == 'custom')
+           <form method="GET" action="{{route('create.old.special.invoice',$repository->id)}}">
+            @csrf
+            <input type="hidden" name="old" value="yes">
+            @else
+            <form method="GET" action="{{route('create.special.invoice',$repository->id)}}">
+              @csrf
+            @endif
     <div class="row">
 
      {{-- <form method="GET" action="{{route('create.special.invoice',$repository->id)}}">
@@ -342,8 +348,13 @@ select{
   
 {{--<form action="{{route('sell.special.invoice',$repository->id)}}" method="POST">--}}
   <div id="print-content">
-<form id="sell-form" action="{{route('sell.special.invoice',$repository->id)}}" method="POST">
-  @csrf
+    @if(isset($date) && $date == 'custom')
+           <form id="sell-form" action="{{route('save.old.special.invoice',$repository->id)}}" method="POST">
+            @csrf
+            @else
+            <form id="sell-form" action="{{route('sell.special.invoice',$repository->id)}}" method="POST">
+            @csrf
+    @endif
   <div class="col-md-12">
     
     <button class="btn btn-secondary dropdown-toggle" type="button" id="toggle-recipe" >
@@ -1056,7 +1067,12 @@ select{
               العميل<input type="text" name="customer_name" id="customer_name" value="{{isset($customer_name)?$customer_name:''}}" readonly>
               الجوال<input type="text" name="customer_phone" id="customer_phone" value="{{isset($phone)?$phone:''}}" readonly>
             </h4>--}}
+            @if(isset($date) && $date == 'custom')
+            <h4>{{__('sales.plz_input_date_invoice')}}</h4>
+            <input type="datetime-local" name="date" class="form-control">
+            @else
             <input style="display: none" type="text" name="date" value="{{isset($date)?$date:''}}" readonly>
+            @endif
             <input style="display: none" type="text" name="customer_phone" id="customer_phone" value="{{isset($phone)?$phone:''}}" readonly>
             <input type="hidden" name="customer_name" id="customerN" value="{{isset($customer_name)?$customer_name:''}}">
           </div>
@@ -1288,6 +1304,10 @@ select{
           </div>
           <h4>{{__('sales.note')}}</h4>
           <input type="text" name="note" placeholder="{{__('sales.type_note')}}" class="form-control">
+          @if(isset($date) && $date == 'custom')
+          <h4>{{__('sales.inv_not_belong_to_todays_invoices')}}</h4>
+          <input type="checkbox" name="old_invoice" value="yes" checked>
+          @endif
           <div>
 
 

@@ -50,5 +50,11 @@ return [
     'offline' => 'Offline',
     'last_logout' => 'Last seen',
     'multiple' => 'Multiple',
+    'number_of_invoices' => 'Number of invoices',
+    'pending_money_thisday_sales' => 'Pending money for this day sales',
+    'close_date' => 'Close date',
+    'total_gained_money' => 'Total Gained money this day',
+    'thisday_gained_money_sales' => 'Gained money for this day sales',
+    'money_in_box' => 'Money in box',
 ];
 ?>

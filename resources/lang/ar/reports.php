@@ -50,5 +50,11 @@ return [
     'offline' => 'غير متصل',
     'last_logout' => 'آخر ظهور في',
     'multiple' => 'متعددة',
+    'number_of_invoices' => 'عدد الفواتير',
+    'pending_money_thisday_sales' => 'الاموال المعلقة لمبيعات هذا اليوم',
+    'close_date' => 'تاريخ الاغلاق',
+    'total_gained_money' => 'الاموال المحصلة الاجمالية لهذا اليوم',
+    'thisday_gained_money_sales' => 'الاموال المحصلة لمبيعات هذا اليوم',
+    'money_in_box' => 'المبلغ المتوفر في الضصندوق',
 ];
 ?>
