@@ -1199,6 +1199,26 @@ class SellController extends Controller
                 ]);
                 $report->invoices()->attach($invoice->id);
                 }
+                else{  // لا يوجد تقرير شهري يوافق تاريخ الفاتورة فسننشئ تقرير شهري لنفس شهر الفاتورة وننسبها له
+                    $user_id = Auth::id();
+                    $temp_date2 = new DateTime();
+                    $temp_date2 = date("Y-m-d H:i:s", strtotime($request->date));
+                    $temp_date2 = Carbon::createFromFormat('Y-m-d H:i:s', $temp_date2);            
+                    $report_date =    \Carbon\Carbon::parse($temp_date2)->endOfMonth();
+                    $rep = new MonthlyReport();
+                    $rep->timestamps = false;   // temporary insert custom timestamps values
+                    $rep->repository_id = $repository->id;
+                    $rep->user_id = $user_id;
+                    $rep->cash_balance = $invoice->cash_amount;
+                    $rep->card_balance = $invoice->card_amount;
+                    $rep->stc_balance = $invoice->stc_amount;
+                    $rep->out_cashier = 0;
+                    $rep->out_external = 0;
+                    $rep->created_at = $report_date;
+                    $rep->updated_at = $report_date;
+                    $rep->save();
+                    $rep->invoices()->attach($invoice->id);
+                }
             }
             
             // we dont save the recipes in the saved recipe table cause its an old invoice

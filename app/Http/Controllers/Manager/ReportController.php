@@ -189,20 +189,18 @@ class ReportController extends Controller
         ini_set('max_execution_time', 500);
         $repository = Repository::find($id);
         $user = User::find(Auth::user()->id);   // worker
-        $invoices = $repository->invoices()->where('monthly_report_check',false)->whereYear('created_at','=', now()->year)
-        ->whereMonth('created_at','=',now()->month)->get();  // the invoices that will taken in monthly report
-        /*$cash_amount = $repository->invoices()->where('status','!=','retrieved')->where('monthly_report_check',false)->whereYear('created_at','=', now()->year)
-        ->whereMonth('created_at','=',now()->month)->sum('cash_amount');
-        $card_amount = $repository->invoices()->where('status','!=','retrieved')->where('monthly_report_check',false)->whereYear('created_at','=', now()->year)
-        ->whereMonth('created_at','=',now()->month)->sum('card_amount');
-        $stc_amount = $repository->invoices()->where('status','!=','retrieved')->where('monthly_report_check',false)->whereYear('created_at','=', now()->year)
-        ->whereMonth('created_at','=',now()->month)->sum('stc_amount');*/
+       /* $invoices = $repository->invoices()->where('monthly_report_check',false)->whereYear('created_at','=', now()->year)
+        ->whereMonth('created_at','=',now()->month)->get();*/  // the invoices that will taken in monthly report
+        $invoices = $repository->invoices()->where('monthly_report_check',false)
+        ->get();
         $cash_amount = $repository->statistic->m_in_cash_balance;
         $card_amount = $repository->statistic->m_in_card_balance;
         $stc_amount = $repository->statistic->m_in_stc_balance;
 
-        $purchases = $repository->purchases()->where('monthly_report_check',false)->whereYear('updated_at','=',now()->year)
-        ->whereMonth('updated_at','=',now()->month)->get();
+        /*$purchases = $repository->purchases()->where('monthly_report_check',false)->whereYear('updated_at','=',now()->year)
+        ->whereMonth('updated_at','=',now()->month)->get();*/
+        $purchases = $repository->purchases()->where('monthly_report_check',false)
+        ->get();
         $out_cashier = 0 ;
         $out_external = 0 ;
         foreach($purchases as $purchase){

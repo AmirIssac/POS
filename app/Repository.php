@@ -303,6 +303,12 @@ class Repository extends Model
        $invoices = $this->invoices()->where('status','!=','retrieved')->
        where('status','!=','deleted')->where('daily_report_check',false)
        ->doesntHave('dailyReports')->get();
+       /*$invoices = $this->invoices()->where('status','!=','retrieved')->
+       where('status','!=','deleted')->where('daily_report_check',false)
+       ->where(function($query){
+       $query->doesntHave('dailyReports')->orWhere(function($q){
+       $q->doesntHave('monthlyReports');});
+       })->get();*/
         foreach($invoices as $invoice){
             $today_sales += $invoice->total_price;
         }

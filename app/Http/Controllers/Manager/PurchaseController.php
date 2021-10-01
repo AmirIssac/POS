@@ -311,6 +311,36 @@ class PurchaseController extends Controller
                         ]);
                 $report->purchases()->attach($purchase->id);
                 }
+                else{  // لا يوجد تقرير شهري يوافق تاريخ الفاتورة فسننشئ تقرير شهري لنفس شهر الفاتورة وننسبها له
+                    $user_id = Auth::id();
+                    $temp_date2 = new DateTime();
+                    $temp_date2 = date("Y-m-d H:i:s", strtotime($request->date));
+                    $temp_date2 = Carbon::createFromFormat('Y-m-d H:i:s', $temp_date2);            
+                    $report_date =    \Carbon\Carbon::parse($temp_date2)->endOfMonth();
+                    $rep = new MonthlyReport();
+                    $rep->timestamps = false;   // temporary insert custom timestamps values
+                    $rep->repository_id = $repository->id;
+                    $rep->user_id = $user_id;
+                    $rep->cash_balance = 0;
+                    $rep->card_balance = 0;
+                    $rep->stc_balance = 0;
+                    if($purchase->payment == 'cashier'){
+                        $rep->out_cashier = $purchase->total_price;
+                        $rep->out_external = 0;
+                    }
+                    elseif($purchase->payment == 'external'){
+                        $rep->out_cashier = 0;
+                        $rep->out_external = $purchase->total_price;
+                    }
+                    else{ // later
+                        $rep->out_cashier = 0;
+                        $rep->out_external = 0;
+                    }
+                    $rep->created_at = $report_date;
+                    $rep->updated_at = $report_date;
+                    $rep->save();
+                    $rep->purchases()->attach($purchase->id);
+                }
             }
        
         $count = count($request->barcode);
