@@ -8,6 +8,7 @@ use App\PermissionCategory;
 use App\Repository;
 use App\Type;
 use App\User;
+use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,10 +17,28 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Twilio\Rest\Client as RestClient;
 
 class SettingsController extends Controller
 {
     //
+
+    public function sendMessage(){
+        $sid =   env("TWILIO_ACCOUNT_SID");
+        $token = env("TWILIO_AUTH_TOKEN");
+        $twilio = new RestClient($sid, $token);
+        $message = $twilio->messages
+                  ->create("whatsapp:+966509016572", // to
+                           [
+                               "from" => "whatsapp:+14155238886",
+                               "body" => "مرحبا عبد الله انا امير اخاطبك من التطبيق "
+                           ]
+                  );
+
+            print($message->sid);
+    }
+
+
 
     public function index($id){
       /*  $user = Auth::user();
@@ -306,4 +325,6 @@ class SettingsController extends Controller
         $repository = Repository::find($id);
         return view('manager.Settings.print_settings')->with(['repository'=>$repository]);
     }
+
+    
 }

@@ -87,4 +87,6 @@ class HomeController extends Controller
             return view('manager.Dashboard.worker_index')->with(['repository'=>$repository]);
         }
     } 
+
+   
 }

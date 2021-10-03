@@ -10,6 +10,7 @@ use App\Repository;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Twilio\Rest\Client;
 
 class CashierController extends Controller
 {
@@ -117,6 +118,23 @@ class CashierController extends Controller
         }
             // all invoices not taked by DailyReport Yet..
         $invoices = Invoice::where('repository_id',$repository->id)->where('daily_report_check',false)->get();
+        
+        /* ------ */
+        /*
+        // take the invoices that we want use today sales in whatsapp message before (attach)
+        $whatsapp_invoices = $repository->invoices()->where('status','!=','retrieved')->
+        where('status','!=','deleted')->where('daily_report_check',false)
+        ->doesntHave('dailyReports')->get();
+        $today_sales = 0 ;
+        $today_purchase = 0 ;
+        foreach($whatsapp_invoices as $whatsapp_invoice){
+            $today_sales += $whatsapp_invoice->total_price;
+        }
+        $whatsapp_purchases = $repository->purchases()->where('status','!=','retrieved')->where('daily_report_check',false)->doesntHave('dailyReports')->get();
+        foreach($whatsapp_purchases as $pur){
+            $today_purchase += $pur->total_price;
+        }*/
+            /*-----*/
         foreach($invoices as $invoice){
         $dailyReport->invoices()->attach($invoice->id);
         $invoice->update(
@@ -150,6 +168,27 @@ class CashierController extends Controller
             'd_out_cashier' => 0,
             'd_out_external' => 0,
         ]);
+
+        /*
+        // send whatsapp notification
+        $sid =   env("TWILIO_ACCOUNT_SID");
+        $token = env("TWILIO_AUTH_TOKEN");
+        $twilio = new Client($sid, $token);
+        // get the owner phone number
+        $owner = User::whereHas('repositories', function ($query) use ($repository) {
+            $query->where('repositories.id',$repository->id);
+        })->role('مالك-مخزن')->first();
+        $phone_number = $owner->phone;
+        $note = ' تم اغلاق الكاشير في متجرك '.$repository->name.' فرع '.$repository->address.' | بتاريخ '.$dailyReport->updated_at.' | موظف الاغلاق '.$user->name.' | باجمالي مبيعات '.$today_sales.' | ومشتريات '.$today_purchase;
+        $message = $twilio->messages
+                  ->create("whatsapp:$phone_number", // to
+                           [
+                               "from" => "whatsapp:+14155238886",
+                               "body" => $note,
+                           ]
+                  );
+        */
+                  
             //return redirect()->route('cashier.index', ['success' => 'تم إغلاق الكاشير اليومي بنجاح']);
             return redirect()->route('daily.reports.index',$repository->id)->with('success',__('alerts.cashier_closed_success'));
         }

@@ -3,6 +3,7 @@
 namespace App;
 
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Database\Eloquent\Model;
 
 class Repository extends Model
@@ -296,26 +297,39 @@ class Repository extends Model
         }
     }
 
-    public function todaySales(){
+   /* public function todaySales(){
         $today_sales = 0;
        // $invoices = $this->invoices()->where('status','!=','retrieved')->where('transform','!=','p-d')->where('daily_report_check',false)->get();
        //$invoices = $this->invoices()->where('status','!=','retrieved')->where('daily_report_check',false)->get();
        $invoices = $this->invoices()->where('status','!=','retrieved')->
        where('status','!=','deleted')->where('daily_report_check',false)
        ->doesntHave('dailyReports')->get();
-       /*$invoices = $this->invoices()->where('status','!=','retrieved')->
-       where('status','!=','deleted')->where('daily_report_check',false)
-       ->where(function($query){
-       $query->doesntHave('dailyReports')->orWhere(function($q){
-       $q->doesntHave('monthlyReports');});
-       })->get();*/
         foreach($invoices as $invoice){
+            $today_sales += $invoice->total_price;
+        }
+        return $today_sales;
+    } */
+
+    public function todaySales(){
+        $today_sales = 0;
+       $invoices = $this->invoices()->where('status','!=','retrieved')->
+       where('status','!=','deleted')->where('daily_report_check',false)
+       ->doesntHave('dailyReports')->get();
+        foreach($invoices as $invoice){
+            // we must handle if this invoice has old register invoice by custom date so it doesnt have dailyreport but it must not taken by todaysales
+            if($invoice->invoiceProcesses()->count()>0){
+                $old_date = Carbon::createFromFormat('Y-m-d H:i:s', $invoice->invoiceProcesses[0]->created_at);
+                $current_date = Carbon::createFromFormat('Y-m-d H:i:s', $invoice->created_at);
+                $temp = $current_date->diff($old_date);  // عدد الايام بين تعديل الفاتورة اليوم ودورة حياتها السابقة
+                if($temp->d > 1)
+                    continue;
+            }
             $today_sales += $invoice->total_price;
         }
         return $today_sales;
     }
 
-    public function monthSales(){
+    /*public function monthSales(){
        $month_sales = 0;
        $invoices = $this->invoices()->where('status','!=','retrieved')->
        where('status','!=','deleted')->where('monthly_report_check',false)
@@ -325,7 +339,30 @@ class Repository extends Model
             $month_sales += $invoice->total_price;
         }
         return $month_sales;
-    }
+    }*/
+
+    public function monthSales(){
+        $month_sales = 0;
+        $invoices = $this->invoices()->where('status','!=','retrieved')->
+        where('status','!=','deleted')->where('monthly_report_check',false)
+        ->whereYear('created_at',now()->year)->whereMonth('created_at',now()->month)
+        ->get();
+         foreach($invoices as $invoice){
+             //يجب علينا ان نختبر في حال كانت الفاتورة مستكملة هذا الشهر ولكنها منشئة الشهر الماضي فلا يجب حسابها من مبيعات الشهر هذا
+             if($invoice->invoiceProcesses()->count()>0)
+             {
+                 $old_process_date = $invoice->invoiceProcesses[0]->created_at;
+                 $old_process_date = Carbon::createFromFormat('Y-m-d H:i:s', $old_process_date); 
+                 if($old_process_date->month == now()->month && $old_process_date->year == now()->year) {         
+                 $month_sales += $invoice->total_price;
+                 continue;
+                 }
+             }
+             else
+                 $month_sales += $invoice->total_price;
+         }
+         return $month_sales;
+     }
 
     public function yearSales(){
         $year_sales = 0;
@@ -394,10 +431,27 @@ class Repository extends Model
         return $purchases;
     }*/
 
+   /* public function todayPurchases(){
+        $purchases = 0 ;
+        $purchases_invoices = $this->purchases()->where('status','!=','retrieved')->where('daily_report_check',false)->doesntHave('dailyReports')->get();
+        foreach($purchases_invoices as $inv){
+            $purchases += $inv->total_price;
+        }
+        return $purchases;
+    } */
+
     public function todayPurchases(){
         $purchases = 0 ;
         $purchases_invoices = $this->purchases()->where('status','!=','retrieved')->where('daily_report_check',false)->doesntHave('dailyReports')->get();
         foreach($purchases_invoices as $inv){
+            // we must handle if this invoice has old register invoice by custom date so it doesnt have dailyreport but it payed in this day but must not taken by todaypurchases
+            if($inv->created_at != $inv->updated_at){
+                $old_date = Carbon::createFromFormat('Y-m-d H:i:s', $inv->created_at);
+                $current_date = Carbon::createFromFormat('Y-m-d H:i:s', $inv->updated_at);
+                $temp = $current_date->diff($old_date);  // عدد الايام بين تعديل الفاتورة اليوم ودورة حياتها السابقة
+                if($temp->d > 1)
+                    continue;
+            }
             $purchases += $inv->total_price;
         }
         return $purchases;
