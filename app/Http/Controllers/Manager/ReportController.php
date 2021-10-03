@@ -111,7 +111,6 @@ class ReportController extends Controller
         //return view('manager.Sales.show_pending_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
         return view('manager.Reports.show_invoices')->with(['repository'=>$repository,'invoices'=>$invoices]);
     }
-
     public function viewCustomerInvoices(Request $request,$id){
         $customer = Customer::find($id);
         $repository = Repository::find($request->repo_id);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Manager;
 
 use App\Branch;
 use App\Customer;
+use App\DailyReport;
 use App\Http\Controllers\Controller;
 use App\Invoice;
 use App\InvoiceProcess;
@@ -1214,6 +1215,46 @@ class SellController extends Controller
                     $rep->stc_balance = $invoice->stc_amount;
                     $rep->out_cashier = 0;
                     $rep->out_external = 0;
+                    $rep->created_at = $report_date;
+                    $rep->updated_at = $report_date;
+                    $rep->save();
+                    $rep->invoices()->attach($invoice->id);
+                }
+            }
+
+            // check for dailyreports
+            if($daily_report_check == true){ 
+                $temp_date3 = new DateTime();
+                $temp_date3 = date("Y-m-d H:i:s", strtotime($request->date));
+                $temp_date3 = Carbon::createFromFormat('Y-m-d H:i:s', $temp_date3);
+                //return $input_date->year;
+                $day_report = DailyReport::where('repository_id',$repository->id)->whereYear('created_at', '=', $temp_date3->year)
+                    ->whereMonth('created_at','=',$temp_date3->month)->whereDay('created_at','=',$temp_date3->day)->first();
+                if($day_report){
+                    $day_report->invoices()->attach($invoice->id);
+                }
+                else{  // لا يوجد تقرير يومي يوافق تاريخ الفاتورة فسننشئ تقرير يومي شكلي لنفس يوم الفاتورة وننسبها له
+                    $user_id = Auth::id();
+                    $temp_date4 = new DateTime();
+                    $temp_date4 = date("Y-m-d H:i:s", strtotime($request->date));
+                    $temp_date4 = Carbon::createFromFormat('Y-m-d H:i:s', $temp_date4);            
+                    $report_date =    \Carbon\Carbon::parse($temp_date4)->endOfDay();
+                    $rep = new DailyReport();
+                    $rep->timestamps = false;   // temporary insert custom timestamps values
+                    $rep->repository_id = $repository->id;
+                    $rep->user_id = $user_id;
+                    $rep->cash_balance = 0;
+                    $rep->card_balance = 0;
+                    $rep->stc_balance = 0;
+                    $rep->cash_shortage = 0;
+                    $rep->card_shortage = 0;
+                    $rep->stc_shortage = 0;
+                    $rep->cash_plus = 0;
+                    $rep->card_plus = 0;
+                    $rep->stc_plus = 0;
+                    $rep->out_cashier = 0;
+                    $rep->out_external = 0;
+                    $rep->box_balance = 0;
                     $rep->created_at = $report_date;
                     $rep->updated_at = $report_date;
                     $rep->save();

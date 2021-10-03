@@ -297,7 +297,7 @@ class Repository extends Model
         }
     }
 
-   /* public function todaySales(){
+    public function todaySales(){
         $today_sales = 0;
        // $invoices = $this->invoices()->where('status','!=','retrieved')->where('transform','!=','p-d')->where('daily_report_check',false)->get();
        //$invoices = $this->invoices()->where('status','!=','retrieved')->where('daily_report_check',false)->get();
@@ -308,9 +308,9 @@ class Repository extends Model
             $today_sales += $invoice->total_price;
         }
         return $today_sales;
-    } */
+    }
 
-    public function todaySales(){
+   /* public function todaySales(){
         $today_sales = 0;
        $invoices = $this->invoices()->where('status','!=','retrieved')->
        where('status','!=','deleted')->where('daily_report_check',false)
@@ -327,7 +327,7 @@ class Repository extends Model
             $today_sales += $invoice->total_price;
         }
         return $today_sales;
-    }
+    } */
 
     /*public function monthSales(){
        $month_sales = 0;
@@ -431,16 +431,16 @@ class Repository extends Model
         return $purchases;
     }*/
 
-   /* public function todayPurchases(){
+    public function todayPurchases(){
         $purchases = 0 ;
         $purchases_invoices = $this->purchases()->where('status','!=','retrieved')->where('daily_report_check',false)->doesntHave('dailyReports')->get();
         foreach($purchases_invoices as $inv){
             $purchases += $inv->total_price;
         }
         return $purchases;
-    } */
+    }
 
-    public function todayPurchases(){
+   /* public function todayPurchases(){
         $purchases = 0 ;
         $purchases_invoices = $this->purchases()->where('status','!=','retrieved')->where('daily_report_check',false)->doesntHave('dailyReports')->get();
         foreach($purchases_invoices as $inv){
@@ -455,7 +455,7 @@ class Repository extends Model
             $purchases += $inv->total_price;
         }
         return $purchases;
-    }
+    } */
 
     public function monthPurchases(){
         $purchases = 0 ;

@@ -25,3 +25,4 @@ class DailyReport extends Model
         return $this->belongsToMany(Purchase::class,'daily_report_purchase');
     }
 }
+ 
