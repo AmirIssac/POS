@@ -1314,25 +1314,15 @@ select{
          
 
           <div id="buttons">
-            <button  id="submit" type="submit" class="btn btn-primary">{{__('buttons.confirm')}}</button>
+            @if(isset($date) && $date == 'custom')
+            <button  id="submit" type="submit" name="action" value="sell" class="btn btn-primary">{{__('buttons.confirm')}}</button>
+            @else
+            {{-- handle form by two different submit buttons and handle in controller --}}
+            <button  id="submit" type="submit" name="action" value="sell" class="btn btn-primary">{{__('buttons.confirm')}}</button>
+            <button type="submit" name="action" value="save" class="btn btn-success">{{__('buttons.save')}}</button>
+            @endif
           </form>
-            <form action="{{route('save.special.invoice',$repository->id)}}" method="POST">
-              @csrf
-              <div style="display: none;">
-              <input type="number" step="0.01" min="0" max="20" name="add_rs" required>
-              <input type="number" step="0.01" min="0" max="180" name="axis_rs" required>
-              <input type="number" step="0.01" min="-20" max="20" name="cyl_rs" required>
-              <input type="number" step="0.01" min="-20" max="20" name="sph_rs" required>
-              <input type="number" step="0.01" min="0" max="20" name="add_ls" required>
-              <input type="number" step="0.01" min="0" max="180" name="axis_ls" required>
-              <input type="number" step="0.01" min="-20" max="20" name="cyl_ls" required>
-              <input type="number" step="0.01" min="-20" max="20" name="sph_ls" required>
-              <input type="number" min="0" max="100" name="ipdvals">
-              <input type="text" name="customer_phone_s" value="{{isset($phone)?$phone:''}}">
-              <input type="text" name="customer_name_s" value="{{isset($customer_name)?$customer_name:''}}">
-              </div>
-              <button type="submit" class="btn btn-success" disabled>{{__('buttons.save')}}</button>
-            </form>
+            
             {{--<a onclick="PrintElem($('#print-content').attr('id'));" style="color: white" class="btn btn-success">حفظ</a>--}}
             <a href="{{route('create.special.invoice',$repository->id)}}" style="color: white;" class="btn btn-danger">{{__('buttons.cancel')}}</a>
           </div>
@@ -2112,37 +2102,7 @@ window.onload=function(){
         $('#badgecolor').removeClass('visible').addClass('hidden');
     });
   </script>
-  <script>  // save recipe
-
-   
-    $('select[name="add_r"]').on('change',function(){
-      $('input[name="add_rs"]').val($('select[name="add_r"]').val());
-    });
-    $('input[name="axis_r"]').on('change',function(){
-      $('input[name="axis_rs"]').val($('input[name="axis_r"]').val());
-    })
-    $('select[name="cyl_r"]').on('change',function(){
-      $('input[name="cyl_rs"]').val($('select[name="cyl_r"]').val());
-    });
-    $('select[name="sph_r"]').on('change',function(){
-      $('input[name="sph_rs"]').val($('select[name="sph_r"]').val());
-    });
-    $('select[name="add_l"]').on('change',function(){
-      $('input[name="add_ls"]').val($('select[name="add_l"]').val());
-    });
-    $('input[name="axis_l"]').on('change',function(){
-      $('input[name="axis_ls"]').val($('input[name="axis_l"]').val());
-    });
-    $('select[name="cyl_l"]').on('change',function(){
-      $('input[name="cyl_ls"]').val($('select[name="cyl_l"]').val());
-    });
-    $('select[name="sph_l"]').on('change',function(){
-      $('input[name="sph_ls"]').val($('select[name="sph_l"]').val());
-    });
-    $('input[name="ipdval"]').on('change',function(){
-      $('input[name="ipdvals"]').val($('input[name="ipdval"]').val());
-    });
-  </script>
+  
   <script>  // changing the name dynamically
     $('#customerName').on('keyup',function(){
         $('#customerN').val($(this).val());
