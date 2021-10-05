@@ -1081,15 +1081,7 @@ select{
               <table class="table table-c">
                 <thead class="text-primary">
                      
-                  {{--@if($repository->logo)
-                      <img src="{{asset('storage/'.$repository->logo)}}" width="100px" height="100px" alt="logo" id="logo">
-                      @else
-                     <span id="warning" class="badge badge-warning"> يرجى تعيين شعار المتجر من الإعدادات </span>
-                      @endif
-                    
-                      رقم الفاتورة <input type="text" name="code" id="code" value="{{isset($code)?$code:''}}" readonly>
-                      الرقم الضريبي  <input type="text" name="tax_code" id="tax_code" value="{{$repository->tax_code}}" readonly>
-                      --}}
+                
                       <input style="display: none" type="text" name="code" id="code" value="{{isset($code)?$code:''}}" readonly>
                   <th style="width: 20%">
                     Barcode  
@@ -1314,13 +1306,9 @@ select{
          
 
           <div id="buttons">
-            @if(isset($date) && $date == 'custom')
-            <button  id="submit" type="submit" name="action" value="sell" class="btn btn-primary">{{__('buttons.confirm')}}</button>
-            @else
             {{-- handle form by two different submit buttons and handle in controller --}}
             <button  id="submit" type="submit" name="action" value="sell" class="btn btn-primary">{{__('buttons.confirm')}}</button>
             <button type="submit" name="action" value="save" class="btn btn-success">{{__('buttons.save')}}</button>
-            @endif
           </form>
             
             {{--<a onclick="PrintElem($('#print-content').attr('id'));" style="color: white" class="btn btn-success">حفظ</a>--}}

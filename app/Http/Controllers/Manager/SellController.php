@@ -1114,6 +1114,617 @@ class SellController extends Controller
         // make sure we determine customer
         if(!$request->customer_phone || !$request->customer_name)
             return back()->with('failCustomer',__('alerts.input_customer_num'));
+        switch ($request->input('action')) {
+                case 'sell':
+                    // Sell model
+        if(!$request->date)
+            return back()->with('fail','يرجى تحديد تاريخ الفاتورة');
+        $repository = Repository::find($id);
+        // prevent user from selling the invoice twice by refreshing the printing page
+        $invoice = Invoice::where('repository_id',$repository->id)->where('code',$request->code)->first();
+        if($invoice)
+            return redirect(route('sales.index',$repository->id));
+        $count = count($request->barcode);
+        $count2 = count($request->del);
+        $delivered = true;
+        // check if hanging or delivered
+        if($count != $count2) // hanging
+        {
+            $delivered = false;
+        }
+        
+
+        $statistic = $repository->statistic;
+        // check
+        $daily_report_check = true; 
+       if(!$request->old_invoice){
+            $daily_report_check = false;    // غير مأخوذة سابقا في اغلاق الكاشير 
+            $repository->update(
+                [
+                    'cash_balance' => $repository->cash_balance + $request->cashVal,
+                    'card_balance' => $repository->card_balance + $request->cardVal,
+                    'stc_balance' => $repository->stc_balance + $request->stcVal,
+                    'balance' => $repository->balance + $request->cashVal,
+                ]
+                );
+       }
+        // check if this old invoice belong to the same current month or NOT
+        $input_date = new DateTime();
+        $input_date = date("Y-m", strtotime($request->date));
+        $monthly_report_check = true;
+        if ($input_date === now()->format('Y-m')){  // IMPORTANT
+            $monthly_report_check = false;  
+            $statistic->update([
+                'm_in_cash_balance' => $statistic->m_in_cash_balance + $request->cashVal,
+                'm_in_card_balance' => $statistic->m_in_card_balance + $request->cardVal,
+                'm_in_stc_balance' => $statistic->m_in_stc_balance + $request->stcVal,
+            ]);
+        }
+       
+        // store invoice in DB
+        // store details as array of arrays
+        $details = array(array());    // each array store details for one record (one product)
+        if($delivered){  // delivered
+        for($i=0;$i<$count;$i++){
+            if($request->barcode[$i]){
+            $record = array("barcode"=>$request->barcode[$i],"name_ar"=>$request->name[$i],"name_en"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"quantity"=>$request->quantity[$i],"delivered"=>$request->quantity[$i]);
+            $details[]=$record;
+            }
+        }
+        $details = serialize($details);
+        }
+        else{  // hanging
+            for($i=0;$i<$count;$i++){
+                if(in_array($i,$request->del)) // delivered Item
+                {
+                if($request->barcode[$i]){
+                $record = array("barcode"=>$request->barcode[$i],"name_ar"=>$request->name[$i],"name_en"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"quantity"=>$request->quantity[$i],"delivered"=>$request->quantity[$i]);
+                $details[]=$record;
+                }
+                }
+                else{  // hanging Item
+                    if($request->barcode[$i]){
+                    $record = array("barcode"=>$request->barcode[$i],"name_ar"=>$request->name[$i],"name_en"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"quantity"=>$request->quantity[$i],"delivered"=>0);
+                    $details[]=$record;
+                    }
+                }
+            }
+            $details = serialize($details);
+        }
+        if($delivered){
+            $status = "delivered";
+        }
+        else{
+            $status = "pending";
+        }
+        if($request->cash){
+            $cash = true;
+        }
+        else{
+            $cash = false;
+        }       
+        if($request->card){
+            $card = true;
+        }
+        else{
+            $card = false;
+        } 
+        if($request->stc){
+            $stc = true;
+        }
+        else{
+            $stc = false;
+        } 
+        if(!$request->cashVal){
+            $cashVal = 0;
+        }
+        else{
+            $cashVal = $request->cashVal;
+        }
+        if(!$request->cardVal){
+            $cardVal = 0;
+        }
+        else{
+            $cardVal = $request->cardVal;
+        }
+        if(!$request->stcVal){
+            $stcVal = 0;
+        }
+        else{
+            $stcVal = $request->stcVal;
+        }
+        
+        $recipe = array();
+        if($request->recipe_radio == 0){  // BASIC RECIPE
+            $recipe[] = array('add_r'=>$request->add_r,'axis_r'=>$request->axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
+                            'add_l'=>$request->add_l,'axis_l'=>$request->axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
+                            'ipd'=>$request->ipdval,);
+            }
+            else{  // additional recipe  from the index and going back   // beacuse the system changed and now the invoice may contain several recipes
+                $gg = $request->recipe_radio;
+                //$recipe = array();
+                do{
+                if($gg == 0){  // basic recipe we insert it in the begin
+                    array_unshift($recipe, array('add_r'=>$request->add_r,'axis_r'=>$request->axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
+                    'add_l'=>$request->add_l,'axis_l'=>$request->axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
+                    'ipd'=>$request->ipdval,));
+                }
+                else{
+                    $recipe[] = array('name'=>$request->recipe_name[$request->recipe_radio-$gg],'add_r'=>$request->add_r_arr[$request->recipe_radio-$gg],'axis_r'=>$request->axis_r_arr[$request->recipe_radio-$gg],'cyl_r'=>$request->cyl_r_arr[$request->recipe_radio-$gg],'sph_r'=>$request->sph_r_arr[$request->recipe_radio-$gg],
+                    'add_l'=>$request->add_l_arr[$request->recipe_radio-$gg],'axis_l'=>$request->axis_l_arr[$request->recipe_radio-$gg],'cyl_l'=>$request->cyl_l_arr[$request->recipe_radio-$gg],'sph_l'=>$request->sph_l_arr[$request->recipe_radio-$gg],
+                    'ipd'=>$request->ipdval_arr[$request->recipe_radio-$gg],);
+                }
+                $gg--;
+                }
+                while($gg >= 0);
+               // while($gg<=$request->recipe_radio || $gg == intval($request->recipe_radio)+1);
+            }
+            $recipe = serialize($recipe);
+
+        // get all branches for this repository to get customer archive from other sub repositories
+        $branch_id = $repository->branch_id;
+        $branch = Branch::find($branch_id);
+        $sub_repositories = $branch->repositories;    // جلبنا كل الافرع
+        
+        // search for customer if exists before or create new one
+        foreach($sub_repositories as $repository){
+            $customer = Customer::whereHas("repositories", function($q) use ($repository){ $q->where("repositories.id",$repository->id ); })->where('phone',$request->customer_phone)->first();
+            if($customer)
+                break;
+        }
+        $repository = Repository::find($id); // this repo
+        if($customer){ // exists
+            // check if this customer exist (in this sub repo)
+            //$c = $customer->whereHas("repositories", function($q) use ($repository){ $q->where("repositories.id",$repository->id ); })->get();
+            //if($c->count()>0){
+                $customers = $repository->customers;  // customers of this sub repo
+                if($customers->contains('id',$customer->id)){  // the customer exist in this sub repo before
+                $customer->update(
+                    [
+                        'points' => $customer->points + 1,
+                    ]
+                    );
+            }
+            else{
+                $repository->customers()->attach($customer->id);  // pivot table
+                $customer->update(
+                    [
+                        'points' => $customer->points + 1,
+                    ]
+                    );
+            }
+        } 
+        else{ // not exists before
+        $customer = Customer::create(
+            [
+                'name' => $request->customer_name,
+                'phone' => $request->customer_phone,
+                'points' => 1,
+            ]
+            );
+        $repository->customers()->attach($customer->id);  // pivot table
+        }
+
+        $remaining_amount = $request->total_price - ($cashVal + $cardVal + $stcVal); // for printing
+        // calculate the discount by changing price
+      $discount_by_change_price = 0;
+      for($i=0;$i<$count;$i++){
+        if($request->barcode[$i]){
+            $product = Product::where('repository_id',$repository->id)->where('barcode',$request->barcode[$i])->get();
+            if($product){
+            foreach($product as $prod){
+                $discount_by_change_price = $discount_by_change_price + (($prod->price - $request->price[$i]) * $request->quantity[$i]);
+            }
+            }
+        }   
+      }
+        $discounting = $request->discountVal + $request->discount_by_value + $discount_by_change_price;
+        
+       $invoice = Invoice::create(
+            [
+                'repository_id' => $id,
+                'user_id' => Auth::user()->id,
+                'customer_id' => $customer->id,
+                'code' => $request->code,
+                'details' => $details,
+                'recipe' => $recipe,
+                'total_price' => $request->total_price,
+                'discount' => $discounting,
+                'cash_check' => $cash,
+                'card_check' => $card,
+                'stc_check' => $stc,
+                'cash_amount' => $cashVal,
+                'card_amount' => $cardVal,
+                'stc_amount' => $stcVal,
+                'tax' => $request->taxprint,
+                'tax_code' => $repository->tax_code,
+                'status' => $status,
+                'phone' => $request->customer_phone,
+                'created_at' => $request->date,
+                'daily_report_check' => $daily_report_check,
+                'monthly_report_check' => $monthly_report_check,
+                'note' => $request->note,
+            ]
+            );
+
+            if($monthly_report_check == true){     // مأخوذة في شهر سابق لذلك علينا  اضافة هذه الفاتورة مع التقرير القديم
+                // get the monthly report
+                $temp_date = new DateTime();
+                $temp_date = date("Y-m-d H:i:s", strtotime($request->date));
+                $temp_date = Carbon::createFromFormat('Y-m-d H:i:s', $temp_date);
+                //return $input_date->year;
+                $report = MonthlyReport::where('repository_id',$repository->id)->whereYear('created_at', '=', $temp_date->year)
+                    ->whereMonth('created_at','=',$temp_date->month)->first();
+                if($report){
+                $report->update([
+                    'cash_balance' => $report->cash_balance + $invoice->cash_amount,
+                    'card_balance' => $report->card_balance + $invoice->card_amount,
+                    'stc_balance' => $report->stc_balance + $invoice->stc_amount,
+                ]);
+                $report->invoices()->attach($invoice->id);
+                }
+                else{  // لا يوجد تقرير شهري يوافق تاريخ الفاتورة فسننشئ تقرير شهري لنفس شهر الفاتورة وننسبها له
+                    $user_id = Auth::id();
+                    $temp_date2 = new DateTime();
+                    $temp_date2 = date("Y-m-d H:i:s", strtotime($request->date));
+                    $temp_date2 = Carbon::createFromFormat('Y-m-d H:i:s', $temp_date2);            
+                    $report_date =    \Carbon\Carbon::parse($temp_date2)->endOfMonth();
+                    $rep = new MonthlyReport();
+                    $rep->timestamps = false;   // temporary insert custom timestamps values
+                    $rep->repository_id = $repository->id;
+                    $rep->user_id = $user_id;
+                    $rep->cash_balance = $invoice->cash_amount;
+                    $rep->card_balance = $invoice->card_amount;
+                    $rep->stc_balance = $invoice->stc_amount;
+                    $rep->out_cashier = 0;
+                    $rep->out_external = 0;
+                    $rep->created_at = $report_date;
+                    $rep->updated_at = $report_date;
+                    $rep->save();
+                    $rep->invoices()->attach($invoice->id);
+                }
+            }
+
+            // check for dailyreports
+            if($daily_report_check == true){ 
+                $temp_date3 = new DateTime();
+                $temp_date3 = date("Y-m-d H:i:s", strtotime($request->date));
+                $temp_date3 = Carbon::createFromFormat('Y-m-d H:i:s', $temp_date3);
+                //return $input_date->year;
+                $day_report = DailyReport::where('repository_id',$repository->id)->whereYear('created_at', '=', $temp_date3->year)
+                    ->whereMonth('created_at','=',$temp_date3->month)->whereDay('created_at','=',$temp_date3->day)->first();
+                if($day_report && $day_report->created_at < $temp_date3){   // اذا تاريخ التقرير قبل تاريخ الفاتورة بساعات فنسند لفاتورة للتقرير اليومي التالي
+                    $i = 1;
+                    do{
+                    $day_report = DailyReport::where('repository_id',$repository->id)->whereYear('created_at', '=', $temp_date3->year)
+                    ->whereMonth('created_at','=',$temp_date3->month)->whereDay('created_at','=',$temp_date3->day+$i)->first();
+                    $i++;
+                    }while(!$day_report);
+                }
+                if($day_report){
+                    $day_report->invoices()->attach($invoice->id);
+                }
+                else{  // لا يوجد تقرير يومي يوافق تاريخ الفاتورة فسننشئ تقرير يومي شكلي لنفس يوم الفاتورة وننسبها له
+                    $user_id = Auth::id();
+                    $temp_date4 = new DateTime();
+                    $temp_date4 = date("Y-m-d H:i:s", strtotime($request->date));
+                    $temp_date4 = Carbon::createFromFormat('Y-m-d H:i:s', $temp_date4);            
+                    $report_date =    \Carbon\Carbon::parse($temp_date4)->endOfDay();
+                    $rep = new DailyReport();
+                    $rep->timestamps = false;   // temporary insert custom timestamps values
+                    $rep->repository_id = $repository->id;
+                    $rep->user_id = $user_id;
+                    $rep->cash_balance = 0;
+                    $rep->card_balance = 0;
+                    $rep->stc_balance = 0;
+                    $rep->cash_shortage = 0;
+                    $rep->card_shortage = 0;
+                    $rep->stc_shortage = 0;
+                    $rep->cash_plus = 0;
+                    $rep->card_plus = 0;
+                    $rep->stc_plus = 0;
+                    $rep->out_cashier = 0;
+                    $rep->out_external = 0;
+                    $rep->box_balance = 0;
+                    $rep->created_at = $report_date;
+                    $rep->updated_at = $report_date;
+                    $rep->save();
+                    $rep->invoices()->attach($invoice->id);
+                }
+            }
+            
+            // save the recipe
+            if($request->recipe_radio == 0){  // the basic recipe
+                $recipe = unserialize($recipe);  // array of arrays
+                $saved = $customer->savedRecipes()->where('name',null)->first();
+                if($saved){
+                    $saved->update([
+                        'repository_id' => $repository->id,  // update recipe to newest sub repo
+                        'user_id' => Auth::user()->id,
+                        'recipe' => serialize($recipe[0]),  // array
+                    ]);
+                }
+                else{
+                    SavedRecipe::create([
+                        'repository_id' => $id,
+                        'customer_id' => $customer->id,
+                        'user_id' => Auth::user()->id,
+                        'recipe' => serialize($recipe[0]),  // array
+                    ]);
+                }
+                
+            }
+            else{  // additional recipe  (multi recipes)
+                $saved = $customer->savedRecipes;
+                $count = $saved->count();
+                $new = $request->recipe_radio + 1 - $count;  // number of new recipes
+                //return $request->recipe_radio;
+                $recipe = unserialize($recipe);  // array of arrays
+                foreach($saved as $single_recipe){
+                    foreach($recipe as $rec){
+                        if(array_key_exists('name', $rec)){
+                            if($rec['name']==$single_recipe->name){
+                                $single_recipe->update([
+                                    'repository_id' => $repository->id,  // update recipe to newest sub repo
+                                    'user_id' => Auth::user()->id,
+                                    //'name' => $request->recipe_name[$request->recipe_radio-1],
+                                    'recipe' => serialize($rec),
+                                ]);
+                                break;
+                            }
+                        }
+                        else{   // key name not exists  (basic recipe)
+                            if(!$single_recipe->name){
+                                $single_recipe->update([
+                                    'repository_id' => $repository->id,  // update recipe to newest sub repo
+                                    'user_id' => Auth::user()->id,
+                                    'recipe' => serialize($rec),
+                                ]);
+                            }
+                        }
+                    }
+                   
+                }
+                $basic = false;
+                // now we save the new recipes
+                    for($i=$new;$i>=1;$i--){
+                        foreach($recipe as $rec){
+                            if($request->recipe_radio-$i < 0 && !array_key_exists('name', $rec)){  // basic recipe
+                                $basic = true;
+                                break;
+                            }
+                            if(array_key_exists('name', $rec) && $rec['name']==$request->recipe_name[$request->recipe_radio-$i]){
+                                $basic = false;
+                                break;  // yes  
+                            }
+                        }
+                        if($basic == true)
+                            SavedRecipe::create([
+                                'repository_id' => $id,
+                                'customer_id' => $customer->id,
+                                'user_id' => Auth::user()->id,
+                                'recipe' => serialize($rec),
+                            ]);
+                        else
+                            SavedRecipe::create([
+                                'repository_id' => $id,
+                                'customer_id' => $customer->id,
+                                'user_id' => Auth::user()->id,
+                                'name' => $request->recipe_name[$request->recipe_radio-$i],
+                                'recipe' => serialize($rec),
+                            ]);
+                    }
+                }
+
+
+
+
+       // prepare to send data to print page
+       $records = array(array());
+       $temp=0;
+       for($i=0;$i<$count;$i++){   
+        if($request->barcode[$i] && $request->price[$i]){
+            //return $request->del;
+            if(in_array($i,$request->del))
+                $del = 'نعم';
+                else
+                $del = 'لا';
+        $records[]=array('barcode'=>$request->barcode[$i],'name_ar'=>$request->name[$i],'name_en'=>$request->details[$i],'cost_price'=>$request->cost_price[$i],'price'=>$request->price[$i],'quantity'=>$request->quantity[$i],'del'=>$del);
+        }
+      }
+
+      $id = Auth::user()->id;
+      $employee = User::find($id);
+
+
+        // send recipe
+        $r = array();
+        //$recipe = unserialize($recipe);
+        if(count($recipe)<7){   // new version  array of arrays (impossible to have more than 6 recipes)
+            // check if recipe values 0 so we dont print the recipe
+            // send to printing just the valuable recipes
+            for($i=0;$i<count($recipe);$i++){
+            if($recipe[$i]['add_r']=='0' && $recipe[$i]['axis_r']=='0' && $recipe[$i]['cyl_r']=='0' && $recipe[$i]['sph_r']=='0' && $recipe[$i]['add_l']=='0' && $recipe[$i]['axis_l']=='0' && $recipe[$i]['cyl_l']=='0' && $recipe[$i]['sph_l']=='0' && $recipe[$i]['ipd']=='0' )
+                continue;
+                $r[] = $recipe[$i]; // input array into array so we get array of arrays
+            }
+        }
+        $saving_old_invoice = true;
+        if($repository->setting->standard_printer) 
+      return view('manager.Sales.print_special_invoice')->with([
+          'records'=>$records,'num'=>count($records),'sum'=>$request->sum,'tax'=>$request->taxprint,'total_price'=>$request->total_price,
+          'cash'=>$cashVal,'card'=>$cardVal,'stc'=>$stcVal,'repo_id'=>$repository->id,
+          'discount' => $discounting,
+          'date'=>$request->date,'repository' => $repository,
+          'customer' => $customer,'employee'=>$employee,'note'=>$request->note,'remaining_amount'=>$remaining_amount,'invoice'=>$invoice,
+          'recipe' => $r,'saving_old_invoice' => $saving_old_invoice,
+        ]);   // to print the invoice
+        else
+        return view('manager.Sales.print_epson_special_invoice')->with([
+            'records'=>$records,'num'=>count($records),'sum'=>$request->sum,'tax'=>$request->taxprint,'total_price'=>$request->total_price,
+            'cash'=>$cashVal,'card'=>$cardVal,'stc'=>$stcVal,'repo_id'=>$repository->id,
+            'discount' => $discounting,
+            'date'=>$request->date,'repository' => $repository,
+            'customer' => $customer,'employee'=>$employee,'note'=>$request->note,'remaining_amount'=>$remaining_amount,'invoice'=>$invoice,
+            'recipe' => $r,'saving_old_invoice' => $saving_old_invoice,
+          ]);   // to print the invoice
+        break;
+            case 'save':
+                // Save model
+                $repository = Repository::find($id);
+                $recipe = array();
+                if($request->recipe_radio == 0){  // BASIC RECIPE
+                    $recipe[] = array('add_r'=>$request->add_r,'axis_r'=>$request->axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
+                                    'add_l'=>$request->add_l,'axis_l'=>$request->axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
+                                    'ipd'=>$request->ipdval,);
+                    }
+                    else{  // additional recipe  from the index and going back   // beacuse the system changed and now the invoice may contain several recipes
+                        $gg = $request->recipe_radio;
+                        //$recipe = array();
+                        do{
+                        if($gg == 0){  // basic recipe we insert it in the begin
+                            array_unshift($recipe, array('add_r'=>$request->add_r,'axis_r'=>$request->axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
+                            'add_l'=>$request->add_l,'axis_l'=>$request->axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
+                            'ipd'=>$request->ipdval,));
+                        }
+                        else{
+                            $recipe[] = array('name'=>$request->recipe_name[$request->recipe_radio-$gg],'add_r'=>$request->add_r_arr[$request->recipe_radio-$gg],'axis_r'=>$request->axis_r_arr[$request->recipe_radio-$gg],'cyl_r'=>$request->cyl_r_arr[$request->recipe_radio-$gg],'sph_r'=>$request->sph_r_arr[$request->recipe_radio-$gg],
+                            'add_l'=>$request->add_l_arr[$request->recipe_radio-$gg],'axis_l'=>$request->axis_l_arr[$request->recipe_radio-$gg],'cyl_l'=>$request->cyl_l_arr[$request->recipe_radio-$gg],'sph_l'=>$request->sph_l_arr[$request->recipe_radio-$gg],
+                            'ipd'=>$request->ipdval_arr[$request->recipe_radio-$gg],);
+                        }
+                        $gg--;
+                        }
+                        while($gg >= 0);
+                       // while($gg<=$request->recipe_radio || $gg == intval($request->recipe_radio)+1);
+                    }
+                    $recipe = serialize($recipe);
+        
+                 // get all branches for this repository to get customer archive from other sub repositories
+                 $branch_id = $repository->branch_id;
+                 $branch = Branch::find($branch_id);
+                 $sub_repositories = $branch->repositories;    // جلبنا كل الافرع
+                 
+                 // search for customer if exists before or create new one
+                 foreach($sub_repositories as $repository){
+                     $customer = Customer::whereHas("repositories", function($q) use ($repository){ $q->where("repositories.id",$repository->id ); })->where('phone',$request->customer_phone)->first();
+                     if($customer)
+                         break;
+                 }
+                 $repository = Repository::find($id); // this repo
+                 if($customer){ // exists
+                     // check if this customer exist (in this sub repo)
+                     //$c = $customer->whereHas("repositories", function($q) use ($repository){ $q->where("repositories.id",$repository->id ); })->get();
+                     //if($c->count()>0){
+                         $customers = $repository->customers;  // customers of this sub repo
+                         if($customers->contains('id',$customer->id)){  // the customer exist in this sub repo before
+                                //
+                     }
+                     else{
+                         $repository->customers()->attach($customer->id);  // pivot table
+                         
+                     }
+                 } 
+                 else{ // not exists before
+                 $customer = Customer::create(
+                     [
+                         'name' => $request->customer_name,
+                         'phone' => $request->customer_phone,
+                         'points' => 0,
+                     ]
+                     );
+                 $repository->customers()->attach($customer->id);  // pivot table
+                 }
+            if($request->recipe_radio == 0){  // the basic recipe
+                        $recipe = unserialize($recipe);  // array of arrays
+                        $saved = $customer->savedRecipes()->where('name',null)->first();
+                        if($saved){
+                            $saved->update([
+                                'repository_id' => $repository->id,  // update recipe to newest sub repo
+                                'user_id' => Auth::user()->id,
+                                'recipe' => serialize($recipe[0]),  // array
+                            ]);
+                        }
+                        else{
+                            SavedRecipe::create([
+                                'repository_id' => $id,
+                                'customer_id' => $customer->id,
+                                'user_id' => Auth::user()->id,
+                                'recipe' => serialize($recipe[0]),  // array
+                            ]);
+                        }
+                        
+                    }
+                    else{  // additional recipe  (multi recipes)
+                        $saved = $customer->savedRecipes;
+                        $count = $saved->count();
+                        $new = $request->recipe_radio + 1 - $count;  // number of new recipes
+                        //return $request->recipe_radio;
+                        $recipe = unserialize($recipe);  // array of arrays
+                        foreach($saved as $single_recipe){
+                            foreach($recipe as $rec){
+                                if(array_key_exists('name', $rec)){
+                                    if($rec['name']==$single_recipe->name){
+                                        $single_recipe->update([
+                                            'repository_id' => $repository->id,  // update recipe to newest sub repo
+                                            'user_id' => Auth::user()->id,
+                                            //'name' => $request->recipe_name[$request->recipe_radio-1],
+                                            'recipe' => serialize($rec),
+                                        ]);
+                                        break;
+                                    }
+                                }
+                                else{   // key name not exists  (basic recipe)
+                                    if(!$single_recipe->name){
+                                        $single_recipe->update([
+                                            'repository_id' => $repository->id,  // update recipe to newest sub repo
+                                            'user_id' => Auth::user()->id,
+                                            'recipe' => serialize($rec),
+                                        ]);
+                                    }
+                                }
+                            }
+                           
+                        }
+                        $basic = false;
+                        // now we save the new recipes
+                            for($i=$new;$i>=1;$i--){
+                                foreach($recipe as $rec){
+                                    if($request->recipe_radio-$i < 0 && !array_key_exists('name', $rec)){  // basic recipe
+                                        $basic = true;
+                                        break;
+                                    }
+                                    if(array_key_exists('name', $rec) && $rec['name']==$request->recipe_name[$request->recipe_radio-$i]){
+                                        $basic = false;
+                                        break;  // yes  
+                                    }
+                                }
+                                if($basic == true)
+                                    SavedRecipe::create([
+                                        'repository_id' => $id,
+                                        'customer_id' => $customer->id,
+                                        'user_id' => Auth::user()->id,
+                                        'recipe' => serialize($rec),
+                                    ]);
+                                else
+                                    SavedRecipe::create([
+                                        'repository_id' => $id,
+                                        'customer_id' => $customer->id,
+                                        'user_id' => Auth::user()->id,
+                                        'name' => $request->recipe_name[$request->recipe_radio-$i],
+                                        'recipe' => serialize($rec),
+                                    ]);
+                            }
+                        }
+
+                return redirect(route('sales.index',$repository->id))->with('success',__('alerts.prescription_saved_success'));
+                break;
+            }
+    }
+
+   /* public function saveOldSpecialInvoice(Request $request,$id){
+        // make sure we determine customer
+        if(!$request->customer_phone || !$request->customer_name)
+            return back()->with('failCustomer',__('alerts.input_customer_num'));
         if(!$request->date)
             return back()->with('fail','يرجى تحديد تاريخ الفاتورة');
         $repository = Repository::find($id);
@@ -1482,6 +2093,7 @@ class SellController extends Controller
             'recipe' => $r,'saving_old_invoice' => $saving_old_invoice,
           ]);   // to print the invoice
     }
+*/
 
     public function showPending($id){
         $repository = Repository::find($id);

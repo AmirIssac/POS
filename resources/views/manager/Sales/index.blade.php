@@ -17,6 +17,12 @@
                 <strong>{{ session('retrievedSuccess') }}</strong>
         </div>
         @endif
+        @if (session('success'))
+        <div class="alert alert-success alert-block">
+            <button type="button" class="close" data-dismiss="alert">×</button>	
+                <strong>{{ session('success') }}</strong>
+        </div>
+        @endif
         <div class="col-md-4">
          <div class="card card-chart">
            <div class="card-header card-header-primary">
