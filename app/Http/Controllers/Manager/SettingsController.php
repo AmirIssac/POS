@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Action;
 use App\Customer;
 use App\Http\Controllers\Controller;
 use App\PermissionCategory;
+use App\Record;
 use App\Repository;
 use App\Type;
 use App\User;
@@ -221,6 +223,16 @@ class SettingsController extends Controller
             'name' => $request->name,
             'phone' => $request->phone,
         ]);
+        $repository = Repository::find(Session::get('repo_id'));
+         // register record of this process
+         $action = Action::where('name_ar','تعديل بيانات الزبون')->first();
+         $info = array('target'=>'customer','id'=>$customer->id);
+         Record::create([
+             'repository_id' => $repository->id,
+             'user_id' => Auth::user()->id,
+             'action_id' => $action->id,
+             'note' => serialize($info),
+         ]);
         return back()->with('success',__('alerts.edit_success'));
     }
 
@@ -324,6 +336,26 @@ class SettingsController extends Controller
     public function printSettingsIndex($id){
         $repository = Repository::find($id);
         return view('manager.Settings.print_settings')->with(['repository'=>$repository]);
+    }
+
+    public function activityLog(Request $request,$id){
+        $repository = Repository::find($id);
+        $actions = Action::all();
+        $types = Action::query()
+        ->select('type')
+        ->groupBy('type')
+        ->get(); 
+        // not filter
+        if(!$request->action){
+        $records = Record::where('repository_id',$repository->id)->latest()->paginate(30);
+        return view('manager.Settings.activity_log')->with(['records'=>$records,'actions'=>$actions,'types'=>$types,'repository'=>$repository]);
+        }
+        // filter
+        else{
+        $arr = array('action'=>$request->action);
+        $records = Record::where('repository_id',$repository->id)->where('action_id',$request->action)->latest()->paginate(30);
+        return view('manager.Settings.activity_log')->with(['records'=>$records->appends($arr),'actions'=>$actions,'types'=>$types,'repository'=>$repository]); 
+        }
     }
 
     

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Action;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Imports\ProductsImport;
 use App\Imports\ProductsImportSpecial;
 use App\Product;
+use App\Record;
 use App\Repository;
 use App\Type;
 use App\User;
@@ -133,6 +135,15 @@ class RepositoryController extends Controller
         }
     }
         }
+         // register record of this process
+         $action = Action::where('name_ar','اضافة مخزون')->first();
+         $info = array('target'=>'product','total_price'=>$totalPrice);  // تسجيل اجمالي قيمة المدخلات
+         Record::create([
+             'repository_id' => $request->repo_id,
+             'user_id' => Auth::user()->id,
+             'action_id' => $action->id,
+             'note' => serialize($info),
+         ]);
         return back()->with('success',__('alerts.add_success_by_total_price').$totalPrice);
     }
     
@@ -242,6 +253,16 @@ class RepositoryController extends Controller
             'cost_price' => $request->cost_price,
             'price' => $request->price,
             'quantity' => $request->quantity,
+        ]);
+
+        // register record of this process
+        $action = Action::where('name_ar','تعديل منتج')->first();
+        $info = array('target'=>'product','id'=>$product->id);
+        Record::create([
+            'repository_id' => $repository->id,
+            'user_id' => Auth::user()->id,
+            'action_id' => $action->id,
+            'note' => serialize($info),
         ]);
         return redirect(route('repository.index',$repository->id))->with('editProductSuccess',__('alerts.product_edit_success').$product->name);
     }

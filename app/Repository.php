@@ -77,6 +77,10 @@ class Repository extends Model
         return $this->belongsTo(Branch::class);
     }
 
+    public function records(){
+        return $this->hasMany(Record::class);
+    }
+
     /*public function types(){
         return $this->hasMany(Type::class);
     }*/

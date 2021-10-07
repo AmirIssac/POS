@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Action;
 use App\DailyReport;
 use App\Http\Controllers\Controller;
 use App\MonthlyReport;
 use App\Purchase;
 use App\PurchaseProduct;
 use App\PurchaseRecord;
+use App\Record;
 use App\Repository;
 use App\Supplier;
 use App\User;
@@ -64,7 +66,15 @@ class PurchaseController extends Controller
             'account_num' => $request->account_num,
         ]);
         $repository->suppliers()->attach($supplier->id);  // pivot table
-
+        // register record of this process
+        $action = Action::where('name_ar','اضافة مورد')->first();
+        $info = array('target'=>'supplier','id'=>$supplier->id);
+        Record::create([
+            'repository_id' => $repository->id,
+            'user_id' => Auth::user()->id,
+            'action_id' => $action->id,
+            'note' => serialize($info),
+        ]);
         return redirect(route('purchases.index',$repository->id))->with('success',__('alerts.add_supplier_success'));
     }
 
@@ -88,6 +98,15 @@ class PurchaseController extends Controller
             'address' => $request->address,
             'phone' => $request->phone,
             'account_num' => $request->account_num,
+        ]);
+        // register record of this process
+        $action = Action::where('name_ar','تعديل مورد')->first();
+        $info = array('target'=>'supplier','id'=>$supplier->id);
+        Record::create([
+            'repository_id' => $repository->id,
+            'user_id' => Auth::user()->id,
+            'action_id' => $action->id,
+            'note' => serialize($info),
         ]);
         return redirect(route('purchases.index',$repository->id))->with('success',__('alerts.edit_supplier_success'));
     }
@@ -220,6 +239,17 @@ class PurchaseController extends Controller
                 }
             }
         }
+
+        // register record of this process
+        $action = Action::where('name_ar','انشاء فاتورة مشتريات')->first();
+        $info = array('target'=>'purchase','id'=>$purchase->id,'code'=>$purchase->code);
+        Record::create([
+            'repository_id' => $repository->id,
+            'user_id' => Auth::user()->id,
+            'action_id' => $action->id,
+            'note' => serialize($info),
+        ]);
+
         return back()->with('success',__('alerts.create_new_purchase_success'));
     }  
 
@@ -401,6 +431,16 @@ class PurchaseController extends Controller
                 }
             }
         }
+        // register record of this process
+        $action = Action::where('name_ar','تسجيل فاتورة مشتريات بتاريخ محدد')->first();
+        $info = array('target'=>'purchase','id'=>$purchase->id,'code'=>$purchase->code);
+        Record::create([
+            'repository_id' => $repository->id,
+            'user_id' => Auth::user()->id,
+            'action_id' => $action->id,
+            'note' => serialize($info),
+        ]);
+
         return back()->with('success',__('alerts.create_new_purchase_success'));
     }
     
@@ -444,6 +484,7 @@ class PurchaseController extends Controller
             $product->update([
                 'price' => $new_price,
             ]);
+            $totalPrice+=$request->price[$i];
             }
         else{
             
@@ -456,9 +497,19 @@ class PurchaseController extends Controller
                     'price'=>$request->price[$i],
                 ]
                 );
+                $totalPrice+=$request->price[$i];
         }
     }
         }
+        // register record of this process
+        $action = Action::where('name_ar','اضافة منتج مشتريات')->first();
+        $info = array('target'=>'purchase_product','total_price'=>$totalPrice);
+        Record::create([
+            'repository_id' => $repository->id,
+            'user_id' => Auth::user()->id,
+            'action_id' => $action->id,
+            'note' => serialize($info),
+        ]);
         return back()->with('success',__('alerts.add_success'));
     }
 
@@ -513,6 +564,16 @@ class PurchaseController extends Controller
             'daily_report_check' => false,
             'monthly_report_check' => false,
         ]);
+
+        // register record of this process
+        $action = Action::where('name_ar','دفع فاتورة مورد')->first();
+        $info = array('target'=>'purchase','id'=>$purchase->id,'code'=>$purchase->code);
+        Record::create([
+            'repository_id' => $repository->id,
+            'user_id' => Auth::user()->id,
+            'action_id' => $action->id,
+            'note' => serialize($info),
+        ]);
         //return redirect(route('purchases.index'))->with('success',__('alerts.purchase_payed_success'));
         return back()->with('success',__('alerts.purchase_payed_success'));
         //return redirect(route('show.later.purchases',$repository->id))->with('success',__('alerts.purchase_payed_success'));
@@ -533,6 +594,17 @@ class PurchaseController extends Controller
         $repository->update([
             'balance' => $repository->balance + $purchase->total_price,
         ]);
+
+        // register record of this process
+        $action = Action::where('name_ar','استرجاع فاتورة مشتريات')->first();
+        $info = array('target'=>'purchase','id'=>$purchase->id,'code'=>$purchase->code);
+        Record::create([
+            'repository_id' => $repository->id,
+            'user_id' => Auth::user()->id,
+            'action_id' => $action->id,
+            'note' => serialize($info),
+        ]);
+
         return back()->with('success',__('alerts.purchase_retrieve_success'));
     }
 
@@ -749,6 +821,15 @@ class PurchaseController extends Controller
             'name_ar' => $request->name,
             'name_en' => $request->details,
             'price' => $request->price,
+        ]);
+        // register record of this process
+        $action = Action::where('name_ar','تعديل منتج مشتريات')->first();
+        $info = array('target'=>'purchase_product','id'=>$product->id);
+        Record::create([
+            'repository_id' => Session::get('repo_id'),
+            'user_id' => Auth::user()->id,
+            'action_id' => $action->id,
+            'note' => serialize($info),
         ]);
         return back()->with('success',__('alerts.edit_success'));
     }

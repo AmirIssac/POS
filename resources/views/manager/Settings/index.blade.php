@@ -158,6 +158,28 @@
             </div>
             @endcan
 
+           {{-- @if(Auth::user()->hasRole('مالك-مخزن'))  --}}
+            @can('التطبيق')
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <a href="{{route('activity.log',$repository->id)}}">
+              <div class="card card-stats">
+                <div class="card-header card-header-warning card-header-icon">
+                  <div class="card-icon">
+                  <i class="material-icons">device_hub</i>
+                  </div>
+                  <p class="card-category">{{__('settings.activity_record')}}</p>
+                  <h6 class="card-title"></h6>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">update</i>
+                  </div>
+                </div>
+              </div>
+            </a>
+            </div>
+            @endcan
+
 
            </div>
          

@@ -8,8 +8,11 @@ use App\Invoice;
 use App\Purchase;
 use App\Repository;
 use App\User;
+use App\Record;
+use App\Action;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Twilio\Rest\Client;
 
 class CashierController extends Controller
@@ -188,6 +191,15 @@ class CashierController extends Controller
                            ]
                   );
         */
+
+            $action = Action::where('name_ar','اغلاق الكاشير')->first();
+            $info = array('target'=>'cashier','id'=>$dailyReport->id);
+            Record::create([
+                'repository_id' => $repository->id,
+                'user_id' => Auth::user()->id,
+                'action_id' => $action->id,
+                'note' => serialize($info),
+            ]);
                   
             //return redirect()->route('cashier.index', ['success' => 'تم إغلاق الكاشير اليومي بنجاح']);
             return redirect()->route('daily.reports.index',$repository->id)->with('success',__('alerts.cashier_closed_success'));
@@ -211,6 +223,14 @@ class CashierController extends Controller
             $repository->update([
                 'balance' => $repository->balance - $request->money,
             ]);
+            $action = Action::where('name_ar','سحب اموال من الصندوق')->first();
+            $info = array('target'=>'cashier','amount'=>$request->money);
+            Record::create([
+                'repository_id' => $repository->id,
+                'user_id' => Auth::user()->id,
+                'action_id' => $action->id,
+                'note' => serialize($info),
+            ]);
             return back()->with('success',__('alerts.withdraw_success').$request->money);
         }
 
@@ -219,6 +239,18 @@ class CashierController extends Controller
             $repository->update([
                 'balance' => $repository->balance + $request->money,
             ]);
+            // register record of this process
+        $action = Action::where('name_ar','اضافة اموال الى الصندوق')->first();
+        $info = array('target'=>'cashier','amount'=>$request->money);
+        Record::create([
+            'repository_id' => $repository->id,
+            'user_id' => Auth::user()->id,
+            'action_id' => $action->id,
+            'note' => serialize($info),
+        ]);
+        /*
+        Log::info('اضافة اموال الى الصندوق',['amount'=>$money]);
+        */
             return back()->with('success',__('alerts.deposite_success').$request->money);
         }
 }

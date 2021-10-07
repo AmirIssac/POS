@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Action;
 use App\Branch;
 use App\Customer;
 use App\DailyReport;
@@ -10,6 +11,7 @@ use App\Invoice;
 use App\InvoiceProcess;
 use App\MonthlyReport;
 use App\Product;
+use App\Record;
 use App\Repository;
 use App\SavedRecipe;
 use App\User;
@@ -933,7 +935,17 @@ class SellController extends Controller
                         $r[] = $recipe[$i]; // input array into array so we get array of arrays
                     }
                 }
-        
+
+                // register record of this process
+                $action = Action::where('name_ar','انشاء فاتورة')->first();
+                $info = array('target'=>'invoice','id'=>$invoice->id,'code'=>$invoice->code);
+                Record::create([
+                    'repository_id' => $repository->id,
+                    'user_id' => Auth::user()->id,
+                    'action_id' => $action->id,
+                    'note' => serialize($info),
+                ]);
+
                 if($repository->setting->standard_printer) 
               return view('manager.Sales.print_special_invoice')->with([
                   'records'=>$records,'num'=>count($records),'sum'=>$request->sum,'tax'=>$request->taxprint,'total_price'=>$request->total_price,
@@ -1102,6 +1114,16 @@ class SellController extends Controller
                                     ]);
                             }
                         }
+
+                        // register record of this process
+                        $action = Action::where('name_ar','حفظ وصفة الزبون')->first();
+                        $info = array('target'=>'customer','id'=>$customer->id);
+                        Record::create([
+                            'repository_id' => $repository->id,
+                            'user_id' => Auth::user()->id,
+                            'action_id' => $action->id,
+                            'note' => serialize($info),
+                        ]);
 
                 return redirect(route('create.special.invoice',$repository->id))->with('saveSuccess',__('alerts.prescription_saved_success'));
             
@@ -1549,6 +1571,16 @@ class SellController extends Controller
                 $r[] = $recipe[$i]; // input array into array so we get array of arrays
             }
         }
+        // register record of this process
+        $action = Action::where('name_ar','تسجيل فاتورة بتاريخ محدد')->first();
+        $info = array('target'=>'invoice','id'=>$invoice->id,'code'=>$invoice->code);
+        Record::create([
+            'repository_id' => $repository->id,
+            'user_id' => Auth::user()->id,
+            'action_id' => $action->id,
+            'note' => serialize($info),
+        ]);
+
         $saving_old_invoice = true;
         if($repository->setting->standard_printer) 
       return view('manager.Sales.print_special_invoice')->with([
@@ -1715,6 +1747,15 @@ class SellController extends Controller
                                     ]);
                             }
                         }
+                         // register record of this process
+                         $action = Action::where('name_ar','حفظ وصفة الزبون')->first();
+                         $info = array('target'=>'customer','id'=>$customer->id);
+                         Record::create([
+                             'repository_id' => $repository->id,
+                             'user_id' => Auth::user()->id,
+                             'action_id' => $action->id,
+                             'note' => serialize($info),
+                         ]);
 
                 return redirect(route('sales.index',$repository->id))->with('success',__('alerts.prescription_saved_success'));
                 break;
@@ -2281,6 +2322,16 @@ class SellController extends Controller
                             else{   // old version
                                 $recipe[] = $r;
                             }
+
+                            // register record of this process
+                            $action = Action::where('name_ar','استكمال فاتورة')->first();
+                            $info = array('target'=>'invoice','id'=>$invoice->id,'code'=>$invoice->code);
+                            Record::create([
+                                'repository_id' => $repository->id,
+                                'user_id' => Auth::user()->id,
+                                'action_id' => $action->id,
+                                'note' => serialize($info),
+                            ]);
  
                         if($repository->setting->standard_printer) 
                         return view('manager.Sales.print_special_invoice')->with([
@@ -2592,6 +2643,15 @@ class SellController extends Controller
             'monthly_report_check' => false,
             'note' => $request->note,
         ]);
+        // register record of this process
+        $action = Action::where('name_ar','استرجاع فاتورة')->first();
+        $info = array('target'=>'invoice','id'=>$invoice->id,'code'=>$invoice->code);
+        Record::create([
+            'repository_id' => $repository->id,
+            'user_id' => Auth::user()->id,
+            'action_id' => $action->id,
+            'note' => serialize($info),
+        ]);
         return redirect(route('sales.index',$repository->id))->with('retrievedSuccess',__('alerts.purchase_retrieve_success'));
     } 
 
@@ -2659,6 +2719,15 @@ class SellController extends Controller
                     'card_amount' => $request->card,
                     'stc_amount' => $request->stc,
                 ]);
+            // register record of this process
+            $action = Action::where('name_ar','تعديل الدفع لفاتورة')->first();
+            $info = array('target'=>'invoice','id'=>$invoice->id,'code'=>$invoice->code);
+            Record::create([
+                'repository_id' => $repository->id,
+                'user_id' => Auth::user()->id,
+                'action_id' => $action->id,
+                'note' => serialize($info),
+            ]);
         }
         // تعديل طرق الدفع للفواتير المستكملة
         elseif($invoice->invoiceProcesses()->count() == 1 && $invoice->transform == 'p-d' && $invoice->daily_report_check == false){
@@ -2670,6 +2739,15 @@ class SellController extends Controller
                     'card_amount' => $request->card + $prev_inv->card_amount,
                     'stc_amount' => $request->stc + $prev_inv->stc_amount,
                 ]);
+            // register record of this process
+            $action = Action::where('name_ar','تعديل الدفع لفاتورة مستكملة')->first();
+            $info = array('target'=>'invoice','id'=>$invoice->id,'code'=>$invoice->code);
+            Record::create([
+                'repository_id' => $repository->id,
+                'user_id' => Auth::user()->id,
+                'action_id' => $action->id,
+                'note' => serialize($info),
+            ]);
         }
             
         
@@ -2747,6 +2825,16 @@ class SellController extends Controller
             'm_in_cash_balance' => $statistic->m_in_cash_balance - $invoice->cash_amount,
             'm_in_card_balance' => $statistic->m_in_card_balance - $invoice->card_amount,
             'm_in_stc_balance' => $statistic->m_in_stc_balance - $invoice->stc_amount,
+        ]);
+
+        // register record of this process
+        $action = Action::where('name_ar','حذف فاتورة')->first();
+        $info = array('target'=>'invoice','id'=>$invoice->id,'code'=>$invoice->code);
+        Record::create([
+            'repository_id' => $repository->id,
+            'user_id' => Auth::user()->id,
+            'action_id' => $action->id,
+            'note' => serialize($info),
         ]);
 
         return back()->with('success',__('alerts.delete_success'));

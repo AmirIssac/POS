@@ -70,5 +70,11 @@
         'input_stc_here' => 'ادخل المبلغ هنا',
         'must_select_supplier' => 'عليك اختيار مورد',
         'you_must_chose_branch' => 'عليك اختيار الفرع',
+        'activity_record' => 'سجل النشاط',
+        'details' => 'التفاصيل',
+        'chose_process_you_wantto_search_into' => 'قم باختيار الاجراء الذي تريد البحث ضمنه',
+        'employee' => 'الموظف',
+        'customer' => 'الزبون',
+        'total' => 'اجمالي',
     ];
     ?>

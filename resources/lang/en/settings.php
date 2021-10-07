@@ -70,5 +70,11 @@
         'input_stc_here' => 'Input the amount here',
         'must_select_supplier' => 'You must chose supplier',
         'you_must_chose_branch' => 'You must chose branch',
+        'activity_record' => 'Activity record',
+        'details' => 'Details',
+        'chose_process_you_wantto_search_into' => 'Chose the process you want to search into',
+        'employee' => 'Employee',
+        'customer' => 'Customer',
+        'total' => 'Total',
     ];
     ?>
