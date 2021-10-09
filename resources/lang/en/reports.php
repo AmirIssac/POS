@@ -39,7 +39,7 @@ return [
     'monthly_reports_for_sales' => 'Monthly reports for Sales',
     'current_day' => 'Actual day',
     'previous_inv_edited_today' => 'Previous invoices delivered/funded in this report',
-    'monthly_sales' => 'Monthly sales',
+    'sales' => 'Sales',
     'invoices_num' => 'Number of invoices',
     'deleted' => 'Deleted',
     'sure_want_to_delete_invoice' => 'Are you sure you want to delete this invoice',

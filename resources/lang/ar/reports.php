@@ -39,7 +39,7 @@ return [
     'monthly_reports_for_sales' => 'التقارير الشهرية للمبيعات',
     'current_day' => 'اليوم الفعلي',
     'previous_inv_edited_today' => 'فواتير سابقة تم استكمالها\استرجاعها في هذا التقرير',
-    'monthly_sales' => 'مبيعات الشهر',
+    'sales' => 'مبيعات',
     'invoices_num' => 'عدد الفواتير',
     'deleted' => 'محذوفة',
     'sure_want_to_delete_invoice' => 'هل أنت متأكد أنك تريد حذف هذه الفاتورة',

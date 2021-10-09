@@ -76,5 +76,10 @@
         'employee' => 'Employee',
         'customer' => 'Customer',
         'total' => 'Total',
+        'chose_sales_specific_month' => 'Chose sales for specific month',
+        'within_specific_year' => 'Within specific year',
+        'chose_total_sales_for_specific_year' => 'Chose total sales for specific year',
+        'year' => 'year',
+        'month' => 'month',
     ];
     ?>

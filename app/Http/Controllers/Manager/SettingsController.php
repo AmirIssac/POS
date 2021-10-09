@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Manager;
 use App\Action;
 use App\Customer;
 use App\Http\Controllers\Controller;
+use App\Invoice;
+use App\InvoiceProcess;
 use App\PermissionCategory;
 use App\Record;
 use App\Repository;
 use App\Type;
 use App\User;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -256,16 +259,125 @@ class SettingsController extends Controller
         ]);
         return back()->with('success',__('alerts.edit_success'));
     }
-
-    public function showWorkerSales($id , $repoId){   // this month sales
+    /*
+    public function showWorkerSales(Request $request ,$id , $repoId){   // this month sales
         $user = User::find($id);
         $repository = Repository::find($repoId); 
         //$invoices = $user->invoices()->paginate(30);
-        $invoices = $user->invoices()->where('repository_id',$repository->id)->whereYear('created_at', '=', now()->year)
+        if(!$request->month && !$request->year){
+        // مبيعات هذا الشهر
+       /* $invoices = $user->invoices()->where('repository_id',$repository->id)->whereYear('created_at', '=', now()->year)
+        ->whereMonth('created_at','=',now()->month)->where('monthly_report_check',false)->get(); 
+        $this_month_invoices = $user->invoices()->where('repository_id',$repository->id)->whereYear('created_at', '=', now()->year)
         ->whereMonth('created_at','=',now()->month)->where('monthly_report_check',false)->get();
+        $invoices = collect();
+        foreach($this_month_invoices as $inv){
+            if($inv->invoiceProcesses()->count() > 0){
+                $inv_proc_created = Carbon::parse($inv->invoiceProcesses[0]->created_at); 
+                    if($inv_proc_created->year == now()->year && $inv_proc_created->month == now()->month)
+                        $invoices->push($inv); 
+            }
+            else{
+                $invoices->push($inv); 
+            }
+        }
+        }
+        elseif($request->month && $request->year){     // filter of month and year
+            $all_user_invoices = $user->invoices()->where('repository_id',$repository->id)->get();
+            $invoices = collect();
+            foreach($all_user_invoices as $inv){
+                if($inv->invoiceProcesses()->count() == 0){
+                    //return gettype($inv->created_at);
+                    //$inv_created = Carbon::createFromFormat('Y-m-d H:i:s',$inv->created_at);
+                    $inv_created = Carbon::parse($inv->created_at);
+                    if($inv_created->year == $request->year && $inv_created->month == $request->month)
+                        $invoices->push($inv); 
+                }
+                elseif($inv->invoiceProcesses()->count() > 0){
+                    //return $inv->invoiceProcesses[0]->created_at. ' + ' .$inv->created_at;
+                    $temp = $inv->invoiceProcesses[0]->created_at;
+                                     
+                    $inv_proc_created = Carbon::parse($temp); 
+                    if($inv_proc_created->year == $request->year && $inv_proc_created->month == $request->month)
+                        $invoices->push($inv); 
+                }
+            }
+            //return $invoices;
+        }
+        return view('manager.Settings.worker_sales')->with(['user'=>$user,'invoices'=>$invoices,'repository'=>$repository]);
+    } */
+
+    public function showWorkerSales(Request $request ,$id , $repoId){   // this month sales
+        $user = User::find($id);
+        $repository = Repository::find($repoId); 
+        //$invoices = $user->invoices()->paginate(30);
+        if(!$request->month && !$request->year){
+        $invoices = collect();
+        // يرجى تحديد الفلتر للبحث ضمن فترة زمنية معينة
+        }
+        elseif($request->month && $request->year){     // filter of month and year
+                $invoice_ids = array();  // taken in result
+                $tested_inv_ids = array();  // pass on it
+                $invoices = collect(); // result
+                $all_processes = InvoiceProcess::where('repository_id',$repository->id)->get();
+                /*$all_processes = InvoiceProcess::where('repository_id',$repository->id)->whereYear('created_at', '<=', $request->year)
+                ->whereMonth('created_at', '<=', $request->month)->get();*/
+                $all_user_invoices = Invoice::where('repository_id',$repository->id)->where('user_id',$user->id)->get();
+                /*$all_user_invoices = Invoice::where('repository_id',$repository->id)->where('user_id',$user->id)->whereYear('created_at', '<=', $request->year)
+                ->whereMonth('created_at', '<=', $request->month)->get();*/
+                foreach($all_processes as $process){
+                    $created = Carbon::parse($process->created_at);
+                    if($process->user_id == $user->id && !in_array($process->invoice->id, $tested_inv_ids)){
+                        $tested_inv_ids[]=$process->invoice->id;  // لكي لا ناخذ دورة حياة للمستخدم ولكن الاقدم منها لمستخدم اخر
+                        if($created->month == $request->month && $created->year == $request->year){
+                            $invoices->push($process->invoice);
+                            $invoice_ids[]=$process->invoice->id;
+                        }
+                    }
+                    else{
+                        $tested_inv_ids[]=$process->invoice->id;
+                    }
+                }
+                foreach($all_user_invoices as $inv){
+                    $created = Carbon::parse($inv->created_at);
+                    if(!in_array($inv->id, $tested_inv_ids) && $created->month == $request->month && $created->year == $request->year){
+                        $invoices->push($inv);
+                        $invoice_ids[]=$inv->id;
+                    }
+                }
+                //return dd($invoices);
+               // return dd($invoices);
+        }
+        elseif($request->year){
+            $invoice_ids = array();  // taken in result
+            $tested_inv_ids = array();  // pass on it
+            $invoices = collect(); // result
+            $all_processes = InvoiceProcess::where('repository_id',$repository->id)->get();
+            $all_user_invoices = Invoice::where('repository_id',$repository->id)->where('user_id',$user->id)->get();
+            foreach($all_processes as $process){
+                $created = Carbon::parse($process->created_at);
+                if($process->user_id == $user->id && !in_array($process->invoice->id, $tested_inv_ids)){
+                    $tested_inv_ids[]=$process->invoice->id;  // لكي لا ناخذ دورة حياة للمستخدم ولكن الاقدم منها لمستخدم اخر
+                    if($created->year == $request->year){
+                        $invoices->push($process->invoice);
+                        $invoice_ids[]=$process->invoice->id;
+                    }
+                }
+                else{
+                    $tested_inv_ids[]=$process->invoice->id;
+                }
+            }
+            foreach($all_user_invoices as $inv){
+                $created = Carbon::parse($inv->created_at);
+                if(!in_array($inv->id, $tested_inv_ids) && $created->year == $request->year){
+                    $invoices->push($inv);
+                    $invoice_ids[]=$inv->id;
+                }
+            }
+        }
         return view('manager.Settings.worker_sales')->with(['user'=>$user,'invoices'=>$invoices,'repository'=>$repository]);
     }
-    
+
     public function printSettings(Request $request,$id){
         $repository = Repository::find($id);
         $setting = $repository->setting;

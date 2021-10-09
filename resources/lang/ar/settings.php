@@ -76,5 +76,10 @@
         'employee' => 'الموظف',
         'customer' => 'الزبون',
         'total' => 'اجمالي',
+        'chose_sales_specific_month' => 'اختيار مبيعات شهر محدد',
+        'within_specific_year' => 'ضمن سنة محددة',
+        'chose_total_sales_for_specific_year' => 'اختيار اجمالي مبيعات ضمن سنة محددة',
+        'year' => 'سنة',
+        'month' => 'شهر',
     ];
     ?>

@@ -47,7 +47,7 @@
                       {{__('settings.info')}} 
                      </th>
                      <th>
-                       {{__('reports.monthly_sales')}}
+                       {{__('reports.sales')}}
                      </th>
                      <th>
                        {{__('reports.status')}}
@@ -63,7 +63,12 @@
                       <a style="color: white" href="{{route('edit.worker.info',$owner->id)}}" role="button" class="btn btn-info"> {{__('buttons.edit')}} </a>
                      </td>
                      <td>
-                      <a style="color: white" href="{{route('show.worker.sales',[$owner->id,$repository->id])}}" role="button" class="btn btn-info"> {{__('buttons.view')}} </a>
+                     <form action={{route('show.worker.sales',[$owner->id,$repository->id])}}" method="GET">
+                       @csrf
+                       <input type="hidden" name="year" value="{{now()->year}}">
+                       <input type="hidden" name="month" value="{{now()->month}}">
+                       <button class="btn btn-info"> {{__('buttons.view')}} </button>
+                     </form>
                      </td>
                      <td>
                      @if($owner->is_online)
@@ -117,7 +122,7 @@
                       {{__('settings.permissions')}} 
                      </th>
                      <th>
-                       {{__('reports.monthly_sales')}}
+                       {{__('reports.sales')}}
                      </th>
                      <th>
                        {{__('reports.status')}}
@@ -143,8 +148,12 @@
                      </td>
                      @endif
                      <td>
-                      <a style="color: white" href="{{route('show.worker.sales',[$worker->id,$repository->id])}}" role="button" class="btn btn-info"> {{__('buttons.view')}} </a>
-                     </td>
+                      <form action={{route('show.worker.sales',[$worker->id,$repository->id])}}" method="GET">
+                        @csrf
+                        <input type="hidden" name="year" value="{{now()->year}}">
+                        <input type="hidden" name="month" value="{{now()->month}}">
+                        <button class="btn btn-info"> {{__('buttons.view')}} </button>
+                      </form>                     </td>
                      <td>
                       @if($worker->is_online)
                       <span class="green-dot"></span>&nbsp;{{__('reports.online')}}

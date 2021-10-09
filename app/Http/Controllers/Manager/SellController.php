@@ -2234,7 +2234,7 @@ class SellController extends Controller
                         [
                             'repository_id' => $repository->id,
                             'invoice_id' => $invoice->id,
-                            'user_id' => Auth::user()->id,
+                            'user_id' => $invoice->user_id,
                             'details' => $invoice->details,
                             'cash_amount' => $invoice->cash_amount,
                             'card_amount' => $invoice->card_amount,
@@ -2624,7 +2624,7 @@ class SellController extends Controller
                 [
                     'repository_id' => $repository->id,
                     'invoice_id' => $invoice->id,
-                    'user_id' => Auth::user()->id,
+                    'user_id' => $invoice->user_id,
                     'details' => $invoice->details,
                     'cash_amount' => $invoice->cash_amount,
                     'card_amount' => $invoice->card_amount,
@@ -2636,6 +2636,7 @@ class SellController extends Controller
                 );
         // change invoice status
         $invoice->update([
+            'user_id' => Auth::user()->id,
             'status' => 'retrieved',
             'created_at' => now(),
             'transform' => $transform,
@@ -2796,7 +2797,7 @@ class SellController extends Controller
                 [
                     'repository_id' => $repository->id,
                     'invoice_id' => $invoice->id,
-                    'user_id' => Auth::user()->id,
+                    'user_id' => $invoice->user_id,
                     'details' => $invoice->details,
                     'cash_amount' => $invoice->cash_amount,
                     'card_amount' => $invoice->card_amount,
@@ -2807,6 +2808,7 @@ class SellController extends Controller
                 ]
                 );
         $invoice->update([
+            'user_id' => Auth::user()->id,
             'status' => 'deleted',
             'transform' => $transform,
             'created_at' => now(),
