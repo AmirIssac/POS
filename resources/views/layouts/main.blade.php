@@ -21,8 +21,8 @@
  
  <head>
    <meta charset="utf-8" />
-   <link rel="apple-touch-icon" sizes="76x76" href="{{asset('public/img/apple-icon.png')}}">
-   <link rel="icon" type="image/png" href="{{asset('public/img/favicon.png')}}">
+   <link rel="apple-touch-icon" sizes="76x76" href="{{asset('img/apple-icon.png')}}">
+   <link rel="icon" type="image/png" href="{{asset('img/favicon.png')}}">
    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
    <title>
     RoFood
@@ -37,10 +37,10 @@
    <!-- Markazi Text font include just for persian demo purpose, don't include it in your project -->
    <link href="https://fonts.googleapis.com/css?family=Cairo&amp;subset=arabic" rel="stylesheet">
    <!-- CSS Files -->
-   <link href="{{asset('public/css/material-dashboard.min.css?v=2.1.2')}}" rel="stylesheet" />
-   <link href="{{asset('public/css/material-dashboard-rtl.min.css?v=1.1')}}" rel="stylesheet" />
+   <link href="{{asset('css/material-dashboard.min.css?v=2.1.2')}}" rel="stylesheet" />
+   <link href="{{asset('css/material-dashboard-rtl.min.css?v=1.1')}}" rel="stylesheet" />
    <!-- CSS Just for demo purpose, don't include it in your project -->
-   <link href="{{asset('public/demo/demo.css')}}" rel="stylesheet" />
+   <link href="{{asset('demo/demo.css')}}" rel="stylesheet" />
    @if(LaravelLocalization::getCurrentLocale() == 'ar')
    <style>
      body{
@@ -99,7 +99,7 @@
     <!-- Extra details for Live View on GitHub Pages -->
   
     <div class="wrapper ">
-      <div class="sidebar" data-color="azure" data-background-color="white" data-image="{{asset('public/img/sidebar-1.jpg')}}">
+      <div class="sidebar" data-color="azure" data-background-color="white" data-image="{{asset('img/sidebar-1.jpg')}}">
         <!--
           Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
   
@@ -110,19 +110,19 @@
         @if(isset($repositories)  && $repositories->count()>0)  {{-- page for multi repositories --}}
         <div style="display: flex; flex-direction: row">
         @if($repositories[0]->logo)
-        <img src="{{asset('public/storage/'.$repositories[0]->logo)}}" id="logo">
+        <img src="{{asset('storage/'.$repositories[0]->logo)}}" id="logo">
         @else
-        <img src="{{asset('public/img/rofood.jpg')}}" id="logo">
+        <img src="{{asset('img/rofood.jpg')}}" id="logo">
         @endif
         </div>
         @elseif(isset($repository)) {{-- page for one repository --}}
         @if($repository->logo)
-        <img src="{{asset('public/storage/'.$repository->logo)}}" id="logo">
+        <img src="{{asset('storage/'.$repository->logo)}}" id="logo">
         @else
-        <img src="{{asset('public/img/rofood.jpg')}}" id="logo">
+        <img src="{{asset('img/rofood.jpg')}}" id="logo">
         @endif
         @else  {{-- not sending repo variable at all --}}
-       <img src="{{asset('public/img/rofood.jpg')}}" id="logo">
+       <img src="{{asset('img/rofood.jpg')}}" id="logo">
         @endif
          {{-- </a>  --}}
         </div>
@@ -371,21 +371,21 @@
  @yield('body')
   <!--   Core JS Files   -->
   
-  <script src="{{asset('public/js/core/jquery.min.js')}}" type="text/javascript"></script>
-  <script src="{{asset('public/js/core/popper.min.js')}}" type="text/javascript"></script>
-  <script src="{{asset('public/js/core/bootstrap-material-design.min.js')}}" type="text/javascript"></script>
+  <script src="{{asset('js/core/jquery.min.js')}}" type="text/javascript"></script>
+  <script src="{{asset('js/core/popper.min.js')}}" type="text/javascript"></script>
+  <script src="{{asset('js/core/bootstrap-material-design.min.js')}}" type="text/javascript"></script>
   
-  <script src="{{asset('public/js/plugins/perfect-scrollbar.jquery.min.js')}}"></script>
+  <script src="{{asset('js/plugins/perfect-scrollbar.jquery.min.js')}}"></script>
   <!--  Google Maps Plugin    -->
   {{--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2Yno10-YTnLjjn_Vtk0V8cdcY5lC4plU"></script>--}}
   <!-- Place this tag in your head or just before your close body tag. -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Chartist JS -->
-  <script src="{{asset('public/js/plugins/chartist.min.js')}}"></script>
+  <script src="{{asset('js/plugins/chartist.min.js')}}"></script>
   <!--  Notifications Plugin    -->
-  <script src="{{asset('public/js/plugins/bootstrap-notify.js')}}"></script>
+  <script src="{{asset('js/plugins/bootstrap-notify.js')}}"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="{{asset('public/js/material-dashboard.min.js?v=2.1.2')}}" type="text/javascript"></script>
+  <script src="{{asset('js/material-dashboard.min.js?v=2.1.2')}}" type="text/javascript"></script>
   <script>
     $('.main-panel').perfectScrollbar('destroy');
   </script>

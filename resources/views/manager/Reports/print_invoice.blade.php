@@ -329,7 +329,8 @@
           <h4>{{$repository->note}}</h4>
         </div>
         @endif
-        
+        {{QrCode::encoding('UTF-8')->size(150)->generate('[اسم المورد : '.$repository->name.'] , [الطابع الزمني : '.$invoice->created_at.'] , [الرقم الضريبي : '.$repository->tax_code.'] [الضريبة : '.$invoice->tax.'] , [اجمالي الفاتورة : '.$invoice->total_price.']')}}
+
  
  
 @section('scripts')
