@@ -249,8 +249,9 @@
       </div>
       
      
-      {{QrCode::encoding('UTF-8')->size(150)->generate('[اسم المورد : '.$repository->name.'] , [الطابع الزمني : '.$invoice->created_at.'] , [الرقم الضريبي : '.$repository->tax_code.'] [الضريبة : '.$tax.'] , [اجمالي الفاتورة : '.$total_price.']')}}
       @endif
+      {{QrCode::encoding('UTF-8')->size(150)->generate('[اسم المورد : '.$repository->name.'] , [الطابع الزمني : '.$invoice->created_at.'] , [الرقم الضريبي : '.$repository->tax_code.'] [الضريبة : '.$tax.'] , [اجمالي الفاتورة : '.$total_price.']')}}
+
       <input type="hidden" value="{{$repository->id}}" id="repo_id">
       @if(isset($complete_invoice)) {{-- completing invoice --}}
       <input type="hidden" value="true" id="is-completing">
